@@ -138,7 +138,7 @@ int get_data()
 		printf("response_data = %s\n", buf);
 		printf("====end request====, turn = %d\n", c);
 		printf("%ldus elapses in turn %d\n", get_time() - t, c);
-		usleep(1000);
+//		usleep(1000);
 	}
 	close(sockfd);
 	return 0;
