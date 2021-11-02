@@ -21,7 +21,7 @@
 #define _BUF_SIZE_ 8096
 
 #define IPSTR "127.0.0.1"
-#define PORT 8082
+#define PORT 8083
 #define BUFSIZE 10240
 
 using namespace std;
@@ -138,7 +138,7 @@ int get_data()
 		printf("response_data = %s\n", buf);
 		printf("====end request====, turn = %d\n", c);
 		printf("%ldus elapses in turn %d\n", get_time() - t, c);
-		//sleep(1);
+		usleep(1000);
 	}
 	close(sockfd);
 	return 0;
