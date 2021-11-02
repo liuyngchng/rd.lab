@@ -89,7 +89,7 @@ int get_data()
 	servaddr.sin_family = AF_INET;
 	servaddr.sin_port = htons(PORT);
 	if (inet_pton(AF_INET, IPSTR, &servaddr.sin_addr) <= 0 ){
-		printf("inet pton error!\n");
+		printf("inet_pton error!\n");
 		exit(0);
 	};
 
@@ -123,7 +123,7 @@ int get_data()
 		long int t = get_time();
 		ret = write(sockfd,str1,strlen(str1));
 		if (ret < 0) {
-			printf("snd fail, err_code = %d，err_msg = '%s'\n",errno, strerror(errno));
+            printf("snd fail, err_code = %d，err_msg = '%s'\n",errno, strerror(errno));
 			exit(0);
 		} else {
 			printf("snd success %d byte！\n\n", ret);
@@ -158,7 +158,7 @@ int main()
 	cout << "Hello world!" << endl;
 	char ip[] = "127.0.0.1";
 	int port = 8082;
-//	  connect(ip, port);
+//     connect(ip, port);
 	long int t = get_time();
 	printf("%ld\n", get_time());
 	get_data();
