@@ -103,9 +103,9 @@ void* rcvdata(void* sockfd)
 		memset(buf, 0, sizeof(buf));
 		//read(cfd, buf, sizeof(buf));
 		int rs = recv(cfd, buf, sizeof(buf), 0);
-		printf("%s", buf);
+		printf("rcvd %d bytes,\n%s\n", rs, buf);
 		if (rs < sizeof(buf)) {
-			cout << "rec finished" << endl;
+			cout << "rcv finished" << endl;
 			break;
 		}
 		if (debug) {
@@ -113,11 +113,13 @@ void* rcvdata(void* sockfd)
 		}
 	}
 	memset(buf, 0, sizeof(buf));
-	char buf_init[]="response_data_from_server";
-    for(int i=0;i<sizeof(buf_init);i++) {
-        buf[i]=buf_init[i%strlen(buf_init)];
+	char buf_init[] = "rsp_frm_srv";
+    for(int i = 0;i < strlen(buf_init); i++) {
+        buf[i] = buf_init[i%strlen(buf_init)];
     }
+	printf("start snd: %s\n", buf);
 	int ss = send(cfd, buf, strlen(buf), 0);
+	printf("snd %d bytes\n", ss);
 	//fflush(stdout);
 	return NULL;
 }

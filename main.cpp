@@ -1,5 +1,5 @@
 /**
-   g++ -o _tcp_client tcp_client.cc /home/rd/so/libmytime.so
+   g++ -o main main.cc 
    runtime need to ldconfig let so file can be load.
    ./_tcp_client 10.0.0.1 9999 > /dev/null	2>&1 &
    ifstat > tp.dat &
@@ -73,7 +73,7 @@ int connect(char *ip, int port)
 
 int get_data()
 {
-	int sockfd, ret, i, h;
+	int sockfd, h;
 	struct sockaddr_in servaddr;
 	char str1[4096], str2[4096], buf[BUFSIZE], *str;
 	socklen_t len;
@@ -83,15 +83,33 @@ int get_data()
 	if ((sockfd = socket(AF_INET, SOCK_STREAM, 0)) < 0 ) {
 		printf("create socket error!\n");
 		exit(0);
-	};
-
+	}
+	unsigned int opt_val = 0;
+	unsigned int opt_len = sizeof(int);
+	// snd buf
+	getsockopt(sockfd, SOL_SOCKET, SO_SNDBUF, (char *)&opt_val, &opt_len);
+	printf("snd_buf len=%d\n", opt_val);
+	opt_val = 10;
+	int set_result = setsockopt(sockfd, SOL_SOCKET, SO_SNDBUF, (char *)&opt_val, opt_len);
+	opt_val = 0;
+	getsockopt(sockfd, SOL_SOCKET, SO_SNDBUF, (char *)&opt_val, &opt_len);
+	printf("snd_buf len=%d\n", opt_val);
+	// rcv buf
+	getsockopt(sockfd, SOL_SOCKET, SO_RCVBUF, (char *)&opt_val, &opt_len);
+	printf("rcv_buf len=%d\n", opt_val);
+	opt_val = 10;
+	set_result = setsockopt(sockfd, SOL_SOCKET, SO_RCVBUF, (char *)&opt_val, opt_len);
+	opt_val = 0;
+	getsockopt(sockfd, SOL_SOCKET, SO_RCVBUF, (char *)&opt_val, &opt_len);
+	printf("rcv_buf len=%d\n", opt_val);
+	
 	bzero(&servaddr, sizeof(servaddr));
 	servaddr.sin_family = AF_INET;
 	servaddr.sin_port = htons(PORT);
 	if (inet_pton(AF_INET, IPSTR, &servaddr.sin_addr) <= 0 ){
 		printf("inet_pton error!\n");
 		exit(0);
-	};
+	}
 
 	if (connect(sockfd, (struct sockaddr *)&servaddr, sizeof(servaddr)) < 0){
 		printf("connect error!\n");
@@ -121,21 +139,22 @@ int get_data()
 	{
 		printf("====start request====, turn = %d\n", c);
 		long int t = get_time();
-		ret = write(sockfd,str1,strlen(str1));
-		if (ret < 0) {
+		int ss = send(sockfd,str1,strlen(str1), 0);
+		if (ss < 0) {
             printf("snd fail, err_code = %d，err_msg = '%s'\n",errno, strerror(errno));
 			exit(0);
 		} else {
-			printf("snd success %d byte！\n\n", ret);
+			printf("snd %d byte！\n", ss);
 		}
 		memset(buf, 0, sizeof(buf));
-		i=read(sockfd, buf, sizeof(buf));
-		if (i==0){
+		printf("rcving\n");
+		int rs = recv(sockfd, buf, sizeof(buf), MSG_WAITALL);
+		if (rs==0) {
 			close(sockfd);
 			printf("read faild！\n");
 			return -1;
 		}
-		printf("response_data = %s\n", buf);
+		printf("rcvd=%s\n", buf);
 		printf("====end request====, turn = %d\n", c);
 		printf("%ldus elapses in turn %d\n", get_time() - t, c);
 //		usleep(1000);
