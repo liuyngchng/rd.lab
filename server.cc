@@ -50,6 +50,26 @@ int main(int argc, char* argv[])
 		cout << get_time() <<"socket error, " << errno 
 		<<", " <<  strerror(errno) << endl;
 	}
+
+	unsigned int opt_val = 0;
+	unsigned int opt_len = sizeof(int);
+	// snd buf
+    getsockopt(sockfd, SOL_SOCKET, SO_SNDBUF, (char *)&opt_val, &opt_len);
+    printf("snd_buf len=%d\n", opt_val);
+    opt_val = 10; 
+    int set_result = setsockopt(sockfd, SOL_SOCKET, SO_SNDBUF, (char *)&opt_val, opt_len);
+    opt_val = 0;
+    getsockopt(sockfd, SOL_SOCKET, SO_SNDBUF, (char *)&opt_val, &opt_len);
+    printf("snd_buf len=%d\n", opt_val);
+    // rcv buf
+    getsockopt(sockfd, SOL_SOCKET, SO_RCVBUF, (char *)&opt_val, &opt_len);
+    printf("rcv_buf len=%d\n", opt_val);
+    opt_val = 10; 
+    set_result = setsockopt(sockfd, SOL_SOCKET, SO_RCVBUF, (char *)&opt_val, opt_len);
+    opt_val = 0;
+    getsockopt(sockfd, SOL_SOCKET, SO_RCVBUF, (char *)&opt_val, &opt_len);
+    printf("rcv_buf len=%d\n", opt_val);
+
 	struct sockaddr_in server_sock;
 	bzero(&server_sock, sizeof(server_sock));
 	server_sock.sin_family = AF_INET;

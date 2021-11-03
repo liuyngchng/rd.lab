@@ -144,7 +144,7 @@ int get_data()
             printf("snd fail, err_code = %d，err_msg = '%s'\n",errno, strerror(errno));
 			exit(0);
 		} else {
-			printf("snd %d byte！\n", ss);
+			printf("snd %d byte\n", ss);
 		}
 		memset(buf, 0, sizeof(buf));
 		printf("rcving\n");
