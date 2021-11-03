@@ -126,22 +126,24 @@ void* rcvdata(void* sockfd)
 		printf("rcvd %d bytes,\n%s\n", rs, buf);
 		if (rs < sizeof(buf)) {
 			cout << "rcv finished" << endl;
-			break;
+			//break;
 		}
 		if (debug) {
 			cout << "rcv " << strlen(buf) << endl;
 		}
-	}
-	memset(buf, 0, sizeof(buf));
-	char buf_init[] = "rsp_frm_srv";
-    for(int i = 0;i < strlen(buf_init); i++) {
-        buf[i] = buf_init[i%strlen(buf_init)];
+		memset(buf, 0, sizeof(buf));
+		char buf_init[] = "rsp_frm_srv";
+    	for(int i = 0;i < strlen(buf_init); i++) {
+        	buf[i] = buf_init[i%strlen(buf_init)];
+    	}
+		//buf[strlen(buf)] = '\0';
+		printf("start snd: %s\n", buf);
+		//int ss = send(cfd, buf, strlen(buf)+1, 0);
+		int ss = write(cfd, buf, strlen(buf)+1);
+		printf("snd %d bytes\n", ss);
+		//fflush(stdout);
+		//return NULL;
     }
-	printf("start snd: %s\n", buf);
-	int ss = send(cfd, buf, strlen(buf), 0);
-	printf("snd %d bytes\n", ss);
-	//fflush(stdout);
-	return NULL;
 }
 
 void catch_child(int signo) 

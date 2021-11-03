@@ -139,7 +139,8 @@ int get_data()
 	{
 		printf("====start request====, turn = %d\n", c);
 		long int t = get_time();
-		int ss = send(sockfd,str1,strlen(str1), 0);
+		str1[strlen(str1)]='\0';
+		int ss = send(sockfd,str1,strlen(str1)+1, 0);
 		if (ss < 0) {
             printf("snd fail, err_code = %d，err_msg = '%s'\n",errno, strerror(errno));
 			exit(0);
@@ -148,7 +149,8 @@ int get_data()
 		}
 		memset(buf, 0, sizeof(buf));
 		printf("rcving\n");
-		int rs = recv(sockfd, buf, sizeof(buf), MSG_WAITALL);
+		//int rs = recv(sockfd, buf, sizeof(buf), 0);
+		int rs = read(sockfd, buf, sizeof(buf));
 		if (rs==0) {
 			close(sockfd);
 			printf("read faild！\n");
