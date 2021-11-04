@@ -4,6 +4,9 @@
 #include <stdio.h>
 #include <unistd.h>
 
+/**
+ * get the microseconds of time
+ */
 long int get_time()
 {
    	struct timeval tv;
@@ -16,6 +19,7 @@ int main()
 {
 	long int t = get_time();
 	printf("%ldus\n", t);
-    sleep(1);
+    usleep(1000000);
+    //sleep(1);
 	printf("%ldus\n", get_time());
 }
