@@ -1,5 +1,5 @@
 /**
-   g++ -o main main.cc 
+   g++ -o main main.cc
    runtime need to ldconfig let so file can be load.
    ./_tcp_client 10.0.0.1 9999 > /dev/null	2>&1 &
    ifstat > tp.dat &
@@ -20,7 +20,7 @@
 #define _BUF_SIZE_ 8096
 
 #define IPSTR "127.0.0.1"
-#define PORT 80 
+#define PORT 80
 #define BUFSIZE 10240
 
 long int get_time();
@@ -91,7 +91,7 @@ int get_data()
 	opt_val = 0;
 	getsockopt(sockfd, SOL_SOCKET, SO_RCVBUF, (char *)&opt_val, &opt_len);
 	printf("rcv_buf len=%d\n", opt_val);
-	
+
 	bzero(&servaddr, sizeof(servaddr));
 	servaddr.sin_family = AF_INET;
 	servaddr.sin_port = htons(PORT);
@@ -114,22 +114,26 @@ int get_data()
 	sprintf(str, "%d", len);
 
 	memset(str1, 0, 4096);
-	strcat(str1, "GET /data HTTP/1.1\n");
-	strcat(str1, "Host: www.test.cn\n");
-	strcat(str1, "Content-Type: application/json;charset=UTF-8\n");
-	strcat(str1, "Content-Length: ");
-	strcat(str1, str);
-	strcat(str1, "\n\n");
+	strcat(str1, "GET / HTTP/1.1\r\n");
+	strcat(str1, "Accept: */*\r\n");
+	strcat(str1, "Accept-Language: zh-cn\r\n");
+	strcat(str1, "User-Agent: Mozilla/4.0 (compatible; MSIE 5.01; Windows NT 5.0)\r\n");
+	strcat(str1, "Host: 127.0.0.1:80\r\n");
+	strcat(str1, "Content-Type: application/json;charset=UTF-8\r\n");
+	//strcat(str1, "Content-Length: ");
+	//strcat(str1, str);
+	//strcat(str1, "\r\n");
 
-	strcat(str1, str2);
-	strcat(str1, "\r\n\r\n");
+	//strcat(str1, str2);
+	strcat(str1, "Connection: keep-alive\r\n\r\n");
 	printf("%s\n",str1);
 	for (int c = 0; c < 100; c++)
 	{
 		printf("====start request====, turn = %d\n", c);
 		long int t = get_time();
-		str1[strlen(str1)]='\0';
-		int ss = send(sockfd,str1,strlen(str1)+1, 0);
+		printf("send length = %d\n", strlen(str1));
+		printf("%s", str1);
+		int ss = send(sockfd,str1,strlen(str1), 0);
 		if (ss < 0) {
             printf("snd fail, err_code = %d，err_msg = '%s'\n",errno, strerror(errno));
 			exit(0);
@@ -149,6 +153,7 @@ int get_data()
 		printf("====end request====, turn = %d\n", c);
 		printf("%ldus elapses in turn %d\n", get_time() - t, c);
 //		usleep(1000);
+		//break;
 	}
 	close(sockfd);
 	return 0;
