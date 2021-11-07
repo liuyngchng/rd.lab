@@ -108,24 +108,26 @@ int get_data()
 
 	//send data
 	memset(str2, 0, 4096);
-	strcat(str2, "a=1&b=2");
+	strcat(str2, "?a=1&b=2");
 	str=(char *)malloc(128);
 	len = strlen(str2);
 	sprintf(str, "%d", len);
 
 	memset(str1, 0, 4096);
-	strcat(str1, "GET / HTTP/1.1\r\n");
+	strcat(str1, "GET /");
+	strcat(str1, str2);
+	strcat(str1, " HTTP/1.1\r\n");
 	strcat(str1, "Accept: */*\r\n");
 	strcat(str1, "Accept-Language: zh-cn\r\n");
-	strcat(str1, "User-Agent: Mozilla/4.0 (compatible; MSIE 5.01; Windows NT 5.0)\r\n");
+	strcat(str1, "User-Agent: rdAgent\r\n");
 	strcat(str1, "Host: 127.0.0.1:80\r\n");
 	strcat(str1, "Content-Type: application/json;charset=UTF-8\r\n");
 	//strcat(str1, "Content-Length: ");
 	//strcat(str1, str);
 	//strcat(str1, "\r\n");
 
-	//strcat(str1, str2);
-	strcat(str1, "Connection: keep-alive\r\n\r\n");
+	strcat(str1, "Connection: keep-alive\r\n");
+	strcat(str1, "\r\n");
 	printf("%s\n",str1);
 	for (int c = 0; c < 100; c++)
 	{
