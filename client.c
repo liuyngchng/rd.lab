@@ -17,20 +17,17 @@
 #include <string.h>
 #include <errno.h>
 #include <arpa/inet.h>
-#include <iostream>
 #define _BUF_SIZE_ 8096
 
 #define IPSTR "127.0.0.1"
-#define PORT 8083
+#define PORT 80 
 #define BUFSIZE 10240
-
-using namespace std;
 
 long int get_time();
 
-int connect(char *ip, int port)
+int con(char *ip, int port)
 {
-	cout << "con to " << ip << ":" << port << endl;
+	printf("con to %s:%d\n", ip, port);
 	char buf_init[]="hello,this is a test";
 	char buf[_BUF_SIZE_];
 	for(int i=0;i<sizeof(buf);i++) {
@@ -40,7 +37,7 @@ int connect(char *ip, int port)
 	struct sockaddr_in srv_sock;
 	int sockfd = socket(AF_INET, SOCK_STREAM, 0);
 	if (sockfd < 0) {
-		cout << "error," << errno << ", " << strerror(errno) << endl;
+		printf("error,%d, %s\n", errno, strerror(errno));
 	}
 	bzero(&srv_sock, sizeof(srv_sock));
 	srv_sock.sin_family = AF_INET;
@@ -49,25 +46,17 @@ int connect(char *ip, int port)
 	srv_sock.sin_addr.s_addr = inet_addr(ip);
 	int ret = connect(sockfd, (struct sockaddr*)& srv_sock, sizeof(srv_sock));
 	if (ret < 0) {
-		cout << "connect to " << ip << ":" << port
-			 << " error, errno is " << errno << ", errstring is "
-			 << strerror(errno) << endl;
+		printf("connect to %s:%d\n", ip, port);
+		printf("error, errno is %d, %s\n",errno, strerror(errno));
 		return 1;
 	}
-	cout << "connected to " << ip << ":"<< port << endl;
+	printf("connected to %s:%d\n", ip, port);
 	//buf[strlen(buf)-1]='\0';
-	int count = 0;
-	while (count < 10000000) {
-		//write(sockfd, buf, strlen(buf));
-		int ss = send(sockfd, buf, strlen(buf), 0);
-		if (strncasecmp(buf,"quit", 4) == 0) {
-			cout <<"quit !"<< endl;
-			break;
-		}
-	}
-	cout <<"close connection." << endl;
+	//write(sockfd, buf, strlen(buf));
+	int ss = send(sockfd, buf, strlen(buf), 0);
+	printf("close connection.\n");
 	close(sockfd);
-	cout <<"exit" << endl;
+	printf("exit\n");
 	return 0;
 }
 
@@ -149,8 +138,8 @@ int get_data()
 		}
 		memset(buf, 0, sizeof(buf));
 		printf("rcving\n");
-		//int rs = recv(sockfd, buf, sizeof(buf), 0);
-		int rs = read(sockfd, buf, sizeof(buf));
+		int rs = recv(sockfd, buf, sizeof(buf), 0);
+		//int rs = read(sockfd, buf, sizeof(buf));
 		if (rs==0) {
 			close(sockfd);
 			printf("read faild！\n");
@@ -176,7 +165,7 @@ long int get_time()
 
 int main()
 {
-	cout << "Hello world!" << endl;
+	printf("start\n");
 	char ip[] = "127.0.0.1";
 	int port = 8082;
 //     connect(ip, port);

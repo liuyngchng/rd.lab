@@ -22,13 +22,11 @@
 #include <string.h>
 #include <stdlib.h>
 #include "time.h"
-#include <iostream>
 #include <signal.h>
 #include <typeinfo>
+#include <pthread.h>
 #define _BACKLOG_ 10
 #define _BUF_SIZE_ 8096
-
-using namespace std;
 
 const char *inet_ntop(int af, const void *src,char *dst, socklen_t size);
 char* get_time();
@@ -40,15 +38,14 @@ bool debug;
 int main(int argc, char* argv[])
 {
 	if (argc < 2) {
-		cerr <<"pls input listening port" << endl;
+		perror("pls input listening port\n");
 		return 1;
 	}
 	debug = check_debug_mode(argc, argv);
 	int port = atoi(argv[1]);
 	int sockfd = socket(AF_INET, SOCK_STREAM, 0);
 	if (sockfd < 0) {
-		cout << get_time() <<"socket error, " << errno 
-		<<", " <<  strerror(errno) << endl;
+		printf("%s, socket error, %d, %s\n", get_time(), errno, strerror(errno));
 	}
 
 	unsigned int opt_val = 0;
@@ -77,16 +74,16 @@ int main(int argc, char* argv[])
 	server_sock.sin_port = htons(port);
 	if (bind(sockfd, (struct sockaddr*)&server_sock, 
 		sizeof(sockaddr_in)) < 0) {
-		cout <<"bind error, " << errno << ", " << strerror(errno) << endl;
+		printf("bind error, %d, %s\n",errno, strerror(errno));
 		close(sockfd);
 		return 1;
 	}
 	if (listen(sockfd, _BACKLOG_) < 0) {
-		cout << "listen error," << errno << "," <<strerror(errno) << endl;
+		printf("listen error, %d, %s\n", errno, strerror(errno));
 		close(sockfd);
 		return 2;
 	}
-	cout << "listening:" << port << endl;
+	printf("listening:%d\n", port);
 	sockaddr_in csock;
 	socklen_t len = sizeof(csock);
 	int cfd;
@@ -96,7 +93,7 @@ int main(int argc, char* argv[])
 			if((errno == ECONNABORTED) || errno == EINTR) {
 				goto a;
 			} else {
-				cout << "accept  error, " << errno << "," << strerror(errno) << endl;
+				printf("accept  error, %d, %s\n", errno, strerror(errno));
 				return -1;
 			}
 		}
@@ -105,8 +102,7 @@ int main(int argc, char* argv[])
 		//inet_ntop(AF_INET, &csock.sin_addr, buf_ip, sizeof(buf_ip));
 		//cout << "con from " << buf_ip << ":" << ntohs(csock.sin_port) << endl;
 		//cout << len << ":" << typeid(csock).name() << ":" << csock.sin_addr.s_addr << endl;
-		cout << "con from " << inet_ntoa(csock.sin_addr) 
-			 << ":" << ntohs(csock.sin_port) << endl;
+		printf("con from %s: %d\n", inet_ntoa(csock.sin_addr), ntohs(csock.sin_port));
 		//rcvdata(&cfd);
 		pthread_t t;
 		pthread_create(&t, NULL, &rcvdata, &cfd);
@@ -125,11 +121,11 @@ void* rcvdata(void* sockfd)
 		int rs = recv(cfd, buf, sizeof(buf), 0);
 		printf("rcvd %d bytes,\n%s\n", rs, buf);
 		if (rs < sizeof(buf)) {
-			cout << "rcv finished" << endl;
+			printf("rcv finished\n");
 			//break;
 		}
 		if (debug) {
-			cout << "rcv " << strlen(buf) << endl;
+			printf("rcv %d\n", strlen(buf));
 		}
 		memset(buf, 0, sizeof(buf));
 		char buf_init[] = "rsp_frm_srv";
@@ -148,7 +144,7 @@ void* rcvdata(void* sockfd)
 
 void catch_child(int signo) 
 {
-	cout << "child task finished" << endl;	  
+	printf("child task finished\n");	  
 }
 
 bool check_debug_mode(int argc, char* argv[])
@@ -158,7 +154,7 @@ bool check_debug_mode(int argc, char* argv[])
         for(int i=0; i< argc; i++) {
             if(strncasecmp(argv[i], "-d", 2)==0) {
                 debug = true;
-                cout << "debug mode" << endl;
+                printf("debug mode\n");
             }
         }
     }
