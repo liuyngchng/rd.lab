@@ -17,13 +17,18 @@
 #include <string.h>
 #include <errno.h>
 #include <arpa/inet.h>
+#include <math.h>
+#include <ctype.h>
 #define _BUF_SIZE_ 8096
 
 #define IPSTR "127.0.0.1"
-#define PORT 80
-#define BUFSIZE 10240
+#define PORT 8082
 
 long int get_time();
+int get_content_len(char *s);
+int get_chunk_len(char *s);
+int get_data();
+char* get_body(char *s);
 
 int con(char *ip, int port)
 {
@@ -64,7 +69,7 @@ int get_data()
 {
 	int sockfd, h;
 	struct sockaddr_in servaddr;
-	char str1[4096], str2[4096], buf[BUFSIZE], *str;
+	char str1[4096], str2[4096], buf[_BUF_SIZE_], *str;
 	socklen_t len;
 	fd_set	 t_set1;
 	struct timeval	tv;
@@ -114,7 +119,7 @@ int get_data()
 	sprintf(str, "%d", len);
 
 	memset(str1, 0, 4096);
-	strcat(str1, "GET /");
+	strcat(str1, "GET /data");
 	strcat(str1, str2);
 	strcat(str1, " HTTP/1.1\r\n");
 	strcat(str1, "Accept: */*\r\n");
@@ -122,21 +127,18 @@ int get_data()
 	strcat(str1, "User-Agent: rdAgent\r\n");
 	strcat(str1, "Host: 127.0.0.1:80\r\n");
 	strcat(str1, "Content-Type: application/json;charset=UTF-8\r\n");
-	//strcat(str1, "Content-Length: ");
-	//strcat(str1, str);
-	//strcat(str1, "\r\n");
-
 	strcat(str1, "Connection: keep-alive\r\n");
 	strcat(str1, "\r\n");
-	printf("%s\n",str1);
+	printf("%s\n", str1);
 	for (int c = 0; c < 100; c++)
 	{
 		printf("====start request====, turn = %d\n", c);
 		long int t = get_time();
-		printf("send length = %d\n", strlen(str1));
+		printf("send length = %ld\n", strlen(str1));
 		printf("%s", str1);
 		int ss = send(sockfd,str1,strlen(str1), 0);
-		if (ss < 0) {
+		if (ss < 0) 
+		{
             printf("snd fail, err_code = %d，err_msg = '%s'\n",errno, strerror(errno));
 			exit(0);
 		} else {
@@ -144,21 +146,140 @@ int get_data()
 		}
 		memset(buf, 0, sizeof(buf));
 		printf("rcving\n");
-		int rs = recv(sockfd, buf, sizeof(buf), 0);
+		int rs;
+		rs = recv(sockfd, buf, sizeof(buf), 0);
 		//int rs = read(sockfd, buf, sizeof(buf));
-		if (rs==0) {
+		if (rs==0)
+		{
 			close(sockfd);
 			printf("read faild！\n");
 			return -1;
 		}
-		printf("rcvd=%s\n", buf);
+		//printf("rcvd_content=\n");
+		//printf("length=%d\n%s\n", rs, buf);
+		int c_l = get_chunk_len(buf);
+		char *body_head = get_body(buf);
+		if (c_l < 0)
+		{
+			c_l = get_content_len(buf);
+		}
+		//printf("content_length = %d\n", c_l);
+		char ctt[c_l + 1];
+		memset(ctt, 0, sizeof(ctt));
+		ctt[c_l] = '\0';
+		int offset = 0;
+		memcpy(ctt + offset, body_head, strlen(body_head));
+		offset += rs;
+		while(offset < c_l)
+		{
+			memset(buf, 0, sizeof(buf));
+			rs = recv(sockfd, buf, sizeof(buf), 0);
+			char *chunk_end = strstr(buf, "\r\n");
+			char *real_buf;
+			if (chunk_end == NULL) 
+				real_buf = buf;
+			else 
+			{
+				char *token, *new_l, *saveptr;
+				int i;
+				for (i = 0, str = buf;; i++, str = NULL)
+    			{   
+       				token = strtok_r(str, "\r\n", &saveptr);
+					if (token == NULL)
+					    break;
+					if (i == 0)
+						real_buf = token;
+       				else if (i == 1)
+            			new_l = token;
+    			}
+				rs = strlen(real_buf);
+			}
+			memcpy(ctt + offset, real_buf, rs);
+			offset += rs;
+			//printf("%s\n", buf);
+		}
+		printf("%s\n", ctt);
 		printf("====end request====, turn = %d\n", c);
 		printf("%ldus elapses in turn %d\n", get_time() - t, c);
 //		usleep(1000);
-		//break;
+		break;
 	}
 	close(sockfd);
 	return 0;
+}
+
+/**
+ * get content length from 'Content-Length:123'
+ */
+int get_content_len(char *s) 
+{
+	return 0;
+}
+
+/**
+ * get body from HTTP resposne.
+ */
+char* get_body(char *s)
+{
+	char *sub_str = strstr(s, "\r\n\r\n");
+	char *saveptr, *str, *token;
+    int i;
+    for (i = 0, str = sub_str;; i++, str = NULL)
+    {   
+       token = strtok_r(str, "\r\n", &saveptr);
+       if (token == NULL)
+           break;
+       //printf("%d: %s\n", i, token);
+       if (i == 1)
+            return token;
+    }
+	return NULL;
+}
+
+/**
+ * get content length from chunked.
+ */
+int get_chunk_len(char *s)
+{
+	const char *needle = "Transfer-Encoding: chunked";
+	//printf("needle_length=%ld\n", strlen(needle));
+	char* sub_str = strstr(s, needle);
+	if (sub_str == NULL) {
+		return -1;
+	}
+	char *saveptr, *str, *token, *chunk_length;
+	int i;
+	for (i = 0, str = sub_str;; i++, str = NULL)
+	{
+       token = strtok_r(str, "\r\n", &saveptr);
+       if (token == NULL)
+           break;
+       //printf("%d: %s\n", i, token);
+	   if (i == 1)
+	   		chunk_length = token;
+    }
+	//printf("chunk_length=%s\n", chunk_length);
+	unsigned long int l = strlen(chunk_length);
+	//printf("strlen(chunk_length) = %ld\n", l);
+	int sum = 0;
+	for (int j = 0; j < l; j++)
+	{
+		int n ;
+		char c = chunk_length[j];
+		if isdigit(c)
+			n = c - 48;
+		else
+			n = c - 55;
+		//printf("%d\n", n);
+		sum += n * pow(16, l - 1 - j);
+	}
+	//printf("sum = %d\n", sum);
+	return sum;
+}
+
+char* get_chunk_end(char * s)
+{
+	return strstr(s, "\r\n");
 }
 
 
