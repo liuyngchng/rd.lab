@@ -26,7 +26,7 @@ int num_s(char *hex_str)
 }
 
 
-void get_body(char *s, char **ms, int size)
+void split(char *s, char **ms, int size)
 {
     char* sub_str = strstr(s, "\r\n\r\n");
     ms[0] = "ignored_header";
@@ -54,7 +54,7 @@ int main()
 	char s[] = "HTTP/1.1 200 OK\r\nDate: Tue, 09 Nov 2021 00:22:02 GMT\r\nContent-Type: application/json;charset=UTF-8\r\nTransfer-Encoding: chunked\r\n\r\n16F4\r\n{\"pageSize\":25,\"pageNo\":0,\"total\":23,\"totalPage\":0}\r\n0\r\n\r\n";
     int size = 3;
     char **res = (char **)malloc((size +1) * sizeof(char *));
-    get_body(s, res, size);
+    split(s, res, size);
     for (int i = 0; i < size; i++)
     {
         printf("%s\n", res[i]);
