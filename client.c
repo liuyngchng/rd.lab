@@ -28,7 +28,8 @@ long int get_time();
 int get_content_len(char *s);
 int get_chunk_len(char *s);
 int get_data();
-char* get_body(char *s);
+void split(char *s, char **ms, int size);
+int num_s(char *hex_str);
 
 int con(char *ip, int port)
 {
@@ -137,7 +138,7 @@ int get_data()
 		printf("send length = %ld\n", strlen(str1));
 		printf("%s", str1);
 		int ss = send(sockfd,str1,strlen(str1), 0);
-		if (ss < 0) 
+		if (ss < 0)
 		{
             printf("snd fail, err_code = %d，err_msg = '%s'\n",errno, strerror(errno));
 			exit(0);
@@ -155,10 +156,11 @@ int get_data()
 			printf("read faild！\n");
 			return -1;
 		}
-		//printf("rcvd_content=\n");
-		//printf("length=%d\n%s\n", rs, buf);
-		int c_l = get_chunk_len(buf);
-		char *body_head = get_body(buf);
+		int size = 3;
+        char **info = (char **)malloc((size +1) * sizeof(char *));
+        split(buf, info, size);
+		int c_l = num_s(info[1]);           // chunk length
+		char *body_head = info[2];
 		if (c_l < 0)
 		{
 			c_l = get_content_len(buf);
@@ -169,6 +171,7 @@ int get_data()
 		ctt[c_l] = '\0';
 		int offset = 0;
 		memcpy(ctt + offset, body_head, strlen(body_head));
+		free(info);
 		offset += rs;
 		while(offset < c_l)
 		{
@@ -176,14 +179,14 @@ int get_data()
 			rs = recv(sockfd, buf, sizeof(buf), 0);
 			char *chunk_end = strstr(buf, "\r\n");
 			char *real_buf;
-			if (chunk_end == NULL) 
+			if (chunk_end == NULL)
 				real_buf = buf;
-			else 
+			else
 			{
 				char *token, *new_l, *saveptr;
 				int i;
 				for (i = 0, str = buf;; i++, str = NULL)
-    			{   
+    			{
        				token = strtok_r(str, "\r\n", &saveptr);
 					if (token == NULL)
 					    break;
@@ -211,30 +214,11 @@ int get_data()
 /**
  * get content length from 'Content-Length:123'
  */
-int get_content_len(char *s) 
+int get_content_len(char *s)
 {
 	return 0;
 }
 
-/**
- * get body from HTTP resposne.
- */
-char* get_body(char *s)
-{
-	char *sub_str = strstr(s, "\r\n\r\n");
-	char *saveptr, *str, *token;
-    int i;
-    for (i = 0, str = sub_str;; i++, str = NULL)
-    {   
-       token = strtok_r(str, "\r\n", &saveptr);
-       if (token == NULL)
-           break;
-       //printf("%d: %s\n", i, token);
-       if (i == 1)
-            return token;
-    }
-	return NULL;
-}
 
 /**
  * get content length from chunked.
@@ -280,6 +264,51 @@ int get_chunk_len(char *s)
 char* get_chunk_end(char * s)
 {
 	return strstr(s, "\r\n");
+}
+
+int num_s(char *hex_str)
+{
+	unsigned long int l = strlen(hex_str);
+//	printf("strlen(chunk_length) = %ld\n", l);
+	int sum = 0;
+	for (int j = 0; j < l; j++)
+	{
+		int n ;
+		char c =hex_str[j];
+		if isdigit(c)
+			n = c - 48;
+		else
+			n = c - 55;
+
+//		printf("%d\n", n);
+		sum += n * pow(16, l - 1 - j);
+	}
+//	printf("sum = %d\n", sum);
+	return sum;
+}
+
+
+void split(char *s, char **ms, int size)
+{
+    char* sub_str = strstr(s, "\r\n\r\n");
+    ms[0] = "ignored_header";
+	char *str, *token;
+    char *saveptr;
+    int i;
+    for (i = 0, str = sub_str;; i++,str = NULL)
+    {
+        token = strtok_r(str, "\r\n", &saveptr);
+        if (token == NULL)
+            break;
+        if (i == 0)
+        {
+            ms[1] = token;  //length
+        }
+        else if (i == 1)
+        {
+            ms[2] = token;  //body
+        }
+    }
 }
 
 
