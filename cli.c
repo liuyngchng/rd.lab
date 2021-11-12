@@ -19,6 +19,7 @@
 #include <arpa/inet.h>
 #include <math.h>
 #include <ctype.h>
+
 #define _BUF_SIZE_ 8096
 
 long int get_time();
@@ -209,16 +210,17 @@ long int get_time()
 	return timestamp;
 }
 
-int main()
+
+
+int test_t()
 {
-	printf("start\n");
 	char *ip = "127.0.0.1";
 	int port = 8082;
 	long int t = get_time();
 	int sockfd = con(ip, port);
     int size = 8092;
     char *data = (char *)malloc((size) * sizeof(char));
-    for (int i = 0;i< 10000; i++)
+    for (int i = 0;i< 100000; i++)
     {
         memset(data, 0, size);
         printf("---req_start_turn=%d---\n", i);
@@ -235,4 +237,10 @@ int main()
 	close(sockfd);
 	printf("%ldus elapsed\n", get_time() - t);
 	return 0;
+}
+
+int main()
+{
+    test_t();
+    return 0;
 }
