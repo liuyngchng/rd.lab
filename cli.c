@@ -55,7 +55,7 @@ int con(char *ip, int port)
 
 int get_data(int sockfd, char* data)
 {
-	char hdr[4096], param[4096], buf[_BUF_SIZE_];
+	char hdr[4096], param[4096], buf[_BUF_SIZE_], *bdh, *end;
 	memset(hdr, 0, sizeof(buf));
 	memset(param, 0, 4096);
 	memset(buf, 0, sizeof(buf));
@@ -79,6 +79,7 @@ int get_data(int sockfd, char* data)
     } else {
         printf("snd %d bytes\n", ss);
     }
+    int rs_sum = 0;
     int rs = recv(sockfd, buf, sizeof(buf)-1, 0);
     if (rs == 0)
     {
@@ -93,82 +94,24 @@ int get_data(int sockfd, char* data)
     else if (strstr(buf, "Transfer-Encoding: chunked") != NULL)
     {
         printf("chunk_data\n");
-        printf("%s\n", buf);
-        int c_l = -1;                   // chunk_length
-        do
+//        printf("%s\n", buf);
+        memcpy(data + rs_sum, buf, rs);
+        rs_sum += rs;
+        bdh = strstr(buf, "\r\n\r\n");
+        end = strstr(bdh + 4, "\r\n\r\n");
+        while(end == NULL)
         {
-            int size = 3;
-            char **info = (char **)malloc((size + 1) * sizeof(char *));
-            if(rs == 6019) {
-                printf("end");
-            }
-            if(c_l > 0)
-            {
-                memset(buf, 0, sizeof(buf));
-                recv(sockfd, buf, sizeof(buf)-1, 0);
-                split_stream_body(buf, info, size);
-            } else
-            {
-                split_stream_head(buf, info, size);
-            }
-            c_l = num_s(info[1]);           // chunk_length
-            printf("chunk_length=%d, rs=%d\n", c_l, rs);
-
-            if (c_l == 0)
-            {
-                return strlen(data);
-            }
-            if (c_l < 0)
-            {
-                c_l = 0;
-                printf("length_error\n");
-                return -1;
-            }
-
-            char *body_head = info[2];
-            data[c_l] = '\0';
-            int offset = 0;
-            int bd_h_l = strlen(body_head);
-            memcpy(data + offset, body_head, bd_h_l);
-            free(info);
-            offset += bd_h_l;
-            while(offset < c_l)
-            {
-                memset(buf, 0, sizeof(buf));
-                rs = recv(sockfd, buf, sizeof(buf)-1, 0);
-                char *chunk_end = strstr(buf, "\r\n");
-                char *real_buf;
-                if (chunk_end == NULL)
-                    real_buf = buf;
-                else
-                {
-                    char *token, *new_l, *saveptr, *str;
-                    int i;
-                    for (i = 0, str = buf;; i++, str = NULL)
-                    {
-                        token = strtok_r(str, "\r\n", &saveptr);
-                        if (token == NULL)
-                            break;
-                        if (i == 0)
-                            real_buf = token;
-                        else if (i == 1)
-                        {
-                            new_l = token;      //new chunk length
-                            printf("new chunk length=%s\n", new_l);
-                        }
-
-                    }
-                    rs = strlen(real_buf);
-                }
-                memcpy(data + offset, real_buf, rs);
-                offset += rs;
-            }
-        } while (c_l != 0);
+            memset(buf, 0, sizeof(buf));
+            rs = recv(sockfd, buf, sizeof(buf)-1, 0);
+            memcpy(data + rs_sum, buf, rs);
+            rs_sum += rs;
+            end = strstr(buf, "\r\n\r\n");
+        }
     }
     else
     {
         //todo
-        printf("%ld/tnothing done.\n", get_time());
+        printf("%ld\tnothing done.\n", get_time());
     }
 	return strlen(data);
 }
@@ -301,12 +244,12 @@ int main()
 	int sockfd = con(ip, port);
     int size = 8092;
     char *data = (char *)malloc((size) * sizeof(char));
-    for (int i = 0;; i++)
+    for (int i = 0;i< 10000; i++)
     {
         memset(data, 0, size);
         printf("---req_start_turn=%d---\n", i);
         int size = get_data(sockfd, data);
-//        break;
+        printf("%s\n", data);
         printf("---req__end__turn=%d/size=%d---\n", i, size);
         if(size < 0)
         {
