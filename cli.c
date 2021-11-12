@@ -25,6 +25,7 @@
 long int get_time();
 int get_data(int sockfd, char* data);
 void split_str(char *s, char **ms, int size);
+void get_content_len(char *s, char **ms, int size);
 int num_s(char *hex_str);
 void set_sockopt(int sockfd);
 
@@ -55,13 +56,13 @@ int con(char *ip, int port)
 
 int get_data(int sockfd, char* data)
 {
-	char hdr[4096], param[4096], buf[_BUF_SIZE_], *bdh, *end;
+	char hdr[4096], param[4096], buf[_BUF_SIZE_], *bdh, *end, *bdy;
 	memset(hdr, 0, sizeof(buf));
 	memset(param, 0, 4096);
 	memset(buf, 0, sizeof(buf));
 	strcat(param, "?a=1&b=2");
 	memset(hdr, 0, 4096);
-	strcat(hdr, "GET /data");
+	strcat(hdr, "GET /sjzc/");
 	strcat(hdr, param);
 	strcat(hdr, " HTTP/1.1\r\n");
 	strcat(hdr, "Accept: */*\r\n");
@@ -87,9 +88,33 @@ int get_data(int sockfd, char* data)
         printf("read failed！\n");
         exit(-1);
     }
-    if (strstr(buf, "Content-Length") != NULL)
+    char *con_len = strstr(buf, "Content-Length");
+    if (con_len != NULL)
     {
-        printf("Content-Length contained in data\n");
+        memcpy(data + rs_sum, buf, rs);
+        rs_sum += rs;
+        bdh = strstr(buf, "\r\n\r\n");
+        bdy = bdh + 4;
+        int bdy_l = strlen(bdy);
+//        printf("bdy_h_l=%d\nbody=%s\n", bdy_l, bdy);
+        int size = 1;
+        char **info = (char **)malloc((size + 1) * sizeof(char *));
+        get_content_len(con_len, info, size);
+        int flag_size = strlen("Content-Length: ");
+        char *tmp_flg = info[0] + flag_size;
+        const int con_len_i = atoi(tmp_flg);
+        printf("Content-Length: %d contained in data\n", con_len_i);
+
+        while(bdy_l < con_len_i)
+        {
+            memset(buf, 0, sizeof(buf));
+            rs = recv(sockfd, buf, sizeof(buf)-1, 0);
+            memcpy(data + rs_sum, buf, rs);
+            rs_sum += rs;
+            bdy_l +=rs;
+        }
+
+
     }
     else if (strstr(buf, "Transfer-Encoding: chunked") != NULL)
     {
@@ -202,6 +227,26 @@ void split_str(char *s, char **ms, int size)
 }
 
 
+void get_content_len(char *s, char **ms, int size)
+{
+	char *str, *token;
+    char *saveptr;
+    int i;
+    for (i = 0, str = s;; i++,str = NULL)
+    {
+        token = strtok_r(str, "\r\n", &saveptr);
+        if (token == NULL)
+            break;
+        if (i == 0)
+        {
+            ms[0] = token;  //content_length
+            break;
+        }
+    }
+}
+
+
+
 long int get_time()
 {
 	struct timeval tv;
@@ -215,7 +260,7 @@ long int get_time()
 int test_t()
 {
 	char *ip = "127.0.0.1";
-	int port = 8082;
+	int port = 8888;
 	long int t = get_time();
 	int sockfd = con(ip, port);
     int size = 8092;
