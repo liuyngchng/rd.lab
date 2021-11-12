@@ -23,8 +23,7 @@
 
 long int get_time();
 int get_data(int sockfd, char* data);
-void split_stream_head(char *s, char **ms, int size);
-void split_stream_body(char *s, char **ms, int size);
+void split_str(char *s, char **ms, int size);
 int num_s(char *hex_str);
 void set_sockopt(int sockfd);
 
@@ -165,7 +164,7 @@ int num_s(char *hex_str)
   @param ms, string array, ms[0], header, ms[1] length, ms[2] body
   @param size ,size of ms
  */
-void split_stream_head(char *s, char **ms, int size)
+void split_str(char *s, char **ms, int size)
 {
     char *len_f = strstr(s, "Content-Length:");
     if (len_f != NULL)
@@ -201,31 +200,6 @@ void split_stream_head(char *s, char **ms, int size)
     }
 }
 
-void split_stream_body(char *s, char **ms, int size)
-{
-    ms[0] = "no_header\0";
-	char *str, *token;
-    char *saveptr;
-    int i;
-    for (i = 0, str = s;; i++,str = NULL)
-    {
-        token = strtok_r(str, "\r\n", &saveptr);
-        if (token == NULL)
-            break;
-        if (i == 0)
-        {
-            ms[1] = token;  //length
-            if (num_s(ms[1]) < 0)
-            {
-                printf("error_in_split_stream_body\n[%s]\n", s);
-            }
-        }
-        else if (i == 1)
-        {
-            ms[2] = token;  //body
-        }
-    }
-}
 
 long int get_time()
 {
@@ -256,8 +230,6 @@ int main()
             printf("size is zero\n");
             break;
         }
-
-
 	}
 	free(data);
 	close(sockfd);

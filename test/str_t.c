@@ -77,6 +77,8 @@ int main()
         printf("%s\n", res[i]);
     }
 
+    char* sub1= strstr(res[2], "{");
+
     int len = num_s(res[1]);
     free(res);
 	printf("len=%d\n", len);
