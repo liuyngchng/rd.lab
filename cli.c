@@ -57,7 +57,7 @@ int con(char *ip, int port)
 int get_data(int sockfd, char* data)
 {
 	char hdr[4096], param[4096], buf[_BUF_SIZE_], *bdh, *end, *bdy;
-	memset(hdr, 0, sizeof(buf));
+	memset(hdr, 0, sizeof(hdr));
 	memset(param, 0, 4096);
 	memset(buf, 0, sizeof(buf));
 	strcat(param, "?a=1&b=2");
@@ -176,7 +176,7 @@ int num_s(char *hex_str)
 	{
 		int n ;
 		char c =hex_str[j];
-		if isdigit(c)
+		if (isdigit(c))
 			n = c - 48;
 		else
 			n = c - 55;
