@@ -32,7 +32,7 @@
 			<Add option="-Wall" />
 			<Add option="-fexceptions" />
 		</Compiler>
-		<Unit filename="test/t.c">
+		<Unit filename="test/eipd.c">
 			<Option compilerVar="CC" />
 		</Unit>
 		<Extensions>
