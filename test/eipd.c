@@ -1,24 +1,8 @@
-
-
-int get_len(int * array);
-
-double evl(int *brd, int *pce_x, int pos_y, int col, int col_max, int rw_n);
-int *reverse(int *brd);
-int get_ld_h(int *pce_x, int pce_x_size, int pos_y, int rw_n);
-int get_rw_n(int *brd);
-int get_len(int * array);
-int get_rw_rm(int *brd, int col_max, int rw_n);
-int *pop_i(int *array, int i);
-int *insert_i(int *array, int i, int i_v);
-int get_rw_t(int *brd, int col, int rw_n);
-int get_col_t(int *brd, int col, int rw_n, int col_max);
-int get_col_t1(int *brd, int col, int rw_n, int col_max);
-int gt_hl(int *brd, int col, int rw_n);
-int gt_wl(int *brd, int col, int rw_n);
+#include "eipd.h"
 
 double evl(int *brd, int *pce_x, int pos_y, int col, int col_max, int rw_n)
 {
-    reverse(brd);
+    rvs(brd);
     double scr = 0;
     int ld_h = get_ld_h(pce_x, 4, pos_y, rw_n);
     int rw_rm = get_rw_rm(brd, col_max, rw_n);
@@ -35,7 +19,7 @@ double evl(int *brd, int *pce_x, int pos_y, int col, int col_max, int rw_n)
     return scr;
 }
 
-int *reverse(int *brd)
+int *rvs(int *brd)
 {
     return brd;
 }

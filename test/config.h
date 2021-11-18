@@ -1,3 +1,6 @@
+#ifndef CONFIG_H
+#define CONFIG_H
+
 struct rot_piece
 {
     int r_lmt;          // roate limit
@@ -22,3 +25,5 @@ struct config
 };
 
 struct config get_config();
+
+#endif
