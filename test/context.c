@@ -1,12 +1,19 @@
 #include "context.h"
 #include "util.h"
+#include "cJSON.h"
 
 static struct context context;
 
-void init(int **data)
+static char *ctx;
+
+void init(int **matrix, char *data)
 {
-    get_bin(data, 20, 10, context.board);
+    get_bin(matrix, 20, 10, context.board);
+    ctx = data;
 
 }
 
-void update
+cJSON *get_pce_info(char *data)
+{
+
+}
