@@ -7,6 +7,8 @@ void test_j()
     char *str ="{\"name\": \"Awesome 4K\",\"r\": {\"width\": 1280,\"height\": 720,\"wow\":\"wowValue\"},\"test\":[{\"hi\":\"what\"}]}";
 	printf("%s\n",str);
 	cJSON *j = cJSON_Parse(str);
+	char *str1 = cJSON_Print(j);
+	printf("string_json=%s\n", str1);
 	cJSON *name = cJSON_GetObjectItem(j, "name");
 	printf("root.name=%s\n", name->valuestring);
 	cJSON *r = cJSON_GetObjectItem(j, "r");
