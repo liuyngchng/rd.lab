@@ -1,6 +1,5 @@
 #ifndef UTIL_H
 #define UTIL_H
-
 // get a 2d matrix from a 1d matrix
 int** get_matrix(int *b, int size_b, int col_n, int **c);
 //get bin list of a matrix
