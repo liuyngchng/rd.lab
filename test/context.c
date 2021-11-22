@@ -1,5 +1,7 @@
 #include "context.h"
 #include "util.h"
+#include "cJSON.h"
+#include <stddef.h>
 
 static struct context context;
 
@@ -9,4 +11,9 @@ void init(int **data)
 
 }
 
-void update
+
+
+void update()
+{
+
+}

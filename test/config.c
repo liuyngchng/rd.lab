@@ -15,7 +15,7 @@ struct config get_config()
     config.col_bd_msk = pow(2, config.col - 1);
     config.col_max = pow(2, config.col) - 1;
 
-    config.pcs[0] = (struct rot_piece){
+    config.pcs[0] = (struct rot_piece) {
         4, 2, 0,
         0b0010,
         0b0111,
@@ -37,7 +37,7 @@ struct config get_config()
         0b0010,
         0b0000
     };
-    config.pcs[1] = (struct rot_piece){
+    config.pcs[1] = (struct rot_piece) {
         4, 0, 0,
 
         0b0000,
@@ -60,7 +60,7 @@ struct config get_config()
         0b0110,
         0b0000
     };
-    config.pcs[2] = (struct rot_piece){
+    config.pcs[2] = (struct rot_piece) {
         4, 1, 0,
 
         0b0000,

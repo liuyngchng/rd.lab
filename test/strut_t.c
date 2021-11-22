@@ -46,5 +46,5 @@ int test()
 int main()
 {
     struct semaphore smph = (struct semaphore){1, 0, 0, 0};
-    printf("smph.roate=%d\n", smph.rotate);
+    printf("smph.roate=%d\n", smph.rot);
 }

@@ -1,4 +1,5 @@
 #include <math.h>
+#include "util.h"
 
 int** get_matrix(int *b, int size_b, int col_n, int **c)
 {
