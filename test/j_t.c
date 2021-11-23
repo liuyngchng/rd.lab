@@ -2,7 +2,7 @@
 #include "cJSON.h"
 #include <math.h>
 
-void get_str_a(int *a, int size, char *a_str);
+char *get_str_a(int *a, int size, char *a_str);
 
 void test_j()
 {
@@ -105,19 +105,20 @@ void get_int_array(char *str_a, int *a, int size)
 	cJSON_Delete(json);
 }
 
-void get_str_a(int *a, int size, char *a_str)
+char *get_str_a(int *a, int size, char *a_str)
 {
     cJSON *int_j = cJSON_CreateIntArray(a, size);
     a_str = cJSON_Print(int_j);
+//    a_str = str;
+    printf("test=%s\n", a_str);
+    return a_str;
 }
 
 void test_int_array2d()
 {
     char *str = "[\
-                    [0, 1, 0, 0],\
-                    [1, 1, 1, 0],\
-                    [0, 0, 0, 0],\
-                    [0, 0, 0, 0]\
+                    [0, 1, 2, 3],\
+                    [4, 5, 6, 7]\
                 ]";
     int a[4];
     int size = 4;
@@ -125,9 +126,10 @@ void test_int_array2d()
     for(int i = 0; i< 4; i++) {
         printf("a[%d] = %d\n", i, a[i]);
     }
-    char *str_a;
+    char *str_a = calloc(size*10, sizeof(char));
     get_str_a(a, size, str_a);
     printf("str_a=%s\n", str_a);
+//    free(str_a);
 }
 
 
