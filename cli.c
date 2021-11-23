@@ -260,7 +260,7 @@ long int get_time()
 int test_t()
 {
 	char *ip = "127.0.0.1";
-	int port = 8000;
+	int port = 8080;
 	long int t = get_time();
 	int sockfd = con(ip, port);
     int size = 8092;
