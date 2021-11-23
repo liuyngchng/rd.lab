@@ -32,7 +32,7 @@
 			<Add option="-Wall" />
 			<Add option="-fexceptions" />
 		</Compiler>
-		<Unit filename="test/j_t.c">
+		<Unit filename="test/str_t.c">
 			<Option compilerVar="CC" />
 		</Unit>
 		<Extensions />
