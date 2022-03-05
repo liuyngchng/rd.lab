@@ -32,9 +32,13 @@
 			<Add option="-Wall" />
 			<Add option="-fexceptions" />
 		</Compiler>
-		<Unit filename="test/strut_t.c">
+		<Unit filename="test/j_t.c">
 			<Option compilerVar="CC" />
 		</Unit>
-		<Extensions />
+		<Extensions>
+			<envvars />
+			<code_completion />
+			<debugger />
+		</Extensions>
 	</Project>
 </CodeBlocks_project_file>
