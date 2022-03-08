@@ -46,12 +46,12 @@ https://127.0.0.1:9200/_cluster/health?pretty
 
 
 
-# 3. journal
+# 3.  journal
 To tail the journal:
 
 `sudo journalctl -f`
 
-# 4. healthy check
+# 4. health check
 sudo curl --cacert /etc/elasticsearch/certs/http_ca.crt  'https://127.0.0.1:9200/_cluster/health?pretty' -u elastic
 
 # 5. reset password
