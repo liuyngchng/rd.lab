@@ -238,8 +238,6 @@ bin/elasticsearch-certutil cert --ca elastic-stack-ca.p12
 ./bin/elasticsearch
 ```
 
-
-
 生成证书对应秘钥
 
 ```
@@ -247,6 +245,33 @@ openssl pkcs12 -in elastic-stack-ca.p12 -out newfile.crt.pem -clcerts -nokeys
 ```
 
 把这个文件拷入到filebeat目录中
+
+### 7.3.2 config filebeats
+
+```sh
+output.elasticsearch:
+  # Array of hosts to connect to.
+  hosts: ["localhost:9200"]
+  index: "%{[fields.source]}-*"
+  indices:
+    - index: "ops-systemlog-%{+yyyy.MM.dd}"
+      when.equals: 
+        fields: 
+          source: "ops-systemlog"
+    #- index: "opslog-operationlog-%{+yyyy.MM.dd}"
+    - index: "ops-operationlog-%{+yyyy.MM.dd}"
+      when.equals:
+        fields:
+          #source: "operationlog"
+          source: "ops-operationlog"
+
+  # Protocol - either `http` (default) or `https`.
+  protocol: "https"
+  ssl.verification_mode: none
+  ssl.certificate_authorities: ["newfile.crt.pem"]
+```
+
+启动filebeat
 
 `sudo filebeat -c /etc/filebeat/filebeat.yml`
 
