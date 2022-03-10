@@ -51,8 +51,23 @@ To tail the journal:
 
 `sudo journalctl -f`
 
-# 4. health check
+# 4. health check and Other API
+## 4.1 health check
+
+```
 sudo curl --cacert /etc/elasticsearch/certs/http_ca.crt  'https://127.0.0.1:9200/_cluster/health?pretty' -u elastic
+//不使用证书
+curl -k --tlsv1  'https://127.0.0.1:9200/_cluster/health?pretty' -u elastic:inza42ePLWcTkfxvQykd
+```
+
+## 4.2 index list
+
+```
+https://127.0.0.1:9200/_cat/indices?format=json&index=[索引名称，可使用通配符]
+curl -k --tlsv1  'https://127.0.0.1:9200/_cat/indices' -u elastic:inza42ePLWcTkfxvQykd
+```
+
+
 
 # 5. run
 
@@ -271,7 +286,38 @@ output.elasticsearch:
   ssl.certificate_authorities: ["newfile.crt.pem"]
 ```
 
-启动filebeat
+### 7.3.3 启动filebeat
 
-`sudo filebeat -c /etc/filebeat/filebeat.yml`
+````
+cd /usr/share/filebeat/bin
+sudo filebeat -c /etc/filebeat/filebeat.yml
+````
+
+### 7.3.4 自定义filebeat的ES索引名称
+
+```
+#==================== Elasticsearch template setting ==========================
+setup.ilm.enabled: false
+setup.template.name: "filebeat-rd"
+setup.template.pattern: "filebeat-rd-*"
+
+
+#-------------------------- Elasticsearch output ------------------------------
+output.elasticsearch:
+  # Array of hosts to connect to.
+  hosts: ["localhost:9200"]
+  index: "filebeat-rd-%{[agent.version]}-%{+yyyy.MM.dd}"
+
+  # Protocol - either `http` (default) or `https`.
+  protocol: "https"
+
+  # Authentication credentials - either API key or username/password.
+  #api_key: "id:api_key"
+  username: "elastic"
+  password: "inza42ePLWcTkfxvQykd"
+  ssl.verification_mode: none
+  ssl.certificate_authorities: ["/etc/filebeat/newfile.crt.pem"]
+```
+
+
 
