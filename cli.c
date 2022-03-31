@@ -62,7 +62,7 @@ int get_data(int sockfd, char* data)
 	memset(buf, 0, sizeof(buf));
 	strcat(param, "?a=1&b=2");
 	memset(hdr, 0, 4096);
-	strcat(hdr, "GET /sjzc/");
+	strcat(hdr, "GET /data");
 	strcat(hdr, param);
 	strcat(hdr, " HTTP/1.1\r\n");
 	strcat(hdr, "Accept: */*\r\n");
@@ -260,7 +260,7 @@ long int get_time()
 int test_t()
 {
 	char *ip = "127.0.0.1";
-	int port = 8888;
+	int port = 8000;
 	long int t = get_time();
 	int sockfd = con(ip, port);
     int size = 8092;
