@@ -80,4 +80,6 @@ sudo fc-cache -fsv
 ```
 
 
+# 3. wechat 微信
 
+wine '/home/rd/.wine/drive_c/Program Files (x86)/Tencent/WeChat/[3.6.0.18]/WeChat.exe'
