@@ -51,10 +51,18 @@ docker-ce.x86_64                3:19.03.13-3.el8                docker-ce-stable
 开始安装
 
 ```
-yumdownloader docker-ce.19.03.13-3.el8
+mkdir docker_rpm
+yumdownloader --resolve  docker-ce
+ls | sort | tr "\n" " " | xargs rpm -ivh
 
 ```
-强制安装
+启动并加入开机启动
 ```
-rpm -ivh ***
+systemctl start docker
+systemctl enable docker
+```
+验证安装是否成功(有client和service两部分表示docker安装启动都成功了)
+```
+docker version
+docker info
 ```
