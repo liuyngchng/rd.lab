@@ -82,4 +82,12 @@ sudo fc-cache -fsv
 
 # 3. wechat 微信
 
+```
 wine '/home/rd/.wine/drive_c/Program Files (x86)/Tencent/WeChat/[3.6.0.18]/WeChat.exe'
+```
+ wine是把windows的接口翻译成Linux，但是有一部分没有翻译，所以就导致一部分功能不能用，   
+比如中文的显示异常。这是因为缺少一些windows的库。winetricks应运而生，他可以图形化的安装wine缺少的库
+
+```
+sudo apt-get install winetricks
+```
