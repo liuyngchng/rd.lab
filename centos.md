@@ -111,3 +111,143 @@ you should do
 yum update kernel -y
 yum install kernel-headers kernel-devel gcc make -y
 ```
+
+# 3. install mysql8 on centos7.9 minimal
+
+## 3.1 install
+
+download `mysql-8.0.28-1.el7.x86_64.rpm-bundle.tar`  
+for `RedHadEnterprise Linux 7 /Oracle Linux 7 x86,64bit`  
+in https://dev.mysql.com/downloads/mysql/
+
+```
+tar -xf  mysql-8.0.28-1.el7.x86_64.rpm-bundle.tar
+```
+
+看到一堆rpm文件，
+
+try
+
+```
+ls *.rpm | sort | tr '\n' ' ' | xargs rpm -ivh
+```
+
+逐个下载缺少的依赖
+
+```
+yum search ****
+yumdownloader --resolve ****
+```
+
+直到不再缺少依赖，只显示错误
+
+```
+error: Failed dependencies:
+	mariadb-libs is obsoleted by mysql-community-libs-8.0.28-1.el7.x86_64
+```
+
+查看已经安装的rpm包，包含关键字“mariadb-lib”
+```
+rpm -qa | grep mariadb-libs
+```
+
+删除依赖
+
+```
+yum remove mariadb-libs-5.5.68-1.el7.x86_64
+```
+
+出现
+
+```
+file ****  from install of ***** conflicts with file from package *****
+```
+
+执行强制安装
+
+```
+ls *.rpm | sort | tr '\n' ' ' | xargs rpm -ivh --force
+```
+
+## 3.2 config
+
+查看服务状态
+
+```
+systemctl status mysqld
+```
+
+停止服务
+
+```
+service mysqld stop
+```
+
+初始化数据库
+
+```
+mysqld --initialize --console
+```
+
+目录授权
+
+```
+chown -R mysql:mysql /var/lib/mysql/
+```
+
+
+
+启动mysql服务
+
+```
+systemctl start mysqld
+```
+
+查看临时密码
+
+```
+grep 'password' /var/log/mysqld.log
+```
+
+修改mysql密码
+
+ ```
+ alter USER 'root'@'localhost' IDENTIFIED BY 'mypassword';
+ ```
+
+授权远程连接
+
+```
+show databases;
+use mysql;
+select host, user, authentication_string, plugin from user;
+
+update user set host = "%" where user='root';
+select host, user, authentication_string, plugin from user;
+flush privileges;
+```
+远程 telnet IP port， 若不通，则可能是防火墙原因，执行
+
+```
+systemctl status firewalld
+systemctl stop firewall
+```
+
+远程连接若出现 Authenticationplugin‘caching_sha2_password’ cannot be loaded:XXXXX， 则
+
+
+```
+mysql -u root -p
+use mysql;
+alter USER 'root'@'%' IDENTIFIED WITH mysql_native_password BY 'mypassword';
+flush privileges;
+```
+
+```
+备注：
+mysql8 之前的版本中加密规则是mysql_native_password，而在mysql8之后,加密规则是caching_sha2_password。
+可以把mysql用户登录密码加密规则还原成mysql_native_password.。
+```
+
+ 
+
