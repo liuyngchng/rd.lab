@@ -212,6 +212,7 @@ grep 'password' /var/log/mysqld.log
 修改mysql密码
 
  ```
+ mysql -uroot -p 				//输入临时密码
  alter USER 'root'@'localhost' IDENTIFIED BY 'mypassword';
  ```
 
@@ -249,5 +250,31 @@ mysql8 之前的版本中加密规则是mysql_native_password，而在mysql8之�
 可以把mysql用户登录密码加密规则还原成mysql_native_password.。
 ```
 
- 
+## 3.3 
+出现
+```
+Docker: System has not been booted with systemd as init system
+```
+这是因为启动容器命令如下：
 
+```
+docker run -d --name centos_1 -it  centos:latest /bin/bash
+```
+
+或
+
+```
+docker run -d --name centos_1 -it  centos:latest
+```
+
+解决办法是更换启动命令：
+
+```
+docker run -tid --name centos_1 --privileged=true centos:latest /sbin/init
+```
+
+区别在于后面用了 
+
+```
+/sbin/init
+```

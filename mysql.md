@@ -110,3 +110,23 @@ general_log             = 1
 ```
 tail -f /var/log/mysql/mysql.log
 ```
+ # 3. mysqldump 数据迁移
+ from MySQL8 to mysql5.7
+
+数据导出
+
+```
+mysqldump -uroot  ry -p > ./source.sql
+```
+
+数据修改
+```
+sed -i "s/utf8mb4_0900_ai_ci/utf8_general_ci/g" ./source.sql
+sed -i "s/utf8mb4/utf8/g" ./source.sql
+```
+
+数据导入
+
+```
+mysql -h11.11.54.33 -P13307 -uroot -p ry <./source.sql
+```
