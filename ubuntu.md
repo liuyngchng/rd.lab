@@ -113,3 +113,10 @@ QT_IM_MODULE="xim"
 ibus-daemon -d -x -r
 
 编辑完成，按esc返回，然后输入:wq，回车保存并退出。重启后可以输入了。
+
+Ubuntu18.04 idea快捷键ctrl-alt-left失效
+Ctrl+Alt+Left/Right 被系统占用
+查看
+gsettings get org.gnome.desktop.wm.keybindings switch-to-workspace-left
+修改：
+gsettings set org.gnome.desktop.wm.keybindings switch-to-workspace-left "[]"
