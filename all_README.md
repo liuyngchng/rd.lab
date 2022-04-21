@@ -474,6 +474,14 @@ on server
 ```
 cat /home/user/id_pub.rsa >> ~/.ssh/authroized_keys
 ```
+另外要注意请务必要将服务器上
+
+- ~/.ssh权限设置为700
+- ~/.ssh/authorized_keys的权限设置为600
+   这是linux的安全要求，如果权限不对，自动登录将不会生效
+
+
+
 hava fun!
 
 # 30. config ubuntu wifi driver, chinese and grub timeout input method after installed
@@ -657,3 +665,21 @@ protoc ./Message.proto --java_out=./
 %s/\r//g
 
 %s/\n//g
+# 48. springboot support https
+## 48.1 get key
+```
+keytool -genkey -alias tomcat -keyalg RSA -keystore ./server.keystore
+```
+## 48.2 add config
+```
+server.ssl.protocol=TLS
+server.ssl.key-store=classpath:server.keystore
+server.ssl.key-alias=tomcat
+server.ssl.enabled=true
+server.ssl.key-store-password=123456
+server.ssl.key-store-type=JKS
+```
+其他不需要修改，启动即可， 与更改前 只需要将http 改成https 例如原来访问是http://localhost:8081/  
+更改后：https://localhost:8081/   
+需要注意的是：改完后不再支持http访问，因证书原因，浏览器会报证书风险，可无视
+
