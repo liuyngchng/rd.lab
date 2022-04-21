@@ -479,7 +479,7 @@ yum install nc -y
 
 ## 8.2 端口探测
 
-### 8.2.1 TCP端口探测使用方法
+### 8.2.1 TCP端口探测
 
 ```sh
 # server listen port
