@@ -351,3 +351,21 @@ docker-compose up -d  // 后台启动并运行容器
 ```
 
 镜像服务器地址可以在 `docker-compose.yml` 中配置。
+
+# 8. set proxy for docker in ubuntu
+
+https://docs.docker.com/network/proxy/
+
+```sh
+vi /lib/systemd/system/docker.service
+# 添加如下内容
+[Service]
+Type=notify
+# the default is not to use systemd for cgroups because the delegate issues still
+# exists and systemd currently does not support the cgroup feature set required
+# for containers run by docker
+Environment=HTTP_PROXY=http://xxx.com:xxx
+Environment=HTTPS_PROXY=http://xxx.com:xxx
+Environment=NO_PROXY=*.xxx.com
+```
+
