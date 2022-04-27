@@ -352,12 +352,150 @@ docker-compose up -d  // 后台启动并运行容器
 
 镜像服务器地址可以在 `docker-compose.yml` 中配置。
 
-# 8. set proxy for docker in ubuntu
 
+
+# 8. centOS7 离线安装docker
+
+
+
+## 8.1 docker包下载地址
+
+```sh
+#下载docker-20.10.0包
+wget https://download.docker.com/linux/static/stable/x86_64/docker-20.10.0.tgz
+wget https://download.docker.com/linux/static/stable/x86_64/docker-17.12.1-ce.tgz
+
+#上传到Centos系统/data/目录,如
+scp docker-20.10.0.tgz root@192.168.0.5:/data/
+
+#进入data目录,解压docker包
+cd /data
+tar -zxvf docker-20.10.0.tgz
+
+#将解压出来的docker文件内容移动到 /usr/bin/ 目录下
+cp docker/* /usr/bin/
+
+#查看docker版本
+docker version
+
+#查看docker信息
+docker info
+```
+
+## 8.2 配置Docker开机自启动服务
+
+#添加docker.service文件
+
+vi /etc/systemd/system/docker.service
+
+#按i插入模式,复制如下内容:
+
+```sh
+[Unit]
+Description=Docker Application Container Engine
+Documentation=https://docs.docker.com
+After=network-online.target firewalld.service
+Wants=network-online.target
+  
+[Service]
+Type=notify
+# the default is not to use systemd for cgroups because the delegate issues still
+# exists and systemd currently does not support the cgroup feature set required
+# for containers run by docker
+#ExecStart=/usr/bin/dockerd
+
+# drivermanage 使用overlay2 ，需要配置 /etc/docker/daemon.json一起使用， 详细选择见
+# docker 官网 https://docs.docker.com/storage/storagedriver/select-storage-driver/
+ExecStart=/usr/bin/dockerd --graph=/data/docker --api-cors-header=*
+# drivermanage 使用devicemapper
+#ExecStart=/usr/bin/dockerd --graph=/data/docker -H tcp://0.0.0.0:4243 -H unix://var/run/docker.sock  --insecure-registry  dev.kmx.k2data.com.cn:5001 --storage-driver=devicemapper --api-cors-header=*
+ExecReload=/bin/kill -s HUP $MAINPID
+# Having non-zero Limit*s causes performance problems due to accounting overhead
+# in the kernel. We recommend using cgroups to do container-local accounting.
+LimitNOFILE=infinity
+LimitNPROC=infinity
+LimitCORE=infinity
+# Uncomment TasksMax if your systemd version supports it.
+# Only systemd 226 and above support this version.
+#TasksMax=infinity
+TimeoutStartSec=0
+# set delegate yes so that systemd does not reset the cgroups of docker containers
+Delegate=yes
+# kill only the docker process, not all processes in the cgroup
+KillMode=process
+# restart the docker process if it exits prematurely
+Restart=on-failure
+StartLimitBurst=3
+StartLimitInterval=60s
+  
+[Install]
+WantedBy=multi-user.target
+```
+
+ 添加配置文件， 注意，daemon.json中配置的参数不能与 /etc/systemd/system/docker.service 重复，否则启动服务会报 `start request repeated too quickly for docker.service`
+
+```sh
+touch /etc/docker/daemon.json
+vi /etc/docker/daemon.json
+# 添加如下内容
+{
+ 
+ "debug": true,
+ "live-restore": false,
+ "hosts":["unix:///var/run/docker.sock","tcp://0.0.0.0:4243"],
+ "storage-driver": "overlay2",
+ "storage-opts": [
+    "overlay2.override_kernel_check=true"
+  ],
+  "insecure-registry": [ "hostName:port", "IP:port"] 
+}
+```
+
+
+
+启动服务
+
+```sh
+#添加文件可执行权限
+chmod +x /etc/systemd/system/docker.service
+
+#重新加载配置文件
+systemctl daemon-reload
+
+#启动Docker
+systemctl start docker
+
+#查看docker启动状态
+systemctl status docker
+
+#查看启动容器
+docker ps
+
+#设置开机自启动
+systemctl enable docker.service
+
+#查看docker开机启动状态 enabled:开启, disabled:关闭
+systemctl is-enabled docker.service
+
+https://docs.docker.com/storage/storagedriver/select-storage-driver/
+
+https://blog.csdn.net/doctorone/article/details/88536385
+device-mapper :需要 
+
+yum install -y yum-utils device-mapper-persistent-data lvm2
+
+/usr/bin/dockerd --graph=/data/docker -H tcp://0.0.0.0:4243 -H unix:///var/run/docker.sock  --insecure-registry  dev.kmx.k2data.com.cn:5001 --storage-driver=devicemapper --api-cors-header=*
+```
+
+
+
+# 9. set proxy for docker in ubuntu
+
+## 9.1 docker service
 https://docs.docker.com/network/proxy/
 
 ```sh
-vi /lib/systemd/system/docker.service
+sudo vi /lib/systemd/system/docker.service
 # 添加如下内容
 [Service]
 Type=notify
@@ -368,4 +506,79 @@ Environment=HTTP_PROXY=http://xxx.com:xxx
 Environment=HTTPS_PROXY=http://xxx.com:xxx
 Environment=NO_PROXY=*.xxx.com
 ```
+## 9.2 docker config
+run
+```
+sudo mkdir -p /etc/systemd/system/docker.service.d
+sudo vi /etc/systemd/system/docker.service.d/http-proxy.conf
+```
+内容如下
+```
+[Service]
+Environment="HTTP_PROXY=http://账号:密码@服务器:端口"
+Environment="HTTPS_PROXY=http://账号:密码@服务器:端口"
+Environment="NO_PROXY=localhost,127.0.0.1"
+```
 
+systemctl daemon-reload
+
+systemctl restart docker
+
+# 10. docker push
+## 10.1 查看镜像
+
+查看仓库里的镜像清单
+
+```sh
+curl http://IP:port/v2/_catalog
+```
+
+获取某个镜像的标签列表， image_name 为 镜像清单里的名称
+
+```sh
+curl -XGET http://IP:port/v2/image_name/tags/list
+
+{"errors":[{"code":"NAME_UNKNOWN","message":"repositoryname not known toregistry","detail":{"name":"image_name"}}]}
+```
+
+
+## 10.2 docker pull
+
+在本地登录到远程仓库：
+```
+docker login --username=[用户名] -p=[密码]  远程ip:端口
+```
+本地镜像打标签,   [远程ip:端口/自定义路径/*]:[版本号]  就是：[标签名:版本号]
+```
+docker tag [镜像id] [远程ip:端口/自定义路径/*]:[版本号]
+```
+推送
+```
+docker push [远程ip:端口/自定义路径/*]:[版本号]
+```
+当显示
+```
+The push refers to repository [IP:port/path]
+Get https://IP:port/v2/: Service Unavailable
+```
+原因为 docker镜像仓库暂不支持 https
+在“/etc/docker/“目录下, 创建”daemon.json“文件(如果有的话直接覆盖)。  
+在文件中写入
+```
+{ "insecure-registries":["IP:port"] }
+```
+执行
+```sh
+systemctl daemon-reload
+systemctl restart docker.service 
+```
+## 10.3 docker 删除私有仓库中的镜像
+查看某个镜像的sha256值：
+```
+curl -v -s "127.0.0.1:5000/v2/nginx/manifests/1.7.9" 2>&1 | grep Docker-Content-Digest | awk '{print ($3)}'
+```
+
+删除私有仓库的镜像
+```
+$ curl -I -X DELETE http://127.0.0.1:5000/v2/fbgweb/manifests/sha256:6a67ba482a8dd4f8143ac96b1dcffa5e45af95b8d3e37aeba72401a5afd7ab8e
+```

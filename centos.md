@@ -298,142 +298,6 @@ yum install ***.rpm 提示 `A conflicts with file from package B`
 
 yum -y remove  A, 然后再安装B
 
-# 5. centOS7 离线安装docker
-
-https://www.yisu.com/zixun/509627.html
-
-
-
-## 5.1 docker包下载地址
-
-```sh
-#下载docker-20.10.0包
-wget https://download.docker.com/linux/static/stable/x86_64/docker-20.10.0.tgz
-wget https://download.docker.com/linux/static/stable/x86_64/docker-17.12.1-ce.tgz
-
-#上传到Centos系统/data/目录,如
-scp docker-20.10.0.tgz root@192.168.0.5:/data/
-
-#进入data目录,解压docker包
-cd /data
-tar -zxvf docker-20.10.0.tgz
-
-#将解压出来的docker文件内容移动到 /usr/bin/ 目录下
-cp docker/* /usr/bin/
-
-#查看docker版本
-docker version
-
-#查看docker信息
-docker info
-```
-
-## 5.2 配置Docker开机自启动服务
-
-#添加docker.service文件
-
-vi /etc/systemd/system/docker.service
-
-#按i插入模式,复制如下内容:
-
-```sh
-[Unit]
-Description=Docker Application Container Engine
-Documentation=https://docs.docker.com
-After=network-online.target firewalld.service
-Wants=network-online.target
-  
-[Service]
-Type=notify
-# the default is not to use systemd for cgroups because the delegate issues still
-# exists and systemd currently does not support the cgroup feature set required
-# for containers run by docker
-#ExecStart=/usr/bin/dockerd
-
-# drivermanage 使用overlay2 ，需要配置 /etc/docker/daemon.json一起使用， 详细选择见
-# docker 官网 https://docs.docker.com/storage/storagedriver/select-storage-driver/
-ExecStart=/usr/bin/dockerd --graph=/data/docker   --insecure-registry  dev.kmx.k2data.com.cn:5001  --api-cors-header=*
-# drivermanage 使用devicemapper
-#ExecStart=/usr/bin/dockerd --graph=/data/docker -H tcp://0.0.0.0:4243 -H unix://var/run/docker.sock  --insecure-registry  dev.kmx.k2data.com.cn:5001 --storage-driver=devicemapper --api-cors-header=*
-ExecReload=/bin/kill -s HUP $MAINPID
-# Having non-zero Limit*s causes performance problems due to accounting overhead
-# in the kernel. We recommend using cgroups to do container-local accounting.
-LimitNOFILE=infinity
-LimitNPROC=infinity
-LimitCORE=infinity
-# Uncomment TasksMax if your systemd version supports it.
-# Only systemd 226 and above support this version.
-#TasksMax=infinity
-TimeoutStartSec=0
-# set delegate yes so that systemd does not reset the cgroups of docker containers
-Delegate=yes
-# kill only the docker process, not all processes in the cgroup
-KillMode=process
-# restart the docker process if it exits prematurely
-Restart=on-failure
-StartLimitBurst=3
-StartLimitInterval=60s
-  
-[Install]
-WantedBy=multi-user.target
-```
-
- 添加配置文件
-
-```sh
-touch /etc/docker/daemon.json
-vi /etc/docker/daemon.json
-# 添加如下内容
-{
- 
- "debug": true,
- "live-restore": false,
- "hosts":["unix:///var/run/docker.sock","tcp://0.0.0.0:4243"],
- "storage-driver": "overlay2",
- "storage-opts": [
-    "overlay2.override_kernel_check=true"
-  ]
-}
-```
-
-
-
-
-
-启动服务
-
-```sh
-#添加文件可执行权限
-chmod +x /etc/systemd/system/docker.service
-
-#重新加载配置文件
-systemctl daemon-reload
-
-#启动Docker
-systemctl start docker
-
-#查看docker启动状态
-systemctl status docker
-
-#查看启动容器
-docker ps
-
-#设置开机自启动
-systemctl enable docker.service
-
-#查看docker开机启动状态 enabled:开启, disabled:关闭
-systemctl is-enabled docker.service
-
-https://docs.docker.com/storage/storagedriver/select-storage-driver/
-
-https://blog.csdn.net/doctorone/article/details/88536385
-device-mapper :需要 
-
-yum install -y yum-utils device-mapper-persistent-data lvm2
-
-/usr/bin/dockerd --graph=/data/docker -H tcp://0.0.0.0:4243 -H unix:///var/run/docker.sock  --insecure-registry  dev.kmx.k2data.com.cn:5001 --storage-driver=devicemapper --api-cors-header=*
-```
-
 
 
 # 6. redis
@@ -459,17 +323,9 @@ vi ./redis.conf
 redis-server /etc/redis.conf &
 ```
 
-# 7. docker-compose
+# 7. nc
 
-```sh
-sudo curl -L https://github.com/docker/compose/releases/download/1.21.2/docker-compose-$(uname -s)-$(uname -m) -o /usr/local/bin/docker-compose
-sudo chmod +x /usr/local/bin/docker-compose
-docker-compose -v
-```
-
-# 8. nc
-
-## 8.1 安装nc工具
+## 7.1 安装nc工具
 
 
 
@@ -477,9 +333,9 @@ docker-compose -v
 yum install nc -y
 ```
 
-## 8.2 端口探测
+## 7.2 端口探测
 
-### 8.2.1 TCP端口探测
+### 7.2.1 TCP端口探测
 
 ```sh
 # server listen port
@@ -502,7 +358,7 @@ nc  -w 1 192.168.21.17 34567 < /dev/null && echo "tcp port ok"
 Ncat: Connection refused.
 ```
 
-### 8.2.2 UDP端口探测
+### 7.2.2 UDP端口探测
 
 使用方法：
 
@@ -516,4 +372,118 @@ nc -u -w 1 IP port < /dev/null && echo "udp port ok"
 nc -u -w 1 192.168.21.17 34567 < /dev/null && echo -e "udp port ok"
 udp port ok
 ```
+
+# 8. iptables
+
+## 8.1 basic
+
+执行
+
+```sh
+yum install iptables-services
+systemctl is-enabled iptables.service
+##启用iptables
+ systemctl enable iptables  
+```
+
+
+
+
+
+iptables规则重启自动生效--永久生效
+
+```sh
+iptables-save >  /etc/sysconfig/iptables
+# 手动恢复
+iptables-restore < /etc/sysconfig/iptables
+# 开机自动恢复规则，把恢复命令添加到启动脚本：
+echo '/sbin/iptables-restore /etc/sysconfig/iptables' >>/etc/rc.d/rc.local
+# 现在reboot重启服务器，查看/root/restart.log日志如下：
+chmod +x /etc/rc.d/rc.local
+```
+
+查看iptables现有规则
+
+```bash
+iptables -L -n
+```
+
+先允许所有,不然有可能会杯具
+
+```bash
+iptables -P INPUT ACCEPT
+```
+
+清空所有默认规则
+
+```bash
+iptables -F
+```
+
+清空所有自定义规则
+
+```bash
+iptables -X
+```
+
+所有计数器归0
+
+```bash
+iptables -Z
+```
+
+许来自于lo接口的数据包(本地访问)
+
+```bash
+iptables -A INPUT -i lo -j ACCEPT
+```
+
+开放22端口
+
+```bash
+iptables -A INPUT -p tcp --dport 22 -j ACCEPT
+```
+
+允许ping
+
+```bash
+iptables -A INPUT -p icmp --icmp-type 8 -j ACCEPT
+```
+
+禁用某网段
+
+    iptables -I INPUT -p tcp -s 192.168.116.0/24 -j DROP
+
+禁用某网段的22端口
+
+    iptables -I INPUT -p tcp -s 192.168.116.0/24 --dport 22 -j DROP
+
+禁用192.168.116.1~192.168.116.20 IP段的 22 端口
+
+    iptables -I INPUT -m iprange --src-range 192.168.116.1-192.168.116.20 -p tcp --dport 22 -j DROP
+
+禁用192.168.116.1~192.168.116.20 经过网卡eno1的 IP段的 22 端口
+
+    iptables -I INPUT -m iprange --src-range 192.168.116.1-192.168.116.20 -p tcp -i eno1 --dport 22 -j DROP
+
+禁用192.168.116.1~192.168.116.20 经过网卡eno1的 目的IP为192.168.116.118的 IP段的 22 端口
+
+```
+iptables -I INPUT -m iprange --src-range 192.168.116.1-192.168.116.20 -p tcp -i eno1 -d 192.168.116.118 --dport 22 -j DROP
+```
+
+## 8.2 example
+
+假设希望仅仅允许 111.111.0.0/16 IP段ssh登录，而禁止其他所有ip登录。
+
+最简单的命令是：
+
+```sh
+# 禁止所有对22端口的入访问
+iptables -I INPUT -p tcp --dport 4243 -j DROP
+# 允许111.111.0.0/16的访问
+iptables -I INPUT -s 111.111.0.0/16 -p tcp --dport 4243 -j ACCEPT
+```
+
+
 
