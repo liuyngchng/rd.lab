@@ -1,6 +1,6 @@
-# 1. Introduction to docker
+# Introduction to docker
 
-## 1.1 Install docker
+##  Install docker
 
 download docker desktop from [docker.com](https://www.docker.com/get-started)
 
@@ -10,7 +10,7 @@ download docker desktop from [docker.com](https://www.docker.com/get-started)
 | dockerd &                 | startup dockerd   |
 | docker pull centos        | pull centos image |  
 
-## 1.2 start
+##  start
 
 执行
 ```
@@ -46,26 +46,26 @@ docker ps
 | exit                              | 退出容器  |
 docker cp jre.tar.gz test:/opt      # 将容器外的文件拷贝到容器里
 
-## 1.3 生成新的 image
+##  生成新的 image
 
 提交 container 生成新的 image
 
 | CMD | NOTE |
 | --- | ---  |
 | docker ps | 获取 CONTAINER ID |
-| docker commit container_id richard/test(repository column) | 提交更改，生成新的镜像 |
+| docker commit container_id richard/test(repository column):tag | 提交更改，生成新的镜像 |
 | docker images | 获取 IMAGE ID |
 |docker rmi  image_id | 删除 image |
 
-## 1.4 导出及导入 image
-### 1.4.1 导出tar
+##  导出及导入 image
+###  导出tar
 | CMD | NOTE |
 | --- |  --- |
 | docker images | 获取 REPOSITORY |
 | docker save richard/test -o ./test.tar | 导出为 tar 包 |
 | docker load -i ./test.tar              | 导入 tar 包 |
 
-### 1.4.2 导出img文件
+###  导出img文件
 | CMD | NOTE |
 | --- | ---  |
 | docker images | get image id |
@@ -73,7 +73,7 @@ docker cp jre.tar.gz test:/opt      # 将容器外的文件拷贝到容器里
 | `docker load < ~/images/aaa.img` | load img file |
 
 
-## 1.5 端口和目录映射
+##  端口和目录映射
 执行端口映射时，会调用 docker-proxy 命令，为操作系统创建软链  
 
 | CMD | NOTE |
@@ -82,13 +82,14 @@ docker cp jre.tar.gz test:/opt      # 将容器外的文件拷贝到容器里
 | ln -s /usr/libexec/docker/docker-proxy-current /usr/bin/docker-proxy | 建立软链 |
 | docker run -dit -p 9088:9088 image bash | 启动 |
 | docker run -dit -v /hostdir:/containerdir --name test repository_id | 目录映射 |
+| docker run -u username | 指定运行镜像所使用的用户 |
 
-## 1.6 修改默认镜像存储目录
+## 修改默认镜像存储目录
 
 CentOS 下 docker 默认的存储路径在 /var/lib/docker下面。 
 ``
 docker info | grep dir -i
-```
+```sh
 修改docker的systemd的 docker.service的配置文件
 不知道 配置文件在哪里可以使用systemd 命令显示一下.  
 
@@ -109,7 +110,7 @@ show
 | systemctl daemon-reload  | reload |
 | systemctl start docker   | start |
 
-## 1.7 限制 container 使用的 CPU 和 内存
+##  限制 container 使用的 CPU 和 内存
 
 | CMD | NOTE |
 | --- | ---  |
@@ -119,8 +120,8 @@ show
 | top           | 按 1 键，查看各个 CPU 的利用率，验证 CPU 限制是否生效 |
 | docker stats | 查看  MEM USAGE / LIMIT ，验证配置是否生效 |
 
-## 1.8 docker network
-### 1.8.1 为容器设置固定的 IP 地址
+##  docker network
+###  为容器设置固定的 IP 地址
 
 ```sh
 启动Docker容器的时候，使用默认的网络是不支持指派固定IP的，如下
@@ -134,13 +135,13 @@ docker: Error response from daemon: User specified IP address is supported on us
 | docker network ls | 查看自定义网络 |
 | docker run -itd --name networkTest1 --net mynetwork --ip 172.18.0.2 centos:latest /bin/bash | 启动容器 |
 
-### 1.8.2 使用host 网络模式
+###  使用host 网络模式
 使用`docker network ls` 中的 host模式，容器的网络配置与宿主机完全一样，这样也不需要在做容器内外的端口映射了。
 ```sh
 docker run -dit --name container_name --network host image_id
 ```
 
-## 1.9 gdb in docker
+##  gdb in docker
 linux 内核为了安全起见，采用了Seccomp(secure computing)的沙箱机制来保证系统不被破坏   
 它能使一个进程进入到一种“安全”运行模式，该模式下的进程只能调用4种系统调用（system calls），  
 即read(), write(), exit()和sigreturn()，否则进程便会被终止。
@@ -149,7 +150,7 @@ docker只有以--security-opt seccomp=unconfined的模式运行container才能�
 ```sh
 docker run --security-opt seccomp=unconfined -dit image_id
 ```
-## 1.10 "No manual entry for xx" in docker
+##  "No manual entry for xx" in docker
 By default the centos containers are built using yum's nodocs  
 注释掉这个选项，重新安装 rpm 包即可  
 ```sh
@@ -169,14 +170,14 @@ rpm -qa | xargs yum reinstall -y
 exit
 docker commit bbb046a8fefe image_repository
 ```
-## 1.11 docker容器内设置ubuntu语言为中文
-### 1.11.1 查看当前语言
+##  docker容器内设置ubuntu语言为中文
+###  查看当前语言
 `locale`
-### 1.11.2 查看当前已安装的语言
+###  查看当前已安装的语言
 
 `locale -a`
 
-### 1.11.3 安装语言包
+###  安装语言包
 ```   sh
 apt-get install language-pack-zh-hans
 locale-gen zh_CN.UTF-8
@@ -185,25 +186,25 @@ locale-gen zh_CN.UTF-8
 ```   sh
 locale -a
 ```
-### 2.11.4 添加到文件
+###  添加到文件
 ```sh
 echo "export LC_ALL=zh_CN.UTF-8">> /etc/profile
 source /etc/profile
 ```
 如果这里添加失败，提示没有这种语言包，退出容器，再重新进入，就可以添加了
-### 1.11. 5 完成
+###  完成
 `locale`
 
 
 # 2. docker permission
 
-## 2.1 问题描述  
+##  问题描述  
 在终端执行"docker version"命令，出现如下报错：
 
 ```sh
 ”Got permission denied while trying to connect to the Docker daemon socket at unix:///var/run/docker.sock: Get http://%2Fvar%2Frun%2Fdocker.sock/v1.26/images/json: dial unix /var/run/docker.sock: connect: permission denied“
 ```
-## 2.2 原因分析  
+##  原因分析  
 
 来自docker mannual：
 ```sh
@@ -216,7 +217,7 @@ If you don’t want to use sudo when you use the docker command, create a Unix g
 
 docker进程使用 Unix Socket 而不是 TCP 端口。而默认情况下，Unix socket 属于 root 用户，因此需要 root权限 才能访问。
 
-## 2.3 解决方法  
+## 解决方法  
 
 ```sh
 sudo groupadd docker          #添加docker用户组
@@ -226,7 +227,7 @@ newgrp docker                 #更新docker用户组
 sudo chmod a+rw /var/run/docker.sock
 ```
 
-# 3. docker group 
+# docker group 
 when you run `docker ps` in Ubuntu and it says as following
 ```sh
 Got permission denied while trying to connect to the Docker daemon socket at
@@ -237,7 +238,7 @@ sudo gpasswd -a $USER docker
 newgrp docker
 ```
 
-# 4. use GUI in docker
+# use GUI in docker
 
 warning：非正常操作  
 在宿主机中运行
@@ -259,15 +260,15 @@ docker run -d \
 jess/libreoffice
 ```
 
-# 5. Ubuntu Linux下修改docker镜像源  
-## 5.1 国内亲测可用的几个镜像源  
+# Ubuntu Linux下修改docker镜像源  
+## 国内亲测可用的几个镜像源  
 ```sh
 Docker 官方中国区：https://registry.docker-cn.com
 网易：http://hub-mirror.c.163.com
 中国科技大学：https://docker.mirrors.ustc.edu.cn
 阿里云：https://y0qd3iq.mirror.aliyuncs.com
 ```
-## 5.2 修改配置文件  
+## 修改配置文件  
 
 增加Docker的镜像源配置文件 /etc/docker/daemon.json，  
 如果没有配置过镜像该文件默认是不存的，在其中增加如下内容  
@@ -277,7 +278,7 @@ Docker 官方中国区：https://registry.docker-cn.com
   "registry-mirrors": ["https://y0qd3iq.mirror.aliyuncs.com"]
 }
 ```
-## 5.3 restart service  
+##  restart service  
 ```sh
 service docker restart
 ```
@@ -286,7 +287,7 @@ service docker restart
 ```sh
 docker info|grep Mirrors -A 1
 ```
-# 6. install app in ubuntu docker container
+# install app in ubuntu docker container
 ```sh
 apt-get update
 apt-get install xxx
@@ -294,9 +295,9 @@ apt-get install xxx
 
 
 
-# 7. docker-compose
+# docker-compose
 
-## 7.1 setup
+## setup
 
 ```sh
 sudo curl -L https://github.com/docker/compose/releases/download/1.21.2/docker-compose-$(uname -s)-$(uname -m) -o /usr/local/bin/docker-compose
@@ -306,7 +307,7 @@ docker-compose -v
 
 
 
-## 7.2 run
+##  run
 
 
 
@@ -354,11 +355,11 @@ docker-compose up -d  // 后台启动并运行容器
 
 
 
-# 8. centOS7 离线安装docker
+#  centOS7 离线安装docker
 
 
 
-## 8.1 docker包下载地址
+## docker包下载地址
 
 ```sh
 #下载docker-20.10.0包
@@ -382,7 +383,7 @@ docker version
 docker info
 ```
 
-## 8.2 配置Docker开机自启动服务
+##  配置Docker开机自启动服务
 
 #添加docker.service文件
 
@@ -489,9 +490,9 @@ yum install -y yum-utils device-mapper-persistent-data lvm2
 
 
 
-# 9. set proxy for docker in ubuntu
+# set proxy for docker in ubuntu
 
-## 9.1 docker service
+##  docker service
 https://docs.docker.com/network/proxy/
 
 ```sh
@@ -506,17 +507,17 @@ Environment=HTTP_PROXY=http://xxx.com:xxx
 Environment=HTTPS_PROXY=http://xxx.com:xxx
 Environment=NO_PROXY=*.xxx.com
 ```
-## 9.2 docker config
+##  docker config
 run
-```
+```sh
 sudo mkdir -p /etc/systemd/system/docker.service.d
 sudo vi /etc/systemd/system/docker.service.d/http-proxy.conf
 ```
 内容如下
-```
+```sh
 [Service]
 Environment="HTTP_PROXY=http://账号:密码@服务器:端口"
-Environment="HTTPS_PROXY=http://账号:密码@服务器:端口"
+Environment="HTTPS_PROXY=https://账号:密码@服务器:端口"
 Environment="NO_PROXY=localhost,127.0.0.1"
 ```
 
@@ -524,8 +525,8 @@ systemctl daemon-reload
 
 systemctl restart docker
 
-# 10. docker push
-## 10.1 查看镜像
+# docker push
+##  查看镜像
 
 查看仓库里的镜像清单
 
@@ -542,29 +543,30 @@ curl -XGET http://IP:port/v2/image_name/tags/list
 ```
 
 
-## 10.2 docker pull
+##  docker pull
 
 在本地登录到远程仓库：
-```
+```sh
 docker login --username=[用户名] -p=[密码]  远程ip:端口
 ```
 本地镜像打标签,   [远程ip:端口/自定义路径/*]:[版本号]  就是：[标签名:版本号]
-```
+```sh
 docker tag [镜像id] [远程ip:端口/自定义路径/*]:[版本号]
 ```
 推送
-```
+```sh
 docker push [远程ip:端口/自定义路径/*]:[版本号]
 ```
 当显示
-```
+```sh
 The push refers to repository [IP:port/path]
 Get https://IP:port/v2/: Service Unavailable
 ```
 原因为 docker镜像仓库暂不支持 https
 在“/etc/docker/“目录下, 创建”daemon.json“文件(如果有的话直接覆盖)。  
 在文件中写入
-```
+
+```sh
 { "insecure-registries":["IP:port"] }
 ```
 执行
@@ -572,13 +574,105 @@ Get https://IP:port/v2/: Service Unavailable
 systemctl daemon-reload
 systemctl restart docker.service 
 ```
-## 10.3 docker 删除私有仓库中的镜像
-查看某个镜像的sha256值：
-```
-curl -v -s "127.0.0.1:5000/v2/nginx/manifests/1.7.9" 2>&1 | grep Docker-Content-Digest | awk '{print ($3)}'
+## docker 删除私有仓库中的镜像
+首先， 镜像库服务器上需要进行配置，更改registry容器内/etc/docker/registry/config.yml文件
+
+```yaml
+storage:
+  delete:
+    enabled: true
 ```
 
-删除私有仓库的镜像
+
+
+查看某个镜像的sha256值：
+
+```sh
+curl  --header "Accept: application/vnd.docker.distribution.manifest.v2+json" -I -X GET https://<仓库地址>/v2/<镜像名>/manifests/<tag>
+# 获取 digest_hash
+Docker-Content-Digest: <digest_hash>
+#例如 
+curl --header "Accept: application/vnd.docker.distribution.manifest.v2+json" -I -X GET reg.docker.com:5001/v2/rd/centos8_es7.6.1/manifests/1.0.0  
+# 获取到了结果
+HTTP/1.1 200 OK
+Content-Length: 742
+Content-Type: application/vnd.docker.distribution.manifest.v2+json
+Docker-Content-Digest: sha256:0c31ab1a4ac0ebeec6979a3f1524b646539b98662d81ae3de9a092f8b214e5e2
+Docker-Distribution-Api-Version: registry/2.0
+Etag: "sha256:0c31ab1a4ac0ebeec6979a3f1524b646539b98662d81ae3de9a092f8b214e5e2"
+X-Content-Type-Options: nosniff
+Date: Thu, 28 Apr 2022 02:14:01 GMT
 ```
-$ curl -I -X DELETE http://127.0.0.1:5000/v2/fbgweb/manifests/sha256:6a67ba482a8dd4f8143ac96b1dcffa5e45af95b8d3e37aeba72401a5afd7ab8e
+
+可见 digest_hash 为 sha256:0c31ab1a4ac0ebeec6979a3f1524b646539b98662d81ae3de9a092f8b214e5e2
+
+执行删除， 
+
+```sh
+$ curl -I -X DELETE <protocol>://<registry_host>/v2/<repo_name>/manifests/<digest_hash>
+# 例如
+$ curl -I -X DELETE https://10.109.252.221:5000/v2/wordpress/manifests/sha256:0c31ab1a4ac0ebeec6979a3f1524b646539b98662d81ae3de9a092f8b214e5e2
 ```
+
+
+
+# docker build
+
+创建Dockerfile
+
+```sh
+mkdir docker.test
+cd docker.test
+touch testDockerfile
+vi testDockerfile
+```
+
+文件内容如下
+
+```sh
+# docker pull 需要拉取的镜像名称以及tag
+FROM centos 
+# 挂载的宿主机的目录
+VOLUME /tmp
+WORKDIR /opt
+ADD ./test.sh  a.sh
+RUN bash -c 'pwd'
+RUN bash -c 'ls -lh'
+ENTRYPOINT ["/usr/bin/sh", "./a.sh"]
+```
+
+run,  -f 表示要读取的Dockfile的位置， -t 镜像名称 : tag
+
+```sh
+docker build -f ./testDockerfile ./ -t myimg:1.0.0
+```
+
+# docker 写宿主机权限问题
+
+* docker 中的root 用户 和宿主机的 root 用户的uid是相同的，所以只要宿主机root用户有权限的，那么docker容器内执行也没有问题。
+
+```sh
+rd@rd-ubt:/$ docker exec -it test bash
+[root@26484718385f /]# id root
+uid=0(root) gid=0(root) groups=0(root)
+[root@26484718385f /]# exit
+exit
+rd@rd-ubt:/$ id root
+#  可见容器内外的root用户的uid是相同的
+uid=0(root) gid=0(root) groups=0(root)
+rd@rd-ubt:/$ 
+```
+
+* 涉及到docker 里的非root用户， 在写挂载的宿主机的目录权限时，需要进行如下处理
+
+```sh
+# 进入docker容器
+docker exec -it xxxxx bash
+# 获取docker 里的 userId，一定是进入docker里头获取的用户的id。在宿主机上面创建的同名用户与docker中同名用户的uid 不同
+id userName
+# 退出docker 容器， 1234为docker里用户的id，5678为的docker里头用户的groupid
+exit
+# 在宿主机上授权
+chown -R 1234：5678 dir
+```
+

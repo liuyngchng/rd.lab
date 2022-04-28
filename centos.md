@@ -487,3 +487,18 @@ iptables -I INPUT -s 111.111.0.0/16 -p tcp --dport 4243 -j ACCEPT
 
 
 
+# 9. firewall
+
+```sh
+# 打开防火墙
+systemctl start firewalld
+# 关闭防火墙
+systemctl stop firewalld
+# 查看防火墙状态
+systemctl status firewalld
+# 启用防火墙
+systemctl enable firewalld
+# 禁用防火墙
+systemctl disable firewalld
+```
+

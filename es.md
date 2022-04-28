@@ -318,6 +318,37 @@ output.elasticsearch:
   ssl.verification_mode: none
   ssl.certificate_authorities: ["/etc/filebeat/newfile.crt.pem"]
 ```
+# 8. docker 中非root用户写挂载的宿主机目录权限问题
 
+以`elasticsearch `为例， `elasticsearch` can not run elasticsearch as root， 不允许以root用户启动
 
+##  host deploy
+
+以下方法在docker里头不好使
+
+```sh
+# 添加es组
+groupadd es
+# 创建用户，设置组和密码
+useradd es -g es -p es
+# 修改文件夹所有权
+chown -R es:es elasticsearch-7.6.1/
+# 切换到es 用户
+su es
+# start up
+cd elasticsearch-7.6.1
+./bin/elasticsearch &
+```
+
+## 8.2 docker deploy
+
+涉及到docker 里的用户， 8.1节方法不适用
+
+```sh
+docker exec -it xxxxx bash
+# 获取docker 里的 userId，一定是进入docker里头获取的用户的id。在宿主机上面创建的同名用户与docker中同名用户的uid 不同
+id userName
+# 退出docker 容器， 1234为docker里用户的id，5678为的docker里头用户的groupid
+chown -R 1234：5678 dir
+```
 
