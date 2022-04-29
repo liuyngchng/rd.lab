@@ -2,7 +2,7 @@
 # 1. Setup MySQL on CentOS
 ## 1.1 Setup
 
-```
+```sh
 卸载  先停掉mysql进程   没有安装过的可以直接跳过
 pkill -9 mysqld
 rpm -qa|grep -i mysql
@@ -16,7 +16,7 @@ yum -y install mysql-server
 ```
 ## 1.2 默认配置文件路径 
 
-```
+```sh
 配置文件：/etc/my.cnf 
 日志文件：/var/log/var/log/mysqld.log 
 服务启动脚本：/usr/lib/systemd/system/mysqld.service 
@@ -27,13 +27,13 @@ socket文件：/var/run/mysqld/mysqld.pid
 
 启动mysql服务
 
-```
+```sh
 service mysqld restart
 ```
 
 在 docker 容器中启动 MySQL
 
-```
+```sh
 docker run --privileged -dit --name test1  centos /usr/sbin/init
 docker exec -it centos bash
 systemctl start mysqld
@@ -43,26 +43,26 @@ mysql -uroot -p
 
 重置密码
 
-```
+```sh
 grep password /var/log/mysqld.log
 ```
 A temporary password is generated for root@localhost: ab*******m1
 
-```
+```sh
 mysql -hlocalhost -uroot -p
 alter user 'root'@'localhost' identified
 ```
 
 # 2. Setup Redis
-```
+```sh
 yum install -y epel-release
 yum install -y redis
 
 ```
 # 3. Install MySQL
 ## 3.1 Install MySQL in windows
-```
-unzip mysql-8.0.16-winx64.zip
+```sh
+unzip mysql-8.0.16-winx64.zipsh
 config ENV for ./mysql-8.0.16-winx64/bin/
 mysqld.exe --initialize-insecure
 mysqld.exe --install
@@ -70,7 +70,7 @@ net start mysql
 ```
 ## 3.2 Setup MySQL on ubuntu
 
-```
+```sh
 sudo apt-get install mysql-server
 mysqld
 cd /etc/mysql
@@ -78,7 +78,7 @@ cat debian.cnf
 ```
 user = debian-sys-maint
 password = xedvSNKdLavjuEWV
-```
+```sh
 mysql -udebian-sys-maint -pxedvSNKdLavjuEWV
 show databases;
 use mysql;
@@ -88,52 +88,52 @@ flush privileges;
 quit;
 ```
 restart MySQL
-```
+```sh
 /etc/init.d/mysql restart
 ```
 # 4. 查看挂载的硬盘
 
-```
+```sh
 fdisk -l
 lsblk
 ```
 # 5. yum on centOS  
 download rpm package only
-```
+```sh
 yum install --downloadonly --downloaddir=/opt/rpms mysql
 ```
 # 6. make a ISO start up flash disk  
 ## 6.1 under MacOS
 如果是在Mac系统下，则 需要把下载的Ubuntu安装文件（.iso）  
 转换成(.dmg)格式的文件,方便在Mac OS上面进行操作，转换命令
-```
+```sh
 cd Downloads/
 hdiutil convert -format UDRW -o ubuntu.dmg ubuntu-14.04.5-desktop-amd64.iso
 ```
 hdiutil转换的文件后缀名为.dmg,所以需要把文件重命名为.iso，在安装的时候系统才能够更好的识别
-```
+```sh
 mv ubuntu.dmg ubuntu.iso
 ```
 
 打开终端，输入  
 
-```
+```sh
 diskutil list
 ```
 
 记录下U盘的地址, 然后卸载U盘命令  
-```
+```sh
 diskutil unmountDisk [硬碟位置]
 ```
 
 ## 6.2  Create the installation medium in linux
 Either you can burn the image onto CD/DVD, you use usb stick for the installation.  
 Under linux, you can use the dd for that:
-```
+```sh
 dd if=<source iso> of=<target device> bs=4M; sync
 ```
 Make sure that the device does not include partition number, so example from my machine:
-```
+```sh
 dd if=~/Downloads/alpine-standard-3.10.2-x86_64.iso of=/dev/sdb bs=4M
 ```
 The target device will be erased, so make sure you use something without any data you do not want to lose.
@@ -474,6 +474,14 @@ on server
 ```
 cat /home/user/id_pub.rsa >> ~/.ssh/authroized_keys
 ```
+另外要注意请务必要将服务器上
+
+- ~/.ssh权限设置为700
+- ~/.ssh/authorized_keys的权限设置为600
+   这是linux的安全要求，如果权限不对，自动登录将不会生效
+
+
+
 hava fun!
 
 # 30. config ubuntu wifi driver, chinese and grub timeout input method after installed
@@ -657,3 +665,55 @@ protoc ./Message.proto --java_out=./
 %s/\r//g
 
 %s/\n//g
+# 48. springboot support https
+## 48.1 get key
+```
+keytool -genkey -alias tomcat -keyalg RSA -keystore ./server.keystore
+```
+## 48.2 add config
+```
+server.ssl.protocol=TLS
+server.ssl.key-store=classpath:server.keystore
+server.ssl.key-alias=tomcat
+server.ssl.enabled=true
+server.ssl.key-store-password=123456
+server.ssl.key-store-type=JKS
+```
+其他不需要修改，启动即可， 与更改前 只需要将http 改成https 例如原来访问是http://localhost:8081/  
+更改后：https://localhost:8081/   
+需要注意的是：改完后不再支持http访问，因证书原因，浏览器会报证书风险，可无视
+
+
+```
+
+# 48 ssh yes
+
+要避免输入yes需要在本机上执行
+
+```sh
+vi /etc/ssh/ssh_config
+```
+注意这里修改的不是`sshd_config`配置文件
+将
+
+```sh
+# StrictHostKeyChecking ask`
+```
+
+
+修改为
+
+```sh
+StrictHostKeyChecking no
+# for macOS
+UserKnownHostsFile /dev/null
+```
+
+即可
+
+# 49. 16 进制查看 java class 文件
+
+```$xslt
+vi *.class
+:%!xxd
+```

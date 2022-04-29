@@ -80,4 +80,43 @@ sudo fc-cache -fsv
 ```
 
 
+# 3. wechat 微信
 
+```
+wine '/home/rd/.wine/drive_c/Program Files (x86)/Tencent/WeChat/[3.6.0.18]/WeChat.exe'
+```
+ wine是把windows的接口翻译成Linux，但是有一部分没有翻译，所以就导致一部分功能不能用，   
+比如中文的显示异常。这是因为缺少一些windows的库。winetricks应运而生，他可以图形化的安装wine缺少的库
+
+```
+sudo apt-get install winetricks
+```
+解决 Ubuntu 20.04 桌面平台下 Deepin 版微信的中文乱码问题。
+
+    安装相关字体
+
+    sudo apt-get install -y ttf-wqy-microhei  #文泉驿-微米黑
+    sudo apt-get install -y ttf-wqy-zenhei  #文泉驿-正黑
+    sudo apt-get install -y xfonts-wqy #文泉驿-点阵宋体
+
+Bash
+注销当前系统用户的登录（可能要重启系统） 
+解决ubuntu下wine qq或微信等软件无法用ibus输入法输入中文的问题
+先修改文件/etc/profile，打开终端输入sudo vim /etc/profile运行然后按要求输入密码进行文件编辑，
+如果没有安装vim(先sudo apt-get install vim)
+进入文件编辑页面后，按i进入编辑状态，把以下内容复制到文件末尾，
+
+XMODIFIERS="@im=ibus"
+XIM="ibus"
+GTK_IM_MODULE="xim"
+QT_IM_MODULE="xim"
+ibus-daemon -d -x -r
+
+编辑完成，按esc返回，然后输入:wq，回车保存并退出。重启后可以输入了。
+
+Ubuntu18.04 idea快捷键ctrl-alt-left失效
+Ctrl+Alt+Left/Right 被系统占用
+查看
+gsettings get org.gnome.desktop.wm.keybindings switch-to-workspace-left
+修改：
+gsettings set org.gnome.desktop.wm.keybindings switch-to-workspace-left "[]"
