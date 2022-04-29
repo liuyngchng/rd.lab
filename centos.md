@@ -417,19 +417,19 @@ iptables -P INPUT ACCEPT
 清空所有默认规则
 
 ```bash
-iptables -F
+iptables -F INPUT
 ```
 
 清空所有自定义规则
 
 ```bash
-iptables -X
+iptables -X INPUT
 ```
 
 所有计数器归0
 
 ```bash
-iptables -Z
+iptables -Z INPUT
 ```
 
 许来自于lo接口的数据包(本地访问)
