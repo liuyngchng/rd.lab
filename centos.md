@@ -15,7 +15,7 @@ vi ifcfg-enp0s3         //ifcfg-之后为网卡名称
 docker pull centos          //centos8
 yum update
 ```
-### 2.1.1 centos8 
+### 2.1.1 centos8
 
 会出现
 
@@ -276,7 +276,7 @@ docker run -d --name centos_1 -it  centos:latest
 docker run -tid --name centos_1 --privileged=true centos:latest /sbin/init
 ```
 
-区别在于后面用了 
+区别在于后面用了
 
 ```
 /sbin/init
@@ -288,7 +288,7 @@ yum install ***.rpm 提示 `A conflicts with file from package B`
 
 两种方法
 
-(1)  rpm -ivh --replacefiles  A.rpm, 
+(1)  rpm -ivh --replacefiles  A.rpm,
 
 (2) yum -y remove B 然后再安装A
 
@@ -480,14 +480,15 @@ iptables -I INPUT -m iprange --src-range 192.168.116.1-192.168.116.20 -p tcp -i 
 
 ```sh
 # 禁止所有对22端口的入访问
-iptables -I INPUT -p tcp --dport 4243 -j DROP
+iptables -I INPUT -p tcp --dport 3307 -j DROP
 # 允许111.111.0.0/16的访问
-iptables -I INPUT -s 111.111.0.0/16 -p tcp --dport 4243 -j ACCEPT
+iptables -I INPUT -m iprange --src-range 192.168.1.1-192.168.1.2 -p tcp --dport 3307 -j ACCEPT
 ```
 
 
 
 # 9. firewall
+## 9.1 status
 
 ```sh
 # 打开防火墙
@@ -500,5 +501,38 @@ systemctl status firewalld
 systemctl enable firewalld
 # 禁用防火墙
 systemctl disable firewalld
-```
 
+```
+## 9.2 config
+```sh
+# 列出所支持的zone和查看当前的默认zone
+firewall-cmd --get-zones
+# 默认使用区域
+firewall-cmd --get-default-zone
+# 查看防火墙规则
+firewall-cmd --list-all
+# 查看规则状态
+firewall-cmd --state
+# 加载规则
+firewall-cmd --reload
+# 开放3306端口
+firewall-cmd --add-port=3306/tcp --permanent
+# 开放网段
+ firewall-cmd --permanent --add-source=192.168.0.0/22
+# 移除规则
+ firewall-cmd --permanent --remove-source=192.168.0.0/22
+# 开放服务
+firewall-cmd --permanent --add-service=http
+# 移除服务
+firewall-cmd --permanent --remove-service=http
+
+# 允许192.168.0.142访问80端口
+firewall-cmd --permanent --add-rich-rule="rule family="ipv4" source address="192.168.0.142" port protocol="tcp" port="80" accept"
+# family  对哪个协议
+# source address	源地址
+# accept	允许
+# drop	拒绝
+
+# 拒绝192.168.0.142访问80端口
+firewall-cmd --permanent --add-rich-rule="rule family="ipv4" source address="192.168.0.142" port protocol="tcp" port="80" drop"
+```
