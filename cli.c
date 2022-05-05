@@ -58,22 +58,22 @@ int con(char *ip, int port)
 
 int get_data(int sockfd, char* data)
 {
-    char hdr[4096], param[4096], buf[_BUF_SIZE_], *bdh, *end, *bdy;
-    memset(hdr, 0, sizeof(hdr));
-    memset(param, 0, 4096);
-    memset(buf, 0, sizeof(buf));
-    strcat(param, "?a=1&b=2");
-    memset(hdr, 0, 4096);
-    strcat(hdr, "GET /data");
-    strcat(hdr, param);
-    strcat(hdr, " HTTP/1.1\r\n");
-    strcat(hdr, "Accept: */*\r\n");
-    strcat(hdr, "Accept-Language: zh-cn\r\n");
-    strcat(hdr, "User-Agent: rdAgent\r\n");
-    strcat(hdr, "Host: 127.0.0.1:80\r\n");
-    strcat(hdr, "Content-Type: application/json;charset=UTF-8\r\n");
-    strcat(hdr, "Connection: keep-alive\r\n");
-    strcat(hdr, "\r\n");
+	char hdr[4096], param[4096], buf[_BUF_SIZE_], *bdh, *end, *bdy;
+	memset(hdr, 0, sizeof(buf));
+	memset(param, 0, 4096);
+	memset(buf, 0, sizeof(buf));
+	strcat(param, "?a=1&b=2");
+	memset(hdr, 0, 4096);
+	strcat(hdr, "GET /data");
+	strcat(hdr, param);
+	strcat(hdr, " HTTP/1.1\r\n");
+	strcat(hdr, "Accept: */*\r\n");
+	strcat(hdr, "Accept-Language: zh-cn\r\n");
+	strcat(hdr, "User-Agent: rdAgent\r\n");
+	strcat(hdr, "Host: 127.0.0.1:80\r\n");
+	strcat(hdr, "Content-Type: application/json;charset=UTF-8\r\n");
+	strcat(hdr, "Connection: keep-alive\r\n");
+	strcat(hdr, "\r\n");
     int ss = send(sockfd, hdr, strlen(hdr), 0);
     if (ss < 0)
     {
@@ -263,10 +263,10 @@ long int get_time()
 
 int test_t()
 {
-    char *ip = "127.0.0.1";
-    int port = 8080;
-    long int t = get_time();
-    int sockfd = con(ip, port);
+	char *ip = "127.0.0.1";
+	int port = 8000;
+	long int t = get_time();
+	int sockfd = con(ip, port);
     int size = 8092;
     char *data = (char *)malloc((size) * sizeof(char));
     for (int i = 0; i< 100000; i++)
