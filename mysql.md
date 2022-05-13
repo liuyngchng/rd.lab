@@ -200,10 +200,11 @@ docker images
 初始化mysql密码，打包配置文件
 
 ```sh
-docker run --name mysql -p 3306:3306 -e MYSQL_ROOT_PASSWORD=fGB#K9rtXFELC8y^3%GN -d mysql:8.0.28
+docker run --name mysql -p 3306:3306 -e MYSQL_ROOT_PASSWORD='yourMySqlPassword' -d mysql:8.0.28
 docker ps
 docker exec -it mysql /bin/bash
 cd /etc/
+# /etc/mysql 是容器里mysql的配置文件夹
 tar -czf mysql.tar.gz mysql
 exit
 ```
@@ -216,6 +217,7 @@ mkdir -p /data/mysql/log
 mkdir -p /data/mysql/data
 docker cp mysql:/etc/mysql.tar.gz /data/mysql
 cd /data/mysql
+tar -zxf mysql.tar.gz
 mv mysql conf
 docker stop mysql
 docker rm mysql
@@ -223,16 +225,41 @@ docker rm mysql
 
 ##  normal start up
 
+这么做，是为了将MySQL中存储的数据放在宿主机上，而不是放在容器里
+
 ```sh
+# 启动容器，将 yourMySqlPassword 替换为自己的密码
 docker run -dit \
 --name mysql \
 -p 3306:3306 \
--e MYSQL_ROOT_PASSWORD=fGB#K9rtXFELC8y^3%GN \
+-e MYSQL_ROOT_PASSWORD='yourMySqlPassword' \
 -e LANG=C.UTF-8 \
 -v /data/mysql/conf:/etc/mysql \
 -v /data/mysql/data:/var/lib/mysql \
 mysql:8.0.28
 ```
+
+接下来连接数据库
+
+```sh
+# 进入容器
+docker exec  -it mysql bash
+# 连接数据库
+mysql -uroot -p
+```
+
+
+
+如果想在宿主机上像连接本机数据库一样使用，还需要进行一些配置，
+
+```sh
+# 宿主机上需要安装MySQL client， 能够执行mysql命令
+mysql -hlocalhost -uxxxx -p
+```
+
+
+
+
 
 如果看到
 

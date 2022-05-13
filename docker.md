@@ -374,7 +374,7 @@ cd /data
 tar -zxvf docker-20.10.0.tgz
 
 #将解压出来的docker文件内容移动到 /usr/bin/ 目录下
-cp docker/* /usr/bin/
+cp docker/* /usr/local/bin/
 
 #查看docker版本
 docker version
@@ -387,7 +387,11 @@ docker info
 
 #添加docker.service文件
 
+```sh
+# root 用户
+su
 vi /etc/systemd/system/docker.service
+```
 
 #按i插入模式,复制如下内容:
 
@@ -407,7 +411,7 @@ Type=notify
 
 # drivermanage 使用overlay2 ，需要配置 /etc/docker/daemon.json一起使用， 详细选择见
 # docker 官网 https://docs.docker.com/storage/storagedriver/select-storage-driver/
-ExecStart=/usr/bin/dockerd --graph=/data/docker --api-cors-header=*
+ExecStart=/usr/local/bin/dockerd --graph=/data/docker --api-cors-header=*
 # drivermanage 使用devicemapper
 #ExecStart=/usr/bin/dockerd --graph=/data/docker -H tcp://0.0.0.0:4243 -H unix://var/run/docker.sock  --insecure-registry  dev.kmx.k2data.com.cn:5001 --storage-driver=devicemapper --api-cors-header=*
 ExecReload=/bin/kill -s HUP $MAINPID
@@ -433,7 +437,9 @@ StartLimitInterval=60s
 WantedBy=multi-user.target
 ```
 
- 添加配置文件， 注意，daemon.json中配置的参数不能与 /etc/systemd/system/docker.service 重复，否则启动服务会报 `start request repeated too quickly for docker.service`
+ 添加配置文件， 注意，daemon.json中配置的参数不能与 /etc/systemd/system/docker.service 重复，否则启动服务会报 `start request repeated too quickly for docker.service`,    
+
+注意，  `"insecure-registry": [ "hostName:port", "IP:port"]`  一行的  `[ "hostName:port", "IP:port"]  `需要替换成真是的域名端口号，或者IP和端口号，是用于 docker pull， docker push 的私有registry使用的，若不需要此功能，则不配置这一项。
 
 ```sh
 touch /etc/docker/daemon.json
@@ -485,7 +491,7 @@ device-mapper :需要
 
 yum install -y yum-utils device-mapper-persistent-data lvm2
 
-/usr/bin/dockerd --graph=/data/docker -H tcp://0.0.0.0:4243 -H unix:///var/run/docker.sock  --insecure-registry  dev.kmx.k2data.com.cn:5001 --storage-driver=devicemapper --api-cors-header=*
+/usr/local/bin/dockerd --graph=/data/docker -H tcp://0.0.0.0:4243 -H unix:///var/run/docker.sock  --insecure-registry  dev.kmx.k2data.com.cn:5001 --storage-driver=devicemapper --api-cors-header=*
 ```
 
 

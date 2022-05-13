@@ -1,7 +1,12 @@
-# 1. setup
+# setup
+
+##     doc
+
+https://www.elastic.co/guide/en/elasticsearch/reference/7.6/targz.html
 
 [url](https://www.elastic.co/guide/en/elasticsearch/reference/current/configuring-stack-security.html)
 
+```sh
 -------------------------- Security autoconfiguration information ------------------------------
 
 Authentication and authorization are enabled.
@@ -25,93 +30,84 @@ Generate an enrollment token for Elasticsearch nodes with
 '/usr/share/elasticsearch/bin/elasticsearch-create-enrollment-token -s node'.
 
 -------------------------------------------------------------------------------------------------
+
 ### NOT starting on installation, please execute the following statements to configure elasticsearch service to start automatically using systemd
  sudo systemctl daemon-reload
  sudo systemctl enable elasticsearch.service
 ### You can start elasticsearch service by executing
  sudo systemctl start elasticsearch.service
-
-# 2. API
-
-## 2.1 LOGIN
-
-https://localhost:9200/
-
-username: elastic
-passowrd: q+jy_9qzovxwajQRoVRe
-
-## 2.2 CLUSTER STATUS
-
-https://127.0.0.1:9200/_cluster/health?pretty
-
-
-
-# 3.  journal
-To tail the journal:
-
-`sudo journalctl -f`
-
-# 4. health check and Other API
-## 4.1 health check
-
 ```
-sudo curl --cacert /etc/elasticsearch/certs/http_ca.crt  'https://127.0.0.1:9200/_cluster/health?pretty' -u elastic
-//不使用证书
-curl -k --tlsv1  'https://127.0.0.1:9200/_cluster/health?pretty' -u elastic:inza42ePLWcTkfxvQykd
+##      env config
+
+openfiles 配置
+
+```sh
+vi /etc/security/limits.conf  
+# 添加以下内容，机器重启生效
+# End of file
+soft nofile 65535  
+hard nofile 65535   
+*               soft    nproc         655535  
+*               hard    nproc         655535  
+*               soft    nofile        655535  
+*               hard    nofile        655535  
+root            soft    nofile        655535  
+root            hard    nofile        655535  
+root            soft    nproc         655535  
+root            hard    nproc         655535
+
+# reboot
+reboot
+# 验证 open files 是否增大
+ulimit -a
 ```
 
-## 4.2 index list
+虚拟内存配置
 
-```
-https://127.0.0.1:9200/_cat/indices?format=json&index=[索引名称，可使用通配符]
-curl -k --tlsv1  'https://127.0.0.1:9200/_cat/indices' -u elastic:inza42ePLWcTkfxvQykd
-```
-
-
-
-# 5. run
-
-## 5.1  run Elasticsearch as a daemon
-
-```
-./bin/elasticsearch -d -p pid
+```sh
+# 切换 root
+su
+sysctl -w vm.max_map_count=262144
 ```
 
-## 5.2 reset password
-
-`bin/elasticsearch-reset-password -u elastic`
-
-# 6. ES7.6 Doc
-
-## 6.1 es 7.6
-
-https://www.elastic.co/guide/en/elasticsearch/reference/7.6/targz.html
-
-### 6.1.1 SSL config
+##     传输层 SSL config
 
 * 生成证书
 
-```shell
+```sh
+cd elasticsearch-7.6.1
 ./bin/elasticsearch-certutil ca
 ENTER ENTER
 ./bin/elasticsearch-certutil cert --ca elastic-stack-ca.p12
 ENTER ENTER ENTER
 ```
 
+此时，根目录生成了2个.p12文件
+
+```sh
+cd elasticsearch-7.6.1
+ls | grep p12
+elastic-certificates.p12
+elastic-stack-ca.p12
+```
+
 将获得可用于加密通信的TLS/SSL证书`elastic-certificates.p12`，将证书复制到`config/certs`的目录中，
 
-`mv elastic-*.p12 ./config/certs/`
-
-
-
-```
-cd config
-vi elasticsearch.yml
+```sh
+cd elasticsearch-7.6.1
+mkdir ./config/certs
+mv elastic-*.p12 ./config/certs/
 ```
 
-在`elasticsearch.yml`文件配置如下：
+* 配置 SSL
 
+```sh
+vi ./config/elasticsearch.yml
 ```
+
+在`elasticsearch.yml`文件末尾，新增以下配置：
+
+```sh
 xpack.security.enabled: true
 xpack.security.transport.ssl.enabled: true
 xpack.security.transport.ssl.verification_mode: certificate
@@ -119,37 +115,54 @@ xpack.security.transport.ssl.keystore.path: certs/elastic-certificates.p12
 xpack.security.transport.ssl.truststore.path: certs/elastic-certificates.p12
 ```
 
-### 6.1.2  设置内置用户密码
+
+##     开启远程访问
+
+elastic 默认无法远程IP 进行访问，若需要通过远程IP进行访问，则，需要尽心如下配置
+
+```sh
+vi ./config/elasticsearch.yml
+# 修改以下内容
+network.host: 192.168.1.111				# your real IP addr
+http.port: 9200
+discovery.seed_hosts: ["127.0.0.1", "[::1]"]
+```
+
+##    设置用户密码
 
 ```shell
+# 重启动服务
 kill -9 xxxx
-./bin/elasticsearch -d -p pid 重启动服务    
+./bin/elasticsearch -d -p pid  
+# 手动设置密码
 ./bin/elasticsearch-setup-passwords interactive
-// 或自动生成并设置密码
+# 自动生成并设置密码
 ./bin/elasticsearch-setup-passwords auto
 ```
-
-```shell
+会看到
+```sh
 Changed password for user apm_system
-PASSWORD apm_system = k1YrSWn6Q6iJsASfiiCK
+PASSWORD apm_system = ****
 
 Changed password for user kibana
-PASSWORD kibana = 1vBiugd1pu9k4SEJkPN9
+PASSWORD kibana = ****
 
 Changed password for user logstash_system
-PASSWORD logstash_system = lfCYvpqTlUAaYAz8OwPe
+PASSWORD logstash_system = ****
 
 Changed password for user beats_system
-PASSWORD beats_system = NVgTrZPYOWMRPwrKvKgz
+PASSWORD beats_system = ****
 
 Changed password for user remote_monitoring_user
-PASSWORD remote_monitoring_user = RPA0kLi90XUTkTnQfPzf
+PASSWORD remote_monitoring_user = ****
 
 Changed password for user elastic
-PASSWORD elastic = inza42ePLWcTkfxvQykd
+PASSWORD elastic = ****
 ```
 
-### 6.1.3 配置HTTP层TLS/SSL加密传输
+此时说明登录已设置成功，浏览网页 http://IP:9200 时，则会提示输入密码
+
+##   配置 HTTP 层 TLS/SSL加密传输
 
 对于HTTP层通信，Elasticsearch节点仅用作服务器，因此可以使用服务器证书，即TLS/SSL证书不需要启用客户端身份验证。值得注意的是，用于加密HTTP通信的证书可以完全独立于用于传输通信的证书。为了简化操作，我们使用与已用于传输通信的相同的证书，即在elasticsearch.yml文件中配置如下：
 
@@ -159,24 +172,94 @@ xpack.security.http.ssl.keystore.path: certs/elastic-certificates.p12
 xpack.security.http.ssl.truststore.path: certs/elastic-certificates.p12
 ```
 
-# 7. FileBeats
+这样就能通过 HJTTPS进行浏览了，  https://IP:9200 
 
-## 7.1 Install and Config
+##  启动
 
-### 7.1.1 doc
+```sh
+./bin/elasticsearch -d
+```
+
+
+
+# API
+
+##   LOGIN
+
+https://localhost:9200/
+
+username: elastic
+passowrd: ****
+
+##   CLUSTER STATUS
+
+https://127.0.0.1:9200/_cluster/health?pretty
+
+
+
+#  journal
+To tail the journal:
+
+`sudo journalctl -f`
+
+# health check and Other API
+##    health check
+
+```sh
+sudo curl --cacert /etc/elasticsearch/certs/http_ca.crt  'https://127.0.0.1:9200/_cluster/health?pretty' -u elastic
+//不使用证书
+curl -k --tlsv1  'https://127.0.0.1:9200/_cluster/health?pretty' -u elastic:inza42ePLWcTkfxvQykd
+```
+
+##    index list
+
+```sh
+https://127.0.0.1:9200/_cat/indices?format=json&index=[索引名称，可使用通配符]
+curl -k --tlsv1  'https://127.0.0.1:9200/_cat/indices' -u elastic:inza42ePLWcTkfxvQykd
+```
+
+#  run
+
+##     run Elasticsearch as a daemon
+
+```
+./bin/elasticsearch -d -p pid
+```
+
+##     reset password
+
+`bin/elasticsearch-reset-password -u elastic`
+
+
+#  FileBeats
+
+##   Install and Config
+
+###   doc
 
 https://www.elastic.co/guide/en/beats/filebeat/7.6/filebeat-installation.html
 
-### 7.1.2 install
+###   install
 
 ```sh
+# ubuntu
 curl -L -O https://artifacts.elastic.co/downloads/beats/filebeat/filebeat-7.6.2-amd64.deb
 sudo dpkg -i filebeat-7.6.2-amd64.deb
+# linux
+curl -L -O https://artifacts.elastic.co/downloads/beats/filebeat/filebeat-8.2.0-linux-x86_64.tar.gz
+tar xzvf filebeat-8.2.0-linux-x86_64.tar.gz
 ```
 
-### 7.1.3 config
+###    config
 
 Here is a sample of the `filebeat` section of the `filebeat.yml` file. Filebeat uses predefined default values for most configuration options.
+
+```sh
+cd filebeat-8.2.0-linux-x86_64/
+vi filebeat.yml
+```
+
+配置内容如下所示，其中 `filebeat.inputs.paths` 是 `filebeats`需要读取的日志文件
 
 ```yaml
 filebeat.inputs:
@@ -196,17 +279,17 @@ output.elasticsearch:
 
 
 
-## 7.2 index
+##   index
 
 Filebeat uses time series indices, by default, when index lifecycle management is disabled or unsupported. The indices are named `filebeat-7.6.2-yyyy.MM.dd`, where `yyyy.MM.dd` is the date when the events were indexed. To use a different name, you set the [`index`](https://www.elastic.co/guide/en/beats/filebeat/7.6/elasticsearch-output.html#index-option-es) option in the Elasticsearch output. The value that you specify should include the root name of the index plus version and date information. You also need to configure the `setup.template.name` and `setup.template.pattern` options to match the new name. For example:
 
 ```sh
-output.elasticsearch.index: "customname-%{[agent.version]}-%{+yyyy.MM.dd}"
-setup.template.name: "customname"
-setup.template.pattern: "customname-*"
+output.elasticsearch.index: "rd-%{[agent.version]}-%{+yyyy.MM.dd}"
+setup.template.name: "rd"
+setup.template.pattern: "rd-*"
 ```
 
-## 7.3 Setup and run
+##   Setup and run
 
 生成证书
 
@@ -232,7 +315,7 @@ openssl x509 -req -in client.csr -days 1000 -CA ca.crt -CAkey ca.key -set_serial
 
 
 
-### 7.3.1 ES
+###   ES
 
 创建生产证书的文件
 
@@ -261,7 +344,7 @@ openssl pkcs12 -in elastic-stack-ca.p12 -out newfile.crt.pem -clcerts -nokeys
 
 把这个文件拷入到filebeat目录中
 
-### 7.3.2 config filebeats
+###   config filebeats
 
 ```sh
 output.elasticsearch:
@@ -286,21 +369,20 @@ output.elasticsearch:
   ssl.certificate_authorities: ["newfile.crt.pem"]
 ```
 
-### 7.3.3 启动filebeat
+###   启动filebeat
 
 ````
 cd /usr/share/filebeat/bin
 sudo filebeat -c /etc/filebeat/filebeat.yml
 ````
 
-### 7.3.4 自定义filebeat的ES索引名称
+###   自定义filebeat的ES索引名称
 
-```
+```sh
 #==================== Elasticsearch template setting ==========================
 setup.ilm.enabled: false
 setup.template.name: "filebeat-rd"
 setup.template.pattern: "filebeat-rd-*"
-
 
 #-------------------------- Elasticsearch output ------------------------------
 output.elasticsearch:
@@ -318,37 +400,3 @@ output.elasticsearch:
   ssl.verification_mode: none
   ssl.certificate_authorities: ["/etc/filebeat/newfile.crt.pem"]
 ```
-# 8. docker 中非root用户写挂载的宿主机目录权限问题
-
-以`elasticsearch `为例， `elasticsearch` can not run elasticsearch as root， 不允许以root用户启动
-
-##  host deploy
-
-以下方法在docker里头不好使
-
-```sh
-# 添加es组
-groupadd es
-# 创建用户，设置组和密码
-useradd es -g es -p es
-# 修改文件夹所有权
-chown -R es:es elasticsearch-7.6.1/
-# 切换到es 用户
-su es
-# start up
-cd elasticsearch-7.6.1
-./bin/elasticsearch &
-```
-
-## 8.2 docker deploy
-
-涉及到docker 里的用户， 8.1节方法不适用
-
-```sh
-docker exec -it xxxxx bash
-# 获取docker 里的 userId，一定是进入docker里头获取的用户的id。在宿主机上面创建的同名用户与docker中同名用户的uid 不同
-id userName
-# 退出docker 容器， 1234为docker里用户的id，5678为的docker里头用户的groupid
-chown -R 1234：5678 dir
-```
-
