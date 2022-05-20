@@ -717,3 +717,9 @@ UserKnownHostsFile /dev/null
 vi *.class
 :%!xxd
 ```
+
+# 50. 统计文件行数（不含空行）
+```
+find ./ -name *.java | xargs cat | sed '/^$/d' | wc -l
+```
+
