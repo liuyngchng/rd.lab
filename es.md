@@ -195,17 +195,64 @@ passowrd: ****
 
 ##     CLUSTER STATUS
 
-https://127.0.0.1:9200/_cluster/health?pretty
+
+
+```sh
+curl -k --tlsv1  'https://127.0.0.1:9200/_cluster/health?pretty' -u elastic:****
+```
+
+
 
 ##  search
 
 ```sh
-curl -k --tlsv1  'https://127.0.0.1:9200/index_name/_search?pretty' -u elastic:inza42ePLWcTkfxvQykd
+curl -k --tlsv1  'https://127.0.0.1:9200/index_name/_search?pretty' -u elastic:******
 
 
 
 curl  -k --tlsv1  -X GET "https://11.10.36.1:9200/filebeat-rd-7.6.2-2022.05.16/_search?pretty" -H 'Content-Type: application/json' -u elastic:PufPoocYcRBYtUXe2xoe -d'{"from":0,"size":10,"query":{"match_all":{"boost":1.0}},"sort":[{"@timestamp":{"order":"desc"}}]}' 
 
+```
+
+## grok
+
+通过 grok 将非结构化文本解析为结构化文本
+
+添加名称为`example_grok_pipeline`的管道
+
+```sh
+curl  -k --tlsv1  -X PUT "https://11.10.36.1:9200/_ingest/pipeline/example_grok_pipeline" -H 'Content-Type: application/json' -u elastic:PufPoocYcRBYtUXe2xoe -d'
+{ 
+  "description": "A simple example of using Grok", 
+  "processors": [ 
+    { 
+      "grok": { 
+        "field": "message", 
+        "patterns": [ 
+          "%{IP:host.ip} %{WORD:http.request.method} %{URIPATHPARAM:url.original} %{NUMBER:http.request.bytes:int} %{NUMBER:event.duration:double} %{GREEDYDATA}" 
+        ] 
+      } 
+    } 
+  ] 
+}'
+```
+
+
+
+
+
+
+
+```sh
+curl  -k --tlsv1  -X POST "https://11.10.36.1:9200/_ingest/pipeline/example_grok_pipeline/_simulate?pretty" -H 'Content-Type: application/json' -u elastic:PufPoocYcRBYtUXe2xoe  -d '{
+  "docs": [
+    {
+      "_source": {
+        "message": "55.3.244.1 GET /index.html 15824 0.043 other stuff"
+      }
+    }
+  ]
+}'
 ```
 
 

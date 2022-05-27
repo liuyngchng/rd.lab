@@ -94,7 +94,7 @@ sudo apt-get install winetricks
 解决 Ubuntu 20.04 桌面平台下 Deepin 版微信的中文乱码问题。
 
     安装相关字体
-
+    
     sudo apt-get install -y ttf-wqy-microhei  #文泉驿-微米黑
     sudo apt-get install -y ttf-wqy-zenhei  #文泉驿-正黑
     sudo apt-get install -y xfonts-wqy #文泉驿-点阵宋体
@@ -120,3 +120,12 @@ Ctrl+Alt+Left/Right 被系统占用
 gsettings get org.gnome.desktop.wm.keybindings switch-to-workspace-left
 修改：
 gsettings set org.gnome.desktop.wm.keybindings switch-to-workspace-left "[]"
+
+# 4. proxy for apt
+```
+vi /etc/apt/apt.conf
+Acquire::http::proxy "http://1.2.3.4:8080/";
+Acquire::https::proxy "https://1.2.3.4:8080/";
+Acquire::ftp::proxy "ftp://1.2.3.4:8080/";
+Acquire::socks::proxy "socks://1.2.3.4:8080/";
+```
