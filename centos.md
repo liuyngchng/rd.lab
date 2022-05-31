@@ -80,7 +80,10 @@ systemctl enable docker
 docker version
 docker info
 ```
-遇到 ``
+遇到 
+
+```
+```
 
 ##  centos7 minimal VirtualBox Insert Guest Addtions CD Image
 
@@ -88,8 +91,6 @@ download the iso file first from VirtualBox GUI, and then see
 
 ```
 Unable to insert the virtual optical disk /home/rd/.config/VirtualBox/VBoxGuestAdditions_6.1.32.iso into the machine centos.
-
-
 
 Could not mount the media/drive '/home/rd/.config/VirtualBox/VBoxGuestAdditions_6.1.32.iso' (VERR_PDM_MEDIA_LOCKED).
 
@@ -284,7 +285,7 @@ docker run -tid --name centos_1 --privileged=true centos:latest /sbin/init
 
 # FAQ
 
-yum install ***.rpm 提示 `A conflicts with file from package B`
+yum install xxxx.rpm 提示 `A conflicts with file from package B`
 
 两种方法
 
@@ -385,9 +386,6 @@ systemctl is-enabled iptables.service
 ##启用iptables
  systemctl enable iptables  
 ```
-
-
-
 
 
 iptables规则重启自动生效--永久生效
@@ -742,3 +740,19 @@ Filesystem                 Size  Used Avail Use% Mounted on
 ********************************************
 tmpfs                      3.2G     0  3.2G   0% /run/user/0
 ```
+
+# 挂载数据盘
+
+```
+# 能够看到物理磁盘， 比如 sdbc
+lsblk
+# mount
+mount /dev/sdc1 /data
+```
+此时已挂载完毕， 通过 `df -h` 能够看到磁盘空间  
+但是重启后挂载的盘会看不到，还需要执行   
+```
+vi /etc/fstab
+/dev/sdc /data ext3 defaults 0 0 
+```
+其中， ext3 通过执行 `blkid /dev/sdc`  获取 
