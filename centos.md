@@ -80,7 +80,7 @@ systemctl enable docker
 docker version
 docker info
 ```
-遇到 
+遇到
 
 ```
 ```
@@ -615,8 +615,8 @@ Partition type:
 # 回车，选p， 选择主分区
 Select (default p): p
 # 回车，默认值
-Partition number (3,4, default 3): 
-First sector (134217728-2097151999, default 134217728): 
+Partition number (3,4, default 3):
+First sector (134217728-2097151999, default 134217728):
 Using default value 134217728
 Last sector, +sectors or +size{K,M,G} (134217728-2097151999, default 2097151999):
 Using default value 2097151999
@@ -631,8 +631,12 @@ WARNING: Re-reading the partition table failed with error 16: Device or resource
 The kernel still uses the old table. The new table will be used at
 the next reboot or after you run partprobe(8) or kpartx(8)
 Syncing disks.
-# 重启
-reboot
+# 让系统识别新的分区
+partprobe
+# 查看新的分区
+lsblk
+#  执行了partprobe，就不需要重启了
+#reboot
 ```
 
 ##  扩容
@@ -753,6 +757,6 @@ mount /dev/sdc1 /data
 但是重启后挂载的盘会看不到，还需要执行   
 ```
 vi /etc/fstab
-/dev/sdc /data ext3 defaults 0 0 
+/dev/sdc /data ext3 defaults 0 0
 ```
-其中， ext3 通过执行 `blkid /dev/sdc`  获取 
+其中， ext3 通过执行 `blkid /dev/sdc`  获取
