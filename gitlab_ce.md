@@ -2,6 +2,7 @@
 
 ```sh
 docker pull gitlab/gitlab-ce:latest
+
 docker images
 # image
 REPOSITORY                                TAG       IMAGE ID       CREATED        SIZE
@@ -40,6 +41,7 @@ docker run --detach \
     -v ${GITLAB_HOME}/logs:/var/log/gitlab \
     -v ${GITLAB_HOME}/data:/var/opt/gitlab \
     gitlab/gitlab-ce:latest
+# 增加执行权限
 chmod +x gitlab_start.sh
 ```
 
