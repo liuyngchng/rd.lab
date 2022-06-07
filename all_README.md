@@ -670,6 +670,10 @@ protoc ./Message.proto --java_out=./
 ```
 keytool -genkey -alias tomcat -keyalg RSA -keystore ./server.keystore
 ```
+create pkcs12 certificate
+```
+keytool -genkey -v -alias test_me -keyalg RSA -storetype PKCS12 -keystore dlt.p12 -dname "CN=www.achng.cn,OU=helloworld,O=KLSZ,L=BJ,ST=BJ,C=CHINA" -storepass test@test -keypass test@test
+```
 ## 48.2 add config
 ```
 server.ssl.protocol=TLS
