@@ -674,6 +674,14 @@ create pkcs12 certificate
 ```
 keytool -genkey -v -alias test_me -keyalg RSA -storetype PKCS12 -keystore dlt.p12 -dname "CN=www.achng.cn,OU=helloworld,O=KLSZ,L=BJ,ST=BJ,C=CHINA" -storepass test@test -keypass test@test
 ```
+converto pkcs12 to jks
+```
+keytool -importkeystore -srckeystore dlt.pkcs12 -srcstoretype PKCS12 -deststoretype JKS -destkeystore dlt.jks
+```
+convert jks to pkcs12
+```
+keytool -importkeystore -srckeystore keystore.jks -srcstoretype JKS -deststoretype PKCS12 -destkeystore keystore.p12
+```
 ## 48.2 add config
 ```
 server.ssl.protocol=TLS
