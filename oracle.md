@@ -38,3 +38,14 @@ example
 insert into t1 values(seq_name.nextval, 1, 1);
 ```
 
+# record num
+
+```sql
+SELECT 
+   table_name, count_rows(table_name) nrows 
+FROM 
+    user_tables 
+ORDER BY 
+    nrows DESC;
+```
+
