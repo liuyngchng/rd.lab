@@ -11,6 +11,13 @@ cd ..
 mkdir -p /usr/local/lib/mininet  # 创建build目录
 mininet/util/install.sh -s /usr/local/lib/mininet -a
 ```
+## 1.2 env2
+OS: ubuntu 20.04 LTS
+```
+git checkout -b 2.3.0 2.3.0
+sudo mkdir /usr/local/lib/mininet
+sudo PYTHON=python3 mininet/util/install.sh -s /usr/local/lib/mininet -a
+```
 # 2. network monitor and config
 ## 2.1 network traffic
 ```
