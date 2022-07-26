@@ -307,10 +307,17 @@ yum -y remove  A, 然后再安装B
 yum -y install gcc gcc-c++ libstdc++-devel
 tar -zxf  redis-stable.tar.gz
 cd redis-stable
+vi ./src/.make-settings
+#将 OPT = -O2 修改为 OPT=-O2 -march=x86-64
+# 否则会报 undefined *** je_malloc_usable_size *** error
 cd deps
+#deps目录下的所有组件，均需要make
 cd jemalloc/
+./configure
 make MALLOC=libc
 make install
+cd ../..
+make
 redis-server --version
 Redis server v=6.2.6 sha=00000000:0 malloc=libc bits=64 build=bcb67d162ef0f4f8
 
@@ -319,9 +326,13 @@ Redis server v=6.2.6 sha=00000000:0 malloc=libc bits=64 build=bcb67d162ef0f4f8
 设置密码并启动
 
 ```sh
-vi ./redis.conf
+sudo touch /etc/redis/redis.conf 
+vi /etc/redis/redis.conf
 # 设置 requirepass yourpassword
-redis-server /etc/redis.conf &
+redis-server /etc/redis/redis.conf &
+# 复杂密码passowrd需要加引号
+redis-cli -h 1.2.3.4 -p 6379 -a 'password'
+
 ```
 
 # nc

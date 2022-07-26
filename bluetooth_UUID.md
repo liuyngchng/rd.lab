@@ -98,7 +98,11 @@ A 16-bit UUID may be converted to 32-bit UUID format by zero-extending the 16-bi
 
 ​       蓝牙 UUID 由蓝牙技术联盟（*Bluetooth* Technology Special Interest Group，简称BLE SIG， 直译为蓝牙技术特别兴趣小组）进行授权。
 
+<<<<<<< HEAD
 ​       自定义蓝牙服务时要申请UUID,每个 UUID 2,500 美元。
+=======
+​       自定义蓝牙服务时要申请UUID,每个 UUID 2,500 美元，详见 https://support.bluetooth.com/hc/en-us/articles/360058202612-Bluetooth-SIG-Membership-Fee-Changes-Effective-1-January-2022。
+>>>>>>> 561d7d9f88af7f75496b2e0bb170c434615c237c
 
 已分配的 UUID 详见 https://www.bluetooth.com/specifications/assigned-numbers/。
 

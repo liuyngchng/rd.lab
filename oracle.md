@@ -51,4 +51,13 @@ Number(12) 短期内的值域够用。
 远传表 sequence 最大值 设置为 10 ^12。
 
 ## 涉及到的 sequence
+# record num
 
+```sql
+SELECT 
+   table_name, count_rows(table_name) nrows 
+FROM 
+    user_tables 
+ORDER BY 
+    nrows DESC;
+```
