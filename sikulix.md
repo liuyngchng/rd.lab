@@ -113,34 +113,20 @@ keyDown(Key.WIN)
 
 ```python
 image = ("1565939082284.png")
-
 t1 = find(image)
-
 hover("1565939082284.png")				#鼠标悬停
-
 mouseDown(Button.RIGHT)					#按住鼠标右键
-
 mouseMove(t1.left(122))					#往左拖动
-
 #dragDrop(t,Location(t.x, t.y - 10))  	#向上拖动10的位置
-
 wait(1) 
 mouseUp()								#抬起鼠标右键
-
 image = ("1565939082284.png")
-
 t2 = find(image)
-
 hover("1565939082284.png")				#鼠标悬停
-
 mouseDown(Button.RIGHT)					#按住鼠标右键
-
 mouseMove(t2.above(398))				#往上拖动
-
 #dragDrop(t,Location(t.x, t.y - 10))  	#向上拖动10的位置
-
 wait(1)
-
 mouseUp()								#抬起鼠标右键
 ```
 
@@ -148,14 +134,16 @@ mouseUp()								#抬起鼠标右键
 
 ```
 waitVanish(img)						# 等待img 消失
-wait(img)							# 等待 img 出现
-type("txt")							# 在光标焦点处输入 txt
-type(img, "txt")					# 在 img 出现的文字，输入文本 txt
-paste("txt")						# 在光标焦点处粘贴 txt
+wait(img)									# 等待 img 出现
+type("txt")								# 在光标焦点处输入 txt
+type(img, "txt")					# 在 img 出现的位置，输入文本 txt
+# 在 img 出现的位置，设置一定的偏移量，输入文本 txt
+type(Pattern(img).targetOffset(-100, -1), "txt"); 
+paste("txt")							# 在光标焦点处粘贴 txt
 paste(img, "txt")					# 单击指定的图片 img， 再输入文本 txt
 
 r=Region(img)
-r.click()							# 在指定的区域 r 中点击
+r.click()									# 在指定的区域 r 中点击
 
 ```
 
