@@ -182,3 +182,7 @@ Debug.setUserLogFile("/home/rd/workspace/sikulix/log")		# 设置日志文件的�
 Debug.user("text with %s", "test")							# 打印日志，使用 C语言风格占位符， or said Java String.format()
 ```
 
+# appData
+
+修改源代码 Sikulix1.API.org.sikuli.support.Commons.getAppDataPath()
+
