@@ -184,5 +184,5 @@ Debug.user("text with %s", "test")							# 打印日志，使用 C语言风格�
 
 # appData
 
-修改源代码 Sikulix1.API.org.sikuli.support.Commons.getAppDataPath()
+master 分支， 修改源代码 Sikulix1.API.org.sikuli.support.Commons.getAppDataPath()
 
