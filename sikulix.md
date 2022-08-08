@@ -101,15 +101,15 @@ keyDown(Key.WIN)
 
 常见鼠标操作如下所示。
 
-| 操作         | cmd                    |
-| ------------ | ---------------------- |
-| 鼠标左键单击 | click()                |
-| 鼠标左键双击 | doubleClick()          |
-| 鼠标右键单击 | rightClick()           |
-| 鼠标悬停     | hover()                |
-| 鼠标拖拽     | dragDrop()             |
-| 按下鼠标左键 | mouseDown(Button.LEFT) |
-| 抬起鼠标按键 | mouseUp()              |
+| 操作         | cmd                            |
+| ------------ | ------------------------------ |
+| 鼠标左键单击 | click(Location(123, 456))      |
+| 鼠标左键双击 | doubleClick()                  |
+| 鼠标右键单击 | rightClick(Location(123, 456)) |
+| 鼠标悬停     | hover()                        |
+| 鼠标拖拽     | dragDrop()                     |
+| 按下鼠标左键 | mouseDown(Button.LEFT)         |
+| 抬起鼠标按键 | mouseUp(Button.LEFT)           |
 
 
 
@@ -147,5 +147,38 @@ paste(img, "txt")					# 单击指定的图片 img， 再输入文本 txt
 r=Region(img)
 r.click()									# 在指定的区域 r 中点击
 
+```
+
+
+
+# 拷贝粘贴文本
+
+```python
+r=Region(184,324,1233,479)
+param=r.find(Pattern("1659332267414.png").targetOffset(-71,-6))
+wait(1)
+hover(param)
+wait(1)
+mouseDown(Button.LEFT)
+wait(1)
+mouseMove(500, 0)
+wait(1)
+mouseUp(Button.LEFT)
+type("c", Key.CTRL)
+wait(1)
+type("t", Key.CTRL+Key.ALT)
+wait(2)
+type("v", Key.CTRL+Key.SHIFT)
+type(Key.ENTER)
+wait(2)
+type(Key
+```
+
+# 日志
+
+```python
+Debug.on(3)
+Debug.setUserLogFile("/home/rd/workspace/sikulix/log")		# 设置日志文件的绝对路径
+Debug.user("text with %s", "test")							# 打印日志，使用 C语言风格占位符， or said Java String.format()
 ```
 
