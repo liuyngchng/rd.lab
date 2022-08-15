@@ -187,3 +187,23 @@ Debug.user("text with %s", "test")							# 打印日志，使用 C语言风格�
 master 分支， 修改源代码 Sikulix1.API.org.sikuli.support.Commons.getAppDataPath()
 
 2.0.x bramch, Sikulix1/API/src/main/java/org/sikuli/script/support/Commons.java
+
+# Log
+
+##  python2
+
+```python
+import sys
+print(sys._getframe().f_lineno),
+print($variable)
+```
+
+## php
+
+```php
+echo __LINE__."my text".$variable."\n";
+```
+
+# 数据流
+
+cmd -> php -> casper's ->phantomjs->java
