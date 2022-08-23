@@ -122,10 +122,22 @@ gsettings get org.gnome.desktop.wm.keybindings switch-to-workspace-left
 gsettings set org.gnome.desktop.wm.keybindings switch-to-workspace-left "[]"
 
 # 4. proxy for apt
+
 ```
 vi /etc/apt/apt.conf
 Acquire::http::proxy "http://1.2.3.4:8080/";
 Acquire::https::proxy "https://1.2.3.4:8080/";
 Acquire::ftp::proxy "ftp://1.2.3.4:8080/";
 Acquire::socks::proxy "socks://1.2.3.4:8080/";
+```
+
+# 5. get md5 value of a string on ubuntu
+
+```
+echo -n 'my_str' |  md5sum
+```
+convert all char to uppercase
+
+```
+echo -n 'my_str' | md5sum | tr [:lower:] [:upper:]
 ```
