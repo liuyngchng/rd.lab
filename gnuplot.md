@@ -13,6 +13,8 @@ plot[-3.14: 3.14] sin(x), cos(x)
 # 3. 3D plot
 
 ```
+#!/bin/bash
+echo '
 reset
 set isosamples 40
 unset key
@@ -22,6 +24,6 @@ set xrange [-5:5]
 set yrange [-5:5]
 set ztics 1
 set pm3d
-splot besj0(x**2+y**2)
+splot besj0(x**2+y**2)' | gnuplot
 
 ```
