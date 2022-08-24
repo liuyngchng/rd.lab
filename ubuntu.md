@@ -141,3 +141,12 @@ convert all char to uppercase
 ```
 echo -n 'my_str' | md5sum | tr [:lower:] [:upper:]
 ```
+
+# 6. gnuplot
+
+```
+sudo apt-get install gnuplot
+gnuplot
+plot[-3.14: 3.14] sin(x), cos(x)
+```
+
