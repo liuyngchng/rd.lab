@@ -761,13 +761,17 @@ tmpfs                      3.2G     0  3.2G   0% /run/user/0
 ```
 # 能够看到物理磁盘， 比如 sdbc
 lsblk
-# mount
-mount /dev/sdc1 /data
+# mount， 注意，如果/data目录下有文件，则会被清空
+mount /dev/sdb /data
+# 若提示 /dev/sdb is write-protected, mounting read-only
+#		mount: unknown filesystem type '(null)' 则执行以下语句，否则跳过
+mkfs.ext4 /dev/sdb 					#输入y，回车
 ```
 此时已挂载完毕， 通过 `df -h` 能够看到磁盘空间  
 但是重启后挂载的盘会看不到，还需要执行   
+
 ```
 vi /etc/fstab
-/dev/sdc /data ext3 defaults 0 0
+/dev/sdb                /data                   ext4    defaults        0 0
 ```
-其中， ext3 通过执行 `blkid /dev/sdc`  获取
+其中， ext4 通过执行 `blkid /dev/sdb`  获取
