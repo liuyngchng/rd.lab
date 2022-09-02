@@ -313,7 +313,7 @@ docker-compose -v
 
 应用打包
 
-```sh
+```shell
 mvn clean package
 ```
 
@@ -391,6 +391,7 @@ docker info
 # root 用户
 su
 vi /etc/systemd/system/docker.service
+# vi /usr/lib/systemd/system/docker.service
 ```
 
 #按i插入模式,复制如下内容:
@@ -580,7 +581,7 @@ Get https://IP:port/v2/: Service Unavailable
 systemctl daemon-reload
 systemctl restart docker.service 
 ```
-## docker 删除私有仓库中的镜像
+##  docker 删除私有仓库中的镜像
 首先， 镜像库服务器上需要进行配置，更改registry容器内/etc/docker/registry/config.yml文件
 
 ```yaml

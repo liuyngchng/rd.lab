@@ -461,23 +461,31 @@ iptables -A INPUT -p icmp --icmp-type 8 -j ACCEPT
 
 禁用某网段
 
-    iptables -I INPUT -p tcp -s 192.168.116.0/24 -j DROP
+```shell
+iptables -I INPUT -p tcp -s 192.168.116.0/24 -j DROP
+```
 
 禁用某网段的22端口
 
-    iptables -I INPUT -p tcp -s 192.168.116.0/24 --dport 22 -j DROP
+```shell
+iptables -I INPUT -p tcp -s 192.168.116.0/24 --dport 22 -j DROP
+```
 
 禁用192.168.116.1~192.168.116.20 IP段的 22 端口
 
-    iptables -I INPUT -m iprange --src-range 192.168.116.1-192.168.116.20 -p tcp --dport 22 -j DROP
+```shell
+iptables -I INPUT -m iprange --src-range 192.168.116.1-192.168.116.20 -p tcp --dport 22 -j DROP
+```
 
 禁用192.168.116.1~192.168.116.20 经过网卡eno1的 IP段的 22 端口
 
-    iptables -I INPUT -m iprange --src-range 192.168.116.1-192.168.116.20 -p tcp -i eno1 --dport 22 -j DROP
+```shell
+iptables -I INPUT -m iprange --src-range 192.168.116.1-192.168.116.20 -p tcp -i eno1 --dport 22 -j DROP
+```
 
 禁用192.168.116.1~192.168.116.20 经过网卡eno1的 目的IP为192.168.116.118的 IP段的 22 端口
 
-```
+```shell
 iptables -I INPUT -m iprange --src-range 192.168.116.1-192.168.116.20 -p tcp -i eno1 -d 192.168.116.118 --dport 22 -j DROP
 ```
 
@@ -758,7 +766,7 @@ tmpfs                      3.2G     0  3.2G   0% /run/user/0
 
 # 挂载数据盘
 
-```
+```shell
 # 能够看到物理磁盘， 比如 sdbc
 lsblk
 # mount， 注意，如果/data目录下有文件，则会被清空
@@ -770,8 +778,9 @@ mkfs.ext4 /dev/sdb 					#输入y，回车
 此时已挂载完毕， 通过 `df -h` 能够看到磁盘空间  
 但是重启后挂载的盘会看不到，还需要执行   
 
-```
+```shell
 vi /etc/fstab
 /dev/sdb                /data                   ext4    defaults        0 0
 ```
 其中， ext4 通过执行 `blkid /dev/sdb`  获取
+
