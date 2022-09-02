@@ -19,9 +19,9 @@ openjdk version "17.0.3" 2022-04-19
 
 ```sh
 mkdir workspace				# 创建自己的 java 工程目录
-pwd							# 查看当前目录
+pwd										# 查看当前目录
 touch hello.java			# 创建一个文件，文件名成为 hello.java
-vi hello.java				# 打开 hello.java 文件
+vi hello.java					# 打开 hello.java 文件
 ```
 
 hello.java 内容如下:
@@ -43,8 +43,8 @@ java 源代码文件的文件名（hello.java）称跟其内容中的 class 名�
 运行
 
 ```sh
-javac hello.java				# 编译源代码
-ls								# 查看当前目录下的文件
+javac hello.java						# 编译源代码
+ls													# 查看当前目录下的文件
 hello.java hello.class			# 可以看到编译生成的字节码文件 hello.class
 ```
 
