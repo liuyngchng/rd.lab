@@ -141,5 +141,36 @@ convert all char to uppercase
 ```
 echo -n 'my_str' | md5sum | tr [:lower:] [:upper:]
 ```
+# 6. network 
 
+## 6.1 对eth0网卡进行延迟设置
+```
+tc qdisc add dev eth0 root netem delay 150ms
+# 设置eth0包延迟 150ms
+tc qdisc change dev eth0 root netem delay 150ms 10ms
+# 设置eth0包延迟 150ms ± 10ms
+tc qdisc change dev eth0 root netem delay 150ms 10ms 25%
+# 设置eth0包延迟 150ms ± 10ms，下一个随机元素取决于上一个的25%（约）
+tc qdisc change dev eth0 root netem gap 5 delay 10ms
+# 设置eth0包延迟每5个包有一个包延迟10ms
+```
+
+## 6.2 对eth0网卡限制带宽
+
+```
+tc qdisc add dev eth0 root tbf rate 500Kbit latency 50ms burst 15kb
+# 将eth0网卡限速到500Kbit/s，15bk的buffer，TBF最多产生50ms的延迟
+# tbf是Token Bucket Filter的简写，适合于把流速降低到某个值
+```
+## 6.3 列出已有的策略
+
+```
+tc -s qdisc ls dev eth0
+tc -q qdisc ls dev eth0
+```
+## 6.4 解除eth0网卡的限制
+
+```
+tc qdisc del dev eth0 root
+```
 
