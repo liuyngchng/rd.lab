@@ -45,6 +45,10 @@ docker ps
 | export PATH=$PATH:/opt/jre        | 配置 java 环境变量 |
 | exit                              | 退出容器  |
 |docker cp jre.tar.gz test:/opt      # 将容器外的文件拷贝到容器里||
+若需要在docker 中修改系统时间，则在执行 docker run 时需要加上参数
+```
+docker run --cap-add SYS_TIME
+```
 
 ##  生成新的 image
 
