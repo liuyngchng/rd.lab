@@ -1,6 +1,6 @@
-# 1. Ubuntu16.04下安装GTK+
+# Ubuntu16.04下安装GTK+
 
-## 1.1 安装
+##  安装
 
 安装gcc/g++/gdb/make 等基本编程工具  
 
@@ -45,7 +45,7 @@ sudo apt-get install libgtk2.0-dev
 ```
 sudo apt-get install libgtk2.0*
 ```
-## 1.2 查看 GTK 库版本
+##  查看 GTK 库版本
 
 查看 2.x 版本
 
@@ -63,7 +63,7 @@ pkg-config --version
 $pkg-config --list-all grep gtk
 ```
 
-# 2. 安装字体
+#  安装字体
 
 ```
 sudo cp simsun.ttc /usr/share/fonts
@@ -80,24 +80,26 @@ sudo fc-cache -fsv
 ```
 
 
-# 3. wechat 微信
+# wechat 微信
 
-```
+```shell
 wine '/home/rd/.wine/drive_c/Program Files (x86)/Tencent/WeChat/[3.6.0.18]/WeChat.exe'
 ```
  wine是把windows的接口翻译成Linux，但是有一部分没有翻译，所以就导致一部分功能不能用，   
 比如中文的显示异常。这是因为缺少一些windows的库。winetricks应运而生，他可以图形化的安装wine缺少的库
 
-```
+```shell
 sudo apt-get install winetricks
 ```
 解决 Ubuntu 20.04 桌面平台下 Deepin 版微信的中文乱码问题。
 
-    安装相关字体
-    
-    sudo apt-get install -y ttf-wqy-microhei  #文泉驿-微米黑
-    sudo apt-get install -y ttf-wqy-zenhei  #文泉驿-正黑
-    sudo apt-get install -y xfonts-wqy #文泉驿-点阵宋体
+```shell
+安装相关字体
+
+sudo apt-get install -y ttf-wqy-microhei  #文泉驿-微米黑
+sudo apt-get install -y ttf-wqy-zenhei  #文泉驿-正黑
+sudo apt-get install -y xfonts-wqy #文泉驿-点阵宋体
+```
 
 Bash
 注销当前系统用户的登录（可能要重启系统） 
@@ -121,9 +123,9 @@ gsettings get org.gnome.desktop.wm.keybindings switch-to-workspace-left
 修改：
 gsettings set org.gnome.desktop.wm.keybindings switch-to-workspace-left "[]"
 
-# 4. proxy for apt
+#  proxy for apt
 
-```
+```shell
 vi /etc/apt/apt.conf
 Acquire::http::proxy "http://1.2.3.4:8080/";
 Acquire::https::proxy "https://1.2.3.4:8080/";
@@ -131,20 +133,53 @@ Acquire::ftp::proxy "ftp://1.2.3.4:8080/";
 Acquire::socks::proxy "socks://1.2.3.4:8080/";
 ```
 
-# 5. get md5 value of a string on ubuntu
+#  get md5 value of a string on ubuntu
 
 ```
 echo -n 'my_str' |  md5sum
 ```
 convert all char to uppercase
 
-```
+```shell
 echo -n 'my_str' | md5sum | tr [:lower:] [:upper:]
 ```
-# 6. date
-date in milliseconds
+# date
+date in milliseconds 
 ```
 date +"%T.%6N"
 timedatectl timesync-status
+```
+# network 
+
+##  对eth0网卡进行延迟设置
+
+```shell
+tc qdisc add dev eth0 root netem delay 150ms
+# 设置eth0包延迟 150ms
+tc qdisc change dev eth0 root netem delay 150ms 10ms
+# 设置eth0包延迟 150ms ± 10ms
+tc qdisc change dev eth0 root netem delay 150ms 10ms 25%
+# 设置eth0包延迟 150ms ± 10ms，下一个随机元素取决于上一个的25%（约）
+tc qdisc change dev eth0 root netem gap 5 delay 10ms
+# 设置eth0包延迟每5个包有一个包延迟10ms
+```
+
+##  对eth0网卡限制带宽
+
+```shell
+tc qdisc add dev eth0 root tbf rate 500Kbit latency 50ms burst 15kb
+# 将eth0网卡限速到500Kbit/s，15bk的buffer，TBF最多产生50ms的延迟
+# tbf是Token Bucket Filter的简写，适合于把流速降低到某个值
+```
+##  列出已有的策略
+
+```shell
+tc -s qdisc ls dev eth0
+tc -q qdisc ls dev eth0
+```
+##  解除eth0网卡的限制
+
+```shell
+tc qdisc del dev eth0 root
 ```
 

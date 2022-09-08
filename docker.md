@@ -195,6 +195,13 @@ source /etc/profile
 ###  完成
 `locale`
 
+## 修改docker容器中的系统时间
+
+若需要在docker 中修改系统时间，则在执行 docker run 时需要加上参数
+```
+docker run --cap-add SYS_TIME
+```
+
 
 # 2. docker permission
 
