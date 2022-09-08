@@ -141,5 +141,10 @@ convert all char to uppercase
 ```
 echo -n 'my_str' | md5sum | tr [:lower:] [:upper:]
 ```
-
+# 6. date
+date in milliseconds
+```
+date +"%T.%6N"
+timedatectl timesync-status
+```
 
