@@ -25,3 +25,13 @@ systemctl start docker
 
 
 Environment="HTTP_PROXY=http://10.22.96.29:8080/" "HTTPS_PROXY=https://10.22.96.29:8080/"
+还可以这么做：
+
+ 创建/etc/systemd/system/docker.service.d/http-proxy.conf文件
+ 并添加HTTP_PROXY环境变量。其中[proxy-addr]和[proxy-port]分别改成实际情况的代理地址和端口：
+ 然后执行
+
+ ```
+ systemctl daemon-reload
+ systemctl start docker
+ ```
