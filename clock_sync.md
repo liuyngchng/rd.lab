@@ -1,10 +1,9 @@
 #  env
 
-
+##  setup virtual machine
 
 ```shell
 docker pull ubuntu
-
 docker network create --subnet=172.18.0.0/16 mynetwork
 docker network ls
 # 添加参数，可修改系统时间,可管理网络
@@ -26,7 +25,7 @@ tc qdisc del dev eth0 root
 
 ```
 
-
+##  set network delay
 
 运行shell, 设置延迟
 
@@ -41,6 +40,8 @@ tc qdisc add dev $interface root handle 1: prio
 tc filter add dev $interface parent 1:0 protocol ip prio 1 u32 match ip dst $ip flowid 2:1
 tc qdisc add dev $interface parent 1:1 handle 2: netem delay $delay
 ```
+
+##  set network bandwidth
 
 运行shell ，设置限速
 
@@ -76,9 +77,12 @@ tc filter add dev $interface parent ffff: protocol ip  u32 match ip dst 192.168.
 # tc -s -d filter show dev ppp0
 ```
 
-# demo
+# test
+
+##  启动 server 服务
 
 启动获取时间戳的 HTTP 服务
+
 ```shell
 java -jar spring-boot-test.jar &
 # 测试获取时间戳
@@ -94,6 +98,8 @@ cat get_time.sh
 #echo -n $(date '+%Y-%m-%d %H:%M:%S').$((10#$(date '+%N')/1000000))
 echo $(date '+%Y-%m-%d %H:%M:%S').$(date '+%N')
 ```
+
+##  client 同步时钟
 
 同步时钟
 
@@ -117,7 +123,10 @@ echo $(date '+%Y-%m-%d %H:%M:%S').$((`date '+%N'`/1000000))
 # 当前系统时间 时：分：秒. 纳秒
 echo $(date '+%Y-%m-%d %H:%M:%S').$(date '+%N')
 ```
+##  monitor 检查时钟
+
 检查2个节点的时钟
+
 ```sh
 vi check_clock.sh
 
