@@ -1,9 +1,6 @@
 echo '#### start ####'
 echo "local  time: $(date '+%Y-%m-%d %H:%M:%S').$(date '+%N')"
-#echo $(date '+%Y-%m-%d %H:%M:%S').$((`date '+%N'`/1000000))
-#echo -e '\nstart get server time'
-echo "server time: $(curl -I http://www.baidu.com)"
+echo "server time: $(curl http://172.18.0.3:8082/data/test)"
 echo "local  time: $(date '+%Y-%m-%d %H:%M:%S').$(date '+%N')"
 echo "local  time: $(date '+%Y-%m-%d %H:%M:%S').$(date '+%N')"
-#echo $(date '+%Y-%m-%d %H:%M:%S').$((`date '+%N'`/1000000))
 echo '#### end ####'

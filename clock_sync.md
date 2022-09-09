@@ -99,6 +99,15 @@ cat get_time.sh
 echo $(date '+%Y-%m-%d %H:%M:%S').$(date '+%N')
 ```
 
+获取纳秒时间戳
+
+```sh
+cat timestamp.sh 
+date +%s.%N
+```
+
+
+
 ##  client 同步时钟
 
 同步时钟
