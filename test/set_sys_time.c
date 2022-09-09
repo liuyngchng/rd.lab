@@ -1,9 +1,12 @@
+/**
+ * 需要root 用户权限执行 hwclock
+ **/
+ 
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
 #include <sys/time.h>
 #include <unistd.h>
-
 
 void set_time(int year,int month,int day,int hour,int min,int sec)
 {
@@ -26,7 +29,7 @@ void set_time(int year,int month,int day,int hour,int min,int sec)
 void main()
 {
 
-    printf("before time set");
+    printf("before time set:\n");
     fflush(stdout);
     system("date");
     system("hwclock");
@@ -34,8 +37,7 @@ void main()
     set_time(2012,10,10,1,30,8);
     system("hwclock -w");
 
-
-    printf("after time set");
+    printf("after time set:\n");
     fflush(stdout);
     system("date");
     system("hwclock");

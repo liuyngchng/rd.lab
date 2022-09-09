@@ -8,10 +8,10 @@ docker pull ubuntu
 docker network create --subnet=172.18.0.0/16 mynetwork
 docker network ls
 # 添加参数，可修改系统时间,可管理网络
-docker run -itd --name h1 --net mynetwork --ip 172.18.0.2 --cap-add SYS_TIME --cap-add=NET_ADMIN ubuntu:latest
-docker run -itd --name h2 --net mynetwork --ip 172.18.0.3 --cap-add SYS_TIME --cap-add=NET_ADMIN ubuntu:latest
-docker run -itd --name h3 --net mynetwork --ip 172.18.0.110 --cap-add SYS_TIME --cap-add=NET_ADMIN ubuntu:latest
-docker exec -it test1 bash
+docker run -itd --name h1 --net mynetwork --ip 172.18.0.2 --cap-add SYS_TIME --cap-add=NET_ADMIN -v /home/rd/workspace/clock.sync:/opt ubuntu:latest
+docker run -itd --name h2 --net mynetwork --ip 172.18.0.3 --cap-add SYS_TIME --cap-add=NET_ADMIN -v /home/rd/workspace/clock.sync:/opt ubuntu:latest
+docker run -itd --name h3 --net mynetwork --ip 172.18.0.110 --cap-add SYS_TIME --cap-add=NET_ADMIN -v /home/rd/workspace/clock.sync:/opt ubuntu:latest
+docker exec -it h1 bash
 unset HTTPS_PROXY HTTP_PROXY  http_proxy
 apt-get update
 # ip addr, tc ping ifconfig
@@ -31,6 +31,8 @@ tc qdisc del dev eth0 root
 运行shell, 设置延迟
 
 ```shell
+touch delay.sh
+# 内容如下
 #!/bin/bash
 interface=eth0
 ip=172.18.0.2
@@ -73,3 +75,17 @@ tc filter add dev $interface parent ffff: protocol ip  u32 match ip dst 192.168.
 # 显示filter规则状态
 # tc -s -d filter show dev ppp0
 ```
+
+# run demo
+
+```shell
+java -jar spring-boot-test.jar &
+curl http://172.18.0.3:8082/data/test
+```
+
+当前系统时间ms
+
+```
+echo $(date '+%Y-%m-%d %H:%M:%S').$((`date '+%N'`/1000000))
+```
+
