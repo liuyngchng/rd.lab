@@ -1,4 +1,4 @@
-##  env
+#  env
 
 
 
@@ -76,16 +76,55 @@ tc filter add dev $interface parent ffff: protocol ip  u32 match ip dst 192.168.
 # tc -s -d filter show dev ppp0
 ```
 
-# run demo
+# demo
 
+启动获取时间戳的 HTTP 服务
 ```shell
 java -jar spring-boot-test.jar &
+# 测试获取时间戳
 curl http://172.18.0.3:8082/data/test
 ```
 
-当前系统时间ms
+获取操作系统时间
 
+```sh
+cat get_time.sh 
+# 10#表示将后面的数字作为10进制处理，否则，当出现0xxx时，
+# shell会认为是8进制，会报错
+#echo -n $(date '+%Y-%m-%d %H:%M:%S').$((10#$(date '+%N')/1000000))
+echo $(date '+%Y-%m-%d %H:%M:%S').$(date '+%N')
 ```
+
+同步时钟
+
+```sh
+cat sync_clock.sh 
+echo '#### start ####'
+echo "local  time: $(date '+%Y-%m-%d %H:%M:%S').$(date '+%N')"
+echo "server time: $(curl http://172.18.0.3:8082/data/test)"
+echo "local  time: $(date '+%Y-%m-%d %H:%M:%S').$(date '+%N')"
+# 需 root 权限
+date -s 'xxxxx'
+echo "local  time: $(date '+%Y-%m-%d %H:%M:%S').$(date '+%N')"
+echo '#### end ####'
+```
+
+
+
+```sh
+# 当前系统时间 时：分：秒. 毫秒
 echo $(date '+%Y-%m-%d %H:%M:%S').$((`date '+%N'`/1000000))
+# 当前系统时间 时：分：秒. 纳秒
+echo $(date '+%Y-%m-%d %H:%M:%S').$(date '+%N')
+```
+检查2个节点的时钟
+```sh
+vi check_clock.sh
+
+echo '#### start clock check ####'
+# 添加 & 作为后台进程，保证2条指令同时执行
+echo "h1 clock: $(curl -s http://172.18.0.3:8082/data/test)" &
+echo "h2 clock: $(curl -s http://172.18.0.2:8082/data/test)"
+echo '#### end clock check ####'
 ```
 
