@@ -1,1 +1,1 @@
-date +%s.%N
+date +%s%N
