@@ -1,3 +1,24 @@
+# setup
+
+通过docker 镜像安装 oracle
+
+```sh
+docker pull registry.cn-hangzhou.aliyuncs.com/qida/oracle-xe-11g
+docker run -d -p 1521:1521 --name oracle11 registry.cn-hangzhou.aliyuncs.com/qida/oracle-xe-11g
+docker exec -it oracle11 bash
+sqlplus /nolog
+# 使用sysdba角色登录sqlplus
+conn sys/oracle as sysdba
+# 查看当前实例下的数据库
+select name from v$database;
+# 查看有多少个数据表
+select count(*) from user_tables;
+# 退出sqlplus
+exit
+```
+
+
+
 # Sequence
 
 ## 查看用户序列
