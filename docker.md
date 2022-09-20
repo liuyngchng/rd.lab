@@ -83,6 +83,7 @@ docker ps
 | docker run -dit -p 9088:9088 image bash | 启动 |
 | docker run -dit -v /hostdir:/containerdir --name test repository_id | 目录映射 |
 | docker run -u username | 指定运行镜像所使用的用户 |
+| docker run -it  --entrypoint="/bin/bash" | 覆盖Dockerfile中ENTRYPOINT设置的命令 |
 
 ## 修改默认镜像存储目录
 
