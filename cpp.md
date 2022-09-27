@@ -333,11 +333,68 @@ int main()
 
 
 
-
-
 # 数据结构
 
-## vector
+##  数组
+
+```cpp
+ int n[ 10 ]; 			// n 是一个包含 10 个整数的数组
+```
+
+##  字符串
+
+（1）C 风格的字符串
+
+```cpp
+char site[7] = {'H', 'E', 'L', 'L', 'O', '\0'};
+char site[] = "HELLO";
+```
+
+（2）c++ 中的字符串
+
+```cpp
+string str1 = "hello";
+```
+
+示范
+
+```cpp
+#include <iostream>
+
+using namespace std;
+int main() 
+{
+    string a="hello";
+    cout << a << endl;
+}
+```
+
+##  STL 容器
+
+###  容器通用方法
+
+```cpp
+.size() ：               // 容器内元素个数
+.empty() ：              // 判断容器是否为空, 返回值为 bool 型
+.front()：               // 返回容器第一个元素
+.back() ：               // 返回容器最后一个元素
+.begin() ：              // 返回容器第一个元素的指针
+.end() ：                // 返回容器最后一个元素的指针
+.swap(b) ：              // 交换两个容器的内容
+:: iterator ：           // 迭代器
+```
+
+###   vector（动态数组）
+
+基本操作
+
+```cpp
+.push_back(element)			// 顺序添加元素
+.insert(pos, element)		// 在某个位置添加元素
+.pop_back()					// 取元素
+```
+
+
 
 ```sh
  touch vector.cpp
@@ -362,5 +419,46 @@ int main(void)
 
     return 0;
 }
+```
+
+###  stack（栈）
+
+基本操作
+
+```cpp
+stack<T> s;
+.push(x);
+.pop();
+.top();
+.empty()
+.size()
+```
+
+###  queue（队列）
+
+基本操作
+
+```cpp
+queue<int> q;
+.push(x);
+.pop();
+.top();
+.empty()
+.size()
+```
+
+###  set（集合）
+
+基本操作
+
+```cpp
+set<int> s;
+.insert(x);
+.erase();
+.find();
+.empty()
+.count()
+.clear()
+lower_bound / upper_bound
 ```
 
