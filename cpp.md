@@ -346,8 +346,23 @@ int main()
 （1）C 风格的字符串
 
 ```cpp
-char site[7] = {'H', 'E', 'L', 'L', 'O', '\0'};
-char site[] = "HELLO";
+char a1[7] = {'H', 'E', 'L', 'L', 'O', '\0'};
+char a2[] = "HELLO";
+```
+
+示范
+
+```cpp
+#include <iostream>
+
+using namespace std;
+int main() 
+{
+    char a1[7] = {'H', 'E', 'L', 'L', 'O', '\0'};
+	char a2[] = "HELLO";
+    cout << a1 << endl;
+    cout << a2 << endl;
+}
 ```
 
 （2）c++ 中的字符串
@@ -392,31 +407,36 @@ int main()
 .push_back(element)			// 顺序添加元素
 .insert(pos, element)		// 在某个位置添加元素
 .pop_back()					// 取元素
+.empty()					// 判断是否为空，为空返回真，反之返回假
+.erase(first,last)			// 删除[first,last)的所有元素
+.resize(n,v)				// 改变数组大小为n, n个空间数值赋为v，如果没有默认赋值为0
+ [i]						// 下标访问
 ```
 
-
-
-```sh
- touch vector.cpp
-```
-
-内容如下
+示范如下
 
 ```cpp
 #include <iostream>
 #include <vector>
 
 using std::vector;
+using namespace std;
 int main(void)
 {
     vector<int> v;
-    std::cout<<"v.size() == " << v.size() << " v.capacity() = " << v.capacity() << std::endl;
+    cout<<"v.size() == " << v.size() << " v.capacity() = " << v.capacity() << endl;
     v.reserve(10); 		//
-    std::cout<<"v.size() == " << v.size() << " v.capacity() = " << v.capacity() << std::endl;
+    std::cout<<"v.size() == " << v.size() << " v.capacity() = " << v.capacity() << endl;
     v.resize(10);
-    v.push_back(0);
-    std::cout<<"v.size() == " << v.size() << " v.capacity() = " << v.capacity() << std::endl;
-
+    v.push_back(111);
+    cout<<"v.size() == " << v.size() << " v.capacity() = " << v.capacity() << endl;
+    cout << v.back() << endl; 
+    v.insert(v.begin(), 12);
+    cout << v[0] << endl;
+    cout << v.front() << endl;
+    cout << v.empty() << endl;
+    v.erase(v.begin(), v.end());
+    cout << v.empty() << endl;
     return 0;
 }
 ```
@@ -426,39 +446,76 @@ int main(void)
 基本操作
 
 ```cpp
-stack<T> s;
-.push(x);
-.pop();
-.top();
-.empty()
-.size()
+stack<T> s;				// 定义， T 为容器中元素的类型
+.push(x);				// 压栈，增加元素 x
+.pop();					// 仅用于从堆栈中移除元素，并且没有返回值
+.top();					// 取得栈顶元素
+.empty()				// 检测栈内是否为空，空为真
+.size()					// 返回stack内元素的个数
 ```
+
+示例
+
+```cpp
+#include <iostream>
+#include <stack>
+
+using namespace std;
+int main(void)
+{
+    stack<int> si;
+    stack<string> ss;
+    si.push(100);
+    si.push(200);
+    ss.push("hi,100");
+    ss.push("hi 200");
+    si.pop();
+    ss.pop();
+    cout << si.top() << "\t"<< ss.empty() << endl;
+    cout << ss.size() << endl;
+    return 0;
+}
+```
+
+
 
 ###  queue（队列）
 
 基本操作
 
 ```cpp
-queue<int> q;
-.push(x);
-.pop();
-.top();
-.empty()
-.size()
+queue<T> q;			// 定义， T为元素类型
+.push(x);			// 尾部添加一个元素副本
+.pop();				// 删除第一个元素
+.top();				// 
+.empty()			// 判断是否为空，队列为空，返回true
+.size()				// 返回队列中元素个数，返回值类型unsigned int
 ```
+
+示例
+
+```
+```
+
+
 
 ###  set（集合）
 
 基本操作
 
 ```cpp
-set<int> s;
+set<int> s;		//定义
+.begin();		//
+.end();
+.rbegin();			// 返回逆序迭代器，指向容器元素最后一个位置
 .insert(x);
 .erase();
 .find();
 .empty()
 .count()
-.clear()
-lower_bound / upper_bound
+.clear()			// 删除set容器中的所有的元素,返回unsigned int类型O(N)
+.lower_bound(k) 	// 返回大于等于k的第一个元素的迭代器
+.upper_bound(k)		// 返回大于k的第一个元素的迭代器
+.find(e)			// 查找set中的某一元素，有则返回该元素对应的迭代器，无则返回结束迭代器
 ```
 

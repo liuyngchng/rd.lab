@@ -31,3 +31,10 @@ gqrx &
 ```
 
 ![img](https://images2018.cnblogs.com/blog/650273/201803/650273-20180316134350857-1094321963.png)
+
+# 3. SDR
+
+```sh
+https://docs.srslte.com/en/latest/app_notes/source/pi4/source/index.html
+```
+
