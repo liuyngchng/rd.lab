@@ -509,9 +509,11 @@ set<int> s;		//定义
 .end();
 .rbegin();			// 返回逆序迭代器，指向容器元素最后一个位置
 .insert(x);
-.erase();
+.erase();			// 
 .find();
-.empty()
+.empty(iterator)	// 删除定位器iterator指向的值
+.erase(first,second）// 	删除定位器first和second之间的值
+.erase(key_value)	// 删除键值key_value的值
 .count()
 .clear()			// 删除set容器中的所有的元素,返回unsigned int类型O(N)
 .lower_bound(k) 	// 返回大于等于k的第一个元素的迭代器
