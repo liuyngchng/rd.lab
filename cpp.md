@@ -386,17 +386,64 @@ int main()
 
 ##  STL 容器
 
-###  容器通用方法
+###  通用方法
 
 ```cpp
-.size() ：               // 容器内元素个数
-.empty() ：              // 判断容器是否为空, 返回值为 bool 型
-.front()：               // 返回容器第一个元素
-.back() ：               // 返回容器最后一个元素
-.begin() ：              // 返回容器第一个元素的指针
-.end() ：                // 返回容器最后一个元素的指针
-.swap(b) ：              // 交换两个容器的内容
-:: iterator ：           // 迭代器
+.size();               // 容器内元素个数
+.empty();              // 判断容器是否为空, 返回值为 bool 型
+.front();               // 返回容器第一个元素
+.back();               // 返回容器最后一个元素
+.begin();              // 返回容器第一个元素的指针
+.end();                // 返回容器最后一个元素的指针
+.swap(b);              // 交换两个容器的内容
+:: iterator;           // 迭代器
+```
+
+### list
+
+list是可以在常数范围内在任意位置进行插入和删除的序列式容器，并且该容器可以前后双向迭代。 
+
+```cpp
+list<string> l;				// 定义
+l.insert("hi");				// 添加元素
+.begin(); 					// 返回第一个元素的迭代器
+.end(); 					// 返回最后一个元素下一个位置的迭代器
+.rbegin(); 					// 返回第一个元素的reverse_iterator,即end位置
+.rend(); 					// 返回最后一个元素下一个位置的reverse_iterator,即begin位;
+.empty();					// 判断是否为空
+.size();					// 返回list中有效节点的个数
+.push_front(val);			// 在list首元素前插入值为 val 的元素
+.pop_front();				// 删除list中第一个元素，返回 void
+.push_back (val);			// 在list尾部插入值为val的元素
+.pop_back();				// 删除list中最后一个元素，返回 void
+iterator .erase (iterator position)    // 删除list position位置的 元素
+iterator .erase (iterator ﬁrst, iterator last)   // 删除list中[ﬁrst, last)区 间中的元素
+.clear() 					// 清空list中的有效元素
+.sort() 					//给list排序 
+.splice() 					// 合并两个list 
+.swap() 					// 交换两个list 
+.unique() 					// 删除list中重复的元素
+```
+
+示例
+
+```cpp
+#include <iostream>
+#include <list>
+#include <string>
+
+using namespace std;
+int main(void)
+{
+    list<string> l;
+    l.push_back("hello");
+    l.push_back("world");
+    l.push_back("who");
+    list<string>::iterator it0 = l.begin();
+    list<string>::iterator it1 = l.end();
+    it1--;
+    cout << *it0 << "\t" << *it1 << endl;
+}
 ```
 
 ###   vector（动态数组）
@@ -413,7 +460,7 @@ int main()
  [i]						// 下标访问
 ```
 
-示范如下
+示例
 
 ```cpp
 #include <iostream>
@@ -486,15 +533,36 @@ int main(void)
 ```cpp
 queue<T> q;			// 定义， T为元素类型
 .push(x);			// 尾部添加一个元素副本
-.pop();				// 删除第一个元素
-.top();				// 
-.empty()			// 判断是否为空，队列为空，返回true
-.size()				// 返回队列中元素个数，返回值类型unsigned int
+.pop();				// 删除第一个元素,但不返回其值
+.front();			// 返回队列首元素的值，但不删除该元素
+.back();			// 返回队列尾的值，但不删除该元素
+.empty();			// 判断是否为空，队列为空，返回true
+.size();			// 返回队列中元素个数，返回值类型unsigned int
 ```
 
 示例
 
-```
+```cpp
+#include <iostream>
+#include <queue>
+
+using namespace std;
+int main(void)
+{
+    queue<int> qi;
+    queue<string> qs;
+    qi.push(100);
+    qi.push(200);
+    qs.push("hi,100");
+    qs.push("hi,200");
+    qs.push("hi,300");
+    qi.pop();
+    qs.pop();
+    cout << qi.front() << "\t" << qi.front() << "\t" << qi.empty() << endl;
+    cout << qs.back() << "\t" << qs.size() << endl;
+    cout << qs.back() << "\t" << qs.size() << endl;
+    return 0;
+}
 ```
 
 
@@ -504,20 +572,90 @@ queue<T> q;			// 定义， T为元素类型
 基本操作
 
 ```cpp
-set<int> s;		//定义
-.begin();		//
-.end();
+set<int> s;			//定义
+.begin();			// 返回set容器的第一个元素
+.end();				// 返回set容器的最后一个元素
 .rbegin();			// 返回逆序迭代器，指向容器元素最后一个位置
-.insert(x);
+.insert(x);			//
 .erase();			// 
-.find();
+.find(e)			// 查找set中的某一元素，有则返回该元素对应的迭代器，无则返回结束迭代器
 .empty(iterator)	// 删除定位器iterator指向的值
 .erase(first,second）// 	删除定位器first和second之间的值
 .erase(key_value)	// 删除键值key_value的值
-.count()
+.count()			// set中某个某个键值出现的次数, 0, 1, 因为set 中的元素不能重复
 .clear()			// 删除set容器中的所有的元素,返回unsigned int类型O(N)
 .lower_bound(k) 	// 返回大于等于k的第一个元素的迭代器
 .upper_bound(k)		// 返回大于k的第一个元素的迭代器
-.find(e)			// 查找set中的某一元素，有则返回该元素对应的迭代器，无则返回结束迭代器
+
+```
+
+示例
+
+```cpp
+#include <iostream>
+#include <set>
+
+using namespace std;
+int main(void)
+{
+    set<int> si;
+    set<string> ss;
+    si.insert(100);
+    si.insert(200);
+    si.insert(300);
+    ss.insert("hi,100");
+    ss.insert("hi,200");
+    ss.insert("hi,300");
+    si.erase(si.begin());
+    set<string>::iterator sit = ss.begin();
+    sit++;
+    ss.erase(ss.begin(), sit);
+    set<int>::iterator it0 = si.begin();
+    cout << *it0 << "\t" << *it0 << "\t" << si.empty() << endl;
+    set<int>::iterator it1 = si.find(100) ;
+    set<string>::iterator it2 = ss.find("hi,300") ;
+    cout << *it1<< "\t" << ss.size() << endl;
+    cout << *it2 << "\t" << ss.size() << endl;
+    return 0;
+}
+```
+
+### map
+
+基本操作
+
+```cpp
+map<int, string> m;			//定义
+.insert(pair<int, string>(1, "hello"));	//添加元素
+.earase(key);				// 删除元素
+m[key];						// 获取 key 对应的 value 值
+m[key]=value;				// 修改key 对应的value值
+.find(key)->first;			// 根据 key 值查找对应的 pair， first 输出 key
+.find(key)->second;			// 根据 key 值查找对应的 pair， second 输出 value
+.clear();					// 清除所有元素
+.empty();					// 是否为空，空返回1, 非空返回0
+.size();					// 返回元素的个数
+.max_size();				// 返回可以容纳的元素最大个数
+```
+
+示例
+
+```cpp
+#include <iostream>
+#include <map>
+#include <string>
+
+using namespace std;
+int main(void)
+{
+    map<int, string> m;
+    m.insert(pair<int, string>(1, "hello1"));
+    m.insert(pair<int, string>(3, "hello3"));
+     m.insert(pair<int, string>(10, "hello10"));
+    m[3]="hello33";
+    cout << 3 << "\t" << m[3] << endl;
+    cout << m.empty() << "\t" << m.size() << "\t" << m.max_size() << endl;
+    cout << m.find(3)->first << "\t" << m.find(3)->second << endl;
+}
 ```
 
