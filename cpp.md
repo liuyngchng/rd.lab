@@ -1,5 +1,3 @@
-
-
 # hello world
 
 C++编译需要有编译器， 本文使用的是 g++, 环境如下
@@ -40,8 +38,6 @@ gcc main.cpp -lstdc++ -o main
 ```cpp
 ./main
 ```
-
-
 
 # 编译参数
 
@@ -339,8 +335,6 @@ int main()
 }
 ```
 
-
-
 # 数据结构
 
 ##  Array(数组)
@@ -401,8 +395,6 @@ STL 从广义上分为:容器(container) 、算法(algorithm) 和迭代器(itera
 ```cpp
 <algorithm>、<deque>、<functional>、<iterator>、<vector>、<list>、<map>、<memory>、<numeric>、<queue>、<set>、<stack>和<utility>
 ```
-
-
 
 ###  通用方法
 
@@ -579,8 +571,6 @@ int main(void)
 }
 ```
 
-
-
 ###  queue（队列）
 
 基本操作如下，除了queue外， 还有优先队列(priority_queue)。
@@ -619,8 +609,6 @@ int main(void)
     return 0;
 }
 ```
-
-
 
 ###  set（集合）
 
@@ -797,10 +785,6 @@ int main(void)
 }
 ```
 
-
-
-
-
 ## Tree(自定义树)
 
 Tree  是一个具有递归结构的数据结构（a recursive data structures），可以通过结构体的定义，实现树
@@ -838,4 +822,3 @@ int main(void)
     return 0;
 }
 ```
-
