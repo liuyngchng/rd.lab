@@ -1,3 +1,7 @@
+# online reference
+
+在线参考文档， https://cplusplus.com/
+
 # hello world
 
 C++编译需要有编译器， 本文使用的是 g++, 环境如下
@@ -408,6 +412,41 @@ STL 从广义上分为:容器(container) 、算法(algorithm) 和迭代器(itera
 .swap(b);              // 交换两个容器的内容
 :: iterator;           // 迭代器
 ```
+
+### array（数组）
+
+```cpp
+.at(index);					// 读写某个元素
+.back();					// 读取 array 中的最后一个元素
+```
+
+示例
+
+```cpp
+#include <iostream>
+#include <array>
+
+int main ()
+{
+  std::array<int,10> myarray;
+
+  // assign some values:
+  for (int i=0; i<10; i++) myarray.at(i) = i+1;
+
+  // print content:
+  std::cout << "myarray contains:";
+  for (int i=0; i<10; i++)
+    std::cout << ' ' << myarray.at(i);
+  std::cout << '\n';
+  std::cout << "myarray.back()=" << myarray.back() << std::endl;  
+
+  return 0;
+}
+```
+
+
+
+
 
 ### list（列表）
 
