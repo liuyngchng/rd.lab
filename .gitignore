@@ -10,3 +10,4 @@ _*
 *.o
 *.cbp
 .idea
+.DS_Store
