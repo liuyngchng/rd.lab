@@ -183,3 +183,9 @@ tc -q qdisc ls dev eth0
 tc qdisc del dev eth0 root
 ```
 
+# 录屏
+
+```sh
+sudo apt install kazam
+```
+
