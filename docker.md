@@ -691,3 +691,136 @@ exit
 chown -R 1234：5678 dir
 ```
 
+# docker TLS
+
+https://www.jb51.net/article/235826.htm
+
+##  生成 CA 公私钥
+
+```sh
+# 生成私钥
+openssl genrsa -aes256 -out ca-key.pem 4096
+# 输入密码 helloworld
+```
+
+补全CA证书信息
+
+```sh
+# 生成 PEM certificate
+openssl req -new -x509 -days 365 -key ca-key.pem -sha256 -out ca.pem
+# 输入密码 helloworld
+```
+
+##  生成 server 证书
+
+
+
+```sh
+# 生成私钥
+openssl genrsa -out server-key.pem 4096
+```
+
+用 CA 签署公钥，推荐使用域名（如果没有域名，采用 host 绑定的方式）的方式， IP 的方式容易失败
+
+```sh
+# 生成 PEM certificate request
+openssl req -subj "/CN=my.docker.io" -sha256 -new -key server-key.pem -out server.csr
+```
+
+ host 绑定域名
+
+```sh
+vi /etc/host
+123.456.789.0 my.docker.io
+```
+
+生成 server 端扩展配置i文件
+
+```sh
+# 匹配白名单， 只允许IP 为 1.2.3.4 和 2.3.4.5 的机器访问 docker-daemon 的机器
+echo subjectAltName = DNS:my.docker.io, IP:1.2.3.4, IP:2.3.4.5 >> extfile.cnf
+# 将Docker守护程序密钥的扩展使用属性设置为仅用于服务器身份验证
+echo extendedKeyUsage = serverAuth >> extfile.cnf
+```
+
+生成签名数据
+
+```sh
+# 生成 PEM certificate
+openssl x509 -req -days 365 -sha256 -in server.csr -CA ca.pem -CAkey ca-key.pem \
+  -CAcreateserial -out server-cert.pem -extfile extfile.cnf
+```
+
+server-cert.pem 最终会在 server 端用到。
+
+##  生成 client 证书
+
+生成客户端的 key.pem
+
+```sh
+# 生成 PEM RSA private key
+openssl genrsa -out key.pem 4096
+# 生成 PEM certificate request
+openssl req -subj '/CN=client' -new -key key.pem -out client.csr
+```
+
+创建client 端扩展配置文件
+
+```sh
+echo extendedKeyUsage = clientAuth > extfile-client.cnf
+```
+
+生成签名数据（PEM certificate）
+
+```sh
+openssl x509 -req -days 365 -sha256 -in client.csr -CA ca.pem -CAkey ca-key.pem -CAcreateserial -out cert.pem -extfile extfile-client.cnf
+```
+
+cert.pem 最终会在 client 端用到。
+
+## 删除中间文件
+
+删除不必要得文件
+
+```sh
+rm -v client.csr server.csr extfile.cnf extfile-client.cnf
+```
+
+为了了保护密钥免于意外损坏，请删除其写入权限。要使它们仅供阅读，请按以下方式更改文件模式
+
+```sh
+chmod -v 0400 ca-key.pem key.pem server-key.pem
+```
+
+证书可以使对外可读的，删除写入权限以防止意外损坏
+
+```sh
+chmod -v 0444 ca.pem server-cert.pem cert.pem
+```
+
+## 归集服务端证书
+
+执行
+
+```sh
+cp server-*.pem /usr/local/ca
+cp ca.pem /usr/local/ca
+```
+
+## 修改Docker配置
+
+Docker守护程序仅接收来自提供CA信任的证书的客户端的链接
+
+```sh
+# 具体需要看 server 上 docker service对应的配置
+vim /lib/systemd/system/docker.service
+ExecStart=/usr/bin/dockerd --tlsverify --tlscacert=/usr/local/ca/ca.pem --tlscert=/usr/local/ca/server-cert.pem --tlskey=/usr/local/ca/server-key.pem -H tcp://0.0.0.0:2375 -H unix:///var/run/docker.sock
+```
+
+## 重启 docker
+
+```sh
+systemctl daemon-reload
+systemctl restart docker
+```
+
