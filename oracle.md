@@ -90,6 +90,8 @@ sudo apt-get install alien
 
   ## 下载并安装sqlplus相关软件
 
+在 oralce 官网下载 instant client， https://www.oracle.com/database/technologies/instant-client/downloads.html
+
 ```sh
 alien -i oracle-instantclient*-basic*.rpm
 alien -i oracle-instantclient*-sqlplus*.rpm
