@@ -2,7 +2,7 @@
 
 ## setup
 
-通过docker 镜像安装 oracle
+通过 `docker` 镜像安装 `oracle`, 版本为 Oracle Database 11g Express Edition Release 11.2.0.2.0 - 64bit Production
 
 ```sh
 docker pull registry.cn-hangzhou.aliyuncs.com/qida/oracle-xe-11g
@@ -69,33 +69,44 @@ alter database open;
 create table stu(name varchar(10),code varchar(10),subject varchar(10), score number(16,2));
 ```
 
-# Ubuntu下安装sqlplus客户端
+# Ubuntu下安装 sqlplus 客户端
 
 ## 安装alien
 
-alien可以实现ubuntu deb 包和 centos 的 rpm 包两者的互换
+由于`oracle` 只提供了基于Red Hat Linux 版本的安装包， 安装包格式为`rpm` （(Red Hat Package Manager)）格式，在 Ubuntu 下安装需要进行转换。 
+
+`alien`可以实现`Ubuntu` `deb` 包和 `CentOS` 的 `rpm` 包两者之间的互换
 
 ```sh
-# 转换RPM为DEB
+# 将 RPM 包转换为 DEB 包
 sudo alien test.rpm
-# 换DEB至RPM
+# 将 DEB 包转换为 RPM 包
 sudo alien -r test deb
 ```
 
-安装 alien 包
+安装 `alien` 包
 
 ```sh
 sudo apt-get install alien
 ```
 
-  ## 下载并安装sqlplus相关软件
+  ## 下载并安装sqlplus相关包
 
-在 oralce 官网下载 instant client， https://www.oracle.com/database/technologies/instant-client/downloads.html
+在 oralce 官网下载 instant client， https://www.oracle.com/database/technologies/instant-client/downloads.html, 此处以oracle11.2为例，下载以下 rpm 包。
 
 ```sh
-alien -i oracle-instantclient*-basic*.rpm
-alien -i oracle-instantclient*-sqlplus*.rpm
-alien -i oracle-instantclient*-devel*.rpm
+oracle-instantclient11.2-basic-11.2.0.4.0-1.x86_64.rpm
+oracle-instantclient11.2-devel-11.2.0.4.0-1.x86_64.rpm
+oracle-instantclient11.2-jdbc-11.2.0.4.0-1.x86_64.rpm
+oracle-instantclient11.2-sqlplus-11.2.0.4.0-1.x86_64.rpm
+```
+
+安装 rpm 包
+
+```sh
+sudo alien -i oracle-instantclient*-basic*.rpm
+sudo alien -i oracle-instantclient*-sqlplus*.rpm
+sudo alien -i oracle-instantclient*-devel*.rpm
 ```
 
    ## 安装libaio.so
@@ -104,15 +115,21 @@ alien -i oracle-instantclient*-devel*.rpm
 sudo apt-get install libaio1
 ```
 
-## 配置
+## 配置动态库的路径
 
 把下面的语句配置在oracle.conf中
 
 ```sh
 sudo sensible-editor /etc/ld.so.conf.d/oracle.conf
 # 以下语句根据实际环境二选一配置在oracle.conf中
-/usr/lib/oracle/<your version>/client/lib/   	# 32位
-/usr/lib/oracle/<your version>/client64/lib/	# 64位
+/usr/lib/oracle/<your version>/client/lib/   	# 32位 OS
+/usr/lib/oracle/<your version>/client64/lib/	# 64位 OS
+```
+
+以 oracle 11.2 为例，目录如下所示
+
+```sh
+/usr/lib/oracle/11.2/client64/lib/
 ```
 
 ## 更新动态库配置
@@ -124,9 +141,83 @@ sudo ldconfig
 ```
 
 ## 连接数据库
+
+* 命令格式如下：
+
 ```sh
-sqlplus system/oracle@//ip:1521/sid
-sqlplus64 system/oracle@//ip:1521/sid
+sqlplus username/password@//ip:1521/sid
+sqlplus64 username/password@//ip:1521/sid
+```
+
+* 查询 SID，可以通过以下三种方法中的一种。
+
+（1）或者通过系统管理员登录通过SQL 语句查看 sid
+
+```sql
+select instance_name from V$instance; 
+```
+
+（2）在oracle 的 docker 容器中查询 sid 
+
+```sh
+# 进入docker 容器
+docker exec -it oracle11 bash
+# 查看进程
+ps -ef | grep oracle -i
+oracle 27 1  0 Oct25 ?  00:00:00 /u01/app/oracle/product/11.2.0/xe/bin/tnslsnr LISTENER -inherit
+# 查看环境变量
+echo $ORACLE_SID
+XE
+```
+
+（3）执行语句
+
+```sh
+cat /etc/oratab
+XE:/u01/app/oracle/product/11.2.0/xe:N
+```
+
+"XE" 即为 sid。
+
+* 运行命令
+
+```sh
+# 指定数据库服务器计算机的主机名或ip地址的普通用户连接
+sqlplus64 test/test@//localhost:1521/XE
+```
+
+# SQLPlus及常用 SQL
+
+## 登录
+
+常用的命令如下所示
+
+```sh
+# 先登录sqlplus， 再连接数据库
+sqlplus /nolog 						# 步骤1： 登录到sqlplus，还未登录到数据库，若要登录到数据库，执行步骤2
+conn username/password				# 步骤2：注意，conn /as sysdba 不写用户名和密码的连接属于操作系统认证
+# 普通用户连接到默认数据库（schema与用户名同名）
+sqlplus username/password 
+# 仅限sys和system用户（具有数据库管理权限的用户），连接到默认数据库
+sqlplus username/password as sysdba 
+# 指定net服务名的普通用户连接
+sqlplus username/password@net_service_name  
+#  指定数据库服务器计算机的主机名或ip地址的普通用户连接
+sqlplus username/password@//host:port/sid
+# 退出
+quit;
+```
+
+## 查看版本
+
+```sql
+SELECT * FROM v$version;
+```
+
+## 查看 SID
+
+```sql
+select instance_name from V$instance; 
 ```
 
 # Sequence
