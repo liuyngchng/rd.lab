@@ -220,6 +220,47 @@ SELECT * FROM v$version;
 select instance_name from V$instance; 
 ```
 
+## 查看表信息
+
+* 查看表结构
+
+```sql
+# 简单查看字段名称及类型
+desc table_name;
+
+# 查看创建表的SQL语句
+# 设置显示long,lob等型字段的长度,默认为80，设置为一个较大的值
+set long 5000000;
+# 查询，table_name 需要大写
+SELECT DBMS_METADATA.GET_DDL('TABLE','table_name') FROM DUAL;
+```
+
+* 查看表清单
+
+```sql
+# 查看所有的表:
+SELECT * FROM tab;
+SELECT * FROM dba_tables;
+SELECT * FROM dba_objects;
+SELECT * FROM cat;
+# 查看用户建立的表 :
+SELECT table_name from user_tables;  	# 当前用户的表
+SELECT table_name from all_tables;  	# 所有用户的表
+SELECT table_name from dba_tables;  	# 包括系统表
+SELECT * from user_indexes; 			# 可以查询出所有的用户表索引
+```
+
+* 查看索引
+
+```sql
+# 查找表的所有索引(包括索引名，类型，构成列),表名为 table_name
+SELECT t.*,i.index_type FROM user_ind_columns t,user_indexes i WHERE t.index_name = i.index_name AND t.table_name = i.table_name AND t.table_name = 'table_name';
+# 查找表的主键(包括名称，构成列)
+SELECT cu.* FROM user_cons_columns cu, user_constraints au WHERE cu.constraint_name = au.constraint_name AND au.constraint_type = 'P' AND au.table_name = 'table_name';
+```
+
+
+
 # Sequence
 
 ## 查看用户序列
