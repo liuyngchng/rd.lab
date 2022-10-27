@@ -259,7 +259,38 @@ SELECT t.*,i.index_type FROM user_ind_columns t,user_indexes i WHERE t.index_nam
 SELECT cu.* FROM user_cons_columns cu, user_constraints au WHERE cu.constraint_name = au.constraint_name AND au.constraint_type = 'P' AND au.table_name = 'table_name';
 ```
 
+## 导入导出数据
 
+* 导出文本数据
+我们使用SPOOL方法，将数据库中的表导出为文本文件的时候会采用两种方法，如下述：
+
+```sql
+# 导出
+set trimspool on
+set linesize 120
+set pagesize 2000
+set newpage 1
+set heading off
+set term off
+spool 导出路径+文件名
+select col1||','||col2||','||col3||','||col4||'..' from tablename;
+spool off
+# 导入
+sqlldr username/password@sid control=*.ctl
+# *.ctl格式为：
+load
+infile"d://test.txt"
+……
+```
+
+* 导入导出二进制数据
+
+```sql
+# 导出
+exp system/123456 file= C:person.dmp full=y
+# 导入
+imp 管理员账号/密码 file=C:person.dmp fromuser=用户名
+```
 
 # Sequence
 
