@@ -49,8 +49,10 @@
 
 # 参考文献
 
-[1] https://www.jianshu.com/p/1a6abe6eed74;
+[1] Redis和MySQL双写一致性保证, https://www.jianshu.com/p/1a6abe6eed74;
 
-[2] https://zhuanlan.zhihu.com/p/335617791
+[2] 分布式系统的CAP定理详解, https://zhuanlan.zhihu.com/p/335617791
 
-[3] https://xujiajia.blog.csdn.net/article/details/89601880?spm=1001.2101.3001.6661.1&utm_medium=distribute.pc_relevant_t0.none-task-blog-2%7Edefault%7ECTRLIST%7ERate-1-89601880-blog-105242047.pc_relevant_3mothn_strategy_recovery&depth_1-utm_source=distribute.pc_relevant_t0.none-task-blog-2%7Edefault%7ECTRLIST%7ERate-1-89601880-blog-105242047.pc_relevant_3mothn_strategy_recovery&utm_relevant_index=1
+[3] 二段式提交协议和三段式提交协议, https://xujiajia.blog.csdn.net/article/details/89601880?spm=1001.2101.3001.6661.1&utm_medium=distribute.pc_relevant_t0.none-task-blog-2%7Edefault%7ECTRLIST%7ERate-1-89601880-blog-105242047.pc_relevant_3mothn_strategy_recovery&depth_1-utm_source=distribute.pc_relevant_t0.none-task-blog-2%7Edefault%7ECTRLIST%7ERate-1-89601880-blog-105242047.pc_relevant_3mothn_strategy_recovery&utm_relevant_index=1
+
+[4] 2PC vs 3PC, https://blog.csdn.net/FDXCG_X/article/details/115139454?spm=1001.2101.3001.6650.1&utm_medium=distribute.pc_relevant.none-task-blog-2%7Edefault%7ECTRLIST%7ERate-1-115139454-blog-89601880.pc_relevant_recovery_v2&depth_1-utm_source=distribute.pc_relevant.none-task-blog-2%7Edefault%7ECTRLIST%7ERate-1-115139454-blog-89601880.pc_relevant_recovery_v2&utm_relevant_index=2
