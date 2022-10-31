@@ -292,6 +292,19 @@ exp system/123456 file= C:person.dmp full=y
 imp 管理员账号/密码 file=C:person.dmp fromuser=用户名
 ```
 
+# JDBC
+
+oracle JDBC 连接字符串格式如下所示：
+
+```shell
+# 使用 service_name
+jdbc:oracle:thin:@//host:port/service_name 
+# 使用 service id
+jdbc:oracle:thin:@host:port:SID 
+```
+
+
+
 # Sequence
 
 ## 查看用户序列
