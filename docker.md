@@ -56,6 +56,7 @@ docker ps
 | docker commit container_id richard/test(repository column):tag | 提交更改，生成新的镜像 |
 | docker images | 获取 IMAGE ID |
 |docker rmi  image_id | 删除 image |
+|docker images \| grep '<none>' \| awk -F ' ' '{print $3}' \| xargs docker rmi | 删除 tag 为 <none> 的image |
 
 ##  导出及导入 image
 ###  导出tar
@@ -823,4 +824,3 @@ ExecStart=/usr/bin/dockerd --tlsverify --tlscacert=/usr/local/ca/ca.pem --tlscer
 systemctl daemon-reload
 systemctl restart docker
 ```
-
