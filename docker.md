@@ -314,8 +314,6 @@ sudo chmod +x /usr/local/bin/docker-compose
 docker-compose -v
 ```
 
-
-
 ##  run
 
 
@@ -332,11 +330,23 @@ mvn clean package
 touch Dockerfile
 vi Dockerfile
 # 内容如下
+# 初始拉取的镜像名称及其版本
 FROM java:8
 VOLUME /tmp
+# 将容器内的目录切换到 /opt 下
+WORKDIR /opt/
+# 将宿主机当前目录下的 docker-demo-0.0.1-SNAPSHOT.jar 添加到容器当前目录下，并重命名为 app.jar
 ADD docker-demo-0.0.1-SNAPSHOT.jar app.jar
+# 设置文件编码
+ENV LC_ALL "C.UTF-8"
+ENV LANG "C.UTF-8"
+# 设置时区
+RUN bash -c 'rm /etc/localtime'
+RUN bash -c 'ln -s /usr/share/zoneinfo/Asia/Shanghai /etc/localtime'
 RUN bash -c 'touch /app.jar'
+# 这个告诉查看Dockerfile的读者，此应用需要暴露 9000 端口
 EXPOSE 9000
+# 设置 entrypoint
 ENTRYPOINT ["java","-Djava.security.egd=file:/dev/./urandom","-jar","app.jar"]
 ```
 
