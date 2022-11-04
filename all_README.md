@@ -667,23 +667,23 @@ protoc ./Message.proto --java_out=./
 %s/\n//g
 # 49. springboot support https
 ## 49.1 get key
-```
+```shell
 keytool -genkey -alias tomcat -keyalg RSA -keystore ./server.keystore
 ```
 create pkcs12 certificate
-```
+```shell
 keytool -genkey -v -alias test_me -keyalg RSA -storetype PKCS12 -keystore dlt.p12 -dname "CN=www.achng.cn,OU=helloworld,O=KLSZ,L=BJ,ST=BJ,C=CHINA" -storepass test@test -keypass test@test
 ```
 converto pkcs12 to jks
-```
+```shell
 keytool -importkeystore -srckeystore dlt.pkcs12 -srcstoretype PKCS12 -deststoretype JKS -destkeystore dlt.jks
 ```
 convert jks to pkcs12
-```
+```shell
 keytool -importkeystore -srckeystore keystore.jks -srcstoretype JKS -deststoretype PKCS12 -destkeystore keystore.p12
 ```
 ## 49.2 add config
-```
+```properties
 server.ssl.protocol=TLS
 server.ssl.key-store=classpath:server.keystore
 server.ssl.key-alias=tomcat
@@ -691,6 +691,19 @@ server.ssl.enabled=true
 server.ssl.key-store-password=123456
 server.ssl.key-store-type=JKS
 ```
+yaml 文件格式
+
+```yaml
+server:
+  ssl:
+    enabled: true
+    key-store: classpath:server.keystore
+    key-store-type: JKS
+    key-password: 123456
+    key-store-password: 123456
+    protocol: TLS
+```
+
 其他不需要修改，启动即可， 与更改前 只需要将http 改成https 例如原来访问是http://localhost:8081/  
 更改后：https://localhost:8081/   
 需要注意的是：改完后不再支持http访问，因证书原因，浏览器会报证书风险，可无视
