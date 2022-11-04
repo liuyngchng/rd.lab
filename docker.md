@@ -709,8 +709,8 @@ https://www.jb51.net/article/235826.htm
 ##  生成 CA 公私钥
 
 ```sh
-# 生成私钥
-openssl genrsa -aes256 -out ca-key.pem 4096
+# 生成私钥(PEM RSA private key)
+    openssl genrsa -aes256 -out ca-key.pem 4096
 # 输入密码 helloworld
 ```
 
@@ -727,7 +727,7 @@ openssl req -new -x509 -days 365 -key ca-key.pem -sha256 -out ca.pem
 
 
 ```sh
-# 生成私钥
+# 生成私钥(PEM RSA private key)
 openssl genrsa -out server-key.pem 4096
 ```
 
@@ -735,21 +735,21 @@ openssl genrsa -out server-key.pem 4096
 
 ```sh
 # 生成 PEM certificate request
-openssl req -subj "/CN=my.docker.io" -sha256 -new -key server-key.pem -out server.csr
+openssl req -subj "/CN=my.docker.test" -sha256 -new -key server-key.pem -out server.csr
 ```
 
  host 绑定域名
 
 ```sh
-vi /etc/host
-123.456.789.0 my.docker.io
+sudo vi /etc/hosts
+123.456.789.0 my.docker.test
 ```
 
 生成 server 端扩展配置i文件
 
 ```sh
 # 匹配白名单， 只允许IP 为 1.2.3.4 和 2.3.4.5 的机器访问 docker-daemon 的机器
-echo subjectAltName = DNS:my.docker.io, IP:1.2.3.4, IP:2.3.4.5 >> extfile.cnf
+echo subjectAltName = DNS:my.docker.test, IP:1.2.3.4, IP:2.3.4.5 >> extfile.cnf
 # 将Docker守护程序密钥的扩展使用属性设置为仅用于服务器身份验证
 echo extendedKeyUsage = serverAuth >> extfile.cnf
 ```
@@ -760,34 +760,25 @@ echo extendedKeyUsage = serverAuth >> extfile.cnf
 # 生成 PEM certificate
 openssl x509 -req -days 365 -sha256 -in server.csr -CA ca.pem -CAkey ca-key.pem \
   -CAcreateserial -out server-cert.pem -extfile extfile.cnf
+# 输入密码 helloworld
 ```
 
 server-cert.pem 最终会在 server 端用到。
 
 ##  生成 client 证书
 
-生成客户端的 key.pem
-
 ```sh
 # 生成 PEM RSA private key
 openssl genrsa -out key.pem 4096
 # 生成 PEM certificate request
 openssl req -subj '/CN=client' -new -key key.pem -out client.csr
-```
-
-创建client 端扩展配置文件
-
-```sh
+# 创建client 端扩展配置文件
 echo extendedKeyUsage = clientAuth > extfile-client.cnf
-```
-
-生成签名数据（PEM certificate）
-
-```sh
+# 生成签名数据（PEM certificate）
 openssl x509 -req -days 365 -sha256 -in client.csr -CA ca.pem -CAkey ca-key.pem -CAcreateserial -out cert.pem -extfile extfile-client.cnf
 ```
 
-cert.pem 最终会在 client 端用到。
+cert.pem (PEM certificate) 最终会在 client 端用到。
 
 ## 删除中间文件
 
@@ -814,8 +805,11 @@ chmod -v 0444 ca.pem server-cert.pem cert.pem
 执行
 
 ```sh
+sudo mkdir /usr/local/ca
 cp server-*.pem /usr/local/ca
 cp ca.pem /usr/local/ca
+ls -al /usr/local/ca
+.  ..  ca.pem  server-cert.pem  server-key.pem
 ```
 
 ## 修改Docker配置
