@@ -657,7 +657,7 @@ sudo ufw disable
 # 47. protobuf
 ```
 protoc ./Message.proto --java_out=./
-
+```
 # 48. vim 空格和换行的删除和替换
 
  %s/\s//g
@@ -665,8 +665,8 @@ protoc ./Message.proto --java_out=./
 %s/\r//g
 
 %s/\n//g
-# 48. springboot support https
-## 48.1 get key
+# 49. springboot support https
+## 49.1 get key
 ```
 keytool -genkey -alias tomcat -keyalg RSA -keystore ./server.keystore
 ```
@@ -682,7 +682,7 @@ convert jks to pkcs12
 ```
 keytool -importkeystore -srckeystore keystore.jks -srcstoretype JKS -deststoretype PKCS12 -destkeystore keystore.p12
 ```
-## 48.2 add config
+## 49.2 add config
 ```
 server.ssl.protocol=TLS
 server.ssl.key-store=classpath:server.keystore
@@ -696,9 +696,7 @@ server.ssl.key-store-type=JKS
 需要注意的是：改完后不再支持http访问，因证书原因，浏览器会报证书风险，可无视
 
 
-```
-
-# 48 ssh yes
+# 50. ssh yes
 
 要避免输入yes需要在本机上执行
 
@@ -723,14 +721,14 @@ UserKnownHostsFile /dev/null
 
 即可
 
-# 49. 16 进制查看 java class 文件
+# 51. 16 进制查看 java class 文件
 
 ```$xslt
 vi *.class
 :%!xxd
 ```
 
-# 50. 统计文件行数（不含空行）
+# 52. 统计文件行数（不含空行）
 ```
 find ./ -name *.java | xargs cat | sed '/^$/d' | wc -l
 ```
