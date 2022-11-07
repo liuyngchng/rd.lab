@@ -600,7 +600,7 @@ Get https://IP:port/v2/: Service Unavailable
 systemctl daemon-reload
 systemctl restart docker.service 
 ```
-##  docker 删除私有仓库中的镜像
+##   docker 删除私有仓库中的镜像
 首先， 镜像库服务器上需要进行配置，更改registry容器内/etc/docker/registry/config.yml文件
 
 ```yaml
@@ -608,8 +608,6 @@ storage:
   delete:
     enabled: true
 ```
-
-
 
 查看某个镜像的sha256值：
 
@@ -653,7 +651,7 @@ touch testDockerfile
 vi testDockerfile
 ```
 
-文件内容如下
+文件内容如下：
 
 ```sh
 # docker pull 需要拉取的镜像名称以及tag
@@ -704,19 +702,22 @@ chown -R 1234：5678 dir
 
 # docker TLS
 
-https://www.jb51.net/article/235826.htm
-
 ##  生成 CA 公私钥
 
+生成 CA 认证机构的 key 和 证书签名请求（CSR）
+
 ```sh
+sudo mkdir /data/ssl/srv
+cd /data/ssl/srv
 # 生成私钥(PEM RSA private key)
-    openssl genrsa -aes256 -out ca-key.pem 4096
+openssl genrsa -aes256 -out ca-key.pem 4096
 # 输入密码 helloworld
 ```
 
-补全CA证书信息
+补全CA证书信息（Certificate Signing Request）
 
 ```sh
+cd /data/ssl/srv
 # 生成 PEM certificate
 openssl req -new -x509 -days 365 -key ca-key.pem -sha256 -out ca.pem
 # 输入密码 helloworld
@@ -724,50 +725,53 @@ openssl req -new -x509 -days 365 -key ca-key.pem -sha256 -out ca.pem
 
 ##  生成 server 证书
 
+使用 CA 签署 server 的公钥，推荐使用域名（如果没有域名，采用 host 绑定的方式， IP 的方式容易失败）的方式，生成 server 端经过 CA 签名的证书。
 
+生成 server 端的私钥以及经过 CA 签名的证书
 
 ```sh
+cd /data/ssl/srv
 # 生成私钥(PEM RSA private key)
 openssl genrsa -out server-key.pem 4096
-```
-
-用 CA 签署公钥，推荐使用域名（如果没有域名，采用 host 绑定的方式）的方式， IP 的方式容易失败
-
-```sh
 # 生成 PEM certificate request
 openssl req -subj "/CN=my.docker.test" -sha256 -new -key server-key.pem -out server.csr
 ```
 
- host 绑定域名
+
+ 在发起请求的机器（client）的 host 里绑定域名
 
 ```sh
 sudo vi /etc/hosts
 123.456.789.0 my.docker.test
 ```
 
-生成 server 端扩展配置i文件
+生成 server 端扩展配置文件
 
 ```sh
-# 匹配白名单， 只允许IP 为 1.2.3.4 和 2.3.4.5 的机器访问 docker-daemon 的机器
+cd /data/ssl/srv
+# 匹配白名单， 只允许域名为 my.docker.test， 或者 IP 为 1.2.3.4 和 2.3.4.5 的机器访问 docker-daemon 的机器
 echo subjectAltName = DNS:my.docker.test, IP:1.2.3.4, IP:2.3.4.5 >> extfile.cnf
 # 将Docker守护程序密钥的扩展使用属性设置为仅用于服务器身份验证
 echo extendedKeyUsage = serverAuth >> extfile.cnf
 ```
 
-生成签名数据
+生成经过 CA 签名的服务端证书
 
 ```sh
+cd /data/ssl/srv
 # 生成 PEM certificate
 openssl x509 -req -days 365 -sha256 -in server.csr -CA ca.pem -CAkey ca-key.pem \
   -CAcreateserial -out server-cert.pem -extfile extfile.cnf
 # 输入密码 helloworld
 ```
 
-server-cert.pem 最终会在 server 端用到。
-
 ##  生成 client 证书
 
+生成 client 端的私钥以及经过 CA 签名的证书
+
 ```sh
+sudo mkdir /data/ssl/srv
+cd /data/ssl/srv
 # 生成 PEM RSA private key
 openssl genrsa -out key.pem 4096
 # 生成 PEM certificate request
@@ -777,8 +781,6 @@ echo extendedKeyUsage = clientAuth > extfile-client.cnf
 # 生成签名数据（PEM certificate）
 openssl x509 -req -days 365 -sha256 -in client.csr -CA ca.pem -CAkey ca-key.pem -CAcreateserial -out cert.pem -extfile extfile-client.cnf
 ```
-
-cert.pem (PEM certificate) 最终会在 client 端用到。
 
 ## 删除中间文件
 
@@ -814,17 +816,39 @@ ls -al /usr/local/ca
 
 ## 修改Docker配置
 
-Docker守护程序仅接收来自提供CA信任的证书的客户端的链接
+Docker守护程序仅接收来自提供CA信任的证书的客户端的链接， 需要配置 
+
+（1）CA 证书签名请求（CSR）；
+
+（2）server端经过CA 签名的证书；
+
+（3） server端的私钥。
 
 ```sh
 # 具体需要看 server 上 docker service对应的配置
 vim /lib/systemd/system/docker.service
+vim /etc/systemd/system/docker.service
 ExecStart=/usr/bin/dockerd --tlsverify --tlscacert=/usr/local/ca/ca.pem --tlscert=/usr/local/ca/server-cert.pem --tlskey=/usr/local/ca/server-key.pem -H tcp://0.0.0.0:2375 -H unix:///var/run/docker.sock
 ```
 
 ## 重启 docker
 
 ```sh
-systemctl daemon-reload
-systemctl restart docker
+sudo systemctl daemon-reload
+sudo systemctl restart docker
 ```
+
+## 客户端验证
+
+通过使用客户端证书，以及CA证书，验证 docker 接口，需要提供：
+
+（1）CA 证书签名请求（CSR）；
+
+（2）client 端经过 CA 签名的证书；
+
+（3）client 端的私钥。
+
+```sh
+curl --cacert ../srv/ca.pem --cert ./cert.pem --key ./key.pem  'https://11.10.36.4:4243/version'
+```
+
