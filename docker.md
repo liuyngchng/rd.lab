@@ -849,6 +849,6 @@ sudo systemctl restart docker
 （3）client 端的私钥。
 
 ```sh
-curl --cacert ../srv/ca.pem --cert ./cert.pem --key ./key.pem  'https://11.10.36.4:4243/version'
+curl --cacert ../srv/ca.pem --cert ./cert.pem --key ./key.pem  'https://my.docker.test:4243/version'
 ```
 
