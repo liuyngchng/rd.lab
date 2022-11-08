@@ -239,6 +239,27 @@ sudo scutil --set HostName my_host_name
 ```
 
 # 13. some git things
+
+## setup git in offline centos
+
+```sh
+wget https://mirrors.edge.kernel.org/pub/software/scm/git/git-2.25.1.tar.gz
+scp *.tar.gz root@123.456.7.8:/data/app
+cd /data/app
+tar -zxf git-2.25.1.tar.gz
+cd /data/app/git-2.25.1
+./configure
+make 
+# 若出现缺少 zlib.h, 则执行
+sudo yum install zlib-devel -y
+make install
+# git 若报 fatal: unable to find remote helper for 'http'， 则执行一下语句
+yum install libcurl-devel
+yum install curl-devel
+```
+
+
+
 ## 13.1 git中文文件名变数字
 修改配置
 git config --global core.quotepath false
