@@ -16,6 +16,8 @@ sudo mkdir -p /data/gitlab/config
 sudo mkdir -p /data/gitlab/logs
 sudo mkdir -p /data/gitlab/data
 sudo chown myuser.mygroup -R /data
+## on Mac
+sudo chown -R myuser:mygroup /data
 cd /data/gitlab
 ls
 # 目录已创建好
@@ -43,6 +45,7 @@ docker run --detach \
     gitlab/gitlab-ce:latest
 # 增加执行权限
 chmod +x gitlab_start.sh
+# on MacOS, 还需要将/data 映射的几个宿主机目录通过 docker 引擎 GUI 添加至 File Sharing
 ```
 
 # run
@@ -57,13 +60,13 @@ b80942   git../g..-ce:latest   "/assets/wrapper"   1 min ago   Up    :::80->80/t
 # login
 
 ```sh
-http://192.1681.100
+http://192.168.1.100
 ```
 
 获取 root 密码
 
 ```sh
-sudo cat /data/gitlab/config/initial_root_password
+cat /data/gitlab/config/initial_root_password
 Password: init_password
 # username: root
 # password:init_password
