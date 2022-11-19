@@ -600,7 +600,10 @@ Get https://IP:port/v2/: Service Unavailable
 systemctl daemon-reload
 systemctl restart docker.service 
 ```
+如果是windows docker， 则在图形化界面中的 docker engine的配置 JSON中，加入以上配置，然后重启即可.
+
 ##   docker 删除私有仓库中的镜像
+
 首先， 镜像库服务器上需要进行配置，更改registry容器内/etc/docker/registry/config.yml文件
 
 ```yaml

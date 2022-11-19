@@ -766,3 +766,6 @@ vi *.class
 find ./ -name *.java | xargs cat | sed '/^$/d' | wc -l
 ```
 
+# JQ
+
+jq to parse json, https://stedolan.github.io/jq/download/
