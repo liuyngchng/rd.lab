@@ -1,3 +1,7 @@
+# 国际标准
+
+详见《ISO/IEC 60559:2020 Information technology — Microprocessor Systems — Floating-Point arithmetic》，相关标准 《*IEEE Standard for Binary Floating Point Arithmetic (ANSI/IEEE Std 754-1985)*》
+
 # 双精度浮点数
 
 
