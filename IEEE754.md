@@ -25,7 +25,7 @@ e_sign：双进度浮点数的，以下简称es
 
 ​       把一个数表示成a与10的n次幂相乘的形式（1≤|a|<10，a不为分数形式，n为整数），这种记数法叫做**科学记数法**
 
-例如 双精度浮点数331.46875，十进制的科学技术法表示为，将数字小数点左移动，直到数字在区间[1,10)中：
+例如 双精度浮点数331.46875，十进制的科学技术法表示将数字小数点左移动，直到数字在区间[1,10)中：
 $$
 \begin{align}
 331.46875 &= 3.3146875 \times 10^2 \\
@@ -129,37 +129,34 @@ $$
 
 ## java
 
+根据浮点数定义，自行实现的解析方法如下所示。
+
 ```java
-public static double getDouble(String hex) throws Exception {
-        if (hex.length() > 16) {
-            throw new Exception(String.format("double byte length error, %s should be 8", hex.length()/2));
-        }
-        final int SIGN_LEN = 1;
-        final int EXP_LEN = 11;
-        final int MNT_LEN = 52;
-        String bin = ByteUtil.getBin(ByteUtil.getBytes(hex));
-        System.out.println(String.format("0x%s[hex]= %s[binary]", hex, bin));
-        final String sign_bin = bin.substring(0, SIGN_LEN);
-        final String exponent_bin = bin.substring(SIGN_LEN, SIGN_LEN + EXP_LEN);
-        final String mantissa_bin = bin.substring(SIGN_LEN + EXP_LEN, SIGN_LEN + EXP_LEN + MNT_LEN);
-        System.out.println(String.format("%-23s= %s","sign[binary]", sign_bin));
-        System.out.println(String.format("%-23s= %s" , "exponent[binary]", exponent_bin));
-        System.out.println(String.format("%-23s= 1.%s", "mantissa[binary]", mantissa_bin));
-        double mantissa = 1;
-        for (int i = 0; i < mantissa_bin.length(); i ++) {
-            int a = Integer.parseInt(mantissa_bin.charAt(i) +"");
-            int w = - (i+1);
-            mantissa += a * Math.pow(2, w);
-        }
-        System.out.println(String.format("%-23s= %s", "mantissa[decimal]", mantissa));
-        int exponent = ByteUtil.getIntFromBin(exponent_bin);
-        int pow = (int)(exponent - (Math.pow(2, EXP_LEN -1) -1));
-        System.out.println(String.format("%-23s= %d-%d = %d", "exponent[decimal]", exponent, (int)(Math.pow(2, EXP_LEN -1) -1), pow));
-        double result = mantissa * Math.pow(2, pow);
-        System.out.println(String.format("%-23s= %s", "result", result));
-        return result;
+public static double getDouble(byte[] b) {
+    final int EXP_LEN = 11;
+    final int sign = (0b10000000 & b[0]) == 0 ? 1 : -1;
+    final int exponent = (0b011111110000 & (b[0] << 4)) + 0b00001111 & (b[1] >> 4);
+    final int pow = (int)(exponent - (Math.pow(2, EXP_LEN -1) -1));
+    double mantissa = 1;
+    // 由于double 不支持右移操作，所以只能一步一步计算
+    mantissa += (0b00001111 &b[1]) / Math.pow(2, 4);
+    for (int i = 2; i < 8; i++) {
+        mantissa += (0xff & b[i]) / Math.pow(2, (i- 1)* 8 + 4);
+    }
+    System.out.println(String.format("sign=%d, exponent=%d, pow=%d, mantissa=%1.20f", sign, exponent, pow, mantissa));
+    return sign * mantissa * Math.pow(2, pow);
     }
 ```
+
+ JDK 本身提供了native 实现的类方法, hex为16进制的字符数组表示形式。
+
+```java
+public static double parseDouble(String hex) {
+    return Double.longBitsToDouble(Long.parseLong(hex, 16));
+}
+```
+
+
 
 ## C
 
