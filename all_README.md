@@ -769,3 +769,18 @@ find ./ -name *.java | xargs cat | sed '/^$/d' | wc -l
 # JQ
 
 jq to parse json, https://stedolan.github.io/jq/download/
+
+# git 目录拷贝
+
+git管理的项目，从Linux上拷贝至windows 上，会显示所有的文件都被修改，这是因为不同操作系统使用的换行符是不一样的。Unix/Linux/Mac使用的是LF，但Windows一直使用CRLF[回车(CR, ASCII 13, \r) 换行(LF, ASCII 10, \n)]作为换行符。而git入库的代码采用的是LF格式，它考虑到了跨平台协作的场景，提供了“换行符自动转换”的功能：如果在Windows下安装git，在拉取文件时，会自动将LF换行符替换为CRLF；
+
+解决办法是禁用git的自动换行功能, 添加如下三行配置即可
+
+```shell
+vi ./.git/config
+[core]
+	autocrlf=false
+	filemode=false
+	safecrlf=false
+```
+
