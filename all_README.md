@@ -784,3 +784,11 @@ vi ./.git/config
 	safecrlf=false
 ```
 
+##  zkclient auth
+
+```sh
+./bin/zookeeper-shell.sh IP:port
+addauth digest username:password  # 输入用户名和密码
+ls /
+```
+
