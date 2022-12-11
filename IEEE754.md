@@ -1,6 +1,8 @@
 # 国际标准
 
-详见《ISO/IEC 60559:2020 Information technology — Microprocessor Systems — Floating-Point arithmetic》，相关标准 《*IEEE Standard for Binary Floating Point Arithmetic (ANSI/IEEE Std 754-1985)*》
+​     详见《ISO/IEC 60559:2020 Information technology — Microprocessor Systems — Floating-Point arithmetic》，
+
+​     相关标准 《*IEEE Standard for Binary Floating Point Arithmetic (ANSI/IEEE Std 754-1985)*》
 
 # 双精度浮点数
 
@@ -131,7 +133,7 @@ $$
 
 # 代码实现
 
-## java
+## Java
 
 根据浮点数定义，自行实现的解析方法如下所示。
 
@@ -149,7 +151,7 @@ public static double getDouble(byte[] b) {
     }
     System.out.println(String.format("sign=%d, exponent=%d, pow=%d, mantissa=%1.20f", sign, exponent, pow, mantissa));
     return sign * mantissa * Math.pow(2, pow);
-    }
+}
 ```
 
  JDK 本身提供了native 实现的类方法, hex为16进制的字符数组表示形式。
@@ -160,10 +162,25 @@ public static double parseDouble(String hex) {
 }
 ```
 
+##  C
 
+```c
+void print_bin(char c){
+	for(int i =0; i < 8; i++){
+		printf("%d", ((c<<i)& 0b10000000) >> 7);
+	}
+}
 
-## C
-
-```
+int main()
+{
+	unsigned long x = 0x40E743CD1BF68000;
+	double *a = (double*)&x;
+	printf("%f, sizeof(double)=%lu\n", *a, sizeof(double));
+	for(int i=sizeof(double)-1; i>=0;i--){
+		char *p = (char*)a;
+		char c = *(p+i);
+		print_bin(c);
+	}
+}
 ```
 
