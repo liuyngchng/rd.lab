@@ -151,7 +151,7 @@ timedatectl timesync-status
 ```
 # network 
 
-##  对eth0网卡进行延迟设置
+##  对 eth0 网卡进行延迟设置
 
 ```shell
 tc qdisc add dev eth0 root netem delay 150ms
@@ -164,7 +164,7 @@ tc qdisc change dev eth0 root netem gap 5 delay 10ms
 # 设置eth0包延迟每5个包有一个包延迟10ms
 ```
 
-##  对eth0网卡限制带宽
+##  对 eth0 网卡限制带宽
 
 ```shell
 tc qdisc add dev eth0 root tbf rate 500Kbit latency 50ms burst 15kb
@@ -177,7 +177,7 @@ tc qdisc add dev eth0 root tbf rate 500Kbit latency 50ms burst 15kb
 tc -s qdisc ls dev eth0
 tc -q qdisc ls dev eth0
 ```
-##  解除eth0网卡的限制
+##  解除 eth0 网卡的限制
 
 ```shell
 tc qdisc del dev eth0 root
@@ -187,5 +187,12 @@ tc qdisc del dev eth0 root
 
 ```sh
 sudo apt install kazam
+```
+
+# 远程桌面访问 windwos
+
+```sh
+sudo apt-get install rdesktop
+rdesktop -f -a 16 10.0.0.1
 ```
 
