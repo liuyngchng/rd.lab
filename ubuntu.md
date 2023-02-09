@@ -196,3 +196,10 @@ sudo apt-get install rdesktop
 rdesktop -f -a 16 10.0.0.1
 ```
 
+# ubuntu 访问 windows 共享文件夹
+
+```sh
+sudo apt-get install samba
+```
+
+在ubuntu 的文件夹界面中点击 “connect to server”， 输入 smb://10.0.0.1/sharedFolderName
