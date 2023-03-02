@@ -792,3 +792,36 @@ addauth digest username:password  # 输入用户名和密码
 ls /
 ```
 
+# JSON
+
+
+
+java
+
+```xml
+<dependency>
+		<groupId>com.alibaba</groupId>
+    <artifactId>fastjson</artifactId>
+    <version>1.2.83</version>
+</dependency>
+```
+
+
+
+```java
+import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson.serializer.SerializerFeature
+public static void main(String[] args) {
+    JSONObject obj = new JSONObject(true);
+    obj.put("30_晚上", "有的吃吗");
+    obj.put("01_你好", "wht?");
+    obj.put("02_什么", "你听说过?");
+    obj.put("20_没有", "这是什么?");
+    String a = obj.toJSONString();
+    System.out.println(a);
+    JSONObject obj1 = JSONObject.parseObject(a);
+    String b = JSONObject.toJSONString(obj1, SerializerFeature.MapSortField, SerializerFeature.PrettyFormat);
+    System.out.println(b);
+}
+```
+
