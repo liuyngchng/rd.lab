@@ -13,7 +13,27 @@
 ## 大端和小端
 
 * `大端`（`BigEndian`）： byte[2] = 0X1234， 则byte[0] = 0X12, byte[1] = 0x34; 符合人类的阅读习惯；
+
 * `小端`（`LittileEndian`）： byte[2] = 0X1234， 则byte[1] = 0X12, byte[0] = 0x34; 符合机器的字节流；
+
+  可以通过以下程序来获取当前操作系统的大小端
+
+  ```c
+  /**
+   * 运行结果为 1: little-endian
+   * 					0: big-endian
+   */
+  # include <stdio.h>
+  int main()
+  {
+      int a = 0x0102;
+      char *p = (char *)&a;
+      printf("byte[0]=%d, addr=%p\n", *p, p);
+      printf("byte[1]=%d, addr=%p\n", *(p+1), p+1);
+  }  
+  ```
+
+  
 
 ##  符号说明
 
