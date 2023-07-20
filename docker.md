@@ -85,8 +85,8 @@ docker ps
 | --- |  --- |
 | cat /usr/lib/systemd/system/docker.service \ grep proxy | 查找安装目录 |
 | ln -s /usr/libexec/docker/docker-proxy-current /usr/bin/docker-proxy | 建立软链 |
-| docker run -dit -p 9088:9088 image bash | 启动 |
-| docker run -dit -v /hostdir:/containerdir --name test repository_id | 目录映射 |
+| docker run -dit -p host_port:container_port image bash | 启动 |
+| docker run -dit -v host_dir:container_dir --name test repository_id | 目录映射 |
 | docker run -u username | 指定运行镜像所使用的用户 |
 | docker run -it  --entrypoint="/bin/bash" | 覆盖Dockerfile中ENTRYPOINT设置的命令 |
 
