@@ -10,7 +10,11 @@ download docker desktop from [docker.com](https://www.docker.com/get-started)
 | dockerd &                 | startup dockerd   |
 | docker pull centos        | pull centos image |  
 
-##  start
+##  start up
+
+ubuntu
+
+systemctl start docker
 
 执行
 ```
