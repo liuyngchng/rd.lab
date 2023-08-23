@@ -318,9 +318,11 @@ make MALLOC=libc
 make install
 cd ../..
 make
+make install
 redis-server --version
 Redis server v=6.2.6 sha=00000000:0 malloc=libc bits=64 build=bcb67d162ef0f4f8
-
+mkdir /etc/redis
+cp ./redis.conf /etc/redis
 ```
 
 设置密码并启动
@@ -332,7 +334,8 @@ vi /etc/redis/redis.conf
 redis-server /etc/redis/redis.conf &
 # 复杂密码passowrd需要加引号
 redis-cli -h 1.2.3.4 -p 6379 -a 'password'
-
+# 如果出现连接127.0.0.1, localhost可以,但是使用机器IP 无法连接，则
+# 注释掉 bind 127.0.0.1 -::1
 ```
 
 # nc

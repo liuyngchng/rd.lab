@@ -433,7 +433,8 @@ Type=notify
 # docker 官网 https://docs.docker.com/storage/storagedriver/select-storage-driver/
 ExecStart=/usr/local/bin/dockerd --graph=/data/docker --api-cors-header=*
 # drivermanage 使用devicemapper
-#ExecStart=/usr/bin/dockerd --graph=/data/docker -H tcp://0.0.0.0:4243 -H unix://var/run/docker.sock  --insecure-registry  dev.kmx.k2data.com.cn:5001 --storage-driver=devicemapper --api-cors-header=*
+# 若需要在当前配置文件中添加多个私有仓库，可以在 dockerd 后面通过添加多个 --insecure-registry 来解决
+#ExecStart=/usr/bin/dockerd --graph=/data/docker -H tcp://0.0.0.0:4243 -H unix://var/run/docker.sock  --insecure-registry test1.com.cn:5001 --insecure-registry test2.com.cn:5002 --storage-driver=devicemapper --api-cors-header=*
 ExecReload=/bin/kill -s HUP $MAINPID
 # Having non-zero Limit*s causes performance problems due to accounting overhead
 # in the kernel. We recommend using cgroups to do container-local accounting.

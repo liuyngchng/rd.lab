@@ -8,6 +8,7 @@
 docker pull registry.cn-hangzhou.aliyuncs.com/qida/oracle-xe-11g
 # 映射 oracle的默认端口 1521
 docker run -d -p 1521:1521 --name oracle11 registry.cn-hangzhou.aliyuncs.com/qida/oracle-xe-11g
+docker run -d -p 1521:1521 --name oracle11 oracle11:1.0.0
 docker exec -it oracle11 bash
 sqlplus /nolog
 # 使用sysdba角色登录sqlplus
@@ -233,6 +234,8 @@ desc table_name;
 set long 5000000;
 # 查询，table_name 需要大写
 SELECT DBMS_METADATA.GET_DDL('TABLE','table_name') FROM DUAL;
+
+SELECT DBMS_METADATA.GET_DDL('TABLE','UTL_RECOMP_COMPILED') FROM DUAL;
 ```
 
 * 查看表清单
