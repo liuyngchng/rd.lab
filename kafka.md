@@ -74,9 +74,23 @@ sudo netstat -anpl | grep 2181
 ./bin/zookeeper-server-stop.sh
 ```
 
+# Consumer
+
+##  可获取的最大记录数
+
+```xml
+max.poll.records
+The maximum number of records returned in a single call to poll(). Note, that max.poll.records does not impact the underlying fetching behavior. The consumer will cache the records from each fetch request and returns them incrementally from each poll.
+
+Type:	int
+Default:	500
+Valid Values:	[1,...]
+Importance:	medium
+```
 
 
-## 2.2 kafka
+
+# kafka server
 
 config
 ```sh
