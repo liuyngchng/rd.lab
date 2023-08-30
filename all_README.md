@@ -689,6 +689,7 @@ protoc ./Message.proto --java_out=./
 ## 49.1 get key
 ```shell
 keytool -genkey -alias tomcat -keyalg RSA -keystore ./server.keystore
+# input password and other information
 ```
 create pkcs12 certificate
 ```shell

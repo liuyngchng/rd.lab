@@ -35,9 +35,9 @@ file /usr/bin/sqlplus
 su - oracle
 # 登录sqlplus， 并修改sys、system用户密码
 sqlplus /nolog
-conn sys/oracle as sysdba
-alter user system identified by system;    	# 修改system用户账号的密码
-alter user sys identified by system;		# 修改sys用户账号的密码
+conn sys/oracle as sysdba					# usr:sys, pwd:oracle
+alter user system identified by system;    	# 修改system用户账号的密码, usr:system, pwd:system
+alter user sys identified by system;		# 修改sys用户账号的密码, usr:sys, pwd:system
 create user test identified by test; 		# 创建内部管理员账号 test， 设置密码为 test
 grant connect,resource,dba to test; 		# 将 dba 权限授权给内部管理员账号 test
 ALTER PROFILE DEFAULT LIMIT PASSWORD_LIFE_TIME UNLIMITED; # 修改密码规则策略为密码永不过期
@@ -68,6 +68,8 @@ alter database open;
 
 ```sql
 create table stu(name varchar(10),code varchar(10),subject varchar(10), score number(16,2));
+
+create table up_rpt_dt(mid varchar(64),time varchar(64),dt CLOB);
 ```
 
 # Ubuntu下安装 sqlplus 客户端
@@ -294,6 +296,12 @@ exp system/123456 file= C:person.dmp full=y
 # 导入
 imp 管理员账号/密码 file=C:person.dmp fromuser=用户名
 ```
+
+#  GUI Client
+
+客户端图形化连接工具，可以使用 Oracle 官方提供的免费工具 `Oracle SQL Developer`， 可通过链接
+
+https://www.oracle.com/database/sqldeveloper/ 下载， 支持 Windows 以及 linux。
 
 # JDBC
 
