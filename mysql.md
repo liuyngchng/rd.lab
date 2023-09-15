@@ -142,6 +142,9 @@ tail -f /var/log/mysql/mysql.log
 
 ```sh
 mysqldump --databases my_db -uroot -p > ./source.sql
+mysqldump -h host -P port -u usrname  -p password --databases dbname --dump-date > backup_file.sql
+
+mysqldump -h 192.168.1.1 -P 3306 -u whoami -p'!@#$%^&^%$#!l1#a' --databases my_db --dump-date > db_bck.sql
 ```
 
 数据修改
@@ -240,6 +243,11 @@ docker cp mysql:/etc/mysql.tar.gz /data/mysql
 cd /data/mysql
 tar -zxf mysql.tar.gz
 mv mysql conf
+# 设置时区
+vi /data/mysql/conf/my.cnf
+[mysqld]
+default-time-zone = '+08:00'
+# 停止当前 mysql 服务
 docker stop mysql
 docker rm mysql
 ```
@@ -317,4 +325,12 @@ flush privileges;
 ```sh
 drop user 'root'@'%';
 ```
+
+## 查看时区
+
+```
+SELECT @@global.time_zone;
+```
+
+
 
