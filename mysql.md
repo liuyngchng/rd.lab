@@ -308,13 +308,9 @@ systemctl start docker.service
 
 ```
 
-
-
-
-
 ##  创建用户
 
-```sh
+```sql
 CREATE USER 'foo'@'%' IDENTIFIED WITH mysql_native_password BY 'fGB#sfsfswe*&%$3^3%GN';
 grant all privileges on mysql.* to 'foo'@'%';
 flush privileges;
@@ -322,14 +318,20 @@ flush privileges;
 
 ##  禁止root用户远程登录
 
-```sh
+```sql
 drop user 'root'@'%';
 ```
 
 ## 查看时区
 
-```
+```sql
 SELECT @@global.time_zone;
+```
+
+# shell 中执行sql语句
+
+```sh
+mysql -h 11.10.36.1 -u foo -p'fooxfdsf#$%' -s -e 'select count(1) from db.my_tb'
 ```
 
 
