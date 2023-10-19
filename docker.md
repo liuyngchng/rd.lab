@@ -376,8 +376,6 @@ docker-compose up -d  // 后台启动并运行容器
 
 镜像服务器地址可以在 `docker-compose.yml` 中配置。
 
-
-
 #  centOS7 离线安装docker
 
 

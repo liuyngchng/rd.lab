@@ -59,6 +59,15 @@
 
 # 2. setup
 
+进入  https://kafka.apache.org/downloads.html， 手动下载，或者执行
+
+```
+wget https://archive.apache.org/dist/kafka/2.4.1/kafka_2.11-2.4.1.tgz
+tar -zxf kafka_2.11-2.4.1.tgz
+```
+
+
+
 ## 2.1 zk
 
 启动
@@ -197,8 +206,6 @@ stop
 ```sh
 ./bin/kafka-server-stop.sh config/server1.properties
 ```
-
-
 
 # 3. op
 
