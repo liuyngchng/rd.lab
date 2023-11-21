@@ -826,3 +826,105 @@ public static void main(String[] args) {
 }
 ```
 
+# Python 中调用 C 的 lib.so文件
+
+## 定义 C 函数
+
+头文件 dtparser.h
+
+```c
+char* prs_dt(char* s);
+```
+
+函数 dtparser.c 实现
+
+```c
+#include <stdio.h>
+#include <string.h>
+#include "dtparser.h"
+
+char* prs_dt(char* s) {
+    static char dt[1024];
+    memset(dt,0,sizeof(dt));
+    strcat(dt, "hello world, ");
+    strcat(dt, s); 
+    return dt; 
+}
+```
+
+main.c
+
+```c
+#include <stdio.h>
+#include "dtparser.h"
+int main(int argc, char* argv[]) {
+    printf("%s\n", prs_dt(argv[1]));
+    return 0;
+}
+```
+
+编译，生成动态共享库文件
+
+```sh
+gcc -o main main.c dtparser.c
+gcc -o libdtparser.so -shared -fPIC dtparser.c
+```
+
+测试
+
+```
+./main i_am_c
+hello world, i_am_c
+```
+
+## python 调用
+
+test.py
+
+```python
+#!/usr/bin/python3
+
+import ctypes
+import sys
+
+def prs_dt(dt):
+    '''
+    调用 C 的 lib.so文件中的函数
+    :param dt: a hex string
+    :return: a json string
+    '''
+    # 定义C函数的返回类型和参数类型
+    prs_dt = ctypes.CDLL("./libdtparser.so").prs_dt
+    prs_dt.restype = ctypes.c_char_p
+    prs_dt.argtype = ctypes.c_char_p
+    # 加载.so文件
+    lib = ctypes.CDLL('./libdtparser.so')
+    # 调用函数
+    result = prs_dt(dt.encode("utf-8"))
+    # 获取结果
+    # print(result)
+    result_string = result.decode("utf-8")
+    return result_string
+
+if __name__ == '__main__':
+    if len(sys.argv) < 2:
+        print("pls input dt")
+    else:
+        dt = prs_dt(sys.argv[1])
+        print(dt)
+
+```
+
+添加执行权限
+
+```sh
+chmod +x test.py
+```
+
+执行
+
+```sh
+./test.py i_am_python
+hello world, i_am_python
+```
+
