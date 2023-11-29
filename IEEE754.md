@@ -198,6 +198,7 @@ public static double parseDouble(String hex) {
 <center>Code Snippet 3-3</center>
 
 ```c
+#include <stdio.h>
 void print_bin(char c){
 	for(int i =0; i < 8; i++){
 		printf("%d", ((c<<i)& 0b10000000) >> 7);
@@ -206,9 +207,7 @@ void print_bin(char c){
 
 int main()
 {
-  // 此处的数组为大端格式
 	unsigned long x = 0x40E743CD1BF68000;
-  // a为字符串转换出的双精度浮点数
 	double *a = (double*)&x;
 	printf("%f, sizeof(double)=%lu\n", *a, sizeof(double));
 	for(int i=sizeof(double)-1; i>=0;i--){
@@ -216,6 +215,8 @@ int main()
 		char c = *(p+i);
     // 可以看到二进制的表示，进一步验证 IEEE754 的计算机存储方法
 		print_bin(c);
+    printf("\n");
+    char* y = "40E743CD1BF68000";
 	}
 }
 ```

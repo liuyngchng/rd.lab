@@ -825,3 +825,24 @@ public static void main(String[] args) {
 }
 ```
 
+# Mac Eclipse
+
+## Eclipse 意外退出
+
+执行
+
+```sh
+codesign --force --deep -s gdb_code_sign /Applications/Eclipse.app/
+```
+
+重启电脑
+
+## GDB 失败
+
+首先在 Keychain Access 中创建证书，名称为 `gdb_code_sign`, 然后点击 证书-info，在trust 中选择 “永久信任”，然后执行
+
+```
+codesign -s gdb_code_sign /usr/local/bin/gdb
+```
+
+重启电脑
