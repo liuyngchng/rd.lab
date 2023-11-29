@@ -30,28 +30,39 @@ sudo service mysql restart
 ```
 # binlog
 
-##   登录到MySQL查看binlog
+##   查看binlog
 
 只查看第一个binlog文件的内容
-	
+
+```sh
+mysql -h xxx -u xxx -p;
 show binlog events;  
+```
 
 查看指定binlog文件的内容  
 
-`show binlog events in 'mysql-bin.000002';`
+````sh
+mysql -h xxx -u xxx -p;
+show binlog events in 'mysql-bin.000002';
+````
 
 查看当前正在写入的binlog文件  
 
-`show master status\G;`
+```sh
+show master status\G;
+```
 
 获取binlog文件列表  
 
-`show binary logs;`
+```sh
+show binary logs;
+```
 
-##   config mysqld in ubuntu
+##   config binlog
 
 修改 my.cnf  
 查看my.cnf的位置 `file /etc/mysql/my.cnf`  
+
 ```sh
 cd /etc/mysql/mysql.conf.d
 vim mysqld.cnf
@@ -89,9 +100,19 @@ show variables like '%log_bin%';
 
 
 
-##   browse binlog
+##   browse binlog file
 
+```sh
 sudo mysqlbinlog  -d dbname --base64-output=decode-rows  /var/log/mysql/mysql-bin.000001
+```
+
+## 清空 binlog
+
+```sh
+mysql>RESET MASTER;
+# 可以看到文件已经清空
+ls -al /MYSQL_DIR/mysql/mysqllog/binlog
+```
 
 # general query log
 
@@ -120,7 +141,10 @@ tail -f /var/log/mysql/mysql.log
 数据导出 带表结构和库结构
 
 ```sh
-mysqldump --databases ry -uroot -p > ./source.sql
+mysqldump --databases my_db -uroot -p > ./source.sql
+mysqldump -h host -P port -u usrname  -p password --databases dbname --dump-date > backup_file.sql
+
+mysqldump -h 192.168.1.1 -P 3306 -u whoami -p'!@#$%^&^%$#!l1#a' --databases my_db --dump-date > db_bck.sql
 ```
 
 数据修改
@@ -219,6 +243,11 @@ docker cp mysql:/etc/mysql.tar.gz /data/mysql
 cd /data/mysql
 tar -zxf mysql.tar.gz
 mv mysql conf
+# 设置时区
+vi /data/mysql/conf/my.cnf
+[mysqld]
+default-time-zone = '+08:00'
+# 停止当前 mysql 服务
 docker stop mysql
 docker rm mysql
 ```
@@ -279,21 +308,31 @@ systemctl start docker.service
 
 ```
 
-
-
-
-
 ##  创建用户
 
-```sh
-CREATE USER 'foo'@'%' IDENTIFIED WITH mysql_native_password BY 'fGB#K9rtXFELC8y^3%GN';
+```sql
+CREATE USER 'foo'@'%' IDENTIFIED WITH mysql_native_password BY 'fGB#sfsfswe*&%$3^3%GN';
 grant all privileges on mysql.* to 'foo'@'%';
 flush privileges;
 ```
 
 ##  禁止root用户远程登录
 
-```sh
+```sql
 drop user 'root'@'%';
 ```
+
+## 查看时区
+
+```sql
+SELECT @@global.time_zone;
+```
+
+# shell 中执行sql语句
+
+```sh
+mysql -h 11.10.36.1 -u foo -p'fooxfdsf#$%' -s -e 'select count(1) from db.my_tb'
+```
+
+
 

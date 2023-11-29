@@ -10,7 +10,11 @@ download docker desktop from [docker.com](https://www.docker.com/get-started)
 | dockerd &                 | startup dockerd   |
 | docker pull centos        | pull centos image |  
 
-##  start
+##  start up
+
+ubuntu
+
+systemctl start docker
 
 执行
 ```
@@ -81,8 +85,8 @@ docker ps
 | --- |  --- |
 | cat /usr/lib/systemd/system/docker.service \ grep proxy | 查找安装目录 |
 | ln -s /usr/libexec/docker/docker-proxy-current /usr/bin/docker-proxy | 建立软链 |
-| docker run -dit -p 9088:9088 image bash | 启动 |
-| docker run -dit -v /hostdir:/containerdir --name test repository_id | 目录映射 |
+| docker run -dit -p host_port:container_port image bash | 启动 |
+| docker run -dit -v host_dir:container_dir --name test repository_id | 目录映射 |
 | docker run -u username | 指定运行镜像所使用的用户 |
 | docker run -it  --entrypoint="/bin/bash" | 覆盖Dockerfile中ENTRYPOINT设置的命令 |
 
@@ -372,8 +376,6 @@ docker-compose up -d  // 后台启动并运行容器
 
 镜像服务器地址可以在 `docker-compose.yml` 中配置。
 
-
-
 #  centOS7 离线安装docker
 
 
@@ -433,7 +435,8 @@ Type=notify
 # docker 官网 https://docs.docker.com/storage/storagedriver/select-storage-driver/
 ExecStart=/usr/local/bin/dockerd --graph=/data/docker --api-cors-header=*
 # drivermanage 使用devicemapper
-#ExecStart=/usr/bin/dockerd --graph=/data/docker -H tcp://0.0.0.0:4243 -H unix://var/run/docker.sock  --insecure-registry  dev.kmx.k2data.com.cn:5001 --storage-driver=devicemapper --api-cors-header=*
+# 若需要在当前配置文件中添加多个私有仓库，可以在 dockerd 后面通过添加多个 --insecure-registry 来解决
+#ExecStart=/usr/bin/dockerd --graph=/data/docker -H tcp://0.0.0.0:4243 -H unix://var/run/docker.sock  --insecure-registry test1.com.cn:5001 --insecure-registry test2.com.cn:5002 --storage-driver=devicemapper --api-cors-header=*
 ExecReload=/bin/kill -s HUP $MAINPID
 # Having non-zero Limit*s causes performance problems due to accounting overhead
 # in the kernel. We recommend using cgroups to do container-local accounting.

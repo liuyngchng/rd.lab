@@ -59,6 +59,15 @@
 
 # 2. setup
 
+进入  https://kafka.apache.org/downloads.html， 手动下载，或者执行
+
+```
+wget https://archive.apache.org/dist/kafka/2.4.1/kafka_2.11-2.4.1.tgz
+tar -zxf kafka_2.11-2.4.1.tgz
+```
+
+
+
 ## 2.1 zk
 
 启动
@@ -74,9 +83,98 @@ sudo netstat -anpl | grep 2181
 ./bin/zookeeper-server-stop.sh
 ```
 
+# Consumer
+
+##  可获取的最大记录数
+
+max.poll.records
+
+```xml
+
+The maximum number of records returned in a single call to poll(). Note, that max.poll.records does not impact the underlying fetching behavior. The consumer will cache the records from each fetch request and returns them incrementally from each poll.
+
+Type:	int
+Default:	500
+Valid Values:	[1,...]
+Importance:	medium
+```
+
+## 间隔时间
+
+max.poll.interval.ms
+
+```
+The maximum delay between invocations of poll() when using consumer group management. This places an upper bound on the amount of time that the consumer can be idle before fetching more records. If poll() is not called before expiration of this timeout, then the consumer is considered failed and the group will rebalance in order to reassign the partitions to another member. For consumers using a non-null group.instance.id which reach this timeout, partitions will not be immediately reassigned. Instead, the consumer will stop sending heartbeats and partitions will be reassigned after expiration of session.timeout.ms. This mirrors the behavior of a static consumer which has shutdown.
+
+Type:	int
+Default:	300000 (5 minutes)
+Valid Values:	[1,...]
+Importance:	medium
+```
+
+## 最大字节数
+
+fetch.max.bytes
+
+```
+The maximum amount of data the server should return for a fetch request. Records are fetched in batches by the consumer, and if the first record batch in the first non-empty partition of the fetch is larger than this value, the record batch will still be returned to ensure that the consumer can make progress. As such, this is not a absolute maximum. The maximum record batch size accepted by the broker is defined via message.max.bytes (broker config) or max.message.bytes (topic config). Note that the consumer performs multiple fetches in parallel.
+
+Type:	int
+Default:	52428800 (50 mebibytes)
+Valid Values:	[0,...]
+Importance:	medium
+```
+
+## 消息偏移量
+
+auto.offset.reset
+
+```
+What to do when there is no initial offset in Kafka or if the current offset does not exist any more on the server (e.g. because that data has been deleted):
+
+earliest: automatically reset the offset to the earliest offset
+latest: automatically reset the offset to the latest offset
+none: throw exception to the consumer if no previous offset is found for the consumer's group
+anything else: throw exception to the consumer.
+Type:	string
+Default:	latest
+Valid Values:	[latest, earliest, none]
+Importance:	medium
+```
+
+## 隔离级别
+
+isolation.level
+
+```xml
+Controls how to read messages written transactionally. If set to read_committed, consumer.poll() will only return transactional messages which have been committed. If set to read_uncommitted (the default), consumer.poll() will return all messages, even transactional messages which have been aborted. Non-transactional messages will be returned unconditionally in either mode.
+
+Messages will always be returned in offset order. Hence, in read_committed mode, consumer.poll() will only return messages up to the last stable offset (LSO), which is the one less than the offset of the first open transaction. In particular any messages appearing after messages belonging to ongoing transactions will be withheld until the relevant transaction has been completed. As a result, read_committed consumers will not be able to read up to the high watermark when there are in flight transactions.
+
+Further, when in read_committed the seekToEnd method will return the LSO
+
+Type:	string
+Default:	read_uncommitted
+Valid Values:	[read_committed, read_uncommitted]
+Importance:	medium
+```
+
+## 自动提交
+
+enable.auto.commit
+
+```xml
+If true the consumer's offset will be periodically committed in the background.
+
+Type:	boolean
+Default:	true
+Valid Values:	
+Importance:	medium
+```
 
 
-## 2.2 kafka
+
+# kafka server
 
 config
 ```sh
@@ -108,8 +206,6 @@ stop
 ```sh
 ./bin/kafka-server-stop.sh config/server1.properties
 ```
-
-
 
 # 3. op
 
@@ -1252,3 +1348,114 @@ done
 * 扩容过程中，如果不停止consumer，可能会收到之前已经收到的消息（**重复消息**）
 * TODO：扩容过程中，若生产者和消费者都不停止，对系统的影响待测试
 * TODO： 大批量数据扩容时间估算，待测试。
+
+
+
+# python consumer
+
+## setup
+Python 3.x
+
+Install the Kafka library
+
+```sh
+pip3 install confluent-kafka
+```
+
+## demo
+
+vi kafka.cfg
+
+```sh
+[default]
+bootstrap.servers=11.10.36.1:9092
+
+[consumer]
+group.id=python_grp
+
+# 'auto.offset.reset=earliest' to start reading from the beginning of
+# the topic if no committed offsets exist.
+auto.offset.reset=earliest
+```
+
+vi kafka_consumer.py
+
+```python
+#!/usr/bin/python3
+#       #!/usr/bin/env python
+#       author whoami
+#       pip3 install pip3 install confluent-kafka
+#       ./kafks_consumer.py kafka.cfg
+import sys
+from argparse import ArgumentParser, FileType
+from configparser import ConfigParser
+from confluent_kafka import Consumer, OFFSET_BEGINNING
+
+if __name__ == '__main__':
+    # Parse the command line.
+    parser = ArgumentParser()
+    parser.add_argument('config_file', type=FileType('r'))
+    parser.add_argument('--reset', action='store_true')
+    args = parser.parse_args()
+    print("args", args)
+    # Parse the configuration.
+    # See https://github.com/edenhill/librdkafka/blob/master/CONFIGURATION.md
+    config_parser = ConfigParser()
+    config_parser.read_file(args.config_file)
+    config = dict(config_parser['default'])
+    config.update(config_parser['consumer'])
+
+    # Create Consumer instance
+    consumer = Consumer(config)
+    print("consumer_config", config)
+    # Set up a callback to handle the '--reset' flag.
+    def reset_offset(consumer, partitions):
+        if args.reset:
+            for p in partitions:
+                p.offset = OFFSET_BEGINNING
+            consumer.assign(partitions)
+
+    # Subscribe to topic
+    # topic = "test-up-rpt-dt"
+    topic = "reg-info"
+    consumer.subscribe([topic], on_assign=reset_offset)
+    print("consumer.subscribe", topic)
+    # Poll for new messages from Kafka and print them.
+    try:
+        while True:
+            msg = consumer.poll(1.0)
+            if msg is None:
+                # Initial message consumption may take up to
+                # `session.timeout.ms` for the consumer group to
+                # rebalance and start consuming
+                print("Waiting...")
+            elif msg.error():
+                print("ERR,", msg.error())
+                break
+            else:
+                # Extract the (optional) key and value, and print.
+
+                print("Consumed event from topic {topic}: key = {key:12} value = {value:12} offset = {offset}".format(
+                    topic=msg.topic(), key=msg.key().decode('utf-8'), value=msg.value().decode('utf-8'), offset=msg.offset()))
+    except KeyboardInterrupt:
+        pass
+    finally:
+        # Leave group and commit final offsets
+        consumer.close()
+
+```
+
+add permission
+
+```
+chmod +x kafka_consumer.py
+```
+
+run script
+
+```sh
+./kafka_consumer.py kafka.cfg
+```
+
+
+
