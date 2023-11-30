@@ -932,12 +932,28 @@ hello world, i_am_python
 
 # Mac Eclipse
 
+## 创建 gdb codesign
+
+按入下步骤创建代码签名的证书：
+
+1. 打开 Keychain Access 应用程序（/Applications/Utilities/Keychain Access.app）
+2. 执行菜单 **钥匙串访问(Keychain Access)** -> **证书助理(Certificate Assistant)** -> **创建证书(Create a Certificate...)**
+3. 填写如下信息：
+   - 名称(Name)：gdb_codesign
+   - 身份类型(Identity Type)：自签名根证书
+   - 证书类型(Certificate Type)：代码签名
+   - 钩选：**让我覆盖这些默认设置(Let me override default)**
+4. 一路确定，直到**指定证书位置**的步骤，选择**系统(System)**
+5. 点击“创建”，会提示用输入系统登录密码，创建完成
+6. 在**钥匙串访问程序**中，选择左侧栏的**系统**和**我的证书**，找到你刚刚创建的**gdb_codesign**证书并双击打开证书信息(Get Info)窗口，展开**信任(Trust)**项，设置**使用此证书时：**为**始终信任**。
+7. 关闭**证书信息**窗口，系统会再次要求输入系统登录密码。
+
 ## Eclipse 意外退出
 
 执行
 
 ```sh
-codesign --force --deep -s gdb_code_sign /Applications/Eclipse.app/
+codesign --force --deep -s gdb_codesign /Applications/Eclipse.app/
 ```
 
 重启电脑
@@ -947,7 +963,7 @@ codesign --force --deep -s gdb_code_sign /Applications/Eclipse.app/
 首先在 Keychain Access 中创建证书，名称为 `gdb_code_sign`, 然后点击 证书-info，在trust 中选择 “永久信任”，然后执行
 
 ```
-codesign -s gdb_code_sign /usr/local/bin/gdb
+codesign -s gdb_codesign /usr/local/bin/gdb
 ```
 
 重启电脑
