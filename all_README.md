@@ -934,6 +934,8 @@ hello world, i_am_python
 
 ## 创建 gdb codesign
 
+https://blog.csdn.net/u010157717/article/details/51394693
+
 按入下步骤创建代码签名的证书：
 
 1. 打开 Keychain Access 应用程序（/Applications/Utilities/Keychain Access.app）
@@ -947,6 +949,24 @@ hello world, i_am_python
 5. 点击“创建”，会提示用输入系统登录密码，创建完成
 6. 在**钥匙串访问程序**中，选择左侧栏的**系统**和**我的证书**，找到你刚刚创建的**gdb_codesign**证书并双击打开证书信息(Get Info)窗口，展开**信任(Trust)**项，设置**使用此证书时：**为**始终信任**。
 7. 关闭**证书信息**窗口，系统会再次要求输入系统登录密码。
+
+## code sign eclise and gdb
+
+### Signing GDB
+
+You can use ***Activity Monitor\*** to restart taskgated. Open it and filter the list of processes by typing `***taskgated\***` in the search field in the toolbar. (If you cannot find it, make sure the menu item ***View
+ All Processes\*** is checked.)
+
+Terminate ***Taskgate\*** process . In a few seconds, it will be restarted by the system and should reappear in the list. Please wait for this to happen (it may take up to a minute or two, at worst).
+
+Finally, in a Terminal window, run `***codesign -s gdbcert /usr/local/bin/gdb\***` (if you named your certificate differently, replace `gdbcert` with its name here). Once again, you will be prompted for you username and password. If the command does not produce any output, then GDB is successfully signed.
+
+### Configuring Eclipse
+
+The only thing left to do is to point Eclipse to the GDB executable. Open ***Eclipse\*** -> ***
+ Preferences\*** from the main menu . In the tree of options listed in the sidebar, navigate to ***C/C++
+ Debug
+ GDB\***, and set the ***GDB debugger\*** field to `/usr/local/bin/gdb`.
 
 ## Eclipse 意外退出
 
