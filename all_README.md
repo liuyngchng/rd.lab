@@ -930,7 +930,13 @@ hello world, i_am_python
 
 
 
-# Mac Eclipse
+# Mac gdb
+
+## info
+
+详见 https://sourceware.org/gdb/wiki/PermissionsDarwin。
+
+
 
 ## 创建 gdb codesign
 
@@ -987,9 +993,11 @@ The only thing left to do is to point Eclipse to the GDB executable. Open ***Ecl
 
 ```
 codesign --entitlements gdb-sign.xml -fs gdb_codesign /usr/local/bin/gdb
+codesign -vv $(which gdb)
+codesign -d --entitlements :- $(which gdb)
 ```
 
-
+重启
 
 ## Eclipse 意外退出
 
