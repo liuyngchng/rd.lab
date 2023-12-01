@@ -1001,13 +1001,27 @@ codesign --force --deep -s gdb_codesign /Applications/Eclipse.app/
 
 重启电脑
 
-## GDB 失败
+## GDB run失败
 
-首先在 Keychain Access 中创建证书，名称为 `gdb_code_sign`, 然后点击 证书-info，在trust 中选择 “永久信任”，然后执行
+运行程序时，报错
 
+```sh
+During startup program terminated with signal ?, Unknown signal.
 ```
-codesign -s gdb_codesign /usr/local/bin/gdb
+
+ 解决方法, 新建文件 `~/.gdbinit`，内容以下：
+
+```sh
+set startup-with-shell off
 ```
 
-重启电脑
+## 关闭 MacOS 的 SIP 机制
+
+（1）重启计算机，按住command+R 直到logo出现进入恢复模式。
+
+（2）进入恢复模式之后，左上角选择Utils -> Terminate 
+
+（3）输入 csrutil disable
+
+（4）Restart
 
