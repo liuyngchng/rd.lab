@@ -968,6 +968,29 @@ The only thing left to do is to point Eclipse to the GDB executable. Open ***Ecl
  Debug
  GDB\***, and set the ***GDB debugger\*** field to `/usr/local/bin/gdb`.
 
+## code sign cmd
+
+创建 xml签名文件 gdb-sign.xml, 内容如下所示。
+
+```
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>com.apple.security.cs.debugger</key>
+    <true/>
+</dict>
+</plist>
+```
+
+签名cmd
+
+```
+codesign --entitlements gdb-sign.xml -fs gdb_codesign /usr/local/bin/gdb
+```
+
+
+
 ## Eclipse 意外退出
 
 执行
