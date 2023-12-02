@@ -547,6 +547,7 @@ run `crtl+alt+enter` to exit remote desktop
 如果看到报错`ERROR:CREDSSP..... CredSSP required by Server`,则需要在windows上
 开启远程桌面(我的电脑->属性->远程设置->允许远程连接到此计算机)时，  
 取消勾选`仅允许使用网络级别身份认证...`
+
 # 36. connect wifi via terminal on Ubuntu
 
 查看可用wifi，
@@ -733,5 +734,16 @@ vi *.class
 # 50. 统计文件行数（不含空行）
 ```
 find ./ -name *.java | xargs cat | sed '/^$/d' | wc -l
+```
+
+#  51 github ssh 
+
+```sh
+# create ked25519 key
+ssh-keygen -t ed25519 -C "liuyngchng@hotmail.com"
+# start ssh-agent background
+eval "$(ssh-agent -s)"
+# add key to ssh-agent
+ssh-add ~/.ssh/id_ed25519
 ```
 
