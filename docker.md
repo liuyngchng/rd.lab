@@ -10,7 +10,11 @@ download docker desktop from [docker.com](https://www.docker.com/get-started)
 | dockerd &                 | startup dockerd   |
 | docker pull centos        | pull centos image |  
 
-##  start
+##  start up
+
+ubuntu
+
+systemctl start docker
 
 执行
 ```
@@ -56,6 +60,7 @@ docker ps
 | docker commit container_id richard/test(repository column):tag | 提交更改，生成新的镜像 |
 | docker images | 获取 IMAGE ID |
 |docker rmi  image_id | 删除 image |
+|docker images \| grep '<none>' \| awk -F ' ' '{print $3}' \| xargs docker rmi | 删除 tag 为 <none> 的image |
 
 ##  导出及导入 image
 ###  导出tar
@@ -80,8 +85,8 @@ docker ps
 | --- |  --- |
 | cat /usr/lib/systemd/system/docker.service \ grep proxy | 查找安装目录 |
 | ln -s /usr/libexec/docker/docker-proxy-current /usr/bin/docker-proxy | 建立软链 |
-| docker run -dit -p 9088:9088 image bash | 启动 |
-| docker run -dit -v /hostdir:/containerdir --name test repository_id | 目录映射 |
+| docker run -dit -p host_port:container_port image bash | 启动 |
+| docker run -dit -v host_dir:container_dir --name test repository_id | 目录映射 |
 | docker run -u username | 指定运行镜像所使用的用户 |
 | docker run -it  --entrypoint="/bin/bash" | 覆盖Dockerfile中ENTRYPOINT设置的命令 |
 
@@ -313,8 +318,6 @@ sudo chmod +x /usr/local/bin/docker-compose
 docker-compose -v
 ```
 
-
-
 ##  run
 
 
@@ -331,11 +334,23 @@ mvn clean package
 touch Dockerfile
 vi Dockerfile
 # 内容如下
+# 初始拉取的镜像名称及其版本
 FROM java:8
 VOLUME /tmp
+# 将容器内的目录切换到 /opt 下
+WORKDIR /opt/
+# 将宿主机当前目录下的 docker-demo-0.0.1-SNAPSHOT.jar 添加到容器当前目录下，并重命名为 app.jar
 ADD docker-demo-0.0.1-SNAPSHOT.jar app.jar
+# 设置文件编码
+ENV LC_ALL "C.UTF-8"
+ENV LANG "C.UTF-8"
+# 设置时区
+RUN bash -c 'rm /etc/localtime'
+RUN bash -c 'ln -s /usr/share/zoneinfo/Asia/Shanghai /etc/localtime'
 RUN bash -c 'touch /app.jar'
+# 这个告诉查看Dockerfile的读者，此应用需要暴露 9000 端口
 EXPOSE 9000
+# 设置 entrypoint
 ENTRYPOINT ["java","-Djava.security.egd=file:/dev/./urandom","-jar","app.jar"]
 ```
 
@@ -360,8 +375,6 @@ docker-compose up -d  // 后台启动并运行容器
 ```
 
 镜像服务器地址可以在 `docker-compose.yml` 中配置。
-
-
 
 #  centOS7 离线安装docker
 
@@ -422,7 +435,8 @@ Type=notify
 # docker 官网 https://docs.docker.com/storage/storagedriver/select-storage-driver/
 ExecStart=/usr/local/bin/dockerd --graph=/data/docker --api-cors-header=*
 # drivermanage 使用devicemapper
-#ExecStart=/usr/bin/dockerd --graph=/data/docker -H tcp://0.0.0.0:4243 -H unix://var/run/docker.sock  --insecure-registry  dev.kmx.k2data.com.cn:5001 --storage-driver=devicemapper --api-cors-header=*
+# 若需要在当前配置文件中添加多个私有仓库，可以在 dockerd 后面通过添加多个 --insecure-registry 来解决
+#ExecStart=/usr/bin/dockerd --graph=/data/docker -H tcp://0.0.0.0:4243 -H unix://var/run/docker.sock  --insecure-registry test1.com.cn:5001 --insecure-registry test2.com.cn:5002 --storage-driver=devicemapper --api-cors-header=*
 ExecReload=/bin/kill -s HUP $MAINPID
 # Having non-zero Limit*s causes performance problems due to accounting overhead
 # in the kernel. We recommend using cgroups to do container-local accounting.
@@ -589,7 +603,10 @@ Get https://IP:port/v2/: Service Unavailable
 systemctl daemon-reload
 systemctl restart docker.service 
 ```
-##  docker 删除私有仓库中的镜像
+如果是windows docker， 则在图形化界面中的 docker engine的配置 JSON中，加入以上配置，然后重启即可.
+
+##   docker 删除私有仓库中的镜像
+
 首先， 镜像库服务器上需要进行配置，更改registry容器内/etc/docker/registry/config.yml文件
 
 ```yaml
@@ -597,8 +614,6 @@ storage:
   delete:
     enabled: true
 ```
-
-
 
 查看某个镜像的sha256值：
 
@@ -642,7 +657,7 @@ touch testDockerfile
 vi testDockerfile
 ```
 
-文件内容如下
+文件内容如下：
 
 ```sh
 # docker pull 需要拉取的镜像名称以及tag
@@ -689,5 +704,157 @@ id userName
 exit
 # 在宿主机上授权
 chown -R 1234：5678 dir
+```
+
+# docker TLS
+
+##  生成 CA 公私钥
+
+生成 CA 认证机构的 key 和 证书签名请求（CSR）
+
+```sh
+sudo mkdir /data/ssl/srv
+cd /data/ssl/srv
+# 生成私钥(PEM RSA private key)
+openssl genrsa -aes256 -out ca-key.pem 4096
+# 输入密码 helloworld
+```
+
+补全CA证书信息（Certificate Signing Request）
+
+```sh
+cd /data/ssl/srv
+# 生成 PEM certificate
+openssl req -new -x509 -days 365 -key ca-key.pem -sha256 -out ca.pem
+# 输入密码 helloworld
+```
+
+##  生成 server 证书
+
+使用 CA 签署 server 的公钥，推荐使用域名（如果没有域名，采用 host 绑定的方式， IP 的方式容易失败）的方式，生成 server 端经过 CA 签名的证书。
+
+生成 server 端的私钥以及经过 CA 签名的证书
+
+```sh
+cd /data/ssl/srv
+# 生成私钥(PEM RSA private key)
+openssl genrsa -out server-key.pem 4096
+# 生成 PEM certificate request
+openssl req -subj "/CN=my.docker.test" -sha256 -new -key server-key.pem -out server.csr
+```
+
+
+ 在发起请求的机器（client）的 host 里绑定域名
+
+```sh
+sudo vi /etc/hosts
+123.456.789.0 my.docker.test
+```
+
+生成 server 端扩展配置文件
+
+```sh
+cd /data/ssl/srv
+# 匹配白名单， 只允许域名为 my.docker.test， 或者 IP 为 1.2.3.4 和 2.3.4.5 的机器访问 docker-daemon 的机器
+echo subjectAltName = DNS:my.docker.test, IP:1.2.3.4, IP:2.3.4.5 >> extfile.cnf
+# 将Docker守护程序密钥的扩展使用属性设置为仅用于服务器身份验证
+echo extendedKeyUsage = serverAuth >> extfile.cnf
+```
+
+生成经过 CA 签名的服务端证书
+
+```sh
+cd /data/ssl/srv
+# 生成 PEM certificate
+openssl x509 -req -days 365 -sha256 -in server.csr -CA ca.pem -CAkey ca-key.pem \
+  -CAcreateserial -out server-cert.pem -extfile extfile.cnf
+# 输入密码 helloworld
+```
+
+##  生成 client 证书
+
+生成 client 端的私钥以及经过 CA 签名的证书
+
+```sh
+sudo mkdir /data/ssl/srv
+cd /data/ssl/srv
+# 生成 PEM RSA private key
+openssl genrsa -out key.pem 4096
+# 生成 PEM certificate request
+openssl req -subj '/CN=client' -new -key key.pem -out client.csr
+# 创建client 端扩展配置文件
+echo extendedKeyUsage = clientAuth > extfile-client.cnf
+# 生成签名数据（PEM certificate）
+openssl x509 -req -days 365 -sha256 -in client.csr -CA ca.pem -CAkey ca-key.pem -CAcreateserial -out cert.pem -extfile extfile-client.cnf
+```
+
+## 删除中间文件
+
+删除不必要得文件
+
+```sh
+rm -v client.csr server.csr extfile.cnf extfile-client.cnf
+```
+
+为了了保护密钥免于意外损坏，请删除其写入权限。要使它们仅供阅读，请按以下方式更改文件模式
+
+```sh
+chmod -v 0400 ca-key.pem key.pem server-key.pem
+```
+
+证书可以使对外可读的，删除写入权限以防止意外损坏
+
+```sh
+chmod -v 0444 ca.pem server-cert.pem cert.pem
+```
+
+## 归集服务端证书
+
+执行
+
+```sh
+sudo mkdir /usr/local/ca
+cp server-*.pem /usr/local/ca
+cp ca.pem /usr/local/ca
+ls -al /usr/local/ca
+.  ..  ca.pem  server-cert.pem  server-key.pem
+```
+
+## 修改Docker配置
+
+Docker守护程序仅接收来自提供CA信任的证书的客户端的链接， 需要配置 
+
+（1）CA 证书签名请求（CSR）；
+
+（2）server端经过CA 签名的证书；
+
+（3） server端的私钥。
+
+```sh
+# 具体需要看 server 上 docker service对应的配置
+vim /lib/systemd/system/docker.service
+vim /etc/systemd/system/docker.service
+ExecStart=/usr/bin/dockerd --tlsverify --tlscacert=/usr/local/ca/ca.pem --tlscert=/usr/local/ca/server-cert.pem --tlskey=/usr/local/ca/server-key.pem -H tcp://0.0.0.0:2375 -H unix:///var/run/docker.sock
+```
+
+## 重启 docker
+
+```sh
+sudo systemctl daemon-reload
+sudo systemctl restart docker
+```
+
+## 客户端验证
+
+通过使用客户端证书，以及CA证书，验证 docker 接口，需要提供：
+
+（1）CA 证书签名请求（CSR）；
+
+（2）client 端经过 CA 签名的证书；
+
+（3）client 端的私钥。
+
+```sh
+curl --cacert ../srv/ca.pem --cert ./cert.pem --key ./key.pem  'https://my.docker.test:4243/version'
 ```
 

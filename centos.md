@@ -318,9 +318,11 @@ make MALLOC=libc
 make install
 cd ../..
 make
+make install
 redis-server --version
 Redis server v=6.2.6 sha=00000000:0 malloc=libc bits=64 build=bcb67d162ef0f4f8
-
+mkdir /etc/redis
+cp ./redis.conf /etc/redis
 ```
 
 设置密码并启动
@@ -332,7 +334,8 @@ vi /etc/redis/redis.conf
 redis-server /etc/redis/redis.conf &
 # 复杂密码passowrd需要加引号
 redis-cli -h 1.2.3.4 -p 6379 -a 'password'
-
+# 如果出现连接127.0.0.1, localhost可以,但是使用机器IP 无法连接，则
+# 注释掉 bind 127.0.0.1 -::1
 ```
 
 # nc
@@ -784,3 +787,76 @@ vi /etc/fstab
 ```
 其中， ext4 通过执行 `blkid /dev/sdb`  获取
 
+# crontab
+
+## install
+
+```sh
+sudo yum -y install vixie-cron crontabs
+```
+
+## job list
+
+查看当前的任务
+
+```sh
+crontab -l
+```
+
+## service
+
+```sh
+# 查看cond 状态
+service crond status
+
+# 启动cron
+service crond start
+
+# 关闭cron
+service crond stop
+
+# 重启cron
+service crond restart
+```
+
+## file format
+
+```sh
+minute   hour   day   month   week   command
+# For details see man 4 crontabs
+# Example of job definition:
+.---------------------------------- minute (0 - 59) 表示分钟
+|  .------------------------------- hour (0 - 23)   表示小时
+|  |  .---------------------------- day of month (1 - 31)   表示日期
+|  |  |  .------------------------- month (1 - 12) OR jan,feb,mar,apr ... 表示月份
+|  |  |  |  .---------------------- day of week (0 - 6) (Sunday=0 or 7) OR sun,mon,tue,wed,thu,fri,sat  表示星期（0 或 7 表示星期天）
+|  |  |  |  |  .------------------- username  以哪个用户来执行 
+|  |  |  |  |  |            .------ command  要执行的命令，可以是系统命令，也可以是自己编写的脚本文件
+|  |  |  |  |  |            |
+*  *  *  *  * user-name  command to be executed
+
+```
+
+crontab中%表示换行, 如果要用%字符，进行转义\%。
+
+## task file
+
+```sh
+/etc/crontab			// 全局配置文件
+/etc/cron.d				// 这个目录用来存放任何要执行的crontab文件或脚本
+/etc/cron.deny			// 该文件中所列用户不允许使用crontab命令
+/etc/cron.allow			// 该文件中所列用户允许使用crontab命令
+/var/spool/cron/		// 所有用户crontab文件存放的目录,以用户名命名，比如你是root 用户，那么当你添加任务是，就会在该路径下有一个root文件。
+/etc/cron.deny			// 该文件中所列用户不允许使用crontab命令
+/var/log/cron			// crontab 的日志文件
+```
+
+## demo
+
+sudo vi /etc/crontab
+
+```sh
+00 02 * * * root service httpd restart
+```
+
+在 /etc/crontab 中添加的任务必须提供用户名
