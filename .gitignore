@@ -1,0 +1,17 @@
+a.out
+bin/*
+obj/*
+*.depend
+*.layout
+_*
+*.out
+*.log
+*.a
+*.o
+*.cbp
+.idea
+.DS_Store
+# for c project
+const.h
+**/.cproject
+**/.project
