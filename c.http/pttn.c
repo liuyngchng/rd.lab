@@ -84,7 +84,7 @@ int dispatch(const char *req, char *const resp) {
             printf("[%s][%s-%d]%s matched\n", gettime(),
             	filename(__FILE__), __LINE__, _URI1_);
             char dt1[1024]={0};
-            if(strncmp(body, "68", 2)==0) {
+            if (strncmp(body, "68", 2)==0) {
             	char dt[1024]={0};
 				char id[32]={0};
 				char json[1256];
@@ -113,7 +113,7 @@ int dispatch(const char *req, char *const resp) {
 			printf("[%s][%s-%d]pln_dt,%s\n", gettime(),
 				filename(__FILE__), __LINE__, dt2);
 			codtxt(dt2, dt, sizeof(dt), id, sizeof(id), "37");
-			char tmp[128]={0};
+			char tmp[1500]={0};
 			char pld[1224]={0};
 			char l[5]={0};
 			getshorthex(strlen(dt)+8, l);
@@ -141,7 +141,7 @@ int dispatch(const char *req, char *const resp) {
             coddt(body, dt, sizeof(dt), id, sizeof(id));
             printf("[%s][%s-%d]codedt\n%s\n",gettime(),
             	filename(__FILE__), __LINE__, dt);
-            char tmp[1024]={0};
+            char tmp[1500]={0};
             char pld[1024]={0};
             char l[5]={0};
             getshorthex(strlen(dt)+8, l);
@@ -158,7 +158,7 @@ int dispatch(const char *req, char *const resp) {
 			decdt(json, dt, sizeof(dt), id, sizeof(id));
 			printf("[%s][%s-%d]decdt,%s\n", gettime(),
 				filename(__FILE__), __LINE__, dt);
-			char tmp[128]={0};
+			char tmp[1500]={0};
 			sprintf(tmp,_OP_FMT_, "", dt);
 			respbd=tmp;
         } else {
@@ -167,12 +167,7 @@ int dispatch(const char *req, char *const resp) {
         	respbd=tmp;
         }
     }
-    sprintf(resp,
-        "HTTP/1.1 200 OK\r\n"
-        "Content-Length: %ld\r\n\r\n"
-        "%s",
-        strlen(respbd),respbd
-    );
+    sprintf(resp,_HTTP_MSG_FMT_,strlen(respbd),respbd);
     return strlen(resp);
 }
 
