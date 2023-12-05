@@ -19,7 +19,7 @@
  * m, 最多返回 m 个字符至 id
  **/
 char *const decdt(const char *reqbd, char *const resp,
-		int n, char *const id, int m);
+	int n, char *const id, int m);
 
 /**
  * encode data
@@ -30,7 +30,7 @@ char *const decdt(const char *reqbd, char *const resp,
  * m, 最多返回 m 个字符至 id
  **/
 char *const coddt(const char *reqbd, char *const resp,
-		int n, char *const id, int m);
+	int n, char *const id, int m);
 
 /**
  * 编码数据
@@ -42,7 +42,7 @@ char *const coddt(const char *reqbd, char *const resp,
  * code, encode code
  */
 char *const codtxt(const char *s, char *const t, int n,
-		char *const id, int m, const char *code);
+	char *const id, int m, const char *code);
 
 /**
  * get CHG pkt
@@ -60,6 +60,98 @@ char *const getpkt2(const char *s, char *const t);
  */
 char *const getrdm(char *const t);
 
+char *const doget(char uri[50], char *const buf) {
+	sprintf(buf, _CMN_RESP_FMT_, uri, gettime());
+	return buf;
+}
+
+char *const douri1(char body[1024], char *const buf) {
+	printf("[%s][%s-%d]%s matched\n", gettime(),
+		filename(__FILE__), __LINE__,_URI1_);
+	if (strncmp(body, "68", 2) == 0) {
+		char dt[1024] = {0};
+		char id[32] = {0};
+		char json[1256];
+		sprintf(json, _REQ_FMT_, body);
+		decdt(json, dt, sizeof(dt), id, sizeof(id));
+		printf("[%s][%s-%d]decdt,%s\n", gettime(),
+			filename(__FILE__), __LINE__,dt);
+		prsdt(dt, buf, sizeof(buf));
+	} else {
+		prsdt(body, buf, sizeof(buf));
+	}
+	return buf;
+}
+
+char* const douri2(char body[1024], char *const buf) {
+	printf("[%s][%s-%d]%s matched\n", gettime(),
+		filename(__FILE__), __LINE__,_URI2_);
+	char dt[1024] = { 0 };
+	char id[32] = { 0 };
+	decdt(body, dt, sizeof(dt), id, sizeof(id));
+	char dt1[1024] = { 0 };
+	prsdt(dt, dt1, sizeof(dt1));
+	printf("[%s][%s-%d]prs_dt,%s\n", gettime(), filename(__FILE__), __LINE__,
+		dt1);
+	char rh[9] = { 0 };
+	getrdm(rh);
+	char dt2[256] = { 0 };
+	sprintf(dt2, "%s%s%s", _STR3_, rh, _STR4_);
+	printf("[%s][%s-%d]pln_dt,%s\n", gettime(), filename(__FILE__), __LINE__,
+		dt2);
+	codtxt(dt2, dt, sizeof(dt), id, sizeof(id), "37");
+	char pld[1224] = { 0 };
+	char l[5] = { 0 };
+	getshorthex(strlen(dt) + 8, l);
+	sprintf(pld, _STR5_, l, dt);
+	sprintf(buf, _OP_FMT_, "", pld);
+	return buf;
+}
+
+char* const douri3(char body[1024], char *const buf) {
+	printf("[%s][%s-%d]%s matched\n", gettime(), filename(__FILE__), __LINE__,
+		_URI3_);
+	char dt[1024] = { 0 };
+	char id[32] = { 0 };
+	decdt(body, dt, sizeof(dt), id, sizeof(id));
+	char dt1[1024] = { 0 };
+	prsdt(dt, dt1, sizeof(dt1));
+	printf("[%s][%s-%d]prs_dt\n%s\n", gettime(), filename(__FILE__), __LINE__,
+		dt1);
+	sprintf(buf, _OP_FMT_, id, "");
+	return buf;
+}
+
+char* const douri4(char body[1024], char *const buf) {
+	printf("[%s][%s-%d]%s matched\n", gettime(), filename(__FILE__), __LINE__,
+		_URI4_);
+	char dt[512] = { 0 };
+	char id[32] = { 0 };
+	coddt(body, dt, sizeof(dt), id, sizeof(id));
+	printf("[%s][%s-%d]codedt\n%s\n", gettime(), filename(__FILE__), __LINE__,
+		dt);
+	char pld[1024] = { 0 };
+	char l[5] = { 0 };
+	getshorthex(strlen(dt) + 8, l);
+	sprintf(pld, _STR5_, l, dt);
+	sprintf(buf, _OP_FMT_, id, pld);
+	return buf;
+}
+
+char* const douri5(char body[1024], char *const buf) {
+	printf("[%s][%s-%d]%s matched\n", gettime(), filename(__FILE__), __LINE__,
+		_URI5_);
+	char dt[1024] = { 0 };
+	char id[32] = { 0 };
+	char json[1256];
+	sprintf(json, _REQ_FMT_, body);
+	decdt(json, dt, sizeof(dt), id, sizeof(id));
+	printf("[%s][%s-%d]decdt,%s\n", gettime(), filename(__FILE__), __LINE__,
+		dt);
+	sprintf(buf, _OP_FMT_, "", dt);
+	return buf;
+}
+
 int dispatch(const char *req, char *const resp) {
     char l0[100]={0};
     char method[5]={0};
@@ -74,100 +166,25 @@ int dispatch(const char *req, char *const resp) {
         gettime(), filename(__FILE__), __LINE__, method,
 		_SRV_IP_, _SRV_PORT_, uri, body
     );
-    char *respbd;            // response body
+    char buf[1500] = {0};				// response body
     if (strcasecmp(method, "GET")==0){
-        char tmp[512]={0}; 
-        sprintf(tmp, _CMN_RESP_FMT_,uri ,gettime());
-        respbd=tmp;
+		doget(uri, buf);
     } else {
         if (strcmp(uri, _URI1_)==0) {
-            printf("[%s][%s-%d]%s matched\n", gettime(),
-            	filename(__FILE__), __LINE__, _URI1_);
-            char dt1[1024]={0};
-            if (strncmp(body, "68", 2)==0) {
-            	char dt[1024]={0};
-				char id[32]={0};
-				char json[1256];
-				sprintf(json, _REQ_FMT_, body);
-				decdt(json, dt, sizeof(dt), id, sizeof(id));
-				printf("[%s][%s-%d]decdt,%s\n", gettime(),
-					filename(__FILE__), __LINE__, dt);
-				respbd= prsdt(dt, dt1, sizeof(dt1));
-            } else {
-				respbd= prsdt(body, dt1, sizeof(dt1));
-            }
+			douri1(body, buf);
         } else if (strcmp(uri, _URI2_)==0) {
-            printf("[%s][%s-%d]%s matched\n", gettime(),
-            	filename(__FILE__), __LINE__, _URI2_);
-            char dt[1024]={0};
-            char id[32]={0};
-            decdt(body, dt, sizeof(dt), id, sizeof(id));
-            char dt1[1024] = {0};
-            prsdt(dt, dt1, sizeof(dt1));
-            printf("[%s][%s-%d]prs_dt,%s\n", gettime(),
-            	filename(__FILE__), __LINE__, dt1);
-			char rh[9]={0};
-			getrdm(rh);
-			char dt2[256]={0};
-			sprintf(dt2, "%s%s%s", _STR3_, rh, _STR4_);
-			printf("[%s][%s-%d]pln_dt,%s\n", gettime(),
-				filename(__FILE__), __LINE__, dt2);
-			codtxt(dt2, dt, sizeof(dt), id, sizeof(id), "37");
-			char tmp[1500]={0};
-			char pld[1224]={0};
-			char l[5]={0};
-			getshorthex(strlen(dt)+8, l);
-			sprintf(pld,"68%s030002%s8E1F16", l, dt);
-			sprintf(tmp,_OP_FMT_, "", pld);
-            respbd=tmp;
+			douri2(body, buf);
         } else if (strcmp(uri, _URI3_)==0) {
-            printf("[%s][%s-%d]%s matched\n", gettime(),
-            	filename(__FILE__), __LINE__, _URI3_);
-            char dt[1024]={0};
-            char id[32]={0};
-            decdt(body, dt, sizeof(dt), id, sizeof(id));
-            char dt1[1024] = {0};
-            prsdt(dt, dt1, sizeof(dt1));
-            printf("[%s][%s-%d]prs_dt\n%s\n", gettime(),
-            	filename(__FILE__), __LINE__, dt1);
-            char tmp[128]={0};
-            sprintf(tmp,_OP_FMT_, id, "");
-            respbd=tmp;
+			douri3(body, buf);
         } else if (strcmp(uri, _URI4_)==0) {
-            printf("[%s][%s-%d]%s matched\n", gettime(),
-            	filename(__FILE__), __LINE__, _URI4_);
-            char dt[512]={0};
-            char id[32]={0};
-            coddt(body, dt, sizeof(dt), id, sizeof(id));
-            printf("[%s][%s-%d]codedt\n%s\n",gettime(),
-            	filename(__FILE__), __LINE__, dt);
-            char tmp[1500]={0};
-            char pld[1024]={0};
-            char l[5]={0};
-            getshorthex(strlen(dt)+8, l);
-            sprintf(pld,"68%s030002%s8E1F16", l, dt);
-            sprintf(tmp,_OP_FMT_, id, pld);
-            respbd=tmp;
+			douri4(body, buf);
         } else if(strcmp(uri, _URI5_)==0) {
-        	printf("[%s][%s-%d]%s matched\n", gettime(),
-				filename(__FILE__), __LINE__, _URI5_);
-        	char dt[1024]={0};
-			char id[32]={0};
-			char json[1256];
-			sprintf(json, _REQ_FMT_, body);
-			decdt(json, dt, sizeof(dt), id, sizeof(id));
-			printf("[%s][%s-%d]decdt,%s\n", gettime(),
-				filename(__FILE__), __LINE__, dt);
-			char tmp[1500]={0};
-			sprintf(tmp,_OP_FMT_, "", dt);
-			respbd=tmp;
+			douri5(body, buf);
         } else {
-        	char tmp[512]={0};
-        	sprintf(tmp, _CMN_RESP_FMT_,uri ,gettime());
-        	respbd=tmp;
+        	sprintf(buf, _CMN_RESP_FMT_,uri ,gettime());
         }
     }
-    sprintf(resp,_HTTP_MSG_FMT_,strlen(respbd),respbd);
+    sprintf(resp, _HTTP_MSG_FMT_, strlen(buf), buf);
     return strlen(resp);
 }
 
@@ -177,8 +194,7 @@ char *const decdt(const char *reqbd, char *const resp,
     getjsonv(reqbd, data, _PAYLOAD_, sizeof(data));
     getjsonv(reqbd, id, _MID_, m);
     if (strlen(id)==0) {
-    	char tmp[9]={0};
-    	strcpy(id, getrdm(tmp));
+    	getrdm(id);
     }
     char bd[2048] ={0};
     unsigned long t=gettimestamp();

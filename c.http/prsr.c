@@ -4,12 +4,11 @@
 #include "util.h"
 
 char *const prsdt(const char *s, char *const t, const int n) {
-//    printf("%s\n",prs_up_rpt_dt(s));
     return prs_up_rpt_dt(s, t, n);
 }
 
-char *const prs_up_rpt_dt(const char *s, char *const t, const int n) {
-//    static char dt[1024] = {0};
+char *const prs_up_rpt_dt(const char *s, char *const t,
+	const int n) {
     int i=0;
     char ctrl[3]={0};
     char seq[3]={0};
@@ -52,7 +51,8 @@ char *const prs_up_rpt_dt(const char *s, char *const t, const int n) {
         return t;
 
     }
-    printf("[%s][%s-%d][cmd]%s\n",gettime(), filename(__FILE__), __LINE__,t);
+    printf("[%s][%s-%d][cmd]%s\n",gettime(), filename(__FILE__),
+    	__LINE__,t);
     memset(t, 0, n);			// reset data for return
     return prs_dt_u(s+i, t, n);
 }
@@ -73,7 +73,8 @@ char *const prs_dt_u(const char *s, char *const t, const int n) {
     strcat(t, "\",\"dt\":\"");
     strcat(t, s+i);
     strcat(t, "\"}");
-    printf("[%s][%s-%d][dt_u]%s, %s\n",gettime(), filename(__FILE__), __LINE__, id,t);
+    printf("[%s][%s-%d][dt_u]%s, %s\n",gettime(), filename(__FILE__),
+    	__LINE__, id,t);
     if(strncmp(id, "800", 3)!=0) {
     	return t;
     }
@@ -82,7 +83,8 @@ char *const prs_dt_u(const char *s, char *const t, const int n) {
     return prs_up_rpt_dt_obj(id, s+i, t, n);
 }
     
-char *const prs_up_rpt_dt_obj(const char *id, const char *s, char *const t, const int n) {
+char *const prs_up_rpt_dt_obj(const char *id, const char *s,
+	char *const t, const int n) {
     int i=0;
     strcat(t, "{\"time\":\"");
     strncat(t, s+i, 12);
