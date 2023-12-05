@@ -49,7 +49,7 @@ void MD5Final(MD5_CTX *context,unsigned char digest[16]) {
 
 void MD5Encode(unsigned char *output,unsigned int *input,unsigned int len) {
 	unsigned int i = 0,j = 0;
-    while(j < len) {
+    while (j < len) {
     	output[j] = input[i] & 0xFF;
     	output[j+1] = (input[i] >> 8) & 0xFF;
     	output[j+2] = (input[i] >> 16) & 0xFF;
