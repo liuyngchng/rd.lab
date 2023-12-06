@@ -234,3 +234,21 @@ char *const getchararrayhex(const char *s, int n, char *const t){
 	return t;
 }
 
+char *const readf(const char *fname, char *const t, int n) {
+    FILE *fp;
+    fp = fopen(fname, "r");
+    if (fp == NULL) {
+        printf("fail to open file %s\n", fname);
+        return t;
+    }
+    char buf[1024]={0};
+    int m=0;
+    while (fgets(buf, sizeof(buf), fp) != NULL) {
+        m += strlen(buf);
+        if (m>n) break;
+        strcat(t, buf);
+    }
+    fclose (fp);
+    return t;
+}
+

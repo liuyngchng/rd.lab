@@ -16,3 +16,4 @@ const.h
 **/.cproject/*
 **/.project/*
 **/.settings/*
+**/*.ini

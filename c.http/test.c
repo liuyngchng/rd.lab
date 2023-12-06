@@ -2,12 +2,20 @@
 #include <string.h>
 #include <stdlib.h>
 
+#include "cfg.h"
 #include "peer.h"
 #include "http.h"
 #include "util.h"
 #include "rgx.h"
 #include "md5.h"
 #include "const.h"
+
+extern int _SRV_PORT_;
+extern char _SRV_IP_[64];
+extern char _CODEC_IP_[64];
+extern int _CODEC_PORT_;
+extern char _DEC_PATH_[64];
+extern char _COD_PATH_[64];
 
 void httpreq(){
     char resp[8096] = {0};
@@ -89,9 +97,23 @@ int testgetchararrayhex(){
 	return 0;
 }
 
+int testreadcfg() {
+    char * filename = "./cfg.ini";
+    printf("read file, %s\n", filename);
+    getcfg(filename);
+    return 0;
+}
+
+int testreadf() {
+	char *filename = "./cfg.ini";
+	char buf[1024]={0};
+	printf("read cfg %s\n", readf(filename, buf, sizeof(buf)));
+	return 0;
+}
+
 
 int main(int argc, char* argv[]) {
-	testgetchararrayhex();
+	testreadcfg();
     return 0;
 }
 

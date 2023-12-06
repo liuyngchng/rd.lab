@@ -97,5 +97,13 @@ char *const getcharhex(const char s, char *const t);
  */
 char *const getchararrayhex(const char *s, int n, char *const t);
 
+/**
+ * 读取文件内容
+ * f, file name
+ * t, 输出的文件内容
+ * n, 最多读取的字节数
+ */
+char *const readf(const char *f, char *const t, int n);
+
 #endif
 

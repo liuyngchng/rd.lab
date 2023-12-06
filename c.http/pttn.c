@@ -10,6 +10,14 @@
 #include "md5.h"
 #include "const.h"
 
+extern int _SRV_PORT_;
+extern char _SRV_IP_[64];
+extern char _CODEC_IP_[64];
+extern int _CODEC_PORT_;
+extern char _DEC_PATH_[64];
+extern char _COD_PATH_[64];
+
+
 /**
  * decode data
  * reqbd, HTTP request body;

@@ -4,7 +4,10 @@
 #include "http.h"
 #include "util.h"
 #include "const.h"
+#include "cfg.h"
 
+extern char _SRV_IP_[64];
+extern int _SRV_PORT_;
 
 int clreq() {
     char resp[8096] = {0};
@@ -17,5 +20,6 @@ int clreq() {
 }
 
 int main(int argc, char* argv[]) {
+	initcfg();
 	clreq();
 }
