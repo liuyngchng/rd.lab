@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include "const.h"
+#include "util.h"
 
 char _SRV_IP_[_CFG_LEN_]={0};
 int _SRV_PORT_=8083;
@@ -14,7 +15,8 @@ int getcfg(const char *fname) {
     FILE *fp;
     fp = fopen(fname, "r");
     if (fp == NULL) {
-        printf("fail to open file %s\n", fname);
+        printf("[%s][%s-%d]err_fail to open cfg file %s\n",
+        		gettime(),filename(__FILE__), __LINE__, fname);
         return -1;
     }
     char buf[_CFG_LEN_]={0};
