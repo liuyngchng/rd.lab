@@ -12,8 +12,8 @@
 #include "const.h"
 #include "cfg.h"
 
-extern char _SRV_IP_[64];
 extern int _SRV_PORT_;
+extern char _SRV_IP_[_CFG_LEN_];
 
 /**
  * 从文件句柄中接收数据
