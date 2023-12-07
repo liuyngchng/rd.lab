@@ -17,6 +17,8 @@ extern int _CODEC_PORT_;
 extern char _DEC_PATH_[_CFG_LEN_];
 extern char _COD_PATH_[_CFG_LEN_];
 
+extern pthread_key_t tdt;
+
 
 /**
  * decode data
@@ -171,7 +173,8 @@ int dispatch(const char *req, char *const resp) {
     geturi(l0, uri, sizeof(uri));
     printf(
     	_CRUL_FMT_,
-        gettime(), filename(__FILE__), __LINE__, method,
+        gettime(), filename(__FILE__), __LINE__,
+		*(unsigned long *)pthread_getspecific(tdt),method,
 		_SRV_IP_, _SRV_PORT_, uri, body
     );
     char buf[1500] = {0};				// response body

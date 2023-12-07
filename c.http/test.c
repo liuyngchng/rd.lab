@@ -10,12 +10,10 @@
 #include "md5.h"
 #include "const.h"
 
-extern int _SRV_PORT_;
-extern char _SRV_IP_[_CFG_LEN_];
+
 extern char _CODEC_IP_[_CFG_LEN_];
 extern int _CODEC_PORT_;
 extern char _DEC_PATH_[_CFG_LEN_];
-extern char _COD_PATH_[_CFG_LEN_];
 
 void httpreq(){
     char resp[8096] = {0};

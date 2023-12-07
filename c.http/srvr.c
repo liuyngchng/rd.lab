@@ -15,6 +15,15 @@
 extern int _SRV_PORT_;
 extern char _SRV_IP_[_CFG_LEN_];
 
+
+pthread_key_t tdt;
+
+void destructor(void* data) {
+    printf("[%s][%s-%d]free thread-specific data\n", gettime(),
+		filename(__FILE__),__LINE__);
+    free(data);
+}
+
 /**
  * 从文件句柄中接收数据
  **/
@@ -25,7 +34,6 @@ int startsrv() {
     int sfd;
     int sockopt = 1;
     int res;
-    /*创建一个套接字*/
     sfd = socket(AF_INET, SOCK_STREAM, 0);
     if(sfd < 0) {
         printf("[%s][%s-%d]create socket error\n", gettime(),
@@ -89,8 +97,14 @@ void *rcvdata(void* sockfd) {
     char buf[1024] = {0};
     int cfd = *(int*)sockfd;
     int size = read(cfd, buf, sizeof(buf));
-    printf("[%s][%s-%d][t-%ld]rcv %d bytes\n%s\n",gettime(),
-    	filename(__FILE__),__LINE__, pthread_self(), size, buf);
+    unsigned long *tidp = NULL;
+    tidp = (unsigned long *)malloc(sizeof(unsigned long));
+    *tidp = gettimestamp();
+	int tmp = pthread_setspecific(tdt,tidp);
+//	unsigned long * pthread_test=pthread_getspecific(tdt);
+    printf("[%s][%s-%d][t-%ld]rcv %d bytes, tdt %lu, pthread_getspecific %lu\n%s\n",gettime(),
+    	filename(__FILE__),__LINE__, pthread_self(), size,
+		*tidp, *(unsigned long *)pthread_getspecific(tdt), buf);
     char resp[4096] = {0};
     dispatch(buf,resp);
     write(cfd, resp, strlen(resp));
@@ -104,6 +118,7 @@ void *rcvdata(void* sockfd) {
 
 int main(int argc, char* argv[]) {
 	initcfg();
+	pthread_key_create(&tdt, destructor);
     printf("[%s][%s-%d][t-%ld]server starting\n", gettime(), filename(__FILE__), __LINE__, pthread_self());
     startsrv();
     return 0;
