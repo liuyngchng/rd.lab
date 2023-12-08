@@ -1,4 +1,6 @@
 /**
+ * openssl genrsa 2048 > ca.key
+ * openssl req -new -x509 -nodes -days 1000 -key ca.key -subj /CN=tlsCA\ CA/OU=dev\ group/O=richard\ SIA/DC=tls/DC=com > ca.crt
  * gcc tlsserver.c -lssl -lcrypto
  */
 
@@ -11,8 +13,8 @@
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <arpa/inet.h>
-#define SERVER_CERT "server.crt"
-#define SERVER_KEY "server.key"
+#define SERVER_CERT "ca.crt"
+#define SERVER_KEY "ca.key"
 
 extern void ERR_print_errors_fp(FILE *fp);
 
