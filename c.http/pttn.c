@@ -278,20 +278,19 @@ char *const getrdm(char *const t) {
 }
 
 char *const getpkt2(const char *s, char *const t) {
-    char *tmp="01010001";
     if (strcmp(s, _V00_)==0) {
-        sprintf(t, "%s00", tmp);
+        sprintf(t, "%s00", _STR6_);
     } else if(strcmp(s, _V01_)==0) {
-        sprintf(t, "%s01", tmp);
+        sprintf(t, "%s01", _STR6_);
     } else if(strcmp(s, _V02_)==0) {
-        sprintf(t, "%s02", tmp);
+        sprintf(t, "%s02", _STR6_);
     } else if(strcmp(s, _V03_)==0) {
-        sprintf(t, "%s03", tmp);
+        sprintf(t, "%s03", _STR6_);
     } else if(strcmp(s, _V04_)==0) {
-        sprintf(t, "%s04", tmp);
+        sprintf(t, "%s04", _STR6_);
     } else {
     	printf("[%s][%s-%d]err_input_%s\n",gettime(),
-    		filename(__FILE__), __LINE__, s);
+        		filename(__FILE__), __LINE__, s);
     	pthread_exit(NULL);
     }
     return t;

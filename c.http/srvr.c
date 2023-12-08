@@ -55,7 +55,7 @@ int startsrv() {
     }
     listen(sfd, _BACKLOG_);
     printf(
-		"[%s][%s-%d][t-%ld]listening %s:%d\n",gettime(),
+		"[%s][%s-%d][t-%ld]listening %s:%d, srv_started\n",gettime(),
 		filename(__FILE__),__LINE__,pthread_self(), _SRV_IP_, _SRV_PORT_
 	);
     while (1) {

@@ -1,4 +1,4 @@
-FROM centos 
+#FROM centos 
 FROM ubuntu 
 VOLUME /tmp
 WORKDIR /opt
