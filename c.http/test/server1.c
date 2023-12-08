@@ -22,33 +22,31 @@ SSL_CTX* InitServerCTX(void){
     SSL_load_error_strings();
     method = SSLv23_server_method();
     ctx = SSL_CTX_new(method);
-    if( ctx == NULL ){
+    if ( ctx == NULL ) {
         ERR_print_errors_fp(stderr);
         abort();
     }
     return ctx;
 }
 void LoadCertificates(SSL_CTX* ctx, char* CertFile, char* KeyFile){
-    if( SSL_CTX_use_certificate_file(ctx, CertFile, SSL_FILETYPE_PEM) <= 0 ){
+    if (SSL_CTX_use_certificate_file(ctx, CertFile, SSL_FILETYPE_PEM) <= 0){
         ERR_print_errors_fp(stderr);
         abort();
     }
-    if( SSL_CTX_use_PrivateKey_file(ctx, KeyFile, SSL_FILETYPE_PEM) <= 0 )
-    {
+    if (SSL_CTX_use_PrivateKey_file(ctx, KeyFile, SSL_FILETYPE_PEM) <= 0) {
         ERR_print_errors_fp(stderr);
         abort();
     }
-    if( !SSL_CTX_check_private_key(ctx) )
-    {
+    if (!SSL_CTX_check_private_key(ctx)) {
         fprintf(stderr, "Private key does not match the public certificate\n");
         abort();
     }
 }
-void ShowCerts(SSL* ssl){
+void ShowCerts(SSL* ssl) {
     X509 *cert;
     char *line;
     cert = SSL_get_peer_certificate(ssl);
-    if ( cert != NULL ) {
+    if (cert != NULL) {
         printf("Server certificates:\n");
         line = X509_NAME_oneline(X509_get_subject_name(cert), 0, 0);
         printf("Subject: %s\n", line);
@@ -61,25 +59,19 @@ void ShowCerts(SSL* ssl){
         printf("No certificates.\n");
     }
 }
-void Servlet(SSL* ssl){
+void Servlet(SSL* ssl) {
     char buf[1024];
     int sd, bytes;
-    if( SSL_accept(ssl) == FAIL )
-    {
+    if (SSL_accept(ssl) == FAIL) {
         ERR_print_errors_fp(stderr);
-    }
-    else
-    {
+    } else {
         ShowCerts(ssl);
         bytes = SSL_read(ssl, buf, sizeof(buf));
-        if( bytes > 0 )
-        {
+        if (bytes > 0) {
             buf[bytes] = 0;
             printf("Client msg: \"%s\"\n", buf);
             SSL_write(ssl, "back message", strlen("back message"));
-        }
-        else
-        {
+        } else {
             ERR_print_errors_fp(stderr);
         }
     }
@@ -87,25 +79,23 @@ void Servlet(SSL* ssl){
     SSL_free(ssl);
     close(sd);
 }
-int main(int count, char *strings[]){
+int main(int count, char *strings[]) {
     SSL_CTX *ctx;
     BIO *acc, *client;
     SSL_library_init();
     ctx = InitServerCTX();
     LoadCertificates(ctx, "ca.pem", "ca.pem");
     acc = BIO_new_accept(PORT);
-    if(!acc){
+    if (!acc) {
         printf("Error creating server socket");
     }
-    while(1){
-        if(BIO_do_accept(acc) <= 0)
-        {
+    while(1) {
+        if (BIO_do_accept(acc) <= 0) {
             printf("Error binding server socket");
         }
         SSL *ssl;
         client = BIO_pop(acc);
-        if(!(ssl = SSL_new(ctx)))
-        {
+        if (!(ssl = SSL_new(ctx))) {
             printf("Error creating SSL context");
         }
         SSL_set_bio(ssl, client, client);

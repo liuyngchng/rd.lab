@@ -22,8 +22,7 @@ SSL_CTX* InitCTX(void){
     SSL_load_error_strings();
     method = SSLv23_client_method();
     ctx = SSL_CTX_new(method);
-    if( ctx == NULL )
-    {
+    if (ctx == NULL) {
         ERR_print_errors_fp(stderr);
         abort();
     }
@@ -55,20 +54,21 @@ int main(int count, char *strings[]) {
     SSL_library_init();
     ctx = InitCTX();
     conn = BIO_new_connect(SERVER ":" PORT);
-    if(!conn){
+    if (!conn) {
         printf("Error creating connection BIO");
     }
-    if(BIO_do_connect(conn) <= 0){
+    if (BIO_do_connect(conn) <= 0) {
         printf("Error connecting to remote machine");
     }
     ssl = SSL_new(ctx);
     SSL_set_bio(ssl, conn, conn);
-    if( SSL_connect(ssl) <= 0 ){
+    if (SSL_connect(ssl) <= 0){
         printf("Error connecting SSL object");
     } else {
         printf("Connected!");
         ShowCerts(ssl);
-        SSL_write(ssl, "ana are mere", strlen("ana are mere") );
+        char *msg = "hello, ssl world";
+        SSL_write(ssl, msg, strlen(msg));
         bytes = SSL_read(ssl, buf, sizeof(buf));
         printf("%s\n", buf);
         SSL_free(ssl);
