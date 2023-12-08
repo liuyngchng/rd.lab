@@ -16,7 +16,7 @@
 #include "openssl/err.h"
 #define FAIL -1
 #define PORT "8899"
-SSL_CTX* InitServerCTX(void){
+SSL_CTX* initssl(void){
     SSL_METHOD *method;
     SSL_CTX *ctx;
     OpenSSL_add_all_algorithms();
@@ -29,7 +29,7 @@ SSL_CTX* InitServerCTX(void){
     }
     return ctx;
 }
-void LoadCertificates(SSL_CTX* ctx, char* CertFile, char* KeyFile){
+void loadcert(SSL_CTX* ctx, char* CertFile, char* KeyFile){
     if (SSL_CTX_use_certificate_file(ctx, CertFile, SSL_FILETYPE_PEM) <= 0){
         ERR_print_errors_fp(stderr);
         abort();
@@ -43,7 +43,7 @@ void LoadCertificates(SSL_CTX* ctx, char* CertFile, char* KeyFile){
         abort();
     }
 }
-void ShowCerts(SSL* ssl) {
+void showcert(SSL* ssl) {
     X509 *cert;
     char *line;
     cert = SSL_get_peer_certificate(ssl);
@@ -60,13 +60,13 @@ void ShowCerts(SSL* ssl) {
         printf("No certificates.\n");
     }
 }
-void Servlet(SSL* ssl) {
+void servlet(SSL* ssl) {
     char buf[1024];
     int sd, bytes;
     if (SSL_accept(ssl) == FAIL) {
         ERR_print_errors_fp(stderr);
     } else {
-        ShowCerts(ssl);
+        showcert(ssl);
         bytes = SSL_read(ssl, buf, sizeof(buf));
         if (bytes > 0) {
             buf[bytes] = 0;
@@ -85,8 +85,8 @@ int main(int count, char *strings[]) {
     SSL_CTX *ctx;
     BIO *acc, *client;
     SSL_library_init();
-    ctx = InitServerCTX();
-    LoadCertificates(ctx, "ca.crt", "ca.key");
+    ctx = initssl();
+    loadcert(ctx, "ca.crt", "ca.key");
     acc = BIO_new_accept(PORT);
     if (!acc) {
         printf("Error creating server socket");
@@ -104,7 +104,7 @@ int main(int count, char *strings[]) {
         }
         SSL_set_bio(ssl, client, client);
         // Here should be created threads
-        Servlet(ssl);
+        servlet(ssl);
     }
     printf("server quit, maybe something go wrong.");
     SSL_CTX_free(ctx);

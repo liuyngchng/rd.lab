@@ -15,7 +15,7 @@
 #define FAIL -1
 #define SERVER "127.0.0.1"
 #define PORT "8899"
-SSL_CTX* InitCTX(void){
+SSL_CTX* initssl(void){
     SSL_METHOD *method;
     SSL_CTX *ctx;
     OpenSSL_add_all_algorithms();
@@ -28,7 +28,7 @@ SSL_CTX* InitCTX(void){
     }
     return ctx;
 }
-void ShowCerts(SSL* ssl){
+void showcert(SSL* ssl){
     X509 *cert;
     char *line;
     cert = SSL_get_peer_certificate(ssl);
@@ -52,7 +52,7 @@ int main(int count, char *strings[]) {
     char buf[1024];
     int bytes;
     SSL_library_init();
-    ctx = InitCTX();
+    ctx = initssl();
     conn = BIO_new_connect(SERVER ":" PORT);
     if (!conn) {
         printf("Error creating connection BIO");
@@ -66,7 +66,7 @@ int main(int count, char *strings[]) {
         printf("Error connecting SSL object");
     } else {
         printf("Connected!");
-        ShowCerts(ssl);
+        showcert(ssl);
         char *msg = "hello, ssl world";
         SSL_write(ssl, msg, strlen(msg));
         bytes = SSL_read(ssl, buf, sizeof(buf));
