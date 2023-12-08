@@ -1,6 +1,7 @@
 /**
  * openssl genrsa 2048 > ca.key
  * openssl req -new -x509 -nodes -days 1000 -key ca.key -subj /CN=tlsCA\ CA/OU=dev\ group/O=richard\ SIA/DC=tls/DC=com > ca.crt
+ * openssl req -x509 -nodes -days 365 -newkey rsa:1024 -keyout ca.pem -out ca.pem
  * gcc tlsserver.c -lssl -lcrypto
  */
 
@@ -40,7 +41,6 @@ int main() {
 		ERR_print_errors_fp(stderr);
 		exit(1);
 	}
-	// 创建TCP socket，并绑定到指定端口号
 	int sockfd = socket(AF_INET, SOCK_STREAM, 0);
 	struct sockaddr_in addr;
 	memset(&addr, 0, sizeof(addr));
@@ -49,18 +49,20 @@ int main() {
 	addr.sin_port = htons(8888);
 	bind(sockfd, (struct sockaddr*)&addr, sizeof(addr));
 	listen(sockfd, 5);
-	while (1)
-	{
+	while (1) {
 	    printf("Waiting for incoming connection...\n");
 	    // 接受客户端连接
 	    accept_bio = BIO_new_accept("8888");
-	    BIO_do_accept(accept_bio);
+	    if (!accept_bio) {
+	        printf("Error creating server socket\n");
+	    }
+	    if (BIO_do_accept(accept_bio) <= 0) {
+	        printf("Error calling BIO_do_accept() the first time\n");
+	    }
 	    bio = BIO_pop(accept_bio);
-	    // 创建SSL对象并绑定到BIO
 	    ssl = SSL_new(ctx);
 	    SSL_set_bio(ssl, bio, bio);
-	    if (SSL_accept(ssl) <= 0)
-		{
+	    if (SSL_accept(ssl) <= 0) {
 			fprintf(stderr,"Error accepting SSL connection\n");
 			ERR_print_errors_fp(stderr);
 			BIO_free_all(bio);
@@ -71,19 +73,15 @@ int main() {
         memset(buf, 0, sizeof(buf));
         // 从客户端接收数据
         int len = SSL_read(ssl, buf, sizeof(buf));
-        if (len > 0)
-        {
+        if (len > 0) {
             printf("Received data from client: %s\n", buf);
-            // 向客户端发送响应
             char response[] = "Hello from server!";
             SSL_write(ssl, response, strlen(response));
         }
-        // 关闭SSL连接
         SSL_shutdown(ssl);
         SSL_free(ssl);
         BIO_free_all(bio);
     }
-    // 清理资源
     close(sockfd);
     SSL_CTX_free(ctx);
 	return 0;
