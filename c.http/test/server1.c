@@ -16,12 +16,17 @@
 #include "openssl/err.h"
 #define FAIL -1
 #define PORT "8899"
+
+//extern SSL_METHOD *TLS_server_method();
+
 SSL_CTX* initssl(void){
-    SSL_METHOD *method;
+    const SSL_METHOD *method;
     SSL_CTX *ctx;
     OpenSSL_add_all_algorithms();
     SSL_load_error_strings();
-    method = TLS_server_method();
+    // depend on openssl version
+    method=TLSv1_2_server_method(); // for OpenSSL 1.0.2g
+//    method = TLS_server_method();
     ctx = SSL_CTX_new(method);
     if ( ctx == NULL ) {
         ERR_print_errors_fp(stderr);
@@ -39,7 +44,7 @@ void loadcert(SSL_CTX* ctx, char* CertFile, char* KeyFile){
         abort();
     }
     if (!SSL_CTX_check_private_key(ctx)) {
-        fprintf(stderr, "Private key does not match the public certificate\n");
+        fprintf(stderr, "private key does not match the public certificate\n");
         abort();
     }
 }
@@ -48,21 +53,22 @@ void showcert(SSL* ssl) {
     char *line;
     cert = SSL_get_peer_certificate(ssl);
     if (cert != NULL) {
-        printf("Server certificates:\n");
+        printf("server certificates:\n");
         line = X509_NAME_oneline(X509_get_subject_name(cert), 0, 0);
-        printf("Subject: %s\n", line);
+        printf("subject: %s\n", line);
         free(line);
         line = X509_NAME_oneline(X509_get_issuer_name(cert), 0, 0);
-        printf("Issuer: %s\n", line);
+        printf("issuer: %s\n", line);
         free(line);
         X509_free(cert);
     } else {
-        printf("No certificates.\n");
+        printf("no certificates.\n");
     }
 }
-void servlet(SSL* ssl) {
-    char buf[1024];
+void acceptssl(SSL* ssl) {
+    char buf[1024]={0};
     int sd, bytes;
+    printf("ssl accept\n");
     if (SSL_accept(ssl) == FAIL) {
         ERR_print_errors_fp(stderr);
     } else {
@@ -70,9 +76,11 @@ void servlet(SSL* ssl) {
         bytes = SSL_read(ssl, buf, sizeof(buf));
         if (bytes > 0) {
             buf[bytes] = 0;
-            printf("received msg: \"%s\"\n", buf);
-            char *msg="server ack message";
+            printf("received msg: \n****\n%s\n****\n", buf);
+            char *msg="HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\n\r\nserver ack message";
             SSL_write(ssl, msg, strlen(msg));
+            printf("send msg: \n****\n%s\n****\n", msg);
+
         } else {
             ERR_print_errors_fp(stderr);
         }
@@ -81,7 +89,7 @@ void servlet(SSL* ssl) {
     SSL_free(ssl);
     close(sd);
 }
-int main(int count, char *strings[]) {
+int main(int argc, char *argv[]) {
     SSL_CTX *ctx;
     BIO *acc, *client;
     SSL_library_init();
@@ -89,23 +97,27 @@ int main(int count, char *strings[]) {
     loadcert(ctx, "ca.crt", "ca.key");
     acc = BIO_new_accept(PORT);
     if (!acc) {
-        printf("Error creating server socket");
+        printf("error creating server socket.\n");
+        exit(-1);
     }
     while(1) {
         if (BIO_do_accept(acc) <= 0) {
-            printf("Error binding server socket");
-            continue;
+            printf("error binding server socket.\n");
+            break;
         }
+        printf("bind port %s, bio do accept.\n", PORT);
         SSL *ssl;
         client = BIO_pop(acc);
         if (!(ssl = SSL_new(ctx))) {
-            printf("Error creating SSL context");
-            continue;
+            printf("error creating SSL ctx.\n");
+            break;
         }
+        printf("bio pop.\n");
         SSL_set_bio(ssl, client, client);
+        printf("ssl set bio.\n");
         // Here should be created threads
-        servlet(ssl);
+        acceptssl(ssl);
     }
-    printf("server quit, maybe something go wrong.");
+    printf("server quit, maybe something goes wrong.\n");
     SSL_CTX_free(ctx);
 }
