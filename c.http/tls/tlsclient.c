@@ -1,5 +1,5 @@
 /**
- * gcc -o _client1 client1.c -lssl -lcrypto -Wall
+ * gcc -o _tlsclient tlsclient.c -lssl -lcrypto -Wall
  */
 #include <stdio.h>
 #include <errno.h>

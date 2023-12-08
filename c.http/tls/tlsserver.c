@@ -1,7 +1,8 @@
 /**
- * https://www.oomake.com/question/4087737
  * openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout ca.pem -out ca.pem
- * gcc -o _server1 server1.c -lssl -lcrypto
+ * openssl genrsa 2048 > ca.key
+ * openssl req -new -x509 -nodes -days 1000 -key ca.key -subj /CN=tlsCA\ CA/OU=tlsdev\ group/O=richard\ SIA/DC=rd/DC=com > ca.crt
+ * gcc -o _tlsserver tlsserver.c -lssl -lcrypto
  */
 #include <errno.h>
 #include <unistd.h>
@@ -68,7 +69,7 @@ void showcert(SSL* ssl) {
 void acceptssl(SSL* ssl) {
     char buf[1024]={0};
     int sd, bytes;
-    printf("ssl accept\n");
+    printf("TLS listening\n");
     if (SSL_accept(ssl) == FAIL) {
         ERR_print_errors_fp(stderr);
     } else {
@@ -77,7 +78,9 @@ void acceptssl(SSL* ssl) {
         if (bytes > 0) {
             buf[bytes] = 0;
             printf("received msg: \n****\n%s\n****\n", buf);
-            char *msg="HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\n\r\nserver ack message";
+            char *msg="HTTP/1.1 200 OK\r\n"
+            		"Content-Type: application/json\r\n\r\n"
+            		"{\"status\":200}";
             SSL_write(ssl, msg, strlen(msg));
             printf("send msg: \n****\n%s\n****\n", msg);
 
@@ -102,7 +105,7 @@ int main(int argc, char *argv[]) {
     }
     while(1) {
         if (BIO_do_accept(acc) <= 0) {
-            printf("error binding server socket.\n");
+            printf("error binding server socket port %s.\n", PORT);
             break;
         }
         printf("bind port %s, bio do accept.\n", PORT);
@@ -118,6 +121,6 @@ int main(int argc, char *argv[]) {
         // Here should be created threads
         acceptssl(ssl);
     }
-    printf("server quit, maybe something goes wrong.\n");
+    printf("quit, maybe something goes wrong.\n");
     SSL_CTX_free(ctx);
 }
