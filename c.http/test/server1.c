@@ -1,4 +1,5 @@
 /**
+ * https://www.oomake.com/question/4087737
  * openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout ca.pem -out ca.pem
  * gcc -o _server1 server1.c -lssl -lcrypto
  */
@@ -20,7 +21,7 @@ SSL_CTX* InitServerCTX(void){
     SSL_CTX *ctx;
     OpenSSL_add_all_algorithms();
     SSL_load_error_strings();
-    method = SSLv23_server_method();
+    method = TLS_server_method();
     ctx = SSL_CTX_new(method);
     if ( ctx == NULL ) {
         ERR_print_errors_fp(stderr);
@@ -69,8 +70,9 @@ void Servlet(SSL* ssl) {
         bytes = SSL_read(ssl, buf, sizeof(buf));
         if (bytes > 0) {
             buf[bytes] = 0;
-            printf("Client msg: \"%s\"\n", buf);
-            SSL_write(ssl, "back message", strlen("back message"));
+            printf("received msg: \"%s\"\n", buf);
+            char *msg="server ack message";
+            SSL_write(ssl, msg, strlen(msg));
         } else {
             ERR_print_errors_fp(stderr);
         }
@@ -84,7 +86,7 @@ int main(int count, char *strings[]) {
     BIO *acc, *client;
     SSL_library_init();
     ctx = InitServerCTX();
-    LoadCertificates(ctx, "ca.pem", "ca.pem");
+    LoadCertificates(ctx, "ca.crt", "ca.key");
     acc = BIO_new_accept(PORT);
     if (!acc) {
         printf("Error creating server socket");
@@ -92,15 +94,18 @@ int main(int count, char *strings[]) {
     while(1) {
         if (BIO_do_accept(acc) <= 0) {
             printf("Error binding server socket");
+            continue;
         }
         SSL *ssl;
         client = BIO_pop(acc);
         if (!(ssl = SSL_new(ctx))) {
             printf("Error creating SSL context");
+            continue;
         }
         SSL_set_bio(ssl, client, client);
-// Here should be created threads
+        // Here should be created threads
         Servlet(ssl);
     }
+    printf("server quit, maybe something go wrong.");
     SSL_CTX_free(ctx);
 }
