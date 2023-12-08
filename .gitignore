@@ -11,3 +11,9 @@ _*
 *.cbp
 .idea
 .DS_Store
+# for c project
+const.h
+**/.cproject/*
+**/.project/*
+**/.settings/*
+**/*.ini

@@ -1,7 +1,7 @@
 <h1>`GCC` Introduction</h1>
 
 # 1. cmd
-```
+```sh
 gcc main.c -o main      # comile and link source file in one step, output a executable bin file
 gcc -c main.c           # produce object file from source, default file name is main.o, you can use -o get a customized name
 gcc main.o              # link a object file to produce a execute bin file
@@ -64,14 +64,14 @@ GCC 选项区分大小写
 - 在交互文件中针对目标机器的抽象描述，为编译器重新定向到新架构提供了一个结构化的方式。但是，从 `GCC` 用户角度来看，我们可以忽略这个中间步骤。
 - 通常情况下，`GCC` 把汇编语言输出存储到临时文件中，并且在汇编器执行完后立刻删除它们。但是可以使用`-S`选项，让编译程序在生成汇编语言输出之后立刻停止。
 - 如果没有指定输出文件名，那么采用`-S`选项的 `GCC` 编译过程会为每个被编译的输入文件生成以`.s`作为后缀的汇编语言文件。如下例所示：
-```
+```sh
 $ gcc -S circle.c
 ```
 编译器预处理 circle.c，将其翻译成汇编语言，并将结果存储在 circle.s 文件中。
 如果想把 C 语言变量的名称作为汇编语言语句中的注释，可以加上`-fverbose-asm`选项：
-```
+```sh
 $ gcc -S -fverbose-asm circle.c
-```  
+```
 
 # 7. `GCC` -l
 ## 7.1 链接器  
@@ -83,7 +83,7 @@ $ gcc -S -fverbose-asm circle.c
 
 ## 7.2 demo
 `GCC` 的`-l`选项可以让我们手动添加链接库。下面我们编写一个数学程序 main.c，并使用到了 cos() 函数，它位于 <math.h> 头文件
-```
+```c
 #include <stdio.h>      /* printf */
 #include <math.h>       /* cos */
 #define PI 3.14159265
@@ -95,15 +95,14 @@ int main ()
     printf ("The cosine of %f degrees is %f.\n", param, result );
     return 0;
 }
+
 ```
 为了编译这个 main.c，必须使用-l选项，以链接数学库：
-```
+```sh
 $ gcc main.c -o main.out -lm
 ```
 数学库的文件名是 `libm.a`。前缀`lib`和后缀`.a`是标准的，`m`是基本名称，`GCC` 会在`-l`选项后紧跟着的基本名称的基础上自动添加这些前缀、后缀，本例中，基本名称为 `m`。
-```
 在支持动态链接的系统上，GCC 自动使用在 Darwin 上的共享链接库 libm.so 或 libm.dylib。
-```
 ## 7.3 自定义的链接库  
 `GCC` 会自动在标准库目录中搜索文件，例如 `/usr/lib`，如果想链接其他目录中的库，就得特别指明。有三种方式可以链接在 GCC 搜索路径以外的链接库  
 - 把链接库作为一般的目标文件  
@@ -114,7 +113,7 @@ $gcc main.c -o main.out /usr/lib/libm.a
 ```
 - 使用`-L`选项
 为 `GCC` 增加另一个搜索链接库的目录
-```
+```sh
 $ gcc main.c -o main.out -L/usr/lib -lm
 ```
 可以使用多个`-L`选项，或者在一个`-L`选项内使用冒号分割的路径列表
@@ -122,12 +121,11 @@ $ gcc main.c -o main.out -L/usr/lib -lm
 把包括所需链接库的目录加到环境变量 `LIBRARY_PATH` 中
 
 生成自定义的archieve文件
-```
+```sh
 gcc -c a.c
 gcc -c b.c
 gcc -c c.c
 ar -fr abc.a a.o b.o c.o
-
 ```
 # 8. Shared Object File  
 ## 8.1 Output `.so` File
@@ -141,11 +139,11 @@ Linux 下动态链接库（`shared object file`，共享对象文件）的文件
 这样一来，产生的代码中就没有绝对地址了，全部使用相对地址，所以代码可以被加载器加载到内存的任意位置，都可以正确的执行。  
 这正是共享库所要求的，共享库被加载时，在内存的位置不是固定的。  
 从源文件生成动态链接库
-```
+```sh
 $gcc -fPIC -shared func.c -o libfunc.so
 ```
 从目标文件生成动态链接库
-```
+```sh
 gcc -fPIC -c func.c -o func.o
 gcc -shared func.o -o libfunc.so
 ```
@@ -155,17 +153,17 @@ gcc -shared func.o -o libfunc.so
 
 如果希望将一个动态链接库链接到可执行文件，那么需要在命令行中列出动态链接库的名称，具体方式和普通的源文件、目标文件一样  
 
-```
+```sh
 gcc main.c libfunc.so -o app.out
 ```
 还可以这样加载  
-```
+```sh
 gcc main.c -L. -lfunc -o app.out
 ```
 
 还可以在编译时链接库环境变量 `LIBRARY_PATH` 中添加so文件的路径，然后执行
 
-```
+```sh
 gcc main.c -lfunc -o app.out
 ```
 
@@ -176,34 +174,35 @@ gcc main.c -lfunc -o app.out
 编译完之后，必须要确保程序在运行时可以找到这个动态链接库，可以采用以下几种方法中的一种   
 * 你可以将链接库放到标准目录下，例如 /usr/lib   
 * 为运行时设置一个合适的环境变量，例如 LD_LIBRARY_PATH。  
-```
+```sh
 export LD_LIBRARY_PATH='xxxx'
 ```
 * 不同系统，具有不同的加载链接库的方法, ubuntu 和 centos下，  
   执行 `sudo vim /etc/ld.so.conf`,  或者  
-  ```
-  cd /etc/ld.so.conf.d
-  sudo vim customized.conf
-  ```
-  将.so 文件的路经添加进去,然后执行 `sudo /sbin/ldconfig` 使系统配置生效  
- ldconfig creates the necessary links and cache to the most recent   
-shared libraries found in the directories specified on the command   
-line, in the file /etc/ld.so.conf, and in the trusted directories   
-(/lib and /usr/lib).  
-* 设置 LD_LIBRARY_PATH
+```sh
+cd /etc/ld.so.conf.d
+sudo vim customized.conf
 ```
+  将.so 文件的路经添加进去,然后执行 `sudo /sbin/ldconfig` 使系统配置生效  
+
+* 设置 LD_LIBRARY_PATH
+```sh
 export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/lib/
-```  
+```
+   `ldconfig` creates the necessary links and cache to the most recent  shared libraries found in the directories specified on the command   line, in the file `/etc/ld.so.conf`, and in the trusted directories   
+  (/lib and /usr/lib).  
+
 ## 8.4 check shared objects (shared libraries) dependency
 
-```
+```sh
 ldd execuable file
 ```
 
 # 9. cross-compilation(交叉编译)
 交叉编译，相对于原生编译(native compilation)来说，是指在某个主机平台上（比如x86上）用交叉编译器编译出可在其他平台上（比如ARM上）运行的代码的过程。
 To cross-compile is to build on one platform a binary that will run on another platform. When speaking of cross-compilation, it is important to distinguish between the build platform on which the compilation is performed, and the host platform on which the resulting executable is expected to run. The following configure options are used to specify each of them
-```
+
+```sh
 --build=build
 The system on which the package is built.
 
@@ -212,27 +211,28 @@ The system where built programs and libraries will run.
 ```
 ## 9.1 命名规则
 交叉编译工具链的命名规则为：arch [-vendor] [-os] [-(gnu)eabi]
-```
+```sh
 arch - 体系架构，如ARM，MIPS
 verdor - 工具链提供商
 os - 目标操作系统
 eabi - 嵌入式应用二进制接口
 ```
 根据对操作系统的支持与否，ARM GCC可分为支持和不支持操作系统，如
-```
+```sh
 arm-none-eabi：这个是没有操作系统的，自然不可能支持那些跟操作系统关系密切的函数，比如fork(2)。他使用的是newlib这个专用于嵌
        入式系统的C库。
 arm-none-linux-eabi：用于Linux的，使用Glibc
 ```
 ## 9.2 命名实例
-```
+```sh
 arm-none-eabi-gcc
 ```
 （ARM architecture，no vendor，not target an operating system，complies with the ARM EABI）  
 用于编译 ARM 架构的裸机系统（包括 ARM Linux 的 boot、kernel，不适用编译 Linux 应用 Application），  
 一般适合 ARM7、Cortex-M 和 Cortex-R 内核的芯片使用，所以不支持那些跟操作系统关系密切的函数，  
 比如fork(2)，他使用的是 newlib 这个专用于嵌入式系统的C库。  
-```
+
+```sh
 arm-none-linux-gnueabi-gcc
 ```
 (ARM architecture, no vendor, creates binaries that run on the Linux operating system, and uses the GNU EABI)  
@@ -240,21 +240,21 @@ arm-none-linux-gnueabi-gcc
 arm-none-linux-gnueabi基于GCC，使用Glibc库，经过 Codesourcery 公司优化过推出的编译器。  
 arm-none-linux-gnueabi-xxx 交叉编译工具的浮点运算非常优秀。一般ARM9、ARM11、Cortex-A 内  
 核，带有 Linux 操作系统的会用到  
-```
+```sh
 arm-eabi-gcc
 ```
 Android ARM 编译器。
-```
+```sh
 armcc
 ```
 ARM 公司推出的编译工具，功能和 arm-none-eabi 类似，可以编译裸机程序（u-boot、kernel），  
 但是不能编译 Linux 应用程序。  
 armcc一般和ARM开发工具一起，Keil MDK、ADS、RVDS和DS-5中  
 的编译器都是armcc，所以 armcc 编译器都是收费的。
-```
+```sh
 arm-none-uclinuxeabi-gcc
 ```
-```
+```sh
  arm-none-symbianelf-gcc
 ```
 arm-none-uclinuxeabi 用于uCLinux，使用Glibc。  
@@ -294,11 +294,11 @@ ar命令一般对.o的目标文件进行操作，目标文件可以由gcc -c命�
 
 首先，我们有如下两个源程序文件：  
 
-```
+```sh
 ls
 main.c  print.c test.h
 pg print.c
-
+==========================
 #include <stdio.h>
 
 int print()
@@ -306,7 +306,7 @@ int print()
     printf("Hello world\n");
     return 0;
 }
-
+===========================
 pg main.c                                                        
 #include "test.h"
 
@@ -315,7 +315,7 @@ int main()
     print();
     return 0;
 }
-
+==========================
 pg test.h
 int print();
 ```
@@ -323,7 +323,7 @@ int print();
 
 先通过gcc -c命令将其编译成.o文件:
 
-```
+```sh
 gcc -c *.c                                                        
 ls
 main.c  main.o  print.c  print.o  test.h
@@ -332,19 +332,19 @@ main.c  main.o  print.c  print.o  test.h
 我们可以看到两个.o的目标文件已经成功生成。  
 这时候，如果我们使用以下命令，是可以直接编译成功的：  
 
-```
+```sh
 gcc -o test *.o
 ls
 main.c  main.o  print.c  print.o  test.h test
 ./test
 Hello world
-```  
+```
 ## 10.3 创建归档文件  
 
 但是这里由于我们是要创建静态库，所以可以使用ar命令来创建一个归档文件:
 
-```
-ar crv libtest.a print.o
+```sh
+ar crsv libtest.a print.o
 a - test2.o
 ls
 libtest.a  main.c  main.o  print.c  print.o  test  test.h
@@ -354,11 +354,11 @@ libtest.a  main.c  main.o  print.c  print.o  test  test.h
 但在Linux中，当使用的是GUN开发工具时，这一步可以省略。  
 以上步骤完成后，即可以使用下面的命令来编译程序：  
 
-```
+```sh
 ranlib libtest.a
 ```
 ## 10.4 链接静态库文件  
-```
+```sh
 gcc -o testa main.o -L./ -ltest
 ls
 libtest.a  main.c  main.o  print.c  print.o  test  testa  test.h
@@ -369,7 +369,7 @@ Hello world
 通过以上案例，可以发现得到的效果其实是一样的。  
 当然，也可以使用以下命令，得到相同的效果（这里因为没有链接头文件，会报一个错，但是结果没有影响）：  
 
-```
+```sh
 gcc -o testb main.c -L./ -ltest  
 ls
 libtest.a  main.c  main.o  print.c  print.o  test  testa  testb  test.h
