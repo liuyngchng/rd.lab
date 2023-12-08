@@ -14,6 +14,8 @@ _*
 # for c project
 const.h
 **/.cproject/*
+**/.cproject
 **/.project/*
+**/.project
 **/.settings/*
 **/*.ini
