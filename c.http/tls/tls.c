@@ -43,7 +43,7 @@ int main(){
     serv_addr.sin_family = AF_INET;
     serv_addr.sin_addr.s_addr = htonl(INADDR_ANY);
     serv_addr.sin_port = htons(_PORT_);
-    int i=bind(sockfd, (struct sockar *)&serv_addr, sizeof(serv_addr));
+    int i=bind(sockfd, (struct sockaddr *)&serv_addr, sizeof(serv_addr));
     if (i < 0) {
         printf("bind failed, port %d", _PORT_);
         exit(1);
