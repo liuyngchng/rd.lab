@@ -23,30 +23,28 @@ int main(){
     socklen_t len;
     int sockopt = 1;
     struct sockaddr_in serv_addr, cli_addr;
-
-    int n;
-
+//    int n;
     SSL_library_init();
     ctx = SSL_CTX_new(TLSv1_2_server_method());
     if (SSL_CTX_use_certificate_file(ctx, "ca.pem" , SSL_FILETYPE_PEM) <= 0) {
         ERR_print_errors_fp(stderr);
         printf("err_use_certificate_file, %s\n", strerror(errno));
-        exit(1);
+        exit(-1);
     }
     if (SSL_CTX_use_PrivateKey_file(ctx, "ca.pem", SSL_FILETYPE_PEM) <= 0 ) {
         ERR_print_errors_fp(stderr);
         printf("err_use_private_key_file, %s\n", strerror(errno));
-        exit(1);
+        exit(-1);
     }
     if (!SSL_CTX_check_private_key(ctx)) {
         ERR_print_errors_fp(stderr);
         printf("err check private key, %s\n", strerror(errno));
-        exit(1);
+        exit(-1);
     }
     //创建套接字并绑定端口
     if ((sfd = socket(AF_INET, SOCK_STREAM, 0)) < 0) {
         printf("create socket failed, %s\n", strerror(errno));
-        exit(1);
+        exit(-1);
     }
     bzero(&serv_addr, sizeof(serv_addr));
     serv_addr.sin_family = AF_INET;
@@ -56,11 +54,11 @@ int main(){
     int i=bind(sfd, (struct sockaddr *)&serv_addr, sizeof(serv_addr));
     if (i < 0) {
         printf("bind port %d failed, %s\n", _PORT_, strerror(errno));
-        exit(1);
+        exit(-1);
     }
     if (listen(sfd, 10) < 0) {
     	printf("listen failed, %s\n", strerror(errno));
-        exit(1);
+        exit(-1);
     }
     printf("listening port %d\n", _PORT_);
     len = sizeof(cli_addr);
