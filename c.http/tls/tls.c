@@ -74,7 +74,7 @@ int main(){
 			printf("TLS connection established.\n");
 			//snd buf
 			char *msg="HTTP/1.1 200 OK\r\n"
-				"Content-Type: application/json\r\n\r\n"
+				"Content-Type: application/json;charset=UTF-8\r\n\r\n"
 				"{\"status\":200}";
 			SSL_write(ssl, msg, strlen(msg));
 			printf("send msg %s\n", msg);
