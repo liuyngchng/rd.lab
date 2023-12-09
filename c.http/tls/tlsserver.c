@@ -85,10 +85,12 @@ void showcert(SSL* ssl) {
         printf("no certificates.\n");
     }
 }
-void acceptssl(SSL* ssl) {
+void *acceptssl(void* arg) {
+	SSL* ssl=(SSL *)arg;
     char buf[1024]={0};
     int sd, n;
-    printf("[%s][%s-%d]SSL accept\n", gettime(), filename(__FILE__), __LINE__);
+    printf("[%s][%s-%d][t-%lu]SSL accept\n",
+    	gettime(), filename(__FILE__), __LINE__, pthread_self());
     if (SSL_accept(ssl) == FAIL) {
         ERR_print_errors_fp(stderr);
     } else {
@@ -98,14 +100,14 @@ void acceptssl(SSL* ssl) {
         n = SSL_read(ssl, buf, sizeof(buf));
         if (n > 0) {
             buf[n] = 0;
-            printf("[%s][%s-%d]rcv %d bytes msg: \n****\n%s\n****\n",
+            printf("[%s][%s-%d]rcv %d bytes msg: \n++++\n%s\n++++\n",
             	gettime(), filename(__FILE__), __LINE__, n, buf);
 
             char *msg="HTTP/1.1 200 OK\r\n"
             	"Content-Type: application/json\r\n\r\n"
             	"{\"status\":200}";
             SSL_write(ssl, msg, strlen(msg));
-            printf("[%s][%s-%d]snd msg: \n****\n%s\n****\n",
+            printf("[%s][%s-%d]snd msg: \n----\n%s\n----\n",
             	gettime(), filename(__FILE__), __LINE__, msg);
 
         } else {
@@ -117,6 +119,7 @@ void acceptssl(SSL* ssl) {
     sd = SSL_get_fd(ssl);
     SSL_free(ssl);
     close(sd);
+    return NULL;
 }
 int main(int argc, char *argv[]) {
     SSL_CTX *ctx;
@@ -145,10 +148,14 @@ int main(int argc, char *argv[]) {
         printf("[%s][%s-%d]BIO pop.\n",
         	gettime(),filename(__FILE__), __LINE__);
         SSL_set_bio(ssl, client, client);
-        printf("[%s][%s-%d]SSL set bio.\n",
-        	gettime(),filename(__FILE__), __LINE__);
+        printf("[%s][%s-%d][t-%lu]SSL set bio.\n",
+        	gettime(),filename(__FILE__), __LINE__,pthread_self());
         // Here should be created threads
-        acceptssl(ssl);
+//        acceptssl(ssl);
+        pthread_t t;
+		pthread_create(&t, NULL, &acceptssl, ssl);
+		pthread_detach(t);
+
     }
     printf("[%s][%s-%d]quit, maybe something goes wrong.\n",
     	gettime(),filename(__FILE__), __LINE__);
