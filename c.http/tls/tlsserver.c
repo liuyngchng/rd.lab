@@ -13,12 +13,31 @@
 #include <sys/types.h>
 #include <netinet/in.h>
 #include <resolv.h>
+#include <time.h>
 #include "openssl/ssl.h"
 #include "openssl/err.h"
 #define FAIL -1
 #define PORT "8899"
+#define filename(x) strrchr(x,'/')?strrchr(x,'/')+1:x
 
-//extern SSL_METHOD *TLS_server_method();
+char *gettime() {
+    struct tm *tm_t;
+    struct timeval time;
+    gettimeofday(&time,NULL);
+    tm_t = localtime(&time.tv_sec);
+    static char str_time[32]={0};
+    sprintf(str_time,
+        "%04d-%02d-%02d %02d:%02d:%02d %03ld",
+        tm_t->tm_year+1900,
+        tm_t->tm_mon+1,
+        tm_t->tm_mday,
+        tm_t->tm_hour,
+        tm_t->tm_min,
+        tm_t->tm_sec,
+        time.tv_usec/1000
+    );
+    return str_time;
+}
 
 SSL_CTX* initssl(void){
     const SSL_METHOD *method;
@@ -68,23 +87,30 @@ void showcert(SSL* ssl) {
 }
 void acceptssl(SSL* ssl) {
     char buf[1024]={0};
-    int sd, bytes;
-    printf("TLS listening\n");
+    int sd, n;
+    printf("[%s][%s-%d]SSL accept\n", gettime(), filename(__FILE__), __LINE__);
     if (SSL_accept(ssl) == FAIL) {
         ERR_print_errors_fp(stderr);
     } else {
+    	printf("[%s][%s-%d]show cert\n", gettime(), filename(__FILE__), __LINE__);
         showcert(ssl);
-        bytes = SSL_read(ssl, buf, sizeof(buf));
-        if (bytes > 0) {
-            buf[bytes] = 0;
-            printf("received msg: \n****\n%s\n****\n", buf);
+        printf("[%s][%s-%d]SSL read\n", gettime(), filename(__FILE__), __LINE__);
+        n = SSL_read(ssl, buf, sizeof(buf));
+        if (n > 0) {
+            buf[n] = 0;
+            printf("[%s][%s-%d]rcv %d bytes msg: \n****\n%s\n****\n",
+            	gettime(), filename(__FILE__), __LINE__, n, buf);
+
             char *msg="HTTP/1.1 200 OK\r\n"
-            		"Content-Type: application/json\r\n\r\n"
-            		"{\"status\":200}";
+            	"Content-Type: application/json\r\n\r\n"
+            	"{\"status\":200}";
             SSL_write(ssl, msg, strlen(msg));
-            printf("send msg: \n****\n%s\n****\n", msg);
+            printf("[%s][%s-%d]snd msg: \n****\n%s\n****\n",
+            	gettime(), filename(__FILE__), __LINE__, msg);
 
         } else {
+        	printf("[%s][%s-%d]rcv %d bytes\n",
+        	    gettime(), filename(__FILE__), __LINE__, n);
             ERR_print_errors_fp(stderr);
         }
     }
@@ -108,19 +134,23 @@ int main(int argc, char *argv[]) {
             printf("error binding server socket port %s.\n", PORT);
             break;
         }
-        printf("bind port %s, bio do accept.\n", PORT);
+        printf("[%s][%s-%d]BIO do accept.\n",
+        	gettime(),filename(__FILE__), __LINE__);
         SSL *ssl;
         client = BIO_pop(acc);
         if (!(ssl = SSL_new(ctx))) {
             printf("error creating SSL ctx.\n");
             break;
         }
-        printf("bio pop.\n");
+        printf("[%s][%s-%d]BIO pop.\n",
+        	gettime(),filename(__FILE__), __LINE__);
         SSL_set_bio(ssl, client, client);
-        printf("ssl set bio.\n");
+        printf("[%s][%s-%d]SSL set bio.\n",
+        	gettime(),filename(__FILE__), __LINE__);
         // Here should be created threads
         acceptssl(ssl);
     }
-    printf("quit, maybe something goes wrong.\n");
+    printf("[%s][%s-%d]quit, maybe something goes wrong.\n",
+    	gettime(),filename(__FILE__), __LINE__);
     SSL_CTX_free(ctx);
 }

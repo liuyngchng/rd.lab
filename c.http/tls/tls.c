@@ -9,6 +9,7 @@
 #include <pthread.h>
 #define MAXBUF 8096
 #define _PORT_ 8899
+#define _BACKLOG_ 10
 
 /**
  * 从文件句柄中接收数据
@@ -17,13 +18,13 @@ void* rcvdata(void *);
 
 SSL_CTX *ctx;
 
-int main(){
+int starttlssrv(){
 
     int sfd, cfd;
     socklen_t len;
     int sockopt = 1;
     struct sockaddr_in serv_addr, cli_addr;
-//    int n;
+    int n;
     SSL_library_init();
     ctx = SSL_CTX_new(TLSv1_2_server_method());
     if (SSL_CTX_use_certificate_file(ctx, "ca.pem" , SSL_FILETYPE_PEM) <= 0) {
@@ -56,7 +57,7 @@ int main(){
         printf("bind port %d failed, %s\n", _PORT_, strerror(errno));
         exit(-1);
     }
-    if (listen(sfd, 10) < 0) {
+    if (listen(sfd, _BACKLOG_) < 0) {
     	printf("listen failed, %s\n", strerror(errno));
         exit(-1);
     }
@@ -92,18 +93,35 @@ void *rcvdata(void* sockfd) {
 		printf("SSL accept failed, %s\n", strerror(errno));
 	} else {
 		printf("TLS connection established.\n");
-		//snd buf
-		char *msg="HTTP/1.1 200 OK\r\n"
-			"Content-Type: application/json;charset=UTF-8\r\n\r\n"
-			"{\"status\":200}";
-		SSL_write(ssl, msg, strlen(msg));
-		printf("send msg %s\n", msg);
 		//rcv buf
-		SSL_read(ssl, buf, MAXBUF);
-		printf("received msg: %s\n", buf);
+		int n;
+again:	n = SSL_read(ssl, buf, MAXBUF);
+		if (n > 0){
+			printf("received %d bytes, msg: \n++++++++\n%s\n", n, buf);
+			//snd buf
+			char resp[4096] = {0};
+			char *msg="HTTP/1.1 200 OK\r\n"
+				"Content-Type: application/json;charset=UTF-8\r\n\r\n"
+				"{\"status\":200}";
+			strcat(resp, msg);
+			//		dispatch(buf,resp);
+			SSL_write(ssl, resp, strlen(resp));
+			printf("send msg\n---------\n%s\n", msg);
+		} else {
+			printf("nothing read\n");
+//			ERR_print_errors_fp(stderr);
+			goto again;
+		}
 	}
 	SSL_shutdown(ssl);
 	SSL_free(ssl);
 	close(cfd);
 	return NULL;
+}
+
+int main(int argc, char* argv[]) {
+//	initcfg();
+    printf("TLS server starting\n");
+    starttlssrv();
+    return 0;
 }
