@@ -6,10 +6,11 @@
 #include <arpa/inet.h>
 #include <unistd.h>
 #define MAXBUF 1024
+#define _PORT_ 8899
 
 int main(){
     SSL_CTX *ctx;
-    int sockfd, newsockfd;
+    int sockfd, cfd;
     socklen_t clilen;
     struct sockaddr_in serv_addr, cli_addr;
     char buffer[MAXBUF];
@@ -18,16 +19,19 @@ int main(){
 
     SSL_library_init();
     ctx = SSL_CTX_new(TLSv1_2_server_method());
-    if (SSL_CTX_use_certificate_file(ctx, "cert.pem" , SSL_FILETYPE_PEM) <= 0) {
+    if (SSL_CTX_use_certificate_file(ctx, "ca.pem" , SSL_FILETYPE_PEM) <= 0) {
         ERR_print_errors_fp(stderr);
+        printf("err ca.pem\n");
         exit(1);
     }
-    if (SSL_CTX_use_PrivateKey_file(ctx, "key.pem", SSL_FILETYPE_PEM) <= 0 ) {
+    if (SSL_CTX_use_PrivateKey_file(ctx, "ca.pem", SSL_FILETYPE_PEM) <= 0 ) {
         ERR_print_errors_fp(stderr);
+        printf("err ca.key\n");
         exit(1);
     }
     if (!SSL_CTX_check_private_key(ctx)) {
         ERR_print_errors_fp(stderr);
+        printf("err check key\n");
         exit(1);
     }
     //创建套接字并绑定端口
@@ -38,41 +42,43 @@ int main(){
     bzero(&serv_addr, sizeof(serv_addr));
     serv_addr.sin_family = AF_INET;
     serv_addr.sin_addr.s_addr = htonl(INADDR_ANY);
-    serv_addr.sin_port = htons(8888);
-    if (bind(sockfd, (struct sockaddr *)&serv_addr, sizeof(serv_addr)) < 0) {
-        perror("绑定失败");
+    serv_addr.sin_port = htons(_PORT_);
+    int i=bind(sockfd, (struct sockar *)&serv_addr, sizeof(serv_addr));
+    if (i < 0) {
+        printf("bind failed, port %d", _PORT_);
         exit(1);
     }
     if (listen(sockfd, 10) < 0) {
-        perror("监听失败");
+    	printf("listen failed\n");
         exit(1);
     }
-    printf("等待客户端连接......\n");
+    printf("listening port %d\n", _PORT_);
     clilen = sizeof(cli_addr);
-    newsockfd = accept(sockfd, (struct sockaddr *)&cli_addr, &clilen);
-    if (newsockfd < 0) {
-        perror("连接失败");
+    cfd = accept(sockfd, (struct sockaddr *)&cli_addr, &clilen);
+    if (cfd < 0) {
+        printf("accept failed\n");
         exit(1);
     }
-    printf("连接已建立......\n");
+    printf("connected\n");
     ssl = SSL_new(ctx);
-    SSL_set_fd(ssl, newsockfd);
+    SSL_set_fd(ssl, cfd);
     if (SSL_accept(ssl) == -1) {
         ERR_print_errors_fp(stderr);
+        printf("ssl accept failed\n");
     } else {
-    	printf("TLS连接已建立......\n");
-        //发送
-        SSL_write(ssl, "你好，TLS\n", strlen("你好，TLS\n"));
-        printf("已发送数据: 你好，TLS\n");
-        //接收
+    	printf("TLS connection established.\n");
+        //snd buf
+    	char *msg="hello, TLS world";
+        SSL_write(ssl, msg, strlen(msg));
+        printf("send msg %s\n", msg);
+        //rcv buf
         bzero(buffer, MAXBUF);
         SSL_read(ssl, buffer, MAXBUF);
-        printf("已收到数据: %s\n", buffer);
+        printf("received msg: %s\n", buffer);
     }
-    //关闭连接并释放资源
     SSL_shutdown(ssl);
     SSL_free(ssl);
-    close(newsockfd);
+    close(cfd);
     close(sockfd);
     SSL_CTX_free(ctx);
     return 0;
