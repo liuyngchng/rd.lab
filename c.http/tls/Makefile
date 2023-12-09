@@ -1,6 +1,6 @@
 all:_tlsserver _tlsclient _tls
 _tls: tls.c
-	gcc -o _tls tls.c -lssl -lcrypto
+	gcc -o _tls tls.c -lssl -lcrypto -lpthread
 _tlsserver: tlsserver.c
 	gcc -o _tlsserver tlsserver.c -lssl -lcrypto
 _tlsclient:tlsclient.c
