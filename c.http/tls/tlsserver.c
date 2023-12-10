@@ -103,16 +103,19 @@ void *acceptssl(void* arg) {
             buf[n] = 0;
             printf("[%s][%s-%d]rcv %d bytes msg: \n++++\n%s\n++++\n",
             	gettime(), filename(__FILE__), __LINE__, n, buf);
+            char resp[4096] = {0};
 
             char *msg="HTTP/1.1 200 OK\r\n"
             	"Content-Type: application/json\r\n\r\n"
             	"{\"status\":200}";
-            SSL_write(ssl, msg, strlen(msg));
+            strcpy(resp, msg);
+//            dispatch(buf,resp);
+            SSL_write(ssl, resp, strlen(resp));
             printf("[%s][%s-%d]snd msg: \n----\n%s\n----\n",
             	gettime(), filename(__FILE__), __LINE__, msg);
 
         } else {
-        	printf("[%s][%s-%d]rcv %d bytes\n",
+        	printf("[%s][%s-%d]rcv %d bytes, err info\n",
         	    gettime(), filename(__FILE__), __LINE__, n);
             ERR_print_errors_fp(stderr);
         }
