@@ -14,6 +14,7 @@
 #include <netinet/in.h>
 #include <resolv.h>
 #include <time.h>
+#include <pthread.h>
 #include "openssl/ssl.h"
 #include "openssl/err.h"
 #define FAIL -1
@@ -127,25 +128,49 @@ int main(int argc, char *argv[]) {
     SSL_library_init();
     ctx = initssl();
     loadcert(ctx, "ca.crt", "ca.key");
+    ERR_load_crypto_strings();
+    printf("[%s][%s-%d]load cert finish.\n",
+		gettime(),filename(__FILE__), __LINE__);
     acc = BIO_new_accept(PORT);
     if (!acc) {
         printf("error creating server socket.\n");
+        ERR_print_errors_fp(stderr);
         exit(-1);
     }
+    printf("[%s][%s-%d]BIO new accept %s.\n",
+		gettime(),filename(__FILE__), __LINE__, PORT);
+    BIO_set_bind_mode(acc, BIO_BIND_REUSEADDR);
     while(1) {
+    	/* First call to BIO_accept() sets up accept BIO */
         if (BIO_do_accept(acc) <= 0) {
-            printf("error binding server socket port %s.\n", PORT);
-            break;
+            printf("[%s][%s-%d]error setup accept.\n",
+				gettime(),filename(__FILE__), __LINE__);
+            ERR_print_errors_fp(stderr);
+            exit(-1);
         }
-        printf("[%s][%s-%d]BIO do accept.\n",
+        printf("[%s][%s-%d]BIO setup accept finish.\n",
+			gettime(),filename(__FILE__), __LINE__);
+        /* Wait for incoming connection */
+        printf("[%s][%s-%d]waiting for connection.\n",
         	gettime(),filename(__FILE__), __LINE__);
+        if (BIO_do_accept(acc) <= 0) {
+			printf("[%s][%s-%d]error accept connection.\n",
+				gettime(),filename(__FILE__), __LINE__);
+			ERR_print_errors_fp(stderr);
+			exit(-1);
+		}
+
         SSL *ssl;
+        /* Retrieve BIO for connections */
+        printf("[%s][%s-%d]retrieve BIO for connections.\n",
+			gettime(),filename(__FILE__), __LINE__);
         client = BIO_pop(acc);
         if (!(ssl = SSL_new(ctx))) {
             printf("error creating SSL ctx.\n");
-            break;
+            ERR_print_errors_fp(stderr);
+            exit(-1);
         }
-        printf("[%s][%s-%d]BIO pop.\n",
+        printf("[%s][%s-%d]BIO pop finish.\n",
         	gettime(),filename(__FILE__), __LINE__);
         SSL_set_bio(ssl, client, client);
         printf("[%s][%s-%d][t-%lu]SSL set bio.\n",
