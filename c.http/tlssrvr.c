@@ -18,26 +18,19 @@
 #include <pthread.h>
 #include "openssl/ssl.h"
 #include "openssl/err.h"
-#define PORT "8899"
+#include "pttn.h"
+#include "util.h"
+#include "cfg.h"
+extern int _SRV_PORT_;
+//#define _SRV_PORT_ "8899"
 #define filename(x) strrchr(x,'/')?strrchr(x,'/')+1:x
 
-char *gettime() {
-    struct tm *tm_t;
-    struct timeval time;
-    gettimeofday(&time,NULL);
-    tm_t = localtime(&time.tv_sec);
-    static char str_time[32]={0};
-    sprintf(str_time,
-        "%04d-%02d-%02d %02d:%02d:%02d %03ld",
-        tm_t->tm_year+1900,
-        tm_t->tm_mon+1,
-        tm_t->tm_mday,
-        tm_t->tm_hour,
-        tm_t->tm_min,
-        tm_t->tm_sec,
-        time.tv_usec/1000
-    );
-    return str_time;
+pthread_key_t tdt;
+
+void destructor(void* data) {
+    printf("[%s][%s-%d]free thread-specific data\n", gettime(),
+		filename(__FILE__),__LINE__);
+    free(data);
 }
 
 SSL_CTX* initssl(void){
@@ -104,7 +97,6 @@ void *acceptssl(void* arg) {
             printf("[%s][%s-%d]rcv %d bytes msg: \n++++\n%s\n++++\n",
             	gettime(), filename(__FILE__), __LINE__, n, buf);
             char resp[4096] = {0};
-
             char *msg="HTTP/1.1 200 OK\r\n"
             	"Content-Type: application/json\r\n\r\n"
             	"{\"status\":200}";
@@ -125,23 +117,25 @@ void *acceptssl(void* arg) {
     close(sd);
     return NULL;
 }
-int main(int argc, char *argv[]) {
+int starttlssrv() {
     SSL_CTX *ctx;
     BIO *acc, *client;
     SSL_library_init();
     ctx = initssl();
-    loadcert(ctx, "ca.crt", "ca.key");
+    loadcert(ctx, "./tls/ca.crt", "./tls/ca.key");
     ERR_load_crypto_strings();
     printf("[%s][%s-%d]load cert finish.\n",
 		gettime(),filename(__FILE__), __LINE__);
-    acc = BIO_new_accept(PORT);
+    char port[8]={0};
+    sprintf(port, "%d", _SRV_PORT_);
+    acc = BIO_new_accept(port);
     if (!acc) {
         printf("error creating server socket.\n");
         ERR_print_errors_fp(stderr);
         exit(-1);
     }
     printf("[%s][%s-%d]BIO new accept %s.\n",
-		gettime(),filename(__FILE__), __LINE__, PORT);
+		gettime(),filename(__FILE__), __LINE__, port);
     BIO_set_bind_mode(acc, BIO_BIND_REUSEADDR);
     while(1) {
     	/* First call to BIO_accept() sets up accept BIO */
@@ -188,4 +182,12 @@ int main(int argc, char *argv[]) {
     printf("[%s][%s-%d]quit, maybe something goes wrong.\n",
     	gettime(),filename(__FILE__), __LINE__);
     SSL_CTX_free(ctx);
+}
+
+int main(int argc, char* argv[]) {
+	initcfg();
+	pthread_key_create(&tdt, destructor);
+    printf("[%s][%s-%d][t-%ld]server starting\n", gettime(), filename(__FILE__), __LINE__, pthread_self());
+    starttlssrv();
+    return 0;
 }

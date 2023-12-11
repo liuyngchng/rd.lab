@@ -54,7 +54,9 @@ int getcfg(const char *fname) {
         }
     }
     fclose (fp);
-    printf("_SRV_IP_=%s, _SRV_PORT_=%d\n", _SRV_IP_, _SRV_PORT_);
+    printf("[%s][%s-%d]_SRV_IP_=%s, _SRV_PORT_=%d\n",
+		gettime(),filename(__FILE__), __LINE__,
+		_SRV_IP_, _SRV_PORT_);
     return 0;
 }
 
