@@ -1,6 +1,8 @@
 #FROM centos 
 FROM rd/ssl:1.0.0 
 #FROM ubuntu:20.04 
+#RUN bash -c 'apt-get update'
+#RUN bash -c 'apt-get install openssl'
 RUN bash -c 'pwd'
 VOLUME /tmp
 WORKDIR /opt
