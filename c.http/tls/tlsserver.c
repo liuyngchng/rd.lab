@@ -101,7 +101,7 @@ void *acceptssl(void* arg) {
         n = SSL_read(ssl, buf, sizeof(buf));
         if (n > 0) {
             buf[n] = 0;
-            printf("[%s][%s-%d]rcv %d bytes msg: \n++++\n%s\n++++\n",
+            printf("[%s][%s-%d]rcv %d bytes msg,\n++++\n%s\n++++\n",
             	gettime(), filename(__FILE__), __LINE__, n, buf);
             char resp[4096] = {0};
 

@@ -92,16 +92,22 @@ void *acceptssl(void* arg) {
         showcert(ssl);
         printf("[%s][%s-%d]SSL read\n", gettime(), filename(__FILE__), __LINE__);
         n = SSL_read(ssl, buf, sizeof(buf));
+        unsigned long *tidp = NULL;
+		tidp = (unsigned long *)malloc(sizeof(unsigned long));
+		*tidp = gettimestamp();
+		int tmp = pthread_setspecific(tdt,tidp);
         if (n > 0) {
             buf[n] = 0;
-            printf("[%s][%s-%d]rcv %d bytes msg: \n++++\n%s\n++++\n",
-            	gettime(), filename(__FILE__), __LINE__, n, buf);
+            printf("[%s][%s-%d]rcv %d bytes msg,"
+            	"tdt %lu, pthread_getspecific %lu\n++++\n%s\n++++\n",
+            	gettime(), filename(__FILE__), __LINE__, n,
+				*tidp, *(unsigned long *)pthread_getspecific(tdt), buf);
             char resp[4096] = {0};
-            char *msg="HTTP/1.1 200 OK\r\n"
-            	"Content-Type: application/json\r\n\r\n"
-            	"{\"status\":200}";
-            strcpy(resp, msg);
-//            dispatch(buf,resp);
+//            char *msg="HTTP/1.1 200 OK\r\n"
+//            	"Content-Type: application/json\r\n\r\n"
+//            	"{\"status\":200}";
+//            strcpy(resp, msg);
+            dispatch(buf,resp);
             SSL_write(ssl, resp, strlen(resp));
             printf("[%s][%s-%d]snd msg: \n----\n%s\n----\n",
             	gettime(), filename(__FILE__), __LINE__, resp);

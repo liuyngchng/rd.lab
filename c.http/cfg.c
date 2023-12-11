@@ -6,10 +6,7 @@
 
 char _SRV_IP_[_CFG_LEN_]={0};
 int _SRV_PORT_=8083;
-char _CODEC_IP_[_CFG_LEN_]={0};
-int _CODEC_PORT_=18080;
-char _DEC_PATH_[_CFG_LEN_]={0};
-char _COD_PATH_[_CFG_LEN_]={0};
+int _TLS_=1;
 
 int getcfg(const char *fname) {
     FILE *fp;
@@ -43,14 +40,8 @@ int getcfg(const char *fname) {
         	strcpy(_SRV_IP_, value);
         } else if(strcmp(key, "SRV_PORT")==0){
         	_SRV_PORT_=atoi(value);
-        } else if(strcmp(key, "CODEC_IP")==0){
-        	strcpy(_CODEC_IP_, value);
-        } else if(strcmp(key, "CODEC_PORT")==0){
-        	_CODEC_PORT_=atoi(value);
-        } else if(strcmp(key, "DEC_PATH")==0){
-        	strcpy(_DEC_PATH_, value);
-        } else if(strcmp(key, "COD_PATH")==0){
-        	strcpy(_COD_PATH_, value);
+        } else if(strcmp(key, "TLS")==0){
+        	_TLS_=atoi(value);
         }
     }
     fclose (fp);
