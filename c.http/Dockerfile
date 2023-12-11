@@ -1,9 +1,16 @@
 #FROM centos 
-FROM ubuntu 
+FROM rd/ssl:1.0.0 
+#FROM ubuntu:20.04 
+RUN bash -c 'pwd'
 VOLUME /tmp
 WORKDIR /opt
 ADD ./_srvr  srvr
+ADD ./_tlssrvr  tlssrvr
 ADD ./cfg.ini  cfg.ini
+RUN bash -c 'mkdir tls'
+WORKDIR /opt/tls
+ADD ./tls/ca.crt  ca.crt
+ADD ./tls/ca.key  ca.key
 ENV LC_ALL "C.UTF-8"
 ENV LANG "C.UTF-8"
 #RUN bash -c 'rm /etc/localtime'
@@ -12,4 +19,4 @@ WORKDIR /opt
 RUN bash -c 'pwd'
 RUN bash -c 'ls -lh'
 EXPOSE 8083
-ENTRYPOINT ["./srvr"]
+ENTRYPOINT ["./tlssrvr"]
