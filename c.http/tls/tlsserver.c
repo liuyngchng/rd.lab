@@ -14,10 +14,10 @@
 #include <netinet/in.h>
 #include <resolv.h>
 #include <time.h>
+#include <sys/time.h>
 #include <pthread.h>
 #include "openssl/ssl.h"
 #include "openssl/err.h"
-#define FAIL -1
 #define PORT "8899"
 #define filename(x) strrchr(x,'/')?strrchr(x,'/')+1:x
 
@@ -46,8 +46,8 @@ SSL_CTX* initssl(void){
     OpenSSL_add_all_algorithms();
     SSL_load_error_strings();
     // depend on openssl version
-    method=TLSv1_2_server_method(); // for OpenSSL 1.0.2g
-//    method = TLS_server_method();
+//    method=TLSv1_2_server_method(); // for OpenSSL 1.0.2g
+    method = TLS_server_method();	// for OpenSSL 1.1.1f
     ctx = SSL_CTX_new(method);
     if ( ctx == NULL ) {
         ERR_print_errors_fp(stderr);
@@ -92,7 +92,7 @@ void *acceptssl(void* arg) {
     int sd, n;
     printf("[%s][%s-%d][t-%lu]SSL accept\n",
     	gettime(), filename(__FILE__), __LINE__, pthread_self());
-    if (SSL_accept(ssl) == FAIL) {
+    if (SSL_accept(ssl) == -1) {
         ERR_print_errors_fp(stderr);
     } else {
     	printf("[%s][%s-%d]show cert\n", gettime(), filename(__FILE__), __LINE__);

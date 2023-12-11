@@ -12,10 +12,8 @@ _*
 .idea
 .DS_Store
 # for c project
-const.h
 **/.cproject/*
 **/.cproject
 **/.project/*
 **/.project
 **/.settings/*
-**/*.ini

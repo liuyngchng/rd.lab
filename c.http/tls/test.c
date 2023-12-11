@@ -26,7 +26,8 @@ int starttlssrv(){
     struct sockaddr_in serv_addr, cli_addr;
     int n;
     SSL_library_init();
-    ctx = SSL_CTX_new(TLSv1_2_server_method());
+//    ctx = SSL_CTX_new(TLSv1_2_server_method());	// for OpenSSL 1.0.2g
+    ctx = SSL_CTX_new(TLS_server_method());			// for OpenSSL 1.1.1f
     if (SSL_CTX_use_certificate_file(ctx, "ca.pem" , SSL_FILETYPE_PEM) <= 0) {
         ERR_print_errors_fp(stderr);
         printf("err_use_certificate_file, %s\n", strerror(errno));

@@ -24,8 +24,8 @@ SSL_CTX* initssl(void){
     OpenSSL_add_all_algorithms();
     SSL_load_error_strings();
     // depend on openssl version
-    method=TLSv1_2_client_method();	// for OpenSSL 1.0.2g
-//    method = TLS_client_method();
+//    method=TLSv1_2_client_method();	// for OpenSSL 1.0.2g
+    method = TLS_client_method();	// for OpenSSL 1.1.1f
     ctx = SSL_CTX_new(method);
     if (ctx == NULL) {
         ERR_print_errors_fp(stderr);
