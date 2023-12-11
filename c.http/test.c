@@ -30,7 +30,6 @@ void test() {
     // printf("t, %s\n", t);
     //  startsrv();
     // char resp[8096]={0};
-    httpreq();
    
     // char *s = "{\"key1\":\"value1\", \"key2\":\"value2\", \"key3\":\"value3\"}";
     // char *jsonk = "key3";
