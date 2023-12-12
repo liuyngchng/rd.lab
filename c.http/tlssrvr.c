@@ -157,7 +157,7 @@ int starttlssrv() {
         printf("[%s][%s-%d]BIO setup accept finish.\n",
 			gettime(),filename(__FILE__), __LINE__);
         /* Wait for incoming connection */
-        printf("[%s][%s-%d]waiting for connection.\n",
+        printf("[%s][%s-%d]waiting for connection,srv_started.\n",
         	gettime(),filename(__FILE__), __LINE__);
         if (BIO_do_accept(acc) <= 0) {
 			printf("[%s][%s-%d]error accept connection.\n",

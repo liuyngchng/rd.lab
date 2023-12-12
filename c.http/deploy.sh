@@ -1,20 +1,31 @@
-app=tlssrvr
+app=srvr
 old_img=`docker images | grep '<none>' | awk -F ' ' '{print$3}'`
-make clean
-make
-echo "docker stop ${app}"
-docker stop ${app}
-echo "docker rmi ${app}"
-docker rmi ${app}
+cmd='make clean'
+echo -e "\e[1;32m${cmd}\e[0m"
+eval ${cmd}
+cmd='make'
+echo -e "\e[1;32m${cmd}\e[0m"
+eval ${cmd}
+cmd="docker stop ${app}"
+echo -e "\e[1;32m${cmd}\e[0m"
+eval ${cmd}
+
+cmd="docker rmi ${app}"
+echo -e "\e[1;32m${cmd}\e[0m"
+eval ${cmd}
 if [ "${old_img}" ];then
-    echo "docker rmi -f ${old_img}"
-    docker rmi -f ${old_img}
+    cmd="docker rmi -f ${old_img}"
+    echo -e "\e[1;32m${cmd}\e[0m"
+    eval ${cmd}
 else
    echo 'nothing need to be rm.'
 fi
-echo "docker build -f Dockerfile ./  -t ${app}"
-docker build -f Dockerfile ./  -t ${app}
-echo "docker run -dit --name ${app} --rm -p 8083:8083 ${app}"
-docker run -dit --name ${app} --rm -p 8083:8083 ${app}
-echo "docker logs -f ${app}"
-docker logs -f ${app}
+cmd="docker build -f Dockerfile ./  -t ${app}"
+echo -e "\e[1;32m${cmd}\e[0m"
+eval ${cmd}
+cmd="docker run -dit --name ${app} --rm -p 8083:8083 ${app}"
+echo -e "\e[1;32m${cmd}\e[0m"
+eval ${cmd}
+cmd="docker logs -f ${app}"
+echo -e "\e[1;32m${cmd}\e[0m"
+eval ${cmd}
