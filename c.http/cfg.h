@@ -11,5 +11,4 @@ void initcfg();
  */
 int getcfg(const char *f);
 
-#define __SSL1_0__		"1.0"
 #endif
