@@ -1,3 +1,14 @@
+<< !
+***************************************************
+author      : whoami
+email       : whoami@hotmail.com
+create      : 2022-06-01
+description :
+  (1) docker build image according to Dockerfile
+  (2) deploy docker container service
+  (3) tail log, terminate when success flag matched
+***************************************************
+!
 app=srvr
 
 function check_log() {
