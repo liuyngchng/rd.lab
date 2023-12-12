@@ -7,7 +7,7 @@ obj:tlssrvr.c srvr.c pttn.c util.c prsr.c http.c peer.c rgx.c md5.c cfg.c
 	${CC} -c *.c
 _tlssrvr:${CM_OBJ} tlssrvr.o
 	openssl version
-	${CC} -g ${CFLAGS} -o _tlssrvr ${CM_OBJ} tlssrvr.o -lpthread -lssl -lcrypto  -ldl
+	${CC} -g ${CFLAGS} -o _tlssrvr ${CM_OBJ} tlssrvr.o -lpthread -lssl -lcrypto
 _srvr:${CM_OBJ} srvr.o
 	${CC} -g -o _srvr ${CM_OBJ} srvr.o -lpthread
 _clnt:${CLI_OBJ}
