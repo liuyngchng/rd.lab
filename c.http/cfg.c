@@ -52,6 +52,6 @@ int getcfg(const char *fname) {
 }
 
 void initcfg() {
-	getcfg("./cfg.ini");
+	getcfg("./config/cfg.ini");
 }
 

@@ -9,7 +9,7 @@ description :
   (3) tail log, terminate when success flag matched
 ***************************************************
 !
-app=srvr
+app=tls
 
 function check_log() {
   my_app=$1
@@ -19,7 +19,7 @@ function check_log() {
     do
       echo $line
         if echo $line | grep "${trigger}" --color;then
-          echo -e "\e[1;32mapp:${my_app} deploy OK\e[0m"
+          echo -e "\e[1;32m${my_app} app deploy OK\e[0m"
           kill $$
           break
         fi

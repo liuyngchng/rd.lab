@@ -131,7 +131,7 @@ int starttlssrv() {
     BIO *acc, *client;
     SSL_library_init();
     ctx = initssl();
-    loadcert(ctx, "./tls/ca.crt", "./tls/ca.key");
+    loadcert(ctx, "./config/ca.crt", "./config/ca.key");
     ERR_load_crypto_strings();
     printf("[%s][%s-%d]load cert finish.\n",
 		gettime(),filename(__FILE__), __LINE__);
