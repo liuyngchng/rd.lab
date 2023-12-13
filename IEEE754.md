@@ -198,13 +198,8 @@ public static double parseDouble(String hex) {
 <center>Code Snippet 3-3</center>
 
 ```c
-#include <stdio.h>
-<<<<<<< HEAD
-void print_bin(char c){
-	for(int i =0; i < 8; i++){
-		printf("%d", ((c<<i)& 0b10000000) >> 7);
-=======
 #include <string.h>
+#include<stdio.h>
 /**
  * 输出一个字节的2进制字符串
  */
@@ -227,18 +222,13 @@ void hex2bin(unsigned char *bin, const char *hex) {
 	for (i = 0; i < strlen(hex); i += 2) {
 		bin[i / 2] = (char)((hexcharToInt(hex[i]) << 4) | hexcharToInt(hex[i + 1]));
         printf("bin[%d]=%02X\n", i/2, bin[i/2]);
->>>>>>> 73c6f4b3177c168492dc8465a76263d8343e3546
 	}
 }
 
 int main()
 {
 	unsigned long x = 0x40E743CD1BF68000;
-<<<<<<< HEAD
-=======
 	printf("unsigned long x=%lX\n", x);
-  // a为字符串转换出的双精度浮点数
->>>>>>> 73c6f4b3177c168492dc8465a76263d8343e3546
 	double *a = (double*)&x;
 	printf("double a=%f, sizeof(a)=%lu\n", *a, sizeof(a));
 	for (int i = sizeof(a) - 1; i >= 0; i--) {
@@ -246,14 +236,11 @@ int main()
 		unsigned char c = *(p+i);
 		printf("byte%d=", i);
 		char c = *(p+i);
-    // 可以看到二进制的表示，进一步验证 IEEE754 的计算机存储方法
+    	// 可以看到二进制的表示，进一步验证 IEEE754 的计算机存储方法
 		print_bin(c);
-<<<<<<< HEAD
-    printf("\n");
-    char* y = "40E743CD1BF68000";
-=======
+    	printf("\n");
+    	char* y = "40E743CD1BF68000";
 		printf(" 0X%02X\n", c);
->>>>>>> 73c6f4b3177c168492dc8465a76263d8343e3546
 	}
 	printf("\n");
 	unsigned char b=0xFF;
