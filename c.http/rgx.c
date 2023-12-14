@@ -1,7 +1,13 @@
+/**
+ * regexp util
+ * @author whoami@hotmail.com
+ * @since 2022-06-01
+ */
 #include <stdio.h>
 #include <sys/types.h>
 #include <regex.h>
-#include "util.h"
+
+#include "utl.h"
 
 int match(const char *s, const char *p, char *const t, const int n) {
     regex_t oregex;   // 编译后的结构体

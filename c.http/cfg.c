@@ -1,8 +1,13 @@
+/**
+ * configuration for initialization
+ * @author whoami@hotmail.com
+ * @since 2022-06-01
+ */
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include "const.h"
-#include "util.h"
+#include "utl.h"
 
 char _SRV_IP_[_CFG_LEN_]={0};
 int _SRV_PORT_=8083;

@@ -1,10 +1,15 @@
+/**
+ * a HTTP client
+ * @author whoami@hotmail.com
+ * @since 2022-06-01
+ */
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include "http.h"
-#include "util.h"
 #include "const.h"
 #include "cfg.h"
+#include "utl.h"
 
 extern char _SRV_IP_[_CFG_LEN_];
 extern int _SRV_PORT_;

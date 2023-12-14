@@ -1,3 +1,8 @@
+/**
+ * Message-Digest Algorithm 5
+ * @author whoami@hotmail.com
+ * @since 2022-06-01
+ */
 #include <memory.h>
 #include <stdio.h>
 #include "md5.h"

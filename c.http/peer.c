@@ -1,3 +1,8 @@
+/**
+ * TCP peer util
+ * @author whoami@hotmail.com
+ * @since 2022-06-01
+ */
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -6,7 +11,8 @@
 #include <arpa/inet.h>
 #include <unistd.h>
 #include <errno.h>
-#include "util.h"
+
+#include "utl.h"
 
 int writemsg(const char *ip, const int port, const char *req, char *const resp) {
     struct sockaddr_in server_sock;

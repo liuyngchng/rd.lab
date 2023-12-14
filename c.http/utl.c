@@ -1,8 +1,14 @@
+/**
+ * common util method
+ * @author whoami@hotmail.com
+ * @since 2022-06-01
+ */
 #include <string.h>
 #include <stdio.h>
 #include <time.h>
 #include <sys/time.h>
-#include "util.h"
+
+#include "utl.h"
 
 char *const getmethod(const char *s, char *const t, const int n) {
     int i = 0;

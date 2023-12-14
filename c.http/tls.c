@@ -1,4 +1,7 @@
 /**
+ * TLS util with openSSL
+ * @author whoami@hotmail.com
+ * @since 2022-06-01
  * openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout ca.pem -out ca.pem
  * openssl genrsa 2048 > ca.key
  * openssl req -new -x509 -nodes -days 1000 -key ca.key -subj /CN=tlsCA\ CA/OU=tlsdev\ group/O=richard\ SIA/DC=rd/DC=com > ca.crt
@@ -19,8 +22,8 @@
 #include "openssl/ssl.h"
 #include "openssl/err.h"
 #include "pttn.h"
-#include "util.h"
 #include "cfg.h"
+#include "utl.h"
 extern int _SRV_PORT_;
 //#define _SRV_PORT_ "8899"
 #define filename(x) strrchr(x,'/')?strrchr(x,'/')+1:x

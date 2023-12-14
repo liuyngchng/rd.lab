@@ -1,7 +1,13 @@
+/**
+ * data parser util
+ * @author whoami@hotmail.com
+ * @since 2022-06-01
+ */
 #include <stdio.h>
 #include <string.h>
 #include "prsr.h"
-#include "util.h"
+
+#include "utl.h"
 
 char *const prsdt(const char *s, char *const t, const int n) {
     return prs_up_rpt_dt(s, t, n);

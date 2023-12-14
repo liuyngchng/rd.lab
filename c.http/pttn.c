@@ -1,14 +1,19 @@
+/**
+ * HTTP URI pattern match
+ * @author whoami@hotmail.com
+ * @since 2022-06-01
+ */
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <errno.h>
 #include <pthread.h>
-#include "util.h"
 #include "prsr.h"
 #include "http.h"
 #include "rgx.h"
 #include "md5.h"
 #include "const.h"
+#include "utl.h"
 
 extern int _SRV_PORT_;
 extern char _SRV_IP_[_CFG_LEN_];

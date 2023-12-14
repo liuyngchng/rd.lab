@@ -1,3 +1,8 @@
+/**
+ * TCP socket util
+ * @author whoami@hotmail.com
+ * @since 2022-06-01
+ */
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -7,10 +12,10 @@
 #include <unistd.h>
 #include <errno.h>
 #include <pthread.h>
-#include "util.h"
 #include "pttn.h"
 #include "const.h"
 #include "cfg.h"
+#include "utl.h"
 
 extern int _SRV_PORT_;
 extern char _SRV_IP_[_CFG_LEN_];
