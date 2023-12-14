@@ -1,5 +1,5 @@
 /**
- * gcc -o _tlsclient tlsclient.c -lssl -lcrypto -Wall
+ * gcc -o _tlstest tlstest.c -lssl -lcrypto
  */
 #include <stdio.h>
 #include <errno.h>
@@ -13,8 +13,8 @@
 #include <openssl/err.h>
 #include <openssl/bio.h>
 #define FAIL -1
-#define SERVER "127.0.0.1"
-#define PORT "8899"
+#define SERVER "11.10.36.1"
+#define PORT "8080"
 
 //extern SSL_METHOD *TLS_client_method();
 
@@ -24,8 +24,13 @@ SSL_CTX* initssl(void){
     OpenSSL_add_all_algorithms();
     SSL_load_error_strings();
     // depend on openssl version
-//    method=TLSv1_2_client_method();	// for OpenSSL 1.0.2g
+#ifdef __SSL1_0__
+    method=TLSv1_2_client_method(); // for OpenSSL 1.0.2g
+    printf("TLSv1_2_client_method\n");
+#else
     method = TLS_client_method();	// for OpenSSL 1.1.1f
+    printf("TLS_client_method\n");
+#endif
     ctx = SSL_CTX_new(method);
     if (ctx == NULL) {
         ERR_print_errors_fp(stderr);
@@ -75,7 +80,10 @@ int main(int argc, char *argv[]) {
     }
     printf("connected!\n");
 	showcert(ssl);
-	char *msg = "hello, ssl world";
+//	char *msg = "hello, ssl world";
+	char *msg = "GET /health/check HTTP/1.1\r\n"
+				"Host: 127.0.0.1:8080\r\n"
+				"Content-Type: application/json\r\n\r\n";
 	SSL_write(ssl, msg, strlen(msg));
 	bytes = SSL_read(ssl, buf, sizeof(buf));
 	printf("received msg: %s\n", buf);
