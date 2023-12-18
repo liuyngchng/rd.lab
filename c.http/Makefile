@@ -4,7 +4,7 @@ CM_OBJ:= utl.o prsr.o pttn.o http.o peer.o rgx.o md5.o cfg.o
 CLI_OBJ:=clt.o peer.o http.o utl.o cfg.o
 all: obj _tls _tcp _clt _test
 obj:tls.c tcp.c pttn.c utl.c prsr.c http.c peer.c rgx.c md5.c cfg.c
-	${CC} -c *.c
+	${CC} -c -g -Wpedantic *.c
 _tls:${CM_OBJ} tls.o
 	openssl version
 	${CC} -g ${CFLAGS} -o _tls ${CM_OBJ} tls.o -lpthread -lssl -lcrypto

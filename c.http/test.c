@@ -65,14 +65,14 @@ int testgetcharhex(){
 }
 
 int testgetshorthex(){
-	short i = 0xf3E2;
+	short i =(short)0xf3E2;
 	char t[5]={0};
 	printf("short_str=%s\n", getshorthex(i, t));
 	return 0;
 }
 
 int testgetchararrayhex(){
-	char s[4]={0x3c, 0xff, 0xea, 0x28};
+	char s[4]={0x3c, (char)0xff, (char)0xea, 0x28};
 	char t[9]={0};
 	getchararrayhex(s,sizeof(s), t);
 	printf("str=%s\n", t);
