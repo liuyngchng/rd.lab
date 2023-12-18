@@ -106,5 +106,5 @@ char *const getrdm(char *const t) {
 	char r[4]={0};
 	srand(time(NULL));
 	for (int i = 0; i < sizeof(r); i++) {r[i]=rand()%255;}
-	getchararrayhex(r, sizeof(r), t);
+	return getchararrayhex(r, sizeof(r), t);
 }

@@ -17,9 +17,9 @@ int match(const char *s, const char *p, char *const t, const int n) {
         //成功编译
         if ((ret = regexec(&oregex, s, sizeof(pmatch), pmatch, 0)) == 0) {// 执行匹配不保存匹配的返回值
             printf("[%s][%s-%d]%s matches %s\n",gettime(), filename(__FILE__), __LINE__, s, p);
-            for(int i=0; i< sizeof(pmatch); i++){
-            	printf("eo=%d, so=%d\n", pmatch[i].rm_eo, pmatch[i].rm_so);
-            }
+//            for(int i=0; i< sizeof(pmatch); i++){
+//            	printf("eo=%d, so=%d\n", pmatch[i].rm_eo, pmatch[i].rm_so);
+//            }
             regfree(&oregex);
             return 0;
         }
