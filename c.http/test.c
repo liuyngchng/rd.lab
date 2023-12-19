@@ -9,6 +9,7 @@
 #include "md5.h"
 #include "const.h"
 #include "utl.h"
+#include "hiredis.h"
 
 
 
@@ -93,9 +94,36 @@ int testreadf() {
 	return 0;
 }
 
+void testredis() {
+	char *ip = "127.0.0.1";
+	int port = 6379;
+	redisContext *c = redisConnect(ip, port);
+	if (c == NULL || c->err) {
+	    if (c) {
+	        printf("Error: %s\n", c->errstr);
+	        return;
+	    } else {
+	        printf("Can't allocate redis context\n");
+	    }
+	}
+	printf("connected to %s:%d\n", ip, port);
+	redisReply *reply;
+	char *cmd = "AUTH v3Jrh&3Z7^2JDGGN75^X";
+	reply = (redisReply *)redisCommand(c, cmd);
+	printf("auth result %s\n", reply->str);
+	freeReplyObject(reply);
+
+	cmd = "get mid_201982302000001105_did";
+	reply = (redisReply *)redisCommand(c, cmd);
+	printf("cmd result %s\n", reply->str);
+	freeReplyObject(reply);
+
+	redisFree(c);
+}
+
 
 int main(int argc, char* argv[]) {
-	testreadcfg();
+	testredis();
     return 0;
 }
 
