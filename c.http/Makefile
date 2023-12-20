@@ -13,8 +13,8 @@ _tcp:${CM_OBJ} tcp.o
 	${CC} -g -o _tcp ${CM_OBJ} tcp.o -lpthread
 _clt:${CLI_OBJ}
 	${CC} -o _clt ${CLI_OBJ}
-_test:test.c peer.c http.c utl.c rgx.c md5.c cfg.c
-	${CC} -g -o _test test.c peer.c http.c utl.c rgx.c md5.c cfg.c -lhiredis -L ./hiredis -I /home/rd/workspace/hiredis
+_test:test.o peer.o http.o utl.o rgx.o md5.o cfg.o
+	${CC} -g -o _test test.o peer.o http.o utl.o rgx.o md5.o cfg.o test/*.o -I /home/rd/workspace/hiredis
 clean:
 	rm -fr _* *.o *.so
 

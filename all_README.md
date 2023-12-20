@@ -1044,3 +1044,8 @@ set startup-with-shell off
 （3）输入 csrutil disable
 
 （4）Restart
+
+# powerpoint 插入公式
+
+A Free LaTeX Add-In for PowerPoint on Windows and Mac
+http://www.jonathanleroux.org/software/iguanatex/
