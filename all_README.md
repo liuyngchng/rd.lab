@@ -1049,3 +1049,21 @@ set startup-with-shell off
 
 A Free LaTeX Add-In for PowerPoint on Windows and Mac
 http://www.jonathanleroux.org/software/iguanatex/
+
+# ubuntu latex
+
+```sh
+# 将下载2GB，很大
+sudo apt-get install texlive-full
+# 安装XeLaTeX编译引擎
+sudo apt-get install texlive-xetex
+# 安装中文支持包，使用的是xeCjK
+sudo apt-get install texlive-lang-chinese
+# LaTeX的图形化界面有TeX Live自带的TeXworks、较流行的TeXstudio与万能的VS code等，此处以TeXstudio为例
+sudo apt-get install texstudio
+```
+
+安装完成后打开TeXstudio软件，这里推荐几个常用的设置。
+（1）Options->Configure->TeXstudio->Build->Default Compiler，修改默认编辑器，此处改为XeLaTeX；
+（2）Options->Configure->TeXstudio->General->Language，修改软件界面语言，此处改为zh-CN（中文）；
+（3）选项->设置->编辑器->显示行号->所有行号，以显示LaTeX代码的行号。
