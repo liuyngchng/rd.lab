@@ -1067,3 +1067,26 @@ sudo apt-get install texstudio
 （1）Options->Configure->TeXstudio->Build->Default Compiler，修改默认编辑器，此处改为XeLaTeX；
 （2）Options->Configure->TeXstudio->General->Language，修改软件界面语言，此处改为zh-CN（中文）；
 （3）选项->设置->编辑器->显示行号->所有行号，以显示LaTeX代码的行号。
+
+# Message Authentication Code (MAC)
+
+MAC 主要解决已经加密的密文被中间人恶意篡改的问题，以MAC 的算法 HMAC为例进行说明，MAC建立在通信双方都知道密文加密的基础上的。以下进行说明
+
+```sh
+# 已经加密的密文 a=0B0000
+a=0
+echo 'cypher='$a
+# 密钥 b, 0B1111
+b=15
+echo 'secret key='$b
+# 开始计算HMAC
+# 将密文和密钥进行异或运算c=a^b
+c=$(($a^$b))
+echo 'cypher ^ secret key='$c
+# 计算c的 md5值
+echo -n 'md5sum(cypher ^ secret key)='
+echo -n $c | md5sum
+# 需要发送给对方的报文
+echo $a'_'
+```
+
