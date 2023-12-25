@@ -9,9 +9,9 @@
 void
 hmac_md5(text, text_len, key, key_len, digest)
 unsigned char*  text;                /* pointer to data stream */
-int             text_len;            /* length of data stream */
+int    			text_len;            /* length of data stream */
 unsigned char*  key;                 /* pointer to authentication key */
-int             key_len;             /* length of authentication key */
+int    			key_len;             /* length of authentication key */
 unsigned char*  digest;              /* caller digest to be filled in */
 
 {

@@ -144,7 +144,7 @@ void test_hmac_md5() {
 	int data_len = 8;
 	// 0x9294727a3638bb1c13f48ef8158bfc9d
 	unsigned char digest[17] = {0};
-	hmac_md5(data, data_len, key, key_len, digest);
+	hmac_md5((unsigned char *)data, data_len, key, key_len, digest);
 	printf("digest=");
 	for(int i= 0; i< 16; i++) {
 		printf("%02x", (int)digest[i]);
