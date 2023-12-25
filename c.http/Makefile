@@ -16,5 +16,5 @@ _clt:${CLI_OBJ}
 _test:test.o peer.o http.o utl.o rgx.o md5.o cfg.o hmac_md5.o
 	${CC} -g -o _test test.o peer.o http.o utl.o rgx.o md5.o cfg.o hmac_md5.o test/*.o -I /home/rd/workspace/hiredis
 clean:
-	rm -fr _* *.o *.so
+	rm -fr _* *.o *.so *.out
 
