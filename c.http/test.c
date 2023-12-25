@@ -54,7 +54,7 @@ void testmd5() {
 	char *s="12345678";
 	unsigned char t[128]={0};
 	md5sum(s, t);
-	printf("md5sum, %s\n", t);
+	printf("%s, md5sum, %s\n", s, t);
 	return;
 }
 
@@ -98,8 +98,8 @@ int testreadf() {
 void testredis() {
 	char *ip = "127.0.0.1";
 	int port = 6379;
-	redisContext *c = redisConnect(ip, port);
-	if (c == NULL || c->err) {
+	redisContext *c = redisConnect(ip, port); // @suppress("Type cannot be resolved")
+	if (c == NULL || c->err) { // @suppress("Field cannot be resolved")
 	    if (c) {
 	        printf("Error: %s\n", c->errstr);
 	        return;
@@ -108,7 +108,7 @@ void testredis() {
 	    }
 	}
 	printf("connected to %s:%d\n", ip, port);
-	redisReply *reply;
+	redisReply *reply; // @suppress("Type cannot be resolved")
 	char *cmd = "AUTH v3Jrh&3Z7^2JDGGN75^X";
 	reply = (redisReply *)redisCommand(c, cmd);
 	printf("auth result %s\n", reply->str);
