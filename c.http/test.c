@@ -10,6 +10,7 @@
 #include "const.h"
 #include "utl.h"
 #include "hiredis.h"
+#include "hmac_md5.h"
 
 
 
@@ -121,14 +122,49 @@ void testredis() {
 	redisFree(c);
 }
 
+/**
+ * key =         0x0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b
+  key_len =     16 bytes
+  data =        "Hi There"
+  data_len =    8  bytes
+  digest =      0x9294727a3638bb1c13f48ef8158bfc9d
+ *
+ */
+void test_hmac_md5() {
+	printf("test hmac_md5\n");
+	unsigned char key[17] = {0};
+	for(int i=0; i< 16; i++) {
+		key[i]=0x0b;
+	}
+	char hex_key[33]={0};
+	printf("key=%s\n", char2hex(key, 16, hex_key));
+	int key_len = 16;
+	char *data = "Hi There";
+	printf("data=%s\n", data);
+	int data_len = 8;
+	// 0x9294727a3638bb1c13f48ef8158bfc9d
+	unsigned char digest[17] = {0};
+	hmac_md5(data, data_len, key, key_len, digest);
+	printf("digest=");
+	for(int i= 0; i< 16; i++) {
+		printf("%02x", (int)digest[i]);
+	}
+	printf("\n");
 
-int main(int argc, char* argv[]) {
+}
+
+void test_hex_char() {
 	unsigned char a=0XF3;
 	printf("a=%02X\n", a);
 	char *b="32.888";
 	printf("b=%lf\n", strtod(b, 0));
 	char *c="fe";
 	printf("c=%02X\n", (unsigned int)strtol(c, 0, 16));
+}
+
+
+int main(int argc, char* argv[]) {
+	test_hmac_md5();
     return 0;
 }
 

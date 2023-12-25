@@ -258,3 +258,15 @@ char *const readf(const char *fname, char *const t, int n) {
     return t;
 }
 
+
+char *const char2hex(const unsigned char* s, int l, char *const t) {
+	const char hex[] = "0123456789abcdef";
+	int i=0;
+	while(l--){
+		*(t+i) = hex[*s >> 4];
+		i++;
+		*(t+i) = hex[*(s++) & 0x0f];
+		i++;
+	}
+	return t;
+}

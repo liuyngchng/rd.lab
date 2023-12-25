@@ -1,6 +1,10 @@
+/**
+ * https://www.rfc-editor.org/rfc/rfc2104.txt
+ */
 #include <stdio.h>
 #include <strings.h>
 #include "md5.h"
+#include "utl.h"
 
 void
 hmac_md5(text, text_len, key, key_len, digest)
@@ -72,6 +76,3 @@ unsigned char*  digest;              /* caller digest to be filled in */
 }
 
 
-int main() {
-	printf("test hmac\n");
-}

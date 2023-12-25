@@ -105,5 +105,7 @@ char *const getchararrayhex(const char *s, int n, char *const t);
  */
 char *const readf(const char *f, char *const t, int n);
 
+char *const char2hex(const unsigned char* intput, int input_len, char *const output);
+
 #endif
 
