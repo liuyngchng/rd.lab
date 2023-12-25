@@ -1070,7 +1070,9 @@ sudo apt-get install texstudio
 
 # Message Authentication Code (MAC)
 
-MAC 主要解决已经加密的密文被中间人恶意篡改的问题，以MAC 的算法 HMAC为例进行说明，MAC建立在通信双方都知道密文加密的基础上的。以下进行说明
+有关MAC 的详细描述，详见 RFC2104（https://www.rfc-editor.org/rfc/rfc2104.txt）。
+
+MAC 主要解决已经加密的密文被中间人恶意篡改的问题，保证已加密密文的完整性。以MAC 的算法 HMAC为例进行说明，MAC建立在通信双方都知道密文加密的基础上的。以下进行说明
 
 ```sh
 # 已经加密的密文 a=0B0000

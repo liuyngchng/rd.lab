@@ -123,7 +123,12 @@ void testredis() {
 
 
 int main(int argc, char* argv[]) {
-	testredis();
+	unsigned char a=0XF3;
+	printf("a=%02X\n", a);
+	char *b="32.888";
+	printf("b=%lf\n", strtod(b, 0));
+	char *c="fe";
+	printf("c=%02X\n", (unsigned int)strtol(c, 0, 16));
     return 0;
 }
 
