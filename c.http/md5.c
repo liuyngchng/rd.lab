@@ -160,19 +160,16 @@ void MD5Transform(unsigned int state[4], unsigned char block[64]){
 }
 
 unsigned char *const md5sum(const char* s, unsigned char *const t) {
-	int read_len;
 	int i ;
 	char temp[8]={0};
-	unsigned char digest[16];
-	unsigned char decrypt[16]={0};
+	unsigned char digest[16]={0};
 	MD5_CTX md5c;
 	MD5Init(&md5c);
-	read_len = strlen(s);
-	MD5Update(&md5c, (unsigned char *)s,read_len);
-	MD5Final(&md5c, decrypt);
+	MD5Update(&md5c, (unsigned char *)s, strlen(s));
+	MD5Final(&md5c, digest);
 	strcpy((char *)t, "");
 	for (i=0; i<16; i++) {
-		sprintf(temp,"%02x", decrypt[i]);
+		sprintf(temp, "%02x", digest[i]);
 		strcat((char *)t, temp);
 	}
 	return t;
