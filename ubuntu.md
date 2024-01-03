@@ -203,3 +203,12 @@ sudo apt-get install samba
 ```
 
 在ubuntu 的文件夹界面中点击 “connect to server”， 输入 smb://10.0.0.1/sharedFolderName
+
+# IP route 配置
+
+```
+sudo ip route add 目标网络/子网掩码 via 网关 dev 网卡名称
+```
+
+子网掩码的写法示例如下，例如128.14.32.0/20，其中前20位为网络前缀，后12位为主机号。11.0.0.0/8代表 11.*的所有网络地址。
+
