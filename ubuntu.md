@@ -189,7 +189,7 @@ tc qdisc del dev eth0 root
 sudo apt install kazam
 ```
 
-# 远程桌面访问 windwos
+# 远程桌面访问 windows
 
 ```sh
 sudo apt-get install rdesktop
