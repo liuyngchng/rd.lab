@@ -182,17 +182,18 @@ cd config
 cp server.properties server1.properties
 vi server1.properties
 broker.id=0
-log.dirs=/tmp/kafka1-logs
+# 禁止自动创建topic
+auto.create.topics.enable=false
+# 设置服务监听地址
+listeners=PLAINTEXT://11.10.36.2:9092
 port=9092
-cp server.properties server2.properties
-vi server2.properties
-broker.id=1
-log.dirs=/tmp/kafka2-logs
-port=9093
-cp server.properties server3.properties
-broker.id=2
-log.dirs=/tmp/kafka3-logs
-port=9094
+# kafka注册的zookeeper配置
+zookeeper.connect=11.10.36.2:2181
+# Timeout in ms for connecting to zookeeper
+zookeeper.connection.timeout.ms=6000
+# 数据保留的小时数，超时则自动删除
+# The minimum age of a log file to be eligible for deletion due to age
+log.retention.hours=168
 ```
 startup
 ```sh

@@ -1092,3 +1092,20 @@ echo -n $c | md5sum
 echo $a'_'
 ```
 
+# GraalVM
+
+可以将.class文件以及.jar 文件编译为可执行文件。首先下载 https://www.graalvm.org/downloads/
+
+执行
+
+```sh
+cd graalvm-jdk-17.0.10+11.1/bin
+./gu install native-image
+```
+
+编译jar 包，生成可执行文件
+
+```sh
+native-image --no-fallback -jar abc-1.0.jar  abc_elf
+```
+
