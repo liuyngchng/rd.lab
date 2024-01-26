@@ -1103,9 +1103,9 @@ cd graalvm-jdk-17.0.10+11.1/bin
 ./gu install native-image
 ```
 
-编译jar 包
+编译jar 包，生成可执行文件
 
 ```sh
-native-image -jar abc-1.0.jar
+native-image --no-fallback -jar abc-1.0.jar  abc_elf
 ```
 
