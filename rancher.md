@@ -81,7 +81,7 @@ openssl x509 -req -days 1825 -in /rancher/certs/rancher.csr -signkey /rancher/pr
 
 ##  pull
 
-docker rancher，2.x 的 images 是 `rancher/rancher`。
+docker rancher，2.x 的 images 是 `rancher/rancher`。当前版本为 2.8.1
 
 ```sh
 docker pull rancher/rancher
@@ -92,17 +92,26 @@ mkdir -p /data/rancher/audit
 ##  run
 
 ```sh
-
-docker run -d --privileged --restart=unless-stopped -p 8085:80 -p 8443:443 --name rancher-server -e CATTLE_DB_CATTLE_MYSQL_HOST=11.10.36.1 -e CATTLE_DB_CATTLE_MYSQL_PORT=3306 -e CATTLE_DB_CATTLE_MYSQL_NAME=cattle -e CATTLE_DB_CATTLE_USERNAME=foo -e CATTLE_DB_CATTLE_PASSWORD='xdww' rancher/rancher
+docker run -d --privileged --restart=unless-stopped -p 8085:80 -p 8443:443 \
+  	--name rancher-server -e CATTLE_DB_CATTLE_MYSQL_HOST=11.10.36.1 \
+	-e CATTLE_DB_CATTLE_MYSQL_PORT=3306 \
+  	-e CATTLE_DB_CATTLE_MYSQL_NAME=cattle \
+  	-e CATTLE_DB_CATTLE_USERNAME=foo \
+  	-e CATTLE_DB_CATTLE_PASSWORD='*******' \
+  	-e 'https_proxy=' -e 'HTTPS_PROXY=' -e 'HTTP_PROXY=' \
+	-e 'http_proxy='  -e 'ALL_PROXY='   -e 'all_proxy=' \
+  	-v /data/rancher/rancher:/var/lib/rancher \
+	-v /data/rancher/audit:/var/log/auditlog \
+  	rancher/rancher
 ```
 
 ## login
 
 ```sh
-https://11.10.36.1:8443
+https://localhost:8443
 ```
 
-
+获取初始化密码
 
 ```sh
 docker logs  rancher-server  2>&1 | grep "Bootstrap Password:"
@@ -110,8 +119,7 @@ docker logs  rancher-server  2>&1 | grep "Bootstrap Password:"
 
 找到密码后，
 
-在web界面中输入密码，获取新密码
+在web界面中输入初始化密码，获取新密码
 
-在 https://11.10.36.1:8443 中输入 新用户名和密码登录
+在 https://localhost:8443 中输入 新用户名(admin)和新密码登录
 
-JO2B49Cu6NR6qN36
