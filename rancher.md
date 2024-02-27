@@ -154,6 +154,20 @@ docker run xxxx
 
 此时，在页面中点击 基础架构-主机，可以看到容器列表
 
+## 负载均衡
+
+rancher 中，当启动的容器数量大于1时，系统自动提供负载均衡，负载均衡微服务默认为 `rancher/lb-service-haproxy:v0.9.14`。官方文档详见
+
+https://docs.rancher.cn/docs/rancher1/infrastructure/cattle/adding-load-balancers/_index/
+
+注意， 系统自动提供的负载均衡，对于服务的网络类型有要求，具体如下。
+
+```wiki
+Load balancers will only work for services that are using the managed network. If you select any other network choice for your target services, it will not work with the load balancer.
+```
+
+
+
 # rancher 2.x
 
 ##  pull
