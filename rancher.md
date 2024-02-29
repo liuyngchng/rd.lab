@@ -1,5 +1,19 @@
 # rancher 1.x
 
+rancher 为一个 docker 容器集群编排开源平台。
+
+## 功能介绍
+
+（1）提供对 `docker` 容器集群的图形化界面管理功能，支持对docker 容器进行部署、启停、查看日志等操作。
+
+（2）提供对服务器主机的管理功能，可查看主机的CPU、内存、网络、磁盘IO的使用情况。
+
+（3）支持按照不同的环境（例如，测试环境、生产环境）管理服务器集群，以及docker容器集群。
+
+（4）支持在图形化界面中查看容器日志。
+
+（5）支持在图形化界面中进入docker容器执行命令。
+
 ##  pull
 
 docker rancher，1.x 的 images 是 `rancher/server`。rancher1.x 所支持的docker 版本请参考 https://rancher.com/docs/rancher/v1.6/zh/hosts/#docker%E7%89%88%E6%9C%AC%E9%80%82%E7%94%A8%E5%AF%B9%E6%AF%94， 本案例中安装的docker 版本如下所示
@@ -65,7 +79,7 @@ docker rm mysql5.7
 docker run -dit \
 	--name mysql5.7 \
 	-p 3307:3306 \
-	-e MYSQL_ROOT_PASSWORD='*****' \
+	-e MYSQL_ROOT_PASSWORD='*listen****' \
 	-e LANG=C.UTF-8 \
 	-v /data/mysql57/conf:/etc/mysql \
 	-v /data/mysql57/data:/var/lib/mysql \
@@ -170,6 +184,8 @@ Load balancers will only work for services that are using the managed network. I
 
 # rancher 2.x
 
+裸金属机器安装详见文档  https://ranchermanager.docs.rancher.com/zh/v2.8/getting-started/quick-start-guides/deploy-rancher-manager/equinix-metal。
+
 ##  pull
 
 docker rancher，2.x 的 images 是 `rancher/rancher`。当前版本为 2.8.1, 2.x较为复杂，目前还没有玩明白。
@@ -185,7 +201,7 @@ mkdir -p /data/rancher/audit
 
 ```sh
 docker run -d --privileged --restart=unless-stopped -p 8085:80 -p 8443:443 \
-  	--name rancher-server -e CATTLE_DB_CATTLE_MYSQL_HOST=11.10.36.1 \
+  	--name rancher-rancher -e CATTLE_DB_CATTLE_MYSQL_HOST=11.10.36.1 \
 	-e CATTLE_DB_CATTLE_MYSQL_PORT=3306 \
   	-e CATTLE_DB_CATTLE_MYSQL_NAME=cattle \
   	-e CATTLE_DB_CATTLE_USERNAME=foo \
@@ -194,7 +210,7 @@ docker run -d --privileged --restart=unless-stopped -p 8085:80 -p 8443:443 \
 	-e 'http_proxy='  -e 'ALL_PROXY='   -e 'all_proxy=' \
   	-v /data/rancher/rancher:/var/lib/rancher \
 	-v /data/rancher/audit:/var/log/auditlog \
-  	rancher/rancher
+  	rancher/rancher:v2.8.1
 ```
 
 ## login
@@ -206,12 +222,12 @@ https://localhost:8443
 获取初始化密码
 
 ```sh
-docker logs  rancher-server  2>&1 | grep "Bootstrap Password:"
+docker logs  rancher-rancher  2>&1 | grep "Bootstrap Password:"
 ```
 
 找到密码后，
 
-在web界面中输入初始化密码，获取新密码
+在web界面中输入初始化密码，获取新密码， 或者设置新密码 
 
-在 https://localhost:8443 中输入 新用户名(admin)和新密码登录
+在 https://localhost:8443 中输入 新用户名(admin)和新密码登录 P@***d1234
 
