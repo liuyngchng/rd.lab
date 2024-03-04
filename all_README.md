@@ -1109,3 +1109,80 @@ cd graalvm-jdk-17.0.10+11.1/bin
 native-image --no-fallback -jar abc-1.0.jar  abc_elf
 ```
 
+# nginx
+
+## CentOS 安装 nginx
+
+CentOS version
+
+```sh
+cat /etc/redhat-release 
+CentOS Linux release 7.4.1708 (Core) 
+```
+
+setup
+
+```sh
+wget https://nginx.org/download/nginx-1.16.1.tar.gz
+tar -zxf nginx-1.16.1.tar.gz
+cd nginx-1.16.1
+./configure
+# ./configure: error: the HTTP rewrite module requires the PCRE library.
+# You can either disable the module by using --without-http_rewrite_module
+# option, or install the PCRE library into the system, or build the PCRE library
+# statically from the source with nginx by using --with-pcre=<path> option.
+sudo yum install pcre-devel
+./configure
+make 
+sudo make install
+cd /usr/local/nginx
+```
+
+
+
+## nginx 添加基本登录认证(auth_basic)
+
+https://blog.csdn.net/xhx94/article/details/104674713/
+
+
+安装 htpasswd 工具
+
+```sh
+yum -y install httpd-tools  # 安装 htpasswd 工具
+cd /usr/local/nginx/		# 进入 nginx 的工作目录
+```
+
+
+创建认证用户 yourusername
+
+```sh
+cd conf	
+sudo htpasswd -c pass.db yourusername  # 创建认证用户 yourusername 并输入密码
+# 会在/usr/local/nginx/conf/passwd.db 文件中生成用户名和加密的密码：yourusername:%^&(**xxx)
+cat /usr/local/nginx/conf/passwd.db
+```
+
+`nginx` 增加 `auth_basic` 和 `auth_basic_user_file`两项配置。
+
+```sh
+ sudo vi /usr/local/nginx/conf/nginx.conf
+ server {
+    listen       1999;
+    server_name  local.server.com;
+    auth_basic "User Authentication";
+    auth_basic_user_file /usr/local/nginx/pass.db;
+
+    location / {
+        root   /data/www;
+        index  index.html;
+    }
+}
+```
+
+
+重启nginx服务
+
+```sh
+/etc/init.d/nginx restart
+```
+
