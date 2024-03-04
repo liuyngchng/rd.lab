@@ -1142,7 +1142,7 @@ cd /usr/local/nginx
 
 ## nginx 添加基本登录认证(auth_basic)
 
-https://blog.csdn.net/xhx94/article/details/104674713/
+这种认证的使用场景：请求量不大，在互联网上公开的内容，但不希望非认证用户查看。
 
 
 安装 htpasswd 工具
