@@ -1171,7 +1171,7 @@ cat /usr/local/nginx/conf/passwd.db
     server_name  local.server.com;
     auth_basic "User Authentication";
     auth_basic_user_file /usr/local/nginx/pass.db;
-
+	# your path location
     location / {
         root   /data/www;
         index  index.html;
