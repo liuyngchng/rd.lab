@@ -2,7 +2,7 @@
 
 ## setup
 
-该组件用于收集(pull)监控所需的数据。在页面  https://prometheus.io/download/ 下载
+该组件用于收集(pull)监控数据。在页面  https://prometheus.io/download/ 下载
 
 ```sh
 wegt https://github.com/prometheus/prometheus/releases/download/v2.50.1/prometheus-2.50.1.linux-amd64.tar.gz
@@ -39,7 +39,7 @@ http://localhost:9090/graph
 
 # node exporter
 
-该组件用于收集监控数据。
+该组件用于采集监控主机的数据，为 prometheus 提供数据源。
 
 ```sh
 wegt https://github.com/prometheus/node_exporter/releases/download/v1.7.0/node_exporter-1.7.0.linux-amd64.tar.gz
@@ -50,7 +50,7 @@ cd node_exporter-*.*-amd64
 
 # config prometheus
 
-通过配置 `prometheus` 拉取(pull) `node exporter` 采集的数据。
+通过配置 `prometheus` 拉取(pull) `node exporter` 采集的数据到 `prometheus` 的时序数据库中。
 
 ```sh
 cd prometheus-2.50.1.linux-amd64
@@ -78,6 +78,8 @@ scrape_configs:
 启动 prometheus 后，可以在prometheus 的页面 http://xxxxx:9090/targets 中看到刚配置的数据接收节点
 
 # grafana
+
+grafana 用于对各种数据源的数据进行可视化展示。
 
 ## setup
 
@@ -107,6 +109,8 @@ http://123.456.1.1:3000
 
 ## kafka_exporter
 
+通过 kafka_exporter 采集kafka的相关监控数据。
+
 ### setup
 
 ```sh
@@ -114,7 +118,7 @@ wget https://github.com/danielqsj/kafka_exporter/releases/download/v1.2.0/kafka_
 tar -zxf kafka_exporter-1.2.0.linux-amd64.tar.gz
 cd kafka_exporter-1.2.0.linux-amd64
 nohup ./kafka_exporter --kafka.server=11.10.36.1:9092 &
-# 可见 kafka_exporter 监听的是9308 端口
+# 可见 kafka_exporter 监听的是 9308 端口
 more nohup.out
 ```
 
@@ -128,6 +132,8 @@ http://11.10.36.1:9308/metrics
 
 ## config prometheus
 
+通过在 prometheus 中配置相应的 job，将 kafka_exporter 采集到的 kafka监控数据收集至 prometheus 的时序数据库中。
+
 ```sh
 scrape_configs:
   - job_name: 'kafka'
@@ -136,4 +142,8 @@ scrape_configs:
         - 123.456.789.1:9308
 ```
 
-进入 grafana  官网 https://grafana.com/, 搜索 Kafka Exporter， 下载JSON模板，在 grafana Home->Dashboards, 配置好之后，即可监控kafka的情况。
+进入 grafana  官网 https://grafana.com/, 在dashboard 页面（https://grafana.com/grafana/dashboards/）搜索 Kafka Exporter， 下载JSON模板，在 grafana Home->Dashboards, 配置好之后，即可查看kafka监控数据。
+
+# 主机监控
+
+进入 grafana  官网 https://grafana.com/, 在dashboard 页面（https://grafana.com/grafana/dashboards/）搜索 node Exporter， 下载JSON模板，在 grafana Home->Dashboards, 配置好之后，即可查看主机监控数据。
