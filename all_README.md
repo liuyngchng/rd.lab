@@ -1186,7 +1186,7 @@ cat /usr/local/nginx/conf/passwd.db
 /etc/init.d/nginx restart
 ```
 
-# 二进制字节数组的 hex表示和对应字符串的互相转换
+# 二进制字节数组的 hex表示和对应ASCII字符串的互相转换
 
 ```sh
 echo 7B226D7367223A226869206775792C20656E6A6F79206C6966652C20686176652066756E21227D | xxd -r -p
