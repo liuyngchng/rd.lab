@@ -1,14 +1,14 @@
 # 1. Dameng DB
 ## 1.1 setup dmdb in GUI mode
 
-```
+```sh
 cd dameng_x86
 ./DMInstall.bin
 cd /home/rd/Desktop/DMDBMS
 ```
 add path for cmd
 
-```
+```sh
 sudo vim /etc/profile
 PATH=/home/rd/dmdbms/bin:$PATH
 export PATH
@@ -16,11 +16,11 @@ source /etc/profile
 ```
 start DmServiceDMSERVER, to run
 
-```
+```sh
 DmServiceDMSERVER start
 ```
 test you dm server
-```
+```sh
 disql SYSDBA/SYSDBA@localhost:5236
 create table t(a int,b int,c int);
 insert into t values(1,2,3);
@@ -31,13 +31,13 @@ quit
 
 ## 1.2 setup dmdb in terminal (no GUI)
 install db server
-```
+```sh
 cd dameng_x86
 ./DMInstall.bin -i
 cd /opt/dmdbms/bin
 ```
 init server instance
-```
+```sh
 ./dminit
 input system dir: /opt/dmdbms/data			// 数据文件存放路径
 input db name: dm5252						//实例/数据库名
@@ -56,7 +56,7 @@ input elog path:							//日志路径
 auto_overwrite mode? (0/1/2): 0				//自动覆盖模式
 ```
 注册服务
-```
+```sh
 cd /opt/dmdbms/script/root
 dm_service_installer.sh -t dmserver -i /opt/dmdbms/test/dm.ini -p TEST
 cd /opt/dmdbms
@@ -68,12 +68,12 @@ cd /opt/dmdbms/bin
 
 ```
 start port listening, 若初始化的数据库名称为test，则启动时执行
-```
+```sh
 cd /opt/dmdbms/bin
 nohup ./dmserver ../data/test/dm.ini > dm.log 2>&1 &
 ```
 delete server instance named 'test' 
-```
+```sh
 cd dmdbms/script/root
 ./dm_service_uninstaller.sh -n test
 cd /dmdbms/data
@@ -83,22 +83,22 @@ kill -9 xxxx
 ```
 docker
 
-```
+```sh
 docker run -dit -v /home/rd/work/dky:/dky --network host --name test 209c24a7f1c1
 ```
 create user
-```
+```sh
 create user DBXXFW identified by DBXXFW123456;
 grant DBA to DBXXFW;
 
 ```
 import data
-```
+```sh
 ./dimp SYSDBA/SYSDBA IGNORE=N ROWS=Y FULL=Y file="/dky/xxfw/DBXXFW.dmp"
 ```
 ## 1.3 setup unixODBC
 
-```
+```sh
 tar -zxf unixODBC-2.3.9.tar.gz
 cd unixODBC-2.3.9/
 ./configure
@@ -106,18 +106,18 @@ make
 sudo make install
 ```
 add so to lib path
-```
+```sh
 sudo vim /etc/profile
 LD_LIBRARY_PATH=/usr/local/lib:$LD_LIBRARY_PATH
 export LD_LIBRARY_PATH
 sudo ldconfig
 ```
 then, run
-```
+```sh
 odbcinst -j
 ```
 you can see
-```
+```sh
 unixODBC 2.3.9
 DRIVERS............: /usr/local/etc/odbcinst.ini
 SYSTEM DATA SOURCES: /usr/local/etc/odbc.ini
@@ -131,7 +131,7 @@ SQLSETPOSIROW Size.: 8
 
 sudo vim /user/local/etc/odbcinst.ini,
 content as following
-```
+```sh
 [DM7 ODBC DRIVER]
 Description = ODBC DRIVER FOR DM7
 Driver		= /home/rd/dmdbms/bin/libdodbc.so
@@ -139,7 +139,8 @@ Setup		= /lib/libdmOdbcSetup.so
 ```
 sudo vim /usr/local/etc/odbc.ini,
 content as following
-```
+
+```sh
 [dm]
 Description = DM ODBC DSN
 Driver		= DM7 ODBC DRIVER
@@ -151,20 +152,20 @@ TCP_PORT 	= 5236
 ## 1.5 config LD_LIBRARY_PATH
 add dm libdodbc.so to LD_LIBRARY_PATH
 sudo vim /etc/profile
-```
+```sh
 LD_LIBRARY_PATH=/home/rd/dmdbms/bin:$LD_LIBRARY_PATH
 export LD_LIBRARY_PATH
 ```
 and run
-```
+```sh
 sudo ldconfig
 ```
 now test your odbc config, run
- ```
+ ```sh
  isql -v dm
  ```
 you can see
-```
+```sh
 +---------------------------------------+
 | Connected!                            |
 |                                       |
@@ -179,27 +180,33 @@ if you see
 but the so file really exit, that is because of LD_LIBRARY_PATH config
 for dmdb lib and odbc lib is not valid or haven't be activated.
 check and fix the problem,you can run
-```
+
+```sh
 ldd theSoCalledMissedSoFile.so
 ```
 to check what's wrong.
 
-# 2. DM DB case sensitive  
-# 2.1 对于表名、字段名而言  
-在设置为大小写敏感的库中进行查询的时候，可能经常会遇到无效的表名或列名的问题，  
-下面针对这种情况进行说明。  
-# 2.2 如果使用DM管理工具图形界面建表的话建议表名和字段名都使用大写
-因为使用图形界面建表相当于使用语句建表的时候加了双引号的，会固定住大小写。  
-如果写成小写，那么就是小写了，在查询的时候也需要加双引号，否则就有可能报无效的表名或列名的问题，比较麻烦；
-# 2.3 如果使用脚本建表的话，如果表名和字段名没有加双引号的话都会被系统自动转换成大写  
+#  DM DB case sensitive  
+##  表名、字段名
+
+（1）在设置为大小写敏感的库中进行查询的时候，可能经常会遇到无效的表名或列名的问题，  下面针对这种情况进行说明。  
+
+（2）如果使用DM管理工具图形界面建表的话建议表名和字段名都使用大写，因为使用图形界面建表相当于使用语句建表的时候加了双引号的，会固定住大小写。 
+
+（3）如果写成小写，那么就是小写了，在查询的时候也需要加双引号，否则就有可能报无效的表名或列名的问题，比较麻烦；
+
+（4）如果使用脚本建表的话，如果表名和字段名没有加双引号的话都会被系统自动转换成大写  
+
 如：create table test(a int)；系统会自动把表名test，字段名a转换成大写，处理方式与Oracle数据库一致  
 所以针对大小写敏感的库，在使用建表脚本或者通过查询脚本进行查询的时候建议统一不要写双引号，  
 让系统统一自动都转化为大写；
-## 2.4 以上两点主要针对大小写敏感的库而言，大小写不敏感的库则不存在上述问题。  
-基于以上两点，在初始化数据库的过程中就可以对字符串比较大小写敏感这个参数做出合理的选择了。
-## 2.5 SQL
 
-```
+（5） 以上几点主要针对大小写敏感的库而言，大小写不敏感的库则不存在上述问题。  
+
+（6）基于以上几点，在初始化数据库的过程中就可以对字符串比较大小写敏感这个参数做出合理的选择了。
+##  SQL
+
+```sql
 select * from v$version;
 
 -- 查看所有表空间（schema）---
@@ -259,14 +266,15 @@ select distinct object_name  from all_objects where object_type = 'SCH';
 
 -- 切换schema --
 set schema schema_name;		//前提条件是schema_name 的owner 属于当前用户，否则无法切换；
- 
-```
-
 -- 查看schema编码 --  
 
-0 表示 GB18030，1 表示 UTF-8，2 表示 EUC-KR  
+-- 0 表示 GB18030，1 表示 UTF-8，2 表示 EUC-KR  --
 
 select SF_GET_UNICODE_FLAG();  
 select  UNICODE ();  
+ 
+```
+
+
 
 字符集在安装初始化库的时候指定，设定后不可更改  
