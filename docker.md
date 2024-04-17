@@ -234,7 +234,6 @@ docker进程使用 Unix Socket 而不是 TCP 端口。而默认情况下，Unix 
 
 ```sh
 sudo groupadd docker          #添加docker用户组
-sudo gpasswd -a $XXX docker   #检测当前用户是否已经在docker用户组中，其中XXX为用户名，例如我的，rd
 sudo gpasswd -a $USER docker  #将当前用户添加至docker用户组
 newgrp docker                 #更新docker用户组
 sudo chmod a+rw /var/run/docker.sock

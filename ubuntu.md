@@ -1,8 +1,6 @@
-# Ubuntu 22.04 LTS
+# Ubuntu 22.04 LTS 安装中文输入法
 
-## 安装中文输入法
-
-### 检查系统中文环境
+## 检查系统中文环境
 
 在 Ubuntu 设置中打开「区域与语言」—— 「管理已安装的语言」，然后会自动检查已安装语言是否完整。若不完整，根据提示安装即可
 
@@ -21,7 +19,7 @@ fcitx5-frontend-gtk3 fcitx5-frontend-gtk2 \
 fcitx5-frontend-qt5 kde-config-fcitx5
 ```
 
-### 安装中文词库
+## 安装中文词库
 
 在 GitHub 打开[维基百科中文拼音词库](https://github.com/felixonmars/fcitx5-pinyin-zhwiki)的 [Releases](https://github.com/felixonmars/fcitx5-pinyin-zhwiki/releases) 界面，下载最新版的 `.dict` 文件。按照 README 的指导，将其复制到 `~/.local/share/fcitx5/pinyin/dictionaries/` 文件夹下即可。
 
@@ -34,7 +32,7 @@ mkdir ~/.local/share/fcitx5/pinyin/dictionaries/
 mv zhwiki-20220416.dict ~/.local/share/fcitx5/pinyin/dictionaries/
 ```
 
-### 设置为默认输入法
+## 设置为默认输入法
 
 使用 im-config 工具可以配置首选输入法，在任意命令行输入：
 
@@ -44,7 +42,7 @@ im-config
 
 根据弹出窗口的提示，将首选输入法设置为 Fcitx 5 即可。
 
-### 环境变量
+## 环境变量
 
 需要为桌面会话设置环境变量，即将以下配置项写入某一配置文件中：
 
@@ -60,7 +58,7 @@ export QT_IM_MODULE=fcitx
 
 将配置写入到/etc/profile文件末尾
 
-### 开机自启动
+## 开机自启动
 
 安装 Fcitx 5 后并没有自动添加到开机自启动中，每次开机后需要手动在应用程序中找到并启动，非常繁琐。
 
@@ -68,7 +66,7 @@ export QT_IM_MODULE=fcitx
 
 将Fcitx5添加到开机启动程序列表中
 
-### Fcitx 配置
+## Fcitx 配置
 
 Fcitx 5 提供了一个基于 Qt 的强大易用的 GUI 配置工具，可以对输入法功能进行配置。有多种启动该配置工具的方法：
 
@@ -78,7 +76,7 @@ Fcitx 5 提供了一个基于 Qt 的强大易用的 GUI 配置工具，可以对
 
 根据个人偏好进行设置即可。需要注意的是「输入法」标签页下，应将「键盘 - 英语」放在首位，拼音（或其他中文输入法）放在后面的位置。
 
-### 已知问题
+## 已知问题
 
 （1）修复 JetBrains 系 IDE 显示问题。在 JetBrains 系 IDE（如 PyCharm）中，输入法选择框的位置始终固定于屏幕左下角，而非随输入光标移动，在中文输入很不方便。该问题为 IDE 的 [JetBrainsRuntime](https://github.com/JetBrains/JetBrainsRuntime) 缺陷所致。可尝试使用 [RikudouPatrickstar/JetBrainsRuntime-for-Linux-x64](https://github.com/RikudouPatrickstar/JetBrainsRuntime-for-Linux-x64) 这个仓库[发布](https://github.com/RikudouPatrickstar/JetBrainsRuntime-for-Linux-x64/releases)的 JBR 文件解决。
 

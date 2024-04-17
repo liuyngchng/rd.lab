@@ -1,4 +1,39 @@
-# ubuntu18 修改mysql数据库密码
+#  修改mysql8密码
+
+在对ubuntu 22.04 上通过sudo apt-get install 安装的 MySQL 8.0.36 测试中通过
+
+```sh
+sudo vi /etc/mysql/my.cnf
+# 添加如下内容
+[mysqld]
+skip-grant-tables=1
+# 保存后重启 mysql服务
+sudo service mysql restart
+# 连接服务
+mysql
+# 修改密码
+use mysql;
+ALTER USER 'root'@'localhost' IDENTIFIED BY 'P@$$W0rd';
+FLUSH PRIVILEGES;
+exit;
+# 重新修改配置文件
+sudo vi /etc/mysql/my.cnf
+# 删除如下内容
+[mysqld]
+skip-grant-tables=1
+# 保存后重启 mysql服务
+sudo service mysql restart
+# 连接mysql server
+mysql -h localhost -u root -p
+# 输入新密码登录,over
+```
+
+
+
+# 修改mysql5.7密码
+
+OS = ubuntu18
+
 ```sh
 sudo vim /etc/mysql/my.cnf
 ```
@@ -159,7 +194,9 @@ sed -i "s/utf8mb4/utf8/g" ./source.sql
 mysql -h11.11.54.33 -P13307 -uroot -p ry <./source.sql
 ```
 
-# 修改MySQL8 密码
+# 修改MySQL8 临时密码
+
+此方法在从dev.mysql.org上自行下载安装的 mysql 8.0.28 deb 中实验通过 
 
 查看临时密码
 
