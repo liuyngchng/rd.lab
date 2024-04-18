@@ -349,7 +349,7 @@ RUN bash -c 'ln -s /usr/share/zoneinfo/Asia/Shanghai /etc/localtime'
 RUN bash -c 'touch /app.jar'
 # 这个告诉查看Dockerfile的读者，此应用需要暴露 9000 端口
 EXPOSE 9000
-# 设置 entrypoint
+# 设置 entrypoint 也可是使用 CMD
 ENTRYPOINT ["java","-Djava.security.egd=file:/dev/./urandom","-jar","app.jar"]
 ```
 
@@ -392,7 +392,7 @@ scp docker-20.10.0.tgz root@192.168.0.5:/data/
 #进入data目录,解压docker包
 cd /data
 tar -zxvf docker-20.10.0.tgz
-
+graph
 #将解压出来的docker文件内容移动到 /usr/bin/ 目录下
 cp docker/* /usr/local/bin/
 
@@ -412,6 +412,8 @@ docker info
 su
 vi /etc/systemd/system/docker.service
 # vi /usr/lib/systemd/system/docker.service
+# ubuntu 22.04 LTS 通过 sudo-apt install docker.io 安装的docker
+vi /lib/systemd/system/docker.service
 ```
 
 #按i插入模式,复制如下内容:

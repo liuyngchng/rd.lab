@@ -310,3 +310,32 @@ sudo ip route change 192.168.1.0/24 metric 100
 
 
 
+# virtualBox 中 ubuntu 无法打开 terminal
+
+## 环境
+
+ host：ubuntu 22.04 LTS
+
+virtualbox：7.0
+
+v-host: ubuntu 22.04 LTS
+
+##  ToDo
+
+```sh
+# 进入命令行模式（需要返回桌面时CTRL + ALT + F1）
+#通过虚拟键盘发送 CTRL + ALT + F3 
+cd /etc/default
+sudo nano locale
+# 把文件中的 “en_US” 改成 “en_US.UTF-8”
+# 保存退出
+sudo locale-gen --purge
+reboot # 重启虚拟机
+# 虚拟机- xxx is not in the sudoers
+su root
+gedit /etc/sudoers
+# 找到 “root ALL=(ALL) ALL”，在下面插入“vboxuser ALL=(ALL) ALL”
+exit
+# 再次执行 sudo 命令，即可成功
+```
+
