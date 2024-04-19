@@ -64,10 +64,12 @@ docker ps
 
 ##  导出及导入 image
 ###  导出tar
+
 | CMD | NOTE |
 | --- |  --- |
 | docker images | 获取 REPOSITORY |
 | docker save richard/test -o ./test.tar | 导出为 tar 包 |
+| `docker save myimage:1.0 |  gzip > myimage_1.0.tar.gz` | 导出为 tar.gz包 |
 | docker load -i ./test.tar              | 导入 tar 包 |
 
 ###  导出img文件
