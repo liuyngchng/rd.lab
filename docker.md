@@ -233,9 +233,9 @@ docker进程使用 Unix Socket 而不是 TCP 端口。而默认情况下，Unix 
 ## 解决方法  
 
 ```sh
-sudo groupadd docker          #添加docker用户组
-sudo gpasswd -a $USER docker  #将当前用户添加至docker用户组
-newgrp docker                 #更新docker用户组
+sudo groupadd docker			#添加docker用户组
+sudo gpasswd -a $USER docker	#将当前用户添加至docker用户组
+newgrp docker					#更新docker用户组
 sudo chmod a+rw /var/run/docker.sock
 ```
 
@@ -857,5 +857,31 @@ sudo systemctl restart docker
 
 ```sh
 curl --cacert ../srv/ca.pem --cert ./cert.pem --key ./key.pem  'https://my.docker.test:4243/version'
+```
+
+#  docker registry(docker 镜像仓库)	
+
+通过以下脚本，可搭建docker私有镜像仓库
+
+```sh
+# pull image
+docker pull registry
+# mkdir
+sudo mkdir -p /data/docker/reg
+#chown to current user logged in
+sudo chown -R ${USER}:${USER} /data
+# run container map host 5001 to container 5000
+docker stop registry
+docker rm registry
+docker run -d \
+    --restart=always \
+    --name registry	\
+    -p 5001:5000 \
+    -v /data/docker/reg:/var/lib/registry \
+    registry
+# wait for service init
+sleep 5
+curl -XGET --noproxy '*' http://localhost:5001/v2/_catalog
+# 可见 {"repositories":[]}
 ```
 
