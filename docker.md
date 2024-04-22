@@ -887,3 +887,55 @@ curl -XGET --noproxy '*' http://localhost:5001/v2/_catalog
 # 可见 {"repositories":[]}
 ```
 
+# base image
+
+```sh
+vi hello.c
+```
+
+内容如下
+
+```c
+#include<stdio.h>
+int main()
+{
+    printf("hello docker\n");
+}
+```
+
+执行 
+
+```sh
+gcc -static hello.c
+```
+
+生成  a.out 可执行文件
+
+```sh
+vi Dockerfile
+```
+
+内容如下
+
+```sh
+from scratch
+add  a.out  /
+CMD ["/a.out"]
+```
+
+执行
+
+```sh
+docker build -t mydocker .
+docker images
+#可见如下的镜像
+REPOSITORY                         TAG       IMAGE ID       CREATED          SIZE
+mydocker                           latest    8f88a6999f73   4 minutes ago    900kB
+```
+
+运行
+
+```sh
+docker run mydocker
+```
+
