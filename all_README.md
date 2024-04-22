@@ -1198,3 +1198,33 @@ echo -n {"msg":"hi guy, enjoy life, have fun!"} | hexdump -C
 00000023
 ```
 
+# java 静态编译
+
+将生成的jar包编译成native可执行的二进制代码，不再需要jvm来启动应用。
+
+（1）下载并安装GraalVM。可以从GraalVM官方网站（https://www.graalvm.org/downloads/）下载GraalVM并安装。
+
+（2）安装GraalVM native-image。 
+
+```sh
+cd ./graalvm-jdk-17.0.10+11.1/bin
+./gu install native-image
+```
+
+（3）打包java应用。 `mvn package`， 生成 aaaa-1.0.jar
+
+（4）将 aaaa-1.0.jar 转换为 native code
+
+```
+**/graalvm-jdk-17.0.10+11.1/bin/native-image -jar target/aaa-1.0.jar
+```
+
+出现错误 
+
+```sh
+Error: Main entry point class './target/aaa-1.0.jar' neither found on 
+classpath: '/a/b/c' nor
+modulepath: '/d/e/f/graalvm-jdk-17.0.10+11.1/lib/svm/graal-microservices.jar:/d/e/f/graalvm-jdk-17.0.10+11.1/lib/svm/library-support.jar'.
+Error: Use -H:+ReportExceptionStackTraces to print stacktrace of underlying exception
+```
+
