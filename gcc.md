@@ -1,19 +1,33 @@
-<h1>`GCC` Introduction</h1>
+# basic cmd
 
-# 1. cmd
+##  编译
+
 ```sh
 gcc main.c -o main      # comile and link source file in one step, output a executable bin file
 gcc -c main.c           # produce object file from source, default file name is main.o, you can use -o get a customized name
 gcc main.o              # link a object file to produce a execute bin file
 ```
-# 2. `GCC` pipeline
+##  查看glibc版本
+
+```sh
+ldd --version
+ldd (GNU libc) 2.17  # libc 2.17版
+ls -al /lib64/libc.so.6	
+/lib64/libc.so.6 -> libc-2.17.so # libc 2.17版
+
+```
+
+
+
+#  `GCC` pipeline
+
 gcc process step
 - precompile source file -> precompiled file
 - precompiled file -> assembly file
 - assembly file -> object file
 - link object file -> executable file
 
-# 3. `GCC` options
+#  `GCC` options
 
 GCC 选项区分大小写
 
@@ -28,7 +42,7 @@ GCC 选项区分大小写
 | -save-temps | GCC 会正常地编译和链接，但是会把预处理器输出、汇编语言和对象文件全部存储在当前目录下 (.i 预处理文件, .s 汇编源文件,.o 目标文件)|
 | -static | 静态编译源文件，生成静态链接的可执行文件 |
 
-# 4. `GCC` 预处理选项
+#  `GCC` 预处理选项
 
 - `-E -C`   
   头文件较大或源文件包括了多个头文件时，预处理器输出可能会庞杂难读。使用-C选项可删除源文件和头文件中的注释   
@@ -49,7 +63,7 @@ GCC 选项区分大小写
 所有在`-I-`右边加上`-I`选项的目录，将对所有`#include`命令中的头文件名进行搜索，无论文件名是在引号还是尖括号中。  
 而且，如果命令行中出现了`-I-`，那么包括源文件本身的目录不再自动作为搜索头文件的目录
 
-# 5. Include Header  
+#  Include Header  
 
 对于include目录而言，通常的搜索顺序是：  
 (1) 包含指定源文件的目录（对于在 #include 命令中以引号包括的文件名）。  
@@ -59,7 +73,7 @@ GCC 选项区分大小写
 (5) 采用-isystem选项指定的目录，依照出现在命令行中的顺序进行搜索。  
 (6) 采用环境变量 C_INCLUDE_PATH(gcc)\CPLUS_INCLUDE_PATH(g++) 指定的目录。  
 (7) 系统默认的 include 目录  
-# 6. `GCC` -S
+#  `GCC` -S
 - 编译器的核心任务是把C程序翻译成机器的汇编语言（`assembly language`）。汇编语言是人类可以阅读的编程语言，也是相当接近实际机器码的语言。由此导致每种 `CPU` 架构都有不同的汇编语言。  
 - 实际上，`GCC` 是一个适合多种 `CPU` 架构的编译器，不会把C程序语句直接翻译成目标机器的汇编语言，而是在输入语言和输出汇编语言之间，利用一个中间语言，称为 `RegisterTransfer Language`（简称 `RTL`，寄存器传输语言）。借助于这个抽象层，在任何背景下，编译器可以选择最经济的方式对给定的操作编码。
 - 在交互文件中针对目标机器的抽象描述，为编译器重新定向到新架构提供了一个结构化的方式。但是，从 `GCC` 用户角度来看，我们可以忽略这个中间步骤。
@@ -74,15 +88,15 @@ $ gcc -S circle.c
 $ gcc -S -fverbose-asm circle.c
 ```
 
-# 7. `GCC` -l
-## 7.1 链接器  
+#  `GCC` -l
+##  链接器  
 - 链接器把多个二进制的目标文件（`object file`）链接成一个单独的可执行文件。在链接过程中，它必须把符号（变量名、函数名等一些列标识符）用对应的数据的内存地址（变量地址、函数地址等）替代，以完成程序中多个模块的外部引用。
 - 链接器也必须将程序中所用到的所有`C`标准库函数加入其中。对于链接器而言，链接库不过是一个具有许多目标文件的集合，它们在一个文件中以方便处理。
 - 当把程序链接到一个链接库时，只会链接程序所用到的函数的目标文件。在已编译的目标文件之外，如果创建自己的链接库，可以使用 ar 命令。
 - 标准库的大部分函数通常放在文件 libc.a 中（文件名后缀.a代表“archive”），或者放在用于共享的动态链接文件 libc.so 中（文件名后缀.so代表“share object”，译为“共享对象”）。这些链接库一般位于 /lib/ 或 /usr/lib/，或者位于 GCC 默认搜索的其他目录。
 - 当使用 `GCC` 编译和链接程序时，`GCC` 默认会链接 libc.a 或者 libc.so，但是对于其他的库（例如非标准库、第三方库等），就需要手动添加。
 
-## 7.2 demo
+##  demo
 `GCC` 的`-l`选项可以让我们手动添加链接库。下面我们编写一个数学程序 main.c，并使用到了 cos() 函数，它位于 <math.h> 头文件
 ```c
 #include <stdio.h>      /* printf */
@@ -104,7 +118,7 @@ $ gcc main.c -o main.out -lm
 ```
 数学库的文件名是 `libm.a`。前缀`lib`和后缀`.a`是标准的，`m`是基本名称，`GCC` 会在`-l`选项后紧跟着的基本名称的基础上自动添加这些前缀、后缀，本例中，基本名称为 `m`。
 在支持动态链接的系统上，GCC 自动使用在 Darwin 上的共享链接库 libm.so 或 libm.dylib。
-## 7.3 自定义的链接库  
+##  自定义的链接库  
 `GCC` 会自动在标准库目录中搜索文件，例如 `/usr/lib`，如果想链接其他目录中的库，就得特别指明。有三种方式可以链接在 GCC 搜索路径以外的链接库  
 - 把链接库作为一般的目标文件  
 GCC 指定该链接库的完整路径与文件名。
@@ -128,8 +142,8 @@ gcc -c b.c
 gcc -c c.c
 ar -fr abc.a a.o b.o c.o
 ```
-# 8. Shared Object File  
-## 8.1 Output `.so` File
+#  Shared Object File  
+##  Output `.so` File
 Linux 下动态链接库（`shared object file`，共享对象文件）的文件后缀为`.so`，  
 它是一种特殊的目标文件（`object file`），可以在程序运行时被加载（链接）进来。  
 使用动态链接库的优点是：程序的可执行文件更小，便于程序的模块化以及更新，  
@@ -150,7 +164,7 @@ gcc -shared func.o -o libfunc.so
 ```
 `-fPIC` 选项作用于编译阶段，在生成目标文件时就得使用该选项，以生成位置无关的代码  
 
-## 8.2 Compile with `.so` file  
+##  Compile with `.so` file  
 
 如果希望将一个动态链接库链接到可执行文件，那么需要在命令行中列出动态链接库的名称，具体方式和普通的源文件、目标文件一样  
 
@@ -170,7 +184,7 @@ gcc main.c -lfunc -o app.out
 
 编译器会自动在 `LIBRARY_PATH`中查找动态链接文件libfunc.so  
 
-## 8.3 Run with `.so` file  
+##  Run with `.so` file  
 
 编译完之后，必须要确保程序在运行时可以找到这个动态链接库，可以采用以下几种方法中的一种   
 * 你可以将链接库放到标准目录下，例如 /usr/lib   
@@ -193,13 +207,13 @@ export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/lib/
    `ldconfig` creates the necessary links and cache to the most recent  shared libraries found in the directories specified on the command   line, in the file `/etc/ld.so.conf`, and in the trusted directories   
   (/lib and /usr/lib).  
 
-## 8.4 check shared objects (shared libraries) dependency
+## check shared objects (shared libraries) dependency
 
 ```sh
 ldd execuable file
 ```
 
-# 9. cross-compilation(交叉编译)
+#  cross-compilation(交叉编译)
 交叉编译，相对于原生编译(native compilation)来说，是指在某个主机平台上（比如x86上）用交叉编译器编译出可在其他平台上（比如ARM上）运行的代码的过程。
 To cross-compile is to build on one platform a binary that will run on another platform. When speaking of cross-compilation, it is important to distinguish between the build platform on which the compilation is performed, and the host platform on which the resulting executable is expected to run. The following configure options are used to specify each of them
 
@@ -210,7 +224,7 @@ The system on which the package is built.
 --host=host
 The system where built programs and libraries will run.
 ```
-## 9.1 命名规则
+##  命名规则
 交叉编译工具链的命名规则为：arch [-vendor] [-os] [-(gnu)eabi]
 ```sh
 arch - 体系架构，如ARM，MIPS
@@ -224,7 +238,7 @@ arm-none-eabi：这个是没有操作系统的，自然不可能支持那些跟�
        入式系统的C库。
 arm-none-linux-eabi：用于Linux的，使用Glibc
 ```
-## 9.2 命名实例
+##  命名实例
 ```sh
 arm-none-eabi-gcc
 ```
@@ -260,7 +274,7 @@ arm-none-uclinuxeabi-gcc
 ```
 arm-none-uclinuxeabi 用于uCLinux，使用Glibc。  
 arm-none-symbianelf 用于symbian，没用过，不知道C库是什么   
-## 9.3 缩写说明
+##  缩写说明
 ```
 ABI
 ```
@@ -272,7 +286,7 @@ EABI
 嵌入式ABI。嵌入式应用二进制接口指定了文件格式、数据类型、寄存器使用、堆积组织优化和在一个嵌入式软件中的参数的标准约定。  
 开发者使用自己的汇编语言也可以使用 EABI 作为与兼容的编译器生成的汇编语言的接口。  
 两者主要区别是，ABI是计算机上的，EABI是嵌入式平台上（如ARM，MIPS等）。  
-## 9.4 其他
+##  其他
 `arm-linux-gnueabi-gcc` 和 `arm-linux-gnueabihf-gcc`  
 两个交叉编译器分别适用于`armel`和 `armhf` 两个不同的架构，`armel` 和 `armhf` 这两种架构在对待浮点运算采取了不同的策略  
 （有 fpu 的 arm 才能支持这两种浮点运算策略）。  
@@ -285,13 +299,13 @@ EABI
 `hard`： `armhf`架构（对应的编译器 `arm-linux-gnueabihf-gcc` ）采用的默认值，  
 用`fpu`计算，传参数也用`fpu`中的浮点寄存器传，省去了转换，性能最好，但是中断负荷高。
 
-#  10. 创建静态库 (静态编译）  
+#   创建静态库 (静态编译）  
 
 使用ar命令（archive）可以很容易地创建属于自己的静态库。
 ar命令一般对.o的目标文件进行操作，目标文件可以由gcc -c命令得到。  
 下面就以一个具体的例子来说明一下。
 
-## 10.1 源程序文件  
+##  源程序文件  
 
 首先，我们有如下两个源程序文件：  
 
@@ -320,7 +334,7 @@ int main()
 pg test.h
 int print();
 ```
-## 10.2 生成目标文件    
+##  生成目标文件    
 
 先通过gcc -c命令将其编译成.o文件:
 
@@ -340,7 +354,7 @@ main.c  main.o  print.c  print.o  test.h test
 ./test
 Hello world
 ```
-## 10.3 创建归档文件  
+##  创建归档文件  
 
 但是这里由于我们是要创建静态库，所以可以使用ar命令来创建一个归档文件:
 
@@ -358,7 +372,7 @@ libtest.a  main.c  main.o  print.c  print.o  test  test.h
 ```sh
 ranlib libtest.a
 ```
-## 10.4 链接静态库文件  
+##  链接静态库文件  
 ```sh
 gcc -o testa main.o -L./ -ltest
 ls
@@ -376,5 +390,11 @@ ls
 libtest.a  main.c  main.o  print.c  print.o  test  testa  testb  test.h
  ./testb
 Hello world
+```
+
+## 查看静态库包含的内容
+
+```sh
+ar t libtest.a
 ```
 

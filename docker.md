@@ -887,9 +887,10 @@ curl -XGET --noproxy '*' http://localhost:5001/v2/_catalog
 # 可见 {"repositories":[]}
 ```
 
-# base image
+# build base image
 
 ```sh
+mkdir test
 vi hello.c
 ```
 
@@ -906,12 +907,14 @@ int main()
 执行 
 
 ```sh
+cd test
 gcc -static hello.c
 ```
 
 生成  a.out 可执行文件
 
 ```sh
+cd test
 vi Dockerfile
 ```
 
@@ -919,14 +922,15 @@ vi Dockerfile
 
 ```sh
 from scratch
-add  a.out  /
+copy  a.out  /
 CMD ["/a.out"]
 ```
 
 执行
 
 ```sh
-docker build -t mydocker .
+cd test
+docker build -f ./Dockerfile ./ -t mydocker
 docker images
 #可见如下的镜像
 REPOSITORY                         TAG       IMAGE ID       CREATED          SIZE
@@ -936,6 +940,6 @@ mydocker                           latest    8f88a6999f73   4 minutes ago    900
 运行
 
 ```sh
-docker run mydocker
+docker run --rm mydocker
 ```
 

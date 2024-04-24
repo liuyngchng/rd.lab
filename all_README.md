@@ -1200,7 +1200,11 @@ echo -n {"msg":"hi guy, enjoy life, have fun!"} | hexdump -C
 
 # java 静态编译
 
-将生成的jar包编译成native可执行的二进制代码，不再需要jvm来启动应用。
+  将生成的jar包编译成native可执行的二进制代码，不再需要jvm来启动应用，但可能会依赖 libc库。
+
+文档详见  https://www.graalvm.org/latest/reference-manual/native-image/basics/。
+
+##  GraalVM bin
 
 （1）下载并安装GraalVM。可以从GraalVM官方网站（https://www.graalvm.org/downloads/）下载GraalVM并安装。
 
@@ -1211,20 +1215,68 @@ cd ./graalvm-jdk-17.0.10+11.1/bin
 ./gu install native-image
 ```
 
-（3）打包java应用。 `mvn package`， 生成 aaaa-1.0.jar
+（3）打包java应用。 `mvn package`， 生成 app-1.0.jar
 
-（4）将 aaaa-1.0.jar 转换为 native code
-
-```
-**/graalvm-jdk-17.0.10+11.1/bin/native-image -jar target/aaa-1.0.jar
-```
-
-出现错误 
+（4）将 app-1.0.jar 转换为 native code
 
 ```sh
-Error: Main entry point class './target/aaa-1.0.jar' neither found on 
-classpath: '/a/b/c' nor
-modulepath: '/d/e/f/graalvm-jdk-17.0.10+11.1/lib/svm/graal-microservices.jar:/d/e/f/graalvm-jdk-17.0.10+11.1/lib/svm/library-support.jar'.
-Error: Use -H:+ReportExceptionStackTraces to print stacktrace of underlying exception
+**/graalvm-jdk-17.0.10+11.1/bin/native-image -march=compatibility -jar app-1.0.jar myapp
+```
+
+报错
+
+```sh
+/usr/bin/ld: cannot find -lz: No such file or directory
+```
+
+则是 `gcc -lz`缺少libz库， 需安装
+
+```sh
+#Debian
+sudo apt-get update
+sudo apt-get install zlib1g-dev
+# RedHat
+sudo yum update
+sudo yum install zlib-devel
+```
+
+ 查看可选的配置项目
+
+```sh
+native-image --help
+```
+
+
+
+## GraalVM maven plugin
+
+maven pom.xml 中的配置如下所示。
+
+```xml
+<plugin>
+    <groupId>org.graalvm.nativeimage</groupId>
+    <artifactId>native-image-maven-plugin</artifactId>
+    <version>17.0.10</version>
+    <configuration>
+    	<mainClass>a.b.c.Bootstrap</mainClass>
+    </configuration>
+    <executions>
+    	<execution>
+    		<goals>
+    			<goal>native-image</goal>
+    		</goals>
+    		<phase>package</phase>
+    	</execution>
+    </executions>
+</plugin>
+```
+
+同时，需要使用相同版本的 graalvm java 进行编译，否则可能会出现问题。
+
+run
+
+```sh
+mvn clean package
+#mvn -Pnative native:compile
 ```
 
