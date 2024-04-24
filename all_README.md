@@ -1240,7 +1240,7 @@ sudo yum update
 sudo yum install zlib-devel
 ```
 
- 查看可选的配置参数
+ 查看可选的配置参数， 文档详见  https://docs.oracle.com/en/graalvm/enterprise/20/docs/reference-manual/native-image/Options/#macro-options。
 
 ```sh
 native-image --help
