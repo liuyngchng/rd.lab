@@ -1200,7 +1200,7 @@ echo -n {"msg":"hi guy, enjoy life, have fun!"} | hexdump -C
 
 # java 静态编译
 
-  将生成的jar包编译成native可执行的二进制代码，不再需要jvm来启动应用，但可能会依赖 libc库。
+  通过对java 的class文件进行静态编译，可以将生成的jar包编译成native可执行的二进制代码，不再需要jvm来启动应用，但可能会依赖 libc库。
 
 文档详见  https://www.graalvm.org/latest/reference-manual/native-image/basics/。
 
@@ -1217,10 +1217,11 @@ cd ./graalvm-jdk-17.0.10+11.1/bin
 
 （3）打包java应用。 `mvn package`， 生成 app-1.0.jar
 
-（4）将 app-1.0.jar 转换为 native code
+（4）将 `java -jar app-1.0.jar` 转换为可直接执行`./myapp`可运行的 `native code`
 
 ```sh
 **/graalvm-jdk-17.0.10+11.1/bin/native-image -march=compatibility --no-fallback -jar app-1.0.jar myapp
+
 ```
 
 报错
@@ -1280,3 +1281,35 @@ mvn clean package
 #mvn -Pnative native:compile
 ```
 
+## 缺陷
+
+对于一些使用反射、JNI 等（ Reflection, Java Native Interface, Class Path Resources, and Dynamic Proxy）的方法，需要通过额外的配置，提前告诉 GraalVM native-image，在运行时哪些类会被调用。
+
+文档详见 https://docs.oracle.com/cd/F44923_01/enterprise/19/guide/reference/native-image/tracing-agent.html#tracing-agent。
+
+首先运行
+
+```sh
+$JAVA_HOME/bin/java -agentlib:native-image-agent=config-output-dir=/path/to/config-dir/ -jar myapp.jar
+```
+
+则会在目录 `/path/to/config-dir/`下生成相应的 `JSON` 文件，有两种方法使用这些配置文件，以下分别进行介绍。
+
+**（1）添加 json文件至 classpath。**将这些`JSON`文件放置在classpath的 `META-INF/native-image/` 目录下，比如在一个 JAR 文件中， 本例子中使用myapp.jar。打开 myapp.jar,在其跟目录下创建目录 `META-INF/native-image/`，然后将*.json文件放置在此目录中
+
+然后通过 `native-image -jar myapp.jar`生成对应的二进制文件
+
+**（2）native-image编译添加参数**。
+
+```
+<GRAALVM_HOME>/bin/native-image -jar <JAR_FILE>.jar <NATIVE_IMAGE_NAME> -H:ConfigurationFileDirectories=<DIRECTORY_WHERE_YOUR_JSON_FILES_ARE_AT>
+```
+
+（3）涉及到 apache log4j2 的一些问题， 例如如下错误。
+
+```sh
+ERROR StatusLogger Unable to load services for service class org.apache.logging.log4j.spi.Provider
+ java.lang.InternalError: com.oracle.svm.core.jdk.UnsupportedFeatureError: Defining hidden classes at runtime is not supported.
+```
+
+可以考虑通过  https://github.com/oracle/graalvm-reachability-metadata 进行解决。
