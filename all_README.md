@@ -1220,7 +1220,7 @@ cd ./graalvm-jdk-17.0.10+11.1/bin
 （4）将 app-1.0.jar 转换为 native code
 
 ```sh
-**/graalvm-jdk-17.0.10+11.1/bin/native-image -march=compatibility -jar app-1.0.jar myapp
+**/graalvm-jdk-17.0.10+11.1/bin/native-image -march=compatibility --no-fallback -jar app-1.0.jar myapp
 ```
 
 报错
@@ -1240,7 +1240,7 @@ sudo yum update
 sudo yum install zlib-devel
 ```
 
- 查看可选的配置项目
+ 查看可选的配置参数
 
 ```sh
 native-image --help

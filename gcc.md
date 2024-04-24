@@ -15,6 +15,8 @@ ldd (GNU libc) 2.17  # libc 2.17版
 ls -al /lib64/libc.so.6	
 /lib64/libc.so.6 -> libc-2.17.so # libc 2.17版
 
+strings /lib/x86_64-linux-gnu/libc.so.6 | grep glibc -i
+
 ```
 
 
