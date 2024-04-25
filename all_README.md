@@ -1313,3 +1313,55 @@ ERROR StatusLogger Unable to load services for service class org.apache.logging.
 ```
 
 可以考虑通过  https://github.com/oracle/graalvm-reachability-metadata 进行解决。
+
+# log 
+
+## log4j2
+
+pom config
+
+```xml
+<dependency>
+    <groupId>org.apache.logging.log4j</groupId>
+    <artifactId>log4j-api</artifactId>
+    <version>3.0.0-alpha1</version>
+</dependency>
+<dependency>
+    <groupId>org.apache.logging.log4j</groupId>
+    <artifactId>log4j-core</artifactId>
+    <version>3.0.0-alpha1</version>
+</dependency>
+<!--            bridge for slf4j-->
+<dependency>
+    <groupId>org.apache.logging.log4j</groupId>
+    <artifactId>log4j-slf4j-impl</artifactId>
+    <version>3.0.0-alpha1</version>
+</dependency>
+<!--            bridge for common logging-->
+<dependency>
+    <groupId>org.apache.logging.log4j</groupId>
+    <artifactId>log4j-jcl</artifactId>
+    <version>3.0.0-alpha1</version>
+</dependency>
+```
+
+java
+
+```java
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.core.config.Configurator;
+
+public class Bootstrap {
+    private static final Logger LOGGER = LogManager.getLogger();
+}
+```
+
+## logback
+
+## logging in native image
+
+Native Image supports logging using the `java.util.logging.*` API，详见
+
+https://www.graalvm.org/22.0/reference-manual/native-image/Logging/.
+
