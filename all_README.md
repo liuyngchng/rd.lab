@@ -1363,5 +1363,64 @@ public class Bootstrap {
 
 Native Image supports logging using the `java.util.logging.*` API，详见
 
-https://www.graalvm.org/22.0/reference-manual/native-image/Logging/.
+https://www.graalvm.org/22.0/reference-manual/native-image/Logging/.	
+
+配置文件 log.properties
+
+```properties
+#Level的五个等级SEVERE（最高值） 、WARNING 、INFO 、CONFIG 、FINE 、FINER 、FINEST
+
+#为 Handler 指定默认的级别（默认为 Level.INFO）。
+java.util.logging.ConsoleHandler.level=INFO
+# 指定要使用的 Formatter 类的名称（默认为 java.util.logging.SimpleFormatter）。
+java.util.logging.ConsoleHandler.formatter=java.util.logging.SimpleFormatter
+
+# 为 Handler 指定默认的级别（默认为 Level.ALL）
+java.util.logging.FileHandler.level=INFO
+# 指定要使用的 Formatter 类的名称（默认为 java.util.logging.XMLFormatter）。
+java.util.logging.FileHandler.formatter=java.util.logging.SimpleFormatter
+# 指定要写入到任意文件的近似最大量（以字节为单位）。如果该数为 0，则没有限制（默认为无限制）。
+java.util.logging.FileHandler.limit=1024000
+# 指定有多少输出文件参与循环（默认为 1）。
+java.util.logging.FileHandler.count=1
+# 为生成的输出文件名称指定一个模式。有关细节请参见以下内容（默认为 "%h/java%u.log"）。
+java.util.logging.FileHandler.pattern=%h/java%u.log
+# 指定是否应该将 FileHandler 追加到任何现有文件上（默认为 false）。
+java.util.logging.FileHandler.append=true
+handlers= java.util.logging.ConsoleHandler,java.util.logging.FileHandler	
+```
+
+java
+
+```java
+public class Bootstrap {
+
+    private static java.util.logging.Logger LOGGER;
+
+    private static final String LOG_F = "./config/log.properties";
+
+    static {
+        try {
+            java.util.logging.LogManager.getLogManager().readConfiguration(
+                new FileInputStream(new File(LOG_F))
+            );
+            System.out.println(String.format("rd %s finish", Bootstrap.LOG_F));
+        } catch (IOException e) {
+            System.out.println(String.format("file %s not exist", LOG_F));
+            e.printStackTrace();
+        }
+        LOGGER = java.util.logging.Logger.getLogger(Bootstrap.class.getName());
+        LOGGER.setLevel(Level.ALL);
+        LOGGER.info("log properties init finish {0}, {1}", "placeholder0", "placeholder1");
+    }
+}
+```
+
+占位符格式
+
+```
+{0,number}， 第0个占位符为数字;
+{1,date}， 第1个占位符为日期;
+{}
+```
 
