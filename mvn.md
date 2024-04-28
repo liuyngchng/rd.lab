@@ -77,13 +77,13 @@ in file /etc/maven/settings.xml
 
 # 单独构建子模块
 
-对于父子工程，由于项目下子模块很多，如果直接用parent下的pom文件打包（`mvn clean package`），会将所有子模块打包，耗时较长。如果只想打包某一个子模块，可单独进行构建。
+对于父子工程，由于项目下子模块很多，如果直接用parent下的pom文件打包（`mvn clean package`），会将所有子模块打包，耗时较长。如果只想打包某一个子模块，可单独进行构建，执行如下命令
 
 ```sh
 mvn clean package -pl child-module-name -am
 ```
 
-例如，目前pom.xml中有以下几个module
+例如，目前parent `pom.xml` 中有以下几个 `module`
 
 ```xml
 <modules>
@@ -94,7 +94,7 @@ mvn clean package -pl child-module-name -am
 </modules>
 ```
 
-其中 c 模块依赖 b 模块， 那么在根pom.xml所在目录下使用命令 
+其中 c 模块依赖 b 模块， 那么在根 pom.xml 所在目录下使用命令 
 
 ```sh
 mvn clean package -pl c -am
