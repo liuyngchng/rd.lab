@@ -1359,13 +1359,22 @@ public class Bootstrap {
 
 ## logback
 
-## logging in native image
+logback config
+
+```
+```
+
+
+
+## logging 
 
 Native Image supports logging using the `java.util.logging.*` API，详见
 
 https://www.graalvm.org/22.0/reference-manual/native-image/Logging/.	
 
-配置文件 log.properties
+java.util.logging.Logger 的相关配置详见 JDK 文档。
+
+配置文件 `log.properties`
 
 ```properties
 #Level的五个等级SEVERE（最高值） 、WARNING 、INFO 、CONFIG 、FINE 、FINER 、FINEST
@@ -1373,7 +1382,9 @@ https://www.graalvm.org/22.0/reference-manual/native-image/Logging/.
 #为 Handler 指定默认的级别（默认为 Level.INFO）。
 java.util.logging.ConsoleHandler.level=INFO
 # 指定要使用的 Formatter 类的名称（默认为 java.util.logging.SimpleFormatter）。
-java.util.logging.ConsoleHandler.formatter=java.util.logging.SimpleFormatter
+java.util.logging.ConsoleHandler.formatter=cm.iot.cmn.utl.LogFormatter
+#java.util.logging.ConsoleHandler.formatter=java.util.logging.SimpleFormatter
+#java.util.logging.SimpleFormatter.format = %1$tF %1$tT [%4$s] %3$s -  %5$s %n
 
 # 为 Handler 指定默认的级别（默认为 Level.ALL）
 java.util.logging.FileHandler.level=INFO
@@ -1384,10 +1395,10 @@ java.util.logging.FileHandler.limit=1024000
 # 指定有多少输出文件参与循环（默认为 1）。
 java.util.logging.FileHandler.count=1
 # 为生成的输出文件名称指定一个模式。有关细节请参见以下内容（默认为 "%h/java%u.log"）。
-java.util.logging.FileHandler.pattern=%h/java%u.log
+java.util.logging.FileHandler.pattern=./log/java%u.log
 # 指定是否应该将 FileHandler 追加到任何现有文件上（默认为 false）。
 java.util.logging.FileHandler.append=true
-handlers= java.util.logging.ConsoleHandler,java.util.logging.FileHandler	
+handlers= java.util.logging.ConsoleHandler,java.util.logging.FileHandler
 ```
 
 java
@@ -1409,18 +1420,63 @@ public class Bootstrap {
             System.out.println(String.format("file %s not exist", LOG_F));
             e.printStackTrace();
         }
-        LOGGER = java.util.logging.Logger.getLogger(Bootstrap.class.getName());
-        LOGGER.setLevel(Level.ALL);
-        LOGGER.info("log properties init finish {0}, {1}", "placeholder0", "placeholder1");
+    }
+
+    private static Logger LOGGER = Logger.getLogger(Bootstrap.class.getName());
+    
+    public static void main(String[] args) throws Exception {
+        Thread.currentThread().setName("boot");
+        Bootstrap.initPort();
+        final HttpSrv server = new HttpSrv();
+        server.start(8080);
     }
 }
 ```
 
+自定义的 formatter `cm.iot.cmn.utl.LogFormatter`
+
+```java
+package cm.iot.cmn.utl;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.logging.Formatter;
+import java.util.logging.LogRecord;
+
+public class LogFormatter extends Formatter {
+     private static final SimpleDateFormat DF =
+        new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
+
+    @Override
+    public String format(LogRecord record) {
+        StringBuilder builder = new StringBuilder(100);
+        builder.append(LogFormatter.DF.format(new Date(record.getMillis())));
+        builder.append(" - ");
+        builder.append("[t" + record.getLongThreadID() + "]");
+        builder.append(record.getLevel().getName());
+        builder.append(record.getSourceClassName());
+        builder.append( "." + record.getSourceMethodName());
+        builder.append(": ");
+        builder.append(this.formatMessage(record));
+        builder.append("\n");
+        return builder.toString();
+    }
+}
+```
+
+
+
 占位符格式
 
-```
+```java
 {0,number}， 第0个占位符为数字;
 {1,date}， 第1个占位符为日期;
 {}
+```
+
+打印的日志格式如下所示
+
+```java
+2024-04-28 16:42:37.024 - [t1][INFO]cm.iot.api.Bootstrap.initPort: port_init_as_default 8,080
 ```
 
