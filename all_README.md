@@ -1480,3 +1480,16 @@ public class LogFormatter extends Formatter {
 2024-04-28 16:42:37.024 - [t1][INFO]cm.iot.api.Bootstrap.initPort: port_init_as_default 8,080
 ```
 
+##  slf4j to java.util.logging
+
+如果想让 `org.slf4j.LoggerFactory` 使用  java.util.logging.Logger， 则需要在 pom 中添加以下依赖。
+
+```xml
+<!--  slf4j to java.util.logging -->
+<dependency>
+    <groupId>org.slf4j</groupId>
+    <artifactId>slf4j-jdk14</artifactId>
+    <version>1.7.30</version>
+</dependency>
+```
+
