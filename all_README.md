@@ -1458,6 +1458,9 @@ public class LogFormatter extends Formatter {
         builder.append( "." + record.getSourceMethodName());
         builder.append(": ");
         builder.append(this.formatMessage(record));
+        if(null != record.getThrown()) {
+            builder.append("," +record.getThrown());
+        }
         builder.append("\n");
         return builder.toString();
     }

@@ -339,3 +339,6 @@ exit
 # 再次执行 sudo 命令，即可成功
 ```
 
+#  cmd
+
+netstat  need to run `sudo apt install net-tools`
