@@ -1378,7 +1378,8 @@ java.util.logging.Logger 的相关配置详见 JDK 文档。
 
 ```properties
 #Level的五个等级SEVERE（最高值） 、WARNING 、INFO 、CONFIG 、FINE 、FINER 、FINEST
-
+# 指定package cm.iot.api的日志级别为FINE，默认值为 INFO
+cm.iot.api.level=FINE
 #为 Handler 指定默认的级别（默认为 Level.INFO）。
 java.util.logging.ConsoleHandler.level=INFO
 # 指定要使用的 Formatter 类的名称（默认为 java.util.logging.SimpleFormatter）。
