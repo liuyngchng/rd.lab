@@ -1445,7 +1445,7 @@ import java.util.logging.Formatter;
 import java.util.logging.LogRecord;
 
 public class LogFormatter extends Formatter {
-     private static final SimpleDateFormat DF =
+    private static final SimpleDateFormat DF =
         new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
 
     @Override
@@ -1454,21 +1454,62 @@ public class LogFormatter extends Formatter {
         builder.append(LogFormatter.DF.format(new Date(record.getMillis())));
         builder.append(" - ");
         builder.append("[t" + record.getLongThreadID() + "]");
-        builder.append(record.getLevel().getName());
+        builder.append("[" + record.getLevel().getName()+ "]");
         builder.append(record.getSourceClassName());
         builder.append( "." + record.getSourceMethodName());
         builder.append(": ");
         builder.append(this.formatMessage(record));
-        if(null != record.getThrown()) {
-            builder.append("," +record.getThrown());
-        }
         builder.append("\n");
+        if(null != record.getThrown()) {
+            record.getThrown().printStackTrace();
+        }
         return builder.toString();
+    }
+
+    /**
+     * 日志系统默认会对数字添加千位分隔符，如果需要去除千位分隔符，
+     * 可参考本方法
+     * @param record
+     * @return
+     */
+    @Override
+    public String formatMessage(LogRecord record) {
+        String format = record.getMessage();
+        java.util.ResourceBundle catalog = record.getResourceBundle();
+        if (catalog != null) {
+            try {
+                format = catalog.getString(format);
+            } catch (java.util.MissingResourceException ex) {
+            }
+        }
+        try {
+            Object parameters[] = record.getParameters();
+            if (parameters == null || parameters.length == 0) {
+                // No parameters.  Just return format string.
+                return format;
+            }
+            int index = -1;
+            int fence = format.length() - 1;
+            while ((index = format.indexOf('{', index + 1)) > -1) {
+                if (index >= fence) break;
+                char digit = format.charAt(index + 1);
+                if (digit >= '0' && digit <= '9') {
+                    String[] p = new String[parameters.length];
+                    for (int i = 0; i < parameters.length; i++) {
+                        p[i] = parameters[i].toString();
+                    }
+                    return java.text.MessageFormat.format(format, p);
+                }
+            }
+            return format;
+
+        } catch (Exception ex) {
+            // Formatting failed: use localized format string.
+            return format;
+        }
     }
 }
 ```
-
-
 
 占位符格式
 
@@ -1483,6 +1524,8 @@ public class LogFormatter extends Formatter {
 ```java
 2024-04-28 16:42:37.024 - [t1][INFO]cm.iot.api.Bootstrap.initPort: port_init_as_default 8,080
 ```
+
+
 
 ##  slf4j to java.util.logging
 
