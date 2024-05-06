@@ -10,7 +10,7 @@ _tls:${CM_OBJ} tls.o
 	openssl version
 	${CC} -g ${CFLAGS} -o _tls ${CM_OBJ} tls.o -lpthread -lssl -lcrypto
 _tcp:${CM_OBJ} tcp.o
-	${CC} -g -o _tcp ${CM_OBJ} tcp.o -lpthread
+	${CC} -g --static -o _tcp ${CM_OBJ} tcp.o -lpthread
 _clt:${CLI_OBJ}
 	${CC} -o _clt ${CLI_OBJ}
 _test:test.o peer.o http.o utl.o rgx.o md5.o cfg.o hmac_md5.o

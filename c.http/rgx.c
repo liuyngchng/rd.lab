@@ -6,8 +6,9 @@
 #include <stdio.h>
 #include <sys/types.h>
 #include <regex.h>
-
 #include "utl.h"
+
+#define ARRAY_SIZE(arr) (sizeof((arr)) / sizeof((arr)[0]))
 
 int match(const char *s, const char *p, char *const t, const int n) {
     regex_t oregex;   // 编译后的结构体
@@ -15,7 +16,7 @@ int match(const char *s, const char *p, char *const t, const int n) {
     int ret = 0;
     if ((ret = regcomp(&oregex, p, REG_EXTENDED | REG_NOSUB)) == 0) {// 编译
         //成功编译
-        if ((ret = regexec(&oregex, s, sizeof(pmatch), pmatch, 0)) == 0) {// 执行匹配不保存匹配的返回值
+        if ((ret = regexec(&oregex, s, ARRAY_SIZE(pmatch), pmatch, 0)) == 0) {// 执行匹配不保存匹配的返回值
             printf("[%s][%s-%d]%s matches %s\n",gettime(), filename(__FILE__), __LINE__, s, p);
 //            for(int i=0; i< sizeof(pmatch); i++){
 //            	printf("eo=%d, so=%d\n", pmatch[i].rm_eo, pmatch[i].rm_so);
