@@ -11,7 +11,7 @@
 #define ARRAY_SIZE(arr) (sizeof((arr)) / sizeof((arr)[0]))
 
 int match(const char *s, const char *p, char *const t, const int n) {
-    regex_t oregex;   // 编译后的结构体
+    regex_t oregex;   		// 编译后的结构体
     regmatch_t pmatch[3];	//匹配到的结果
     int ret = 0;
     if ((ret = regcomp(&oregex, p, REG_EXTENDED | REG_NOSUB)) == 0) {// 编译

@@ -570,6 +570,7 @@ curl http://IP:port/v2/_catalog
 
 ```sh
 curl -XGET http://IP:port/v2/image_name/tags/list
+curl --noproxy '*' -XGET --tlsv1 -k https://hub.docker.com/v2/mysql/tags/list
 
 {"errors":[{"code":"NAME_UNKNOWN","message":"repositoryname not known toregistry","detail":{"name":"image_name"}}]}
 ```

@@ -1,6 +1,8 @@
-#  修改mysql8密码
+#  修改 MySQL 8密码
 
-在对ubuntu 22.04 上通过sudo apt-get install 安装的 MySQL 8.0.36 测试中通过
+在对ubuntu 22.04 上通过sudo apt-get install 安装的 MySQL 8.0.36 中测试通过
+
+在 docker pull mysql:8.4.0 中测试通过
 
 ```sh
 sudo vi /etc/mysql/my.cnf
@@ -13,6 +15,8 @@ sudo service mysql restart
 mysql
 # 修改密码
 use mysql;
+# 首先执行 flush ***，不然会报  ERROR 1290 (HY000): The MySQL server is running with the --skip-grant-tables option so it cannot execute this statement
+flush privileges;
 ALTER USER 'root'@'localhost' IDENTIFIED BY 'P@$$W0rd';
 FLUSH PRIVILEGES;
 exit;
@@ -246,7 +250,7 @@ mysql8 之前的版本中加密规则是mysql_native_password，而在mysql8之�
 可以把mysql用户登录密码加密规则还原成mysql_native_password.。
 ```
 
-# docker setup mysql8
+# docker setup MySQL 8.0.28
 
 ## docker pull
 
@@ -323,9 +327,177 @@ mysql -uroot -p
 mysql -hlocalhost -uxxxx -p
 ```
 
+如果看到
+
+```sh
+docker: Error response from daemon: driver failed programming external connectivity on endpoint mysql (0482470b97dad25e247e8396b943a466338dada8d5356de7636e7301f8aba8b4):  (iptables failed: iptables --wait -t filter -A DOCKER ! -i docker0 -o docker0 -p tcp -d 172.17.0.2 --dport 3306 -j ACCEPT: iptables: No chain/target/match by that name
+```
+
+则运行
+
+```sh
+# centos
+systemctl stop docker.service 
+iptables -t nat -F
+ifconfig docker0 down
+brctl delbr docker0
+systemctl start docker.service
+
+```
+
+##  创建用户
+
+兼容老系统，使用 mysql_native_password
+
+```sql
+CREATE USER IF NOT EXISTS 'foo'@'%' IDENTIFIED WITH mysql_native_password BY 'fGB#sfsfswe*&%$3^3%GN';
+grant all privileges on mysql.* to 'foo'@'%';
+flush privileges;
+```
+
+MySQL8以上，使用新的密码策略
+
+```sql
+CREATE USER IF NOT EXISTS 'newuser'@'%' IDENTIFIED BY 'user_password';
+GRANT ALL PRIVILEGES ON *.* TO 'newuser'@'%';
+FLUSH PRIVILEGES;
+```
+
+出现错误 
+
+```sh
+ERROR 1396 (HY000): Operation CREATE USER failed for 'newuser'@'%
+```
+
+一般来说是该用户已经存在，可以通过以下语句查看
+
+```sql
+select host, user from mysql.user;
+```
+
+若需要删除，可执行
+
+```sql
+DROP USER 'foo'@'%';
+```
 
 
 
+##  禁止root用户远程登录
+
+```sql
+drop user 'root'@'%';
+```
+
+## 查看时区
+
+```sql
+SELECT @@global.time_zone;
+```
+
+# docker setup MySQL 8.4.0
+
+## docker pull
+
+```sh
+docker pull mysql:8.4.0
+docker images
+
+```
+
+##  config start up
+
+初始化mysql密码，打包配置文件
+
+```sh
+# --privileged 参数可避免如下错误
+# ls: cannot access '/docker-entrypoint-initdb.d/': Operation not permitted
+docker run --name mysql84 --privileged -p 3306:3306 -e MYSQL_ROOT_PASSWORD='yourMySqlPassword' -d mysql:8.4.0
+
+docker ps
+docker exec -it mysql /bin/bash
+cd /etc/
+# /etc/mysql 是容器里mysql的配置文件夹
+tar -czf mysql.tar.gz mysql
+# 文件 /etc/my.cnf 和文件夹 /etc/my.cnf.d 是 mysql 8.4.0 的配置文件夹
+tar -czf my.cnf.d.tag.gz my.cnf.d
+exit
+```
+
+在宿主机上拷贝配置文件
+
+```sh
+su root
+mkdir -p /data/mysql84/log
+mkdir -p /data/mysql84/data
+mkdir -p /data/mysql84/mysqld
+docker cp mysql84:/etc/mysql.tar.gz /data/mysql84
+docker cp mysql84:/etc/my.cnf.d.tar.gz /data/mysql84
+docker cp mysql84:/etc/my.cnf /data/mysql84
+cd /data/mysql84
+tar -zxf mysql.tar.gz
+tar -zxf my.cnf.d.tar.gz
+mv mysql conf
+# 设置时区
+vi /data/mysql84/my.cnf
+[mysqld]
+default-time-zone = '+08:00'
+# 停止当前 mysql 服务
+docker stop mysql84
+docker rm mysql84
+
+docker run -dit \
+	--name mysql84 \
+	--privileged \
+	-p 3307:3306 \
+	-e MYSQL_ROOT_PASSWORD=yourMySqlPassword \
+	-e LANG=C.UTF-8 \
+	-v /data/mysql84/my.cnf:/etc/my.cnf \
+	-v /data/mysql84/my.cnf.d:/etc/my.cnf.d \
+	-v /data/mysql84/conf:/etc/mysql \
+	-v /data/mysql84/data:/var/lib/mysql \
+	-v /data/mysql84/mysqld:/var/run/mysqld \
+	mysql:8.4.0
+```
+
+##  normal start up
+
+这么做，是为了将MySQL中存储的数据放在宿主机上，而不是放在容器里
+
+```sh
+# 启动容器，将 yourMySqlPassword 替换为自己的密码
+# --privileged 参数可避免如下错误
+# ls: cannot access '/docker-entrypoint-initdb.d/': Operation not permitted
+docker run -dit \
+	--name mysql84 \
+	--privileged \
+	-p 3307:3306 \
+	-e MYSQL_ROOT_PASSWORD=yourMySqlPassword \
+	-e LANG=C.UTF-8 \
+	-v /data/mysql84/my.cnf:/etc/my.cnf \
+	-v /data/mysql84/my.cnf.d:/etc/my.cnf.d \
+	-v /data/mysql84/conf:/etc/mysql \
+	-v /data/mysql84/data:/var/lib/mysql \
+	-v /data/mysql84/mysqld:/var/run/mysqld \
+	mysql:8.4.0
+```
+
+接下来连接数据库
+
+```sh
+# 进入容器
+docker exec  -it mysql84 bash
+# 连接数据库
+mysql -uroot -p
+# 输入密码登录成功
+```
+
+如果想在宿主机上像连接本机数据库一样使用，还需要进行一些配置，
+
+```sh
+# 宿主机上需要安装MySQL client， 能够执行mysql命令
+mysql -hlocalhost -uxxxx -p
+```
 
 如果看到
 
@@ -364,6 +536,8 @@ drop user 'root'@'%';
 ```sql
 SELECT @@global.time_zone;
 ```
+
+# 
 
 # shell 中执行sql语句
 
