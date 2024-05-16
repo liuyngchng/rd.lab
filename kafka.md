@@ -1,6 +1,6 @@
-# 1. context
+# context
 
-## 1.1 logic
+##  logic
 
 * 逻辑关系
 
@@ -22,7 +22,7 @@
   consumer -> broker -> zk -> topic-> partition -> leader -> server
   ```
 
-## 1.2 partition
+##  partition
 
  * 分区消息数量
 
@@ -38,7 +38,7 @@
 
    
 
-## 1.3 replica
+##  replica
 
  * replica 集合关系
 
@@ -48,16 +48,16 @@
 
    提升系统的冗余度，保障系统的容错性和高可用性
 
-## 1.4 group
+##  group
 
 * consumer 在不建group的情况下，各自消费各自的，独立使用各自的offset
 * consumer 加入group的情况下，所有consumer作为一个整体，使用同一个offset 消费topic下的多个partition，所有的consumer处于一个队列中，有序消费消息，同时又不丧失并发性
 
-## 1.5 ENV
+##  ENV
 
 本文中所有脚本在 `Ubuntu 20.04 `， `kafka_2.11-2.4.1`， `openjdk version "17.0.2"`环境下测试通过。
 
-# 2. setup
+# setup
 
 进入  https://kafka.apache.org/downloads.html， 手动下载，或者执行
 
@@ -68,7 +68,7 @@ tar -zxf kafka_2.11-2.4.1.tgz
 
 
 
-## 2.1 zk
+##  zk
 
 启动
 
@@ -82,6 +82,8 @@ sudo netstat -anpl | grep 2181
 ```sh
 ./bin/zookeeper-server-stop.sh
 ```
+
+
 
 # Consumer
 
@@ -188,6 +190,7 @@ auto.create.topics.enable=false
 listeners=PLAINTEXT://11.10.36.2:9092
 port=9092
 # kafka注册的zookeeper配置
+# zookeeper.connect=username:password@your_zookeeper_host:port/chroot
 zookeeper.connect=11.10.36.2:2181
 # Timeout in ms for connecting to zookeeper
 zookeeper.connection.timeout.ms=6000
