@@ -188,6 +188,7 @@ broker.id=0
 auto.create.topics.enable=false
 # 设置服务监听地址
 listeners=PLAINTEXT://11.10.36.2:9092
+#port: DEPRECATED: only used when listeners is not set. Use listeners instead. the port to listen and accept connections on
 port=9092
 # kafka注册的zookeeper配置
 # zookeeper.connect=username:password@your_zookeeper_host:port/chroot
