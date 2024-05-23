@@ -1,9 +1,29 @@
+<< !
+***************************************************
+author      : whoami
+email       : whoami@hotmail.com
+create      : 2022-06-01
+description :
+  (1) the script need to be run with sudo
+  (2) stop and disable firewall
+  (3) setup iptables and start iptables.service
+  (4) set iptables rules
+***************************************************
+!
+
 # 停止防火墙
 systemctl stop firewalld
 systemctl disable firewalld
 systemctl mask firewalld
 # setup iptables
 yum install iptables iptables-services -y
+
+# 查看 iptalbls 服务状态
+systemctl status iptables.service
+
+# 启用 iptalbes 服务
+systemctl start iptables.service
+
 # 允许所有访问
 iptables -P INPUT ACCEPT
 # 清空所有默认规则
