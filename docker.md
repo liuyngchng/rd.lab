@@ -95,15 +95,18 @@ docker ps
 ## 修改默认镜像存储目录
 
 CentOS 下 docker 默认的存储路径在 /var/lib/docker下面。 
-``
-docker info | grep dir -i
+
 ```sh
+docker info | grep dir -i
+```
 修改docker的systemd的 docker.service的配置文件
 不知道 配置文件在哪里可以使用systemd 命令显示一下.  
 
-```
+```sh
 systemctl disable docker
+# 设置开机启动docker
 systemctl enable docker
+```
 显示结果
 Created symlink from /etc/systemd/system/multi-user.target.wants/docker.service to /usr/lib/systemd/system/docker.service.
 i```
@@ -113,8 +116,8 @@ show
 | --- |  --- |
 | vim /usr/lib/systemd/system/docker.service | 修改配置文件 |
 | ExecStart=/usr/bin/dockerd --graph /data/docker | 在里面的EXECStart的后面增加 --graph /data/docker |
-| systemctl disable docker | disable |
-| systemctl enable docker  | enable |
+| systemctl disable docker | 设置开机不启动docker |
+| systemctl enable docker  | 设置开机启动docker |
 | systemctl daemon-reload  | reload |
 | systemctl start docker   | start |
 
