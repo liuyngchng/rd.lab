@@ -9,6 +9,9 @@
 #include "const.h"
 #include "utl.h"
 
+/**
+ * global variables can be used in other files
+ */
 char _SRV_IP_[_CFG_LEN_]={0};
 int _SRV_PORT_=8083;
 int _TLS_=1;
@@ -24,7 +27,7 @@ int getcfg(const char *fname) {
     char buf[_CFG_LEN_]={0};
     while (fgets(buf, _CFG_LEN_, fp) != NULL) {
         int len = strlen(buf);
-        int i=0;
+        int i = 0;
         while (buf[i] != '=') {
             i++;
         }
@@ -58,5 +61,9 @@ int getcfg(const char *fname) {
 
 void initcfg() {
 	getcfg("./config/cfg.ini");
+}
+
+void initcfg1(const char *fname) {
+	getcfg(fname);
 }
 

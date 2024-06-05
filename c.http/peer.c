@@ -1,5 +1,5 @@
 /**
- * TCP peer util
+ * TCP peer util used in TCP communication
  * @author whoami@hotmail.com
  * @since 2022-06-01
  */

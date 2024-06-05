@@ -1,3 +1,6 @@
+/**
+ * 计算一个字符串的 MD5 值
+ */
 #ifndef MD5_H
 #define MD5_H
 

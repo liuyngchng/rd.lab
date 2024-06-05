@@ -54,6 +54,7 @@ SSL_CTX* initssl(void){
     }
     return ctx;
 }
+
 void loadcert(SSL_CTX* ctx, char* CertFile, char* KeyFile){
     if (SSL_CTX_use_certificate_file(ctx, CertFile, SSL_FILETYPE_PEM) <= 0){
         ERR_print_errors_fp(stderr);
@@ -68,6 +69,7 @@ void loadcert(SSL_CTX* ctx, char* CertFile, char* KeyFile){
         abort();
     }
 }
+
 void showcert(SSL* ssl) {
     X509 *cert;
     char *line;
@@ -85,6 +87,7 @@ void showcert(SSL* ssl) {
         printf("no certificates.\n");
     }
 }
+
 void *acceptssl(void* arg) {
 	SSL* ssl=(SSL *)arg;
     char buf[1024]={0};
@@ -129,6 +132,7 @@ void *acceptssl(void* arg) {
     close(sd);
     return NULL;
 }
+
 int starttlssrv() {
     SSL_CTX *ctx;
     BIO *acc, *client;

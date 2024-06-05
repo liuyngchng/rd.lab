@@ -1,5 +1,6 @@
 /**
  * HTTP URI pattern match
+ * 提供一个 HTTP 请求分发的 demo,实际使用时可按照需要自定义
  * @author whoami@hotmail.com
  * @since 2022-06-01
  */

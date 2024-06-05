@@ -2,6 +2,9 @@
 #define UTIL_H
 #include <string.h>
 
+/**
+ * get the filename from a full file path
+ */
 //windows:
 // #define filename(x) strrchr(x,'\\')?strrchr(x,'\\')+1:x
 //linux :

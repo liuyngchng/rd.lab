@@ -1,3 +1,8 @@
+/**
+ * constant used in project
+ * @author whoami@hotmail.com
+ * @since 2022-06-01
+ */
 #ifndef CONST_H
 #define CONST_H
 

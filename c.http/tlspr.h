@@ -1,7 +1,7 @@
 #ifndef TLSPR_H
 #define TLSPR_H
 /**
- * TLS request.
+ * work as a TLS request client.
  * ip, connect ip;
  * port, connect port;
  * msg, send msg(payload);

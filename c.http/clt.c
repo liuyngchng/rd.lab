@@ -11,6 +11,9 @@
 #include "cfg.h"
 #include "utl.h"
 
+/**
+ * global variables defined in cfg.c
+ */
 extern char _SRV_IP_[_CFG_LEN_];
 extern int _SRV_PORT_;
 

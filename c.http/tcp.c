@@ -34,6 +34,9 @@ void destructor(void* data) {
  **/
 void* rcvdata(void *);
 
+/**
+ * start a TCP server
+ */
 int startsrv() {
     struct sockaddr_in srvaddr;
     int sfd;
@@ -96,7 +99,7 @@ again:  cfd = accept(sfd, (struct sockaddr *)&cliaddr, &len);
 }
 
 /**
- * rcv data sent from peer
+ * rcv data sent from peer represented by sockfd
  **/
 void *rcvdata(void* sockfd) {
     char buf[1024] = {0};
