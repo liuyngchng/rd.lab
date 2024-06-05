@@ -86,8 +86,9 @@ again:  cfd = accept(sfd, (struct sockaddr *)&cliaddr, &len);
 			}
         }
         char *ip = inet_ntoa(cliaddr.sin_addr);
-        printf("[%s][%s-%d][t-%ld]%s connected\n", gettime(),
-        	filename(__FILE__), __LINE__, pthread_self(), ip);
+        int port = ntohs(cliaddr.sin_port);
+        printf("[%s][%s-%d][t-%ld]con_from_%s:%d\n", gettime(),
+        	filename(__FILE__), __LINE__, pthread_self(), ip, port);
         pthread_t t;
 		pthread_create(&t, NULL, &rcvdata, &cfd);
 		pthread_detach(t);
