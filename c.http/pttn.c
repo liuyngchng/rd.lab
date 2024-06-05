@@ -26,11 +26,17 @@ extern pthread_key_t tdt;
  */
 char *const getrdm(char *const t);
 
+/**
+ * dispatch GET request
+ */
 char *const doget(char uri[50], char *const buf) {
 	sprintf(buf, _CMN_RESP_FMT_, uri, gettime());
 	return buf;
 }
 
+/**
+ * POST uri1
+ */
 char *const douri1(char body[1024], char *const buf) {
 	printf("[%s][%s-%d]%s matched\n", gettime(),
 		filename(__FILE__), __LINE__,_URI1_);
@@ -38,6 +44,9 @@ char *const douri1(char body[1024], char *const buf) {
 	return buf;
 }
 
+/**
+ * POST uri2
+ */
 char* const douri2(char body[1024], char *const buf) {
 	printf("[%s][%s-%d]%s matched\n", gettime(),
 		filename(__FILE__), __LINE__,_URI2_);
@@ -45,6 +54,9 @@ char* const douri2(char body[1024], char *const buf) {
 	return buf;
 }
 
+/**
+ * POST uri3
+ */
 char* const douri3(char body[1024], char *const buf) {
 	printf("[%s][%s-%d]%s matched\n", gettime(), filename(__FILE__), __LINE__,
 		_URI3_);
@@ -52,6 +64,10 @@ char* const douri3(char body[1024], char *const buf) {
 	return buf;
 }
 
+
+/**
+ * POST uri4
+ */
 char* const douri4(char body[1024], char *const buf) {
 	printf("[%s][%s-%d]%s matched\n", gettime(), filename(__FILE__), __LINE__,
 		_URI4_);
@@ -59,6 +75,9 @@ char* const douri4(char body[1024], char *const buf) {
 	return buf;
 }
 
+/**
+ * POST uri5
+ */
 char* const douri5(char body[1024], char *const buf) {
 	printf("[%s][%s-%d]%s matched\n", gettime(), filename(__FILE__), __LINE__,
 		_URI5_);
