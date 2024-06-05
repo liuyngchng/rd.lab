@@ -1,5 +1,5 @@
 /**
- * common util method
+ * common utilities method
  * @author whoami@hotmail.com
  * @since 2022-06-01
  */
