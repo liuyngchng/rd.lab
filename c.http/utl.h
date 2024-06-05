@@ -12,7 +12,7 @@
 
 /**
  * 获取 HTTP request method
- * s, source string;
+ * s, source string, a HTTP text line contain request method;
  * t, target string;
  * n, 最多获取 n 个字节;
  **/
@@ -20,7 +20,7 @@ char *const getmethod(const char *s, char *const t, const int n);
 
 /**
  * 获取 http request uri
- * s, source string;
+ * s, source string, a HTTP text line contain request URL;
  * t, target string;
  * n, 最多获取 n 个字节;
  **/
@@ -28,7 +28,7 @@ char *const geturi(const char *s, char *const t, const int n);
 
 /**
  * 从字符 s 中读取第 l(从0开始)行，最多读取 n 个字符,
- * s, source string;
+ * s, source string of HTTP request text contains multi-lines;
  * t, target string, 数据保存在数组 t 中;
  * n, 最多获取 n 个字节;
  * l, 从字符 s 中第 l(从0开始)行开始读取
@@ -37,7 +37,7 @@ char *const getln(const char *s, char *const t, const int n, const int l);
 
 /**
  * 获取 http response body;
- * s, source str;
+ * s, source str of HTTP request text contains multi-lines;
  * t, target str;
  * n, 返回的字符串最大长度
  **/
