@@ -25,27 +25,39 @@ make
 使用`hiredis` 的库 test.c
 
 ```c
+#include "hiredis.h"
 int main() {
 	char *ip = "127.0.0.1";
     int port = 6379;
     redisContext *c = redisConnect(ip, port);
     if (c == NULL || c->err) {
         if (c) {
-            printf("Error: %s\n", c->errstr);
-            return;
+            printf("err: %s\n", c->errstr);
+            return -1;
         } else {
-            printf("Can't allocate redis context\n");
+            printf("can't allocate redis context\n");
         }
     }
-    printf("connected to %s:%d\n", ip, port);
+    const char *psword = "your_psword";
     redisReply *reply;
-
-    cmd = "get mykey";
+    // auth psword
+	reply = redisCommand(c, "AUTH %s", psword);
+    if (reply->type == REDIS_REPLY_ERROR) {
+        printf("auth_failed, cause: %s\n", reply->str);
+        freeReplyObject(reply);
+        redisFree(c);
+        return -1;
+    }
+    freeReplyObject(reply);
+    printf("connected to %s:%d, auth %s\n", ip, port, psword);
+	// exec cmd
+    char *cmd = "keys *";
     reply = (redisReply *)redisCommand(c, cmd);
     printf("cmd result %s\n", reply->str);
     freeReplyObject(reply);
 
     redisFree(c);
+    return 0;
 }
 ```
 
@@ -53,6 +65,23 @@ int main() {
 
 ```sh
 gcc test.c -lhiredis -L ./hiredisdir -I ./hiredisdir
+```
+
+运行
+
+```sh
+# 添加动态库加载路径
+export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:${lib_hiredis_so_dir}
+# 使配置更改生效
+sudo ldconfig
+# 进入ELF 可执行文件的目录
+cd ${elf_dir}
+# 构建软链
+ln -s libhiredis.so libhiredis.so.1.2.1-dev
+# 查看是否缺少其他动态库
+ldd ./a.out
+# 执行可执行文件
+./a.out
 ```
 
 
