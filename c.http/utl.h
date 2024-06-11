@@ -44,6 +44,22 @@ char *const getln(const char *s, char *const t, const int n, const int l);
 char *const getbody(const char *s, char *const t, int n);
 
 /**
+ * 将一个字符串中的大写字母转换为小写字母;
+ * s, source str;
+ * t, target str;
+ * n, 返回的字符串最大长度
+ **/
+char *const tolowerstr(const char *s, char *const t, const int n);
+
+/**
+ * 将一个字符串中的小写字母转换为大写字母;
+ * s, source str;
+ * t, target str;
+ * n, 返回的字符串最大长度
+ **/
+char *const toupperstr(const char *s, char *const t, const int n);
+
+/**
  * 获取当前时间
  * buf, 存储时间字符串的地址,格式为YYYY-MM-DD HH:mm:ss
  * n, 最多返回n个字符

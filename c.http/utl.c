@@ -270,3 +270,27 @@ char *const char2hex(const unsigned char* s, int l, char *const t) {
 	}
 	return t;
 }
+
+char *const tolowerstr(const char *s, char *const t, const int n) {
+	int i;
+	for(i = 0; i < n; i++) {
+		if(s[i] >=65 && s[i]<=90) {
+			t[i] = s[i] + 32;
+		} else {
+			t[i] = s[i];
+		}
+	}
+	return t;
+}
+
+char *const toupperstr(const char *s, char *const t, const int n) {
+	int i;
+	for(i = 0; i < n; i++) {
+		if(s[i] >=97 && s[i]<=122) {
+			t[i] = s[i] - 32;
+		} else {
+			t[i] = s[i];
+		}
+	}
+	return t;
+}
