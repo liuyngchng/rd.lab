@@ -766,6 +766,8 @@ vi *.class
 # 52. 统计文件行数（不含空行）
 ```sh
 find ./ -name *.java | xargs cat | sed '/^$/d' | wc -l
+# 只查找当前目录，不递归查找子目录
+find . -maxdepth 1 -name '*.c' | xargs cat | wc -l
 ```
 
 #  53 github ssh 
