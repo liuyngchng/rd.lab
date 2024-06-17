@@ -689,8 +689,8 @@ protoc ./Message.proto --java_out=./
 # 49. springboot support https
 ## 49.1 get key
 ```shell
-# -validity 1000 有效期1000天
-keytool -genkey -alias whoamisrv -keyalg RSA -keystore ./server.keystore -validity 1000
+# -validity 1001 有效期1001天
+keytool -genkey -alias whoamisrv -keyalg RSA -keystore ./server.keystore -validity 1001
 # input password and other information
 ```
 create pkcs12 certificate
