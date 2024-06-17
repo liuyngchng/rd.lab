@@ -1464,3 +1464,21 @@ run script
 
 
 
+# 13 C API
+
+详见  https://github.com/confluentinc/librdkafka。
+
+```sh
+git clone https://github.com/confluentinc/librdkafka
+cd librdkafka/
+./configure
+make
+```
+
+on ubuntu
+
+```sh
+# on ubuntu
+sudo apt install librdkafka-dev
+```
+
