@@ -1,7 +1,30 @@
 # help
 
 ```sh
+# get client cmd help
 redis-cli -h
+# start server
+redis-server /etc/redis/redis.conf
+```
+
+# config
+
+file /etc/redis/redis.conf
+
+```sh
+#指定监听端口
+port 6379
+# 作为守护进程启动
+daemonize yes
+# Save the DB to disk
+save 300 1
+# The filename where to dump the DB
+dbfilename dump.rdb
+# The DB will be written inside this directory, with the filename specified
+# above using the 'dbfilename' configuration directive
+dir /data/tmp_data/redis/
+# set access password
+requirepass yourpasswd
 ```
 
 
@@ -10,7 +33,16 @@ redis-cli -h
 
 ```sh
 redis-cli  -h 11.10.36.4 -p 6379 -a '12345$lGifRT'  keys "*"
+# 查询持久化存储的目录
+config get dir
+# 查询持久化存储的文件名称
+config get dbfilename
+
+
+
 ```
+
+
 
 # hiredis
 

@@ -400,3 +400,29 @@ Hello world
 ar t libtest.a
 ```
 
+# 加载指定的动态库so文件
+
+动态加载自定义目录下的动态库，可以使用如`dlopen`和`dlsym`函数（在`dlfcn.h`头文件中定义）。
+
+```c
+#include <dlfcn.h>
+ 
+int main() {
+    void *handle = dlopen("/path/to/your/custom/lib/libcustom.so", RTLD_LAZY);
+    if (handle == NULL) {
+        printf("%s\n", dlerror());
+        return 1;
+    }
+    // 获取函数指针
+    double (*func)(double) = dlsym(handle, "functionName");
+    if (func == NULL) {
+        printf("%s\n", dlerror());
+        dlclose(handle);
+        return 1;
+    }
+    // 使用函数...
+    dlclose(handle);
+    return 0;
+}
+```
+
