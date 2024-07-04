@@ -413,14 +413,18 @@ int main() {
         printf("%s\n", dlerror());
         return 1;
     }
-    // 获取函数指针
-    double (*func)(double) = dlsym(handle, "functionName");
+    
+    // 获取函数指针, 假定函数的签名为 int my_func(char *a, long *b);
+    int (*func)(char *, long *) = dlsym(handle, "my_func");
     if (func == NULL) {
         printf("%s\n", dlerror());
         dlclose(handle);
         return 1;
     }
     // 使用函数...
+    char *cfg = "test1";
+    long hdl =-1;
+    int result = (*func)(cfg, &hdl);
     dlclose(handle);
     return 0;
 }
