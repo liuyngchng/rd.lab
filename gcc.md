@@ -406,6 +406,9 @@ ar t libtest.a
 
 ```c
 #include <dlfcn.h>
+
+#define UNTYPED_ANIMATED_POINTER(OBJECT_POINTER) \
+    (*((void (**) (void))(&(OBJECT_POINTER))))
  
 int main() {
     void *handle = dlopen("/path/to/your/custom/lib/libcustom.so", RTLD_LAZY);
@@ -415,7 +418,14 @@ int main() {
     }
     
     // 获取函数指针, 假定函数的签名为 int my_func(char *a, long *b);
+    //此处编译可能会报  warning: ISO C forbids initialization between function pointer and ‘void *’ [-Wpedantic]
     int (*func)(char *, long *) = dlsym(handle, "my_func");
+    
+    //可以这么解决
+    void *fc = dlsym(handle, "my_func");
+    int (*func)(char *, long *);
+    func=(int (*)(char *, long *))UNTYPED_ANIMATED_POINTER(fc);
+   
     if (func == NULL) {
         printf("%s\n", dlerror());
         dlclose(handle);
