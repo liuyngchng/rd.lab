@@ -4,11 +4,11 @@
 
 ### 安装 JDK
 
-（1）Windows 系统
+**（1）Windows 系统**
 
-下载JDK （Java Development Kit，即 Java 开发组件）， 地址详见甲骨文(Oracle)官网 https://www.oracle.com/java/technologies/downloads/， 选择对应的操作系统和硬件架构的安装包。解压后安装。
+下载JDK （Java Development Kit，即 Java 开发组件）， 地址详见甲骨文(Oracle)官网 https://www.oracle.com/java/technologies/downloads/， 选择对应的操作系统（Windows、MacOS、Linux）和硬件架构（x86, aarch）的安装包。解压后安装。
 
-（2）Ubuntu 系统
+**（2）Ubuntu 系统**
 
 以ubuntu 22.04 LTS 为例，可直接在控制台终端(CTRL+ALT+T)中运行  
 
@@ -16,7 +16,7 @@
 sudo apt-get install openjdk-17-jdk
 ```
 
-输入管理员密码，即可
+输入管理员密码，即可。
 
 ###  配置环境变量
 
@@ -107,43 +107,69 @@ eclipse &
 
 # Unit 2 Hello world
 
-打开Eclipse,
+## 使用 IDE 创建工程并执行代码
 
-##   运行 hello world （run hello world demo）
+以 eclipse-jee-2024-06-R-linux-gtk-x86_64 的 eclipse为例进行说明。打开Eclipse, 选择 `文件(File)`-> `新建(New) `->`工程(Project ...)` ->` Java` -> `Java Project`， 点击 `下一步(Next)`, 输入工程名称“helloworld”， 点击`下一步（Next）`，点击`完成(Finish)`， 如果弹出“`是否打开 java 视图(Open java perspective)`”，点击是即可。
+
+双击IDE左侧区域 “`package Explorer`” 中的 “helloworld”， 出现2个下拉菜单： JRE System Library 和 src， 其中的 src就是源代码文件所在的目录。点击 src，右键点击新建(New) -> 包(package) ， 名称就是用默认的helloworld， 点击完成。此时在src下出现一个类似于小魔方的图标(田字形)，后面紧跟着helloworld,这就是刚创建的package。在田字形和helloworld上点击右键，点击新建(New)->类(class), 输入名称Hello,注意首字母大写，这是Java 类名称的规范写法，点击确认。此时出现了一个 Hello.java的打开文件，其中内容如下所示
+
+```java
+package helloworld;
+
+public class Helllo {
+
+}
+```
+
+在其中编写源代码， 如下所示。
+
+```java
+package helloworld;
+
+public class Helllo {
+	public static void main(String[] args) {
+        System.out.println("hello world, i am here");
+    }
+}
+```
+
+点击菜单栏上的 运行(Run) -运行(Run CTRL+F11)，此时，会在IDE的最下方的 Console tab栏中，出现一行 “hello world, i am here”
+
+##   通过命令行执行代码
 
 * **创建 java 源代码文件**
 
 以下脚本默认运行在 `linux terminal `环境下， `windows `类同。
 
 ```sh
-mkdir workspace							# 创建自己的 java 工程目录
-pwd										# 查看当前目录
-touch hello.java						# 创建一个文件，文件名成为 hello.java
-vi hello.java							# 打开 hello.java 文件
+mkdir workspace			# 创建自己的 java 工程目录， mkdir为linux命令， make a directory，创建文件夹
+pwd						# 查看当前目录, pwd 为linux 命令， print working directory, 打印当前的工作目录
+touch hello.java		# 创建一个文件，文件名成为 hello.java, touch 为linux命令， 若文件不存在则创建，若文件存在则更新访问时间
+vi hello.java			# 打开 hello.java 文件， vi 为linux命令，类似于windows 下的文本编辑器，打开一个文件
 ```
 
-hello.java 内容如下:
+Hello.java 内容如下所示。vi打开文件后，按键盘键“i”， 进入输入模式，输入一下内容
 
 ```java
-class hello {
+class Hello {
     public static void main(String[] args) {
         System.out.println("hello world");
     }
 }
 ```
 
-注意：如果在`windwos` 下编辑文件， 则最好将 `hell.java` 保存为` UTF-8` 文件（`windows` 默认为 `ASCII` 编码格式），保持良好的编程习惯。
+注意：如果在`windows` 下编辑文件， 则最好将 `hell.java` 保存为` UTF-8` 文件（`windows` 默认为 `ASCII` 编码格式），保持良好的编程习惯。linux默认的文件编码格式为UTF-8，不存在这个问题。另外需要说明的是，linux下严格区分文件名称大小写，而windows中则不区分文件名称的大小写。
 
-java 源代码文件的文件名（hello.java）称跟其内容中的 class 名称（hello）保持一致，这是默认规则。当然不一样可以吗？也可以，但初学者暂时按这个规则来，后续再讲不一样的处理方法。
+java 源代码文件的文件名（Hello.java）称跟其内容中的 class 名称（Hello）保持一致，这是默认规则。当然不一样可以吗？也可以，但初学者暂时按这个规则来，后续再讲不一样的处理方法。
 
 * **编译为java 字节码文件**
 
 运行
 
 ```sh
-javac hello.java						# 编译源代码
-ls													# 查看当前目录下的文件
-hello.java hello.class			# 可以看到编译生成的字节码文件 hello.class
+javac Hello.java						# 编译源代码
+ls										# 查看当前目录下的文件
+Hello.java Hello.class					# 可以看到编译生成的字节码文件 hello.class
 ```
 
 `javac` 为 java 的编译器，作用是将 java源代码文件 hello.java 编译为 字节码文件(java规范定义的一种可以在任意平台上被 java 运行时翻译为机器二进制可执行文件的文件格式) `hello.class ` 
@@ -161,5 +187,20 @@ java 命令在 执行后形成的进程在Java 中叫做 Java 虚拟机（Java V
 
 注意，此处命令为`java`，后面的参数为 hello，即 hello.class的前缀， JVM 默认会找到当前目录下的 hello.class 文件，读取，加载至内存，然后解析，找到其中的入口 （main函数），然后执行。
 
-# 数据结构（data structure）
+# 几个基础概念
 
+## 源文件
+
+java 中的源文件是以.java为后缀的编码为UTF-8的纯文本文档。源文件的名称一般以大写字母开头，例如Animal.java, Cat.java, Car.java。
+
+## 类 class
+
+Java 中的 类 （class）， 表示对物理世界中的一个名词（例如，MyCat）、动词（例如，DrinkWater）。类在源文件中体现为以class开头，包含在{}中的部分源代码。通过java编译后，会生成一个与源文件同名但以.class为后缀名的类文件，例如 Animal.class, Cat.class, Car.class。`.class`文件一般称之为类文件，是一个类的字节码文件。
+
+## 包 package
+
+package 在linux、windows中体现为一堆嵌套的文件夹， 在 Java IDE 中以“.”连接的一串字符串，例如 com.alibaba.taobao.ui.user.login。那么从包名可以看出来这个是alibaba的淘宝这个应用的UI（用户界面）中的user（用户）的登录相关的而java类。
+
+package 在 Java 中用于将某个功能模块涉及到的多个类文件放在一起，以方便管理。如果把一个源代码项目比喻成是一个衣柜，那么每个package可以理解为不同的衣橱，有的专门放外套，有的专门放鞋子，有的专门放裤子。
+
+package的概念在很多编程语言中（C、python）都有这个概念，主要为了方便源代码的管理，不然好几百个源代码文件放在一个文件夹下，放眼望去，太多了，无论是管理还是查找都不方便。
