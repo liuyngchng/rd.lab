@@ -187,7 +187,7 @@ java 命令在 执行后形成的进程在Java 中叫做 Java 虚拟机（Java V
 
 注意，此处命令为`java`，后面的参数为 hello，即 hello.class的前缀， JVM 默认会找到当前目录下的 hello.class 文件，读取，加载至内存，然后解析，找到其中的入口 （main函数），然后执行。
 
-# 几个基础概念
+# Unit 3 几个基础概念
 
 ## 源文件
 
@@ -204,3 +204,24 @@ package 在linux、windows中体现为一堆嵌套的文件夹， 在 Java IDE �
 package 在 Java 中用于将某个功能模块涉及到的多个类文件放在一起，以方便管理。如果把一个源代码项目比喻成是一个衣柜，那么每个package可以理解为不同的衣橱，有的专门放外套，有的专门放鞋子，有的专门放裤子。
 
 package的概念在很多编程语言中（C、python）都有这个概念，主要为了方便源代码的管理，不然好几百个源代码文件放在一个文件夹下，放眼望去，太多了，无论是管理还是查找都不方便。
+
+## linux 命令
+
+在linux上，需要掌握一些基础的linux命令，很多时候会起到事半功倍的效果。
+
+| No   | 命令（Name） | 描述（DESCRIPTION）                                          |
+| ---- | ------------ | ------------------------------------------------------------ |
+| 1    | pwd          | print name of current/working directory,打印当前工作目录， linux中在没有图形化用户界面的条件下，通过pwd命令可以直到当前所在的文件目录中的位置 |
+| 2    | mkdir        | make directories， 创建目录（文件夹）。                      |
+| 3    | rm           | remove files or directories， 删除一个文件或文件夹， 例如 rm file_a  rm directory_b |
+| 4    | ls           | list directory contents， 现实指定目录下的文件和文件夹   例如  ls ./ （显示当前目录下的文件和文件夹） ， ls /usr/lib （显示/usr/lib 目录下的文件和文件夹） |
+| 5    | ./           | .  或者  ./ 表示当前目录                                     |
+| 6    | ..           | .. 或者 ../ 表示上一级目录                                   |
+| 7    | man          | 查询系统命令的说明， 例如想知道pwd这个命令怎么用， 可以通过  man pwd 来查看 pwd 命令的用户手册，相当于windows下的help |
+| 8    | ifconfig     | 查看网络配置，例如IP, 网关，子网掩码等， 相当于windows下的ipconfig |
+| 9    | telnet       | 探测一个TCP 服务是否能够连接上，这个与windows相同， 例如 telnet 192.168.1.1 8080， 探测IP为192.168.1.1, 端口为8080 的服务是否能连接上 |
+| 10   | top          | 查看系统负载， 包括 CPU load, 内存利用率，是否有僵尸进程等   |
+| 11   | ps -ef       | 按照进程编号、进程启动命令及参数关键字查找进程信息， 例如   ps -ef \| grep aaaa.bbbb.jar, 查看启动指令中包含“grep aaaa.bbbb.jar”指令的进程 |
+| 12   | cat          | cat - concatenate files and print on the standard output， 打印一个文件的内容至控制台，例如 cat test.txt将打印text.txt的内容至控制台 |
+| 13   | grep         | 查找一个文件中包含某个关键字的行的内容，例如   grep mykeywords test.txt 将打印包含关键字 mykeywords 的行至控制台 |
+
