@@ -8,7 +8,7 @@
 
 下载JDK （Java Development Kit，即 Java 开发组件）， 地址详见甲骨文(Oracle)官网 https://www.oracle.com/java/technologies/downloads/， 选择对应的操作系统（Windows、MacOS、Linux）和硬件架构（x86, aarch）的安装包。解压后安装。
 
-**（2）Ubuntu 系统**
+**（2）Ubuntu(乌班图) 系统**
 
 以ubuntu 22.04 LTS 为例，可直接在控制台终端(CTRL+ALT+T)中运行  
 
@@ -111,7 +111,7 @@ eclipse &
 
 以 eclipse-jee-2024-06-R-linux-gtk-x86_64 的 eclipse为例进行说明。打开Eclipse, 选择 `文件(File)`-> `新建(New) `->`工程(Project ...)` ->` Java` -> `Java Project`， 点击 `下一步(Next)`, 输入工程名称“helloworld”， 点击`下一步（Next）`，点击`完成(Finish)`， 如果弹出“`是否打开 java 视图(Open java perspective)`”，点击是即可。
 
-双击IDE左侧区域 “`package Explorer`” 中的 “helloworld”， 出现2个下拉菜单： JRE System Library 和 src， 其中的 src就是源代码文件所在的目录。点击 src，右键点击新建(New) -> 包(package) ， 名称就是用默认的helloworld， 点击完成。此时在src下出现一个类似于小魔方的图标(田字形)，后面紧跟着helloworld,这就是刚创建的package。在田字形和helloworld上点击右键，点击新建(New)->类(class), 输入名称Hello,注意首字母大写，这是Java 类名称的规范写法，点击确认。此时出现了一个 Hello.java的打开文件，其中内容如下所示
+双击IDE左侧区域 “`package Explorer`” 中的 “helloworld”， 出现2个下拉菜单： JRE System Library 和 src， 其中的 src就是源代码文件所在的目录。点击 src，右键点击新建(New) -> 包(package) ， 名称就是用默认的helloworld， 点击完成。此时在src下出现一个类似于小魔方的图标(田字形)，后面紧跟着helloworld,这就是刚创建的package。在田字形和helloworld上点击右键，点击新建(New)->类(class), 输入名称Hello,注意首字母大写，这是Java 类名称的规范写法，点击确认。此时出现了一个 Hello.java的打开文件，其中内容如代码段2-1所示。
 
 ```java
 package helloworld;
@@ -121,7 +121,9 @@ public class Helllo {
 }
 ```
 
-在其中编写源代码， 如下所示。
+<div align='center'><b>代码段 2-1 类框架示例</b></div>
+
+在其中编写源代码， 如代码段 2-2 所示。
 
 ```java
 package helloworld;
@@ -133,7 +135,9 @@ public class Helllo {
 }
 ```
 
-点击菜单栏上的 运行(Run) -运行(Run CTRL+F11)，此时，会在IDE的最下方的 Console tab栏中，出现一行 “hello world, i am here”
+<div align='center'><b>代码段 2-2 helloworld代码示例</b></div>
+
+点击菜单栏上的 运行(Run) -运行(Run CTRL+F11)，此时，会在IDE的最下方的 Console Tab 栏中，出现一行 “hello world, i am here”。
 
 ##   通过命令行执行代码
 
@@ -205,9 +209,21 @@ package 在 Java 中用于将某个功能模块涉及到的多个类文件放在
 
 package的概念在很多编程语言中（C、python）都有这个概念，主要为了方便源代码的管理，不然好几百个源代码文件放在一个文件夹下，放眼望去，太多了，无论是管理还是查找都不方便。
 
+## 静态语言
+
+Java、C都属于静态语言，静态语言有个特征，都需要首先进行编译源文件/数据，生成一种格式的文件/数据，然后运行的时候需要运行生成的文件/数据。与此对应的有动态语言，例如Javascript、python、perl等都属于动态语言。动态语言的源代码文件无需编译，可直接加载至内存执行。
+
+静态语言还有一个特征，所有的变量都需要预先定义，遵循先定义（声明）再使用的原则。例如 Integer a, 告诉编译系统，变量 a 是一个整数，长度为4个字节。而像python这种动态语言，则可以给变量随意赋值，到底是什么类型，以及占用多少字节，都是在运行时(Runtime)决定的。用通俗的话来说，是“骡子是马，拉出来溜溜”，即通过程序的运行状态来决定到底是个什么变量。
+
+总而言之，如果使用杯子来打比喻的话， 静态语言类似于先设定各种杯子的用途，玻璃杯子只能盛牛奶，陶瓷杯子只能盛茶，塑料杯子则只能盛水。而动态语言呢，则是先那个杯子，在杯子里盛了啥饮料，那么这个杯子就是干什么的。
+
+两种语言各有优缺点，静态语言呢，编译时会对一些基础错误进行检查，若发现潜在问题，会事先发现。而且，各种变量是什么类型占用多少字节，都是预先规定好的，当程序运行起来（运行时，runtime）后，就只管执行就行，所以一般来说效率较高，但缺点是任何变量都需要实现进行约定，所以缺乏灵活性。动态语言的好处就是灵活性较强，一个变量，一会儿是个数字，一会儿可能就是个字符串了，使用较为方便，但缺点也很明显，就是在运行时，除了执行之外，还需要进行前置预处理，判断变量的类型从而决定内存分类，所以会有额外的开销，执行效率相较于静态语言来说要差一些。
+
 ## linux 命令
 
-在linux上，需要掌握一些基础的linux命令，很多时候会起到事半功倍的效果。
+在linux上，需要掌握一些基础的linux命令，很多时候会起到事半功倍的效果， 如表 3-1 所示。
+
+<div align='center'><b>表 3-1 常用 linux 命令清单</b></div>
 
 | No   | 命令（Name） | 描述（DESCRIPTION）                                          |
 | ---- | ------------ | ------------------------------------------------------------ |
@@ -224,4 +240,332 @@ package的概念在很多编程语言中（C、python）都有这个概念，主
 | 11   | ps -ef       | 按照进程编号、进程启动命令及参数关键字查找进程信息， 例如   ps -ef \| grep aaaa.bbbb.jar, 查看启动指令中包含“grep aaaa.bbbb.jar”指令的进程 |
 | 12   | cat          | cat - concatenate files and print on the standard output， 打印一个文件的内容至控制台，例如 cat test.txt将打印text.txt的内容至控制台 |
 | 13   | grep         | 查找一个文件中包含某个关键字的行的内容，例如   grep mykeywords test.txt 将打印包含关键字 mykeywords 的行至控制台 |
+| 14   | where/which  | 查找某个命令的绝对路径， 例如  执行which sh 可得到 /usr/bin/sh,即可得到sh命令的绝对路径为 /usr/bin/sh |
+| 15   | tar -zxf     | 解压缩并打开一个tar（发音：踏）包， 例如执行 tar -zxf abc.tar.gz ，即可得到一个abc的文件夹。tar用于对linux下的文件夹进行打包形成一个文件，方便在脚本等环境中进行拷贝等操作。 |
+| 16   | tar -czf     | 压缩并打包为一个tar包（发音：踏）包，例如执行 tar -czf abc.tar.gz abc, 即将当前目录下的abc文件夹及其内部的所有文件打包为一个压缩文件 abc.tar.gz。 |
 
+# Unit 4 包依赖管理
+
+在程序运行的时候，总是需要一些第三方（其他开发者开发的）的工具， 例如JSON对象解析，ZIP文件解压缩，作为开发人员来说，不可能所有的工具都需要自己去做（重复发明轮子）。这就涉及到如何有效、便捷地使用第三方软件（包、类库等）的问题。在Java的生态中，有 ant、maven、gradle等构建工具（builld tool）可以使用。
+
+打一个通俗的比喻，需要建设一栋房子，开发人员只需要涉及好图纸，打好地基，然后使用第三方开发人员开发的砖头、混凝土、屋顶预制板材、窗户、壁纸等，自己按照建筑设计规范组装起来，最终达到一定抗震、保暖、透光、防水要求即可。那么如何管理砖头供货商、混凝土供货商、窗户供货商的信息，以便于在必要的时间点，及时准确地让第三方的供货商参与进来，就是构建工具(build tool)要做的事情了。下面以maven为例，进行说明。
+
+## maven工程介绍
+
+Java 中如果需要使用maven（发音：mān wen）来进行依赖包（一般称为jar包（发音：榨包），因为java中第三方打的包都是xxxx.jar格式的），则需要按照一定的文件目录格式放置相应的文件，maven才能正常工作。就是说maven比较挑起，必须按照她的要求把文件放好，它才好好干活儿。
+
+maven是apache（阿帕其）基金会（Apache Fundation）管理的开源（open source）项目， 是当前主流的依赖包管理工具， ant历史更早，新兴的gradle也正在被使用。典型的maven工程目录如代码段4-1所示。
+
+```shell
+.
+├── pom.xml
+├── src
+│   ├── main
+│   │   ├── java
+│   │   └── resources
+│   └── test
+│       ├── java
+│       └── resources
+└── target
+
+```
+
+<div align='center'><b>代码段 4-1 maven 项目文件目录结构</b></div>
+
+pom.xml 是一个 XML 配置文件，内容涉及当前项目的名称、项目构建方法、依赖包的清单、依赖的父工程（maven工程可以嵌套）等信息。
+
+src为源文件目录， target为编译生成的文件所在目录。src/main/java为java源代码文件（.java）所在目录，src/main/resources 为源代码所需要的配置文件、资源文件等其他不以".java" 为后缀名的文件所在的目录。src/test/java 为java单元测试文件(.java) 所在的目录， src/test/resources 为单元测试代码所需要的配置文件、资源文件等其他不以".java" 为后缀名的文件所在的目录。
+
+这里提到了“单元测试”的概念，还是以建设一栋房屋为例，来介绍单元测试的概念。建设一栋房屋，不能等房屋完全竣工再去查看地基是否达标、窗户是否达标、防水是否达标，而应该是在各个重要的阶段就对前一阶段的建设成果（一个单元）进行检验，这个就叫单元测试。虽然单元测试不能保证最终的房屋能够完全达标，但却可以事先发现某个单元存在的问题。或者说，当房屋最终质量出现问题时，通过单元测试能很快定位到是哪个部分（单元）出了问题。
+
+这里还提到了 XML 文件，XML（可扩展标记语言 (Extensible Markup Language, 简称 XML)）文件是一个文本文件，文件内容结构代码段 4-2所示。
+
+```xml
+<?xml version="1.0" encoding="utf-8"?>
+<myfile>
+    <name>
+        <firstname>who</firstname>
+        <lastname>ami</lastname>
+    </name>
+	<time>2024-07-15</time>
+	<description>this is a demo xml file to illstrate the file structrue</description>
+</myfile>
+```
+
+<div align='center'><b>代码段 4-2 XML 文件内容结构</b></div>
+
+相当于在文本文档的基础上，通过添加标签`<tag></tag>`，将文本进行分割，添加了说明，方便阅读，另外一个重要的作用，可以方便计算机进行处理。如果是文本文档，只能要求计算机读取第几行，但是XML 文档，就可以要求计算机读取代码段 4-2中的 myfile/name/firstname中的内容，这样是不是更加方便呢？这就是 XML 文件的作用了。这里的 “myfile/name/firstname” 被称之为 XPATH，有兴趣可以阅读 XML相关的书籍进行了解。
+
+## 创建maven工程
+
+maven工程目录结构，可以手动进行创建，也可以通过IDE进行创建，一般IDE都提供有创建maven工程的图形化界面。
+
+打开Eclipse（以 eclipse-jee-2024-06-R-linux-gtk-x86_64 为例），点击 文件（File）->新建（New）->Maven Project（Maven 工程），在弹出的对话框中，选中“Create a simple project(skip archetype selection)”，选中“Use default workspace location”, 点击“下一步（Next）”， 在 group id 中填写 "cn.java.study",， 在 artifact Id 中填写 “my.maven.demo”， 点击“完成(Finish)”。此时，在IDE 左侧的导航栏中能够看到如代码段 4-3 所示的目录结构。
+
+```sh
+my.maven.demo
+    ├── pom.xml
+    ├── src
+    │   ├── main
+    │   │   ├── java
+    │   │   └── resources
+    │   └── test
+    │       ├── java
+    │       └── resources
+    └── target
+```
+
+<div align='center'><b>代码段 4-3 maven 工程结构示例</b></div>
+
+可能在pom.xml 的图标上出现了了红色的x符号，表示此文件存在错误，可以打开pom.xml文件，将 `<project>`所在的行替换为如下内容
+
+```xml
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+```
+
+使得最终pom.xml的内容如代码段4-4所示。
+
+```xml
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>cn.java.study</groupId>
+  <artifactId>my.maven.demo</artifactId>
+  <version>0.0.1-SNAPSHOT</version>
+</project>
+```
+
+<div align='center'><b>代码段 4-4 pom.xml 文件内容</b></div>
+
+然后在 IDE左侧导航界面中选中“my.maven.demo”的图表， 右键菜单中点击“Maven”-> "Update Project"，在弹出的对话框中点击 其他错误，暂时忽略。
+
+## 开始 build
+
+### 安装maven工具
+
+此时，maven工程已经建好了，需要使用maven工具进行代码构建了。maven工具一般可以在IDE中安装插件，也可以从apache 官方网站下载，这里使用从apache官网下载的工具为例，降低复杂性。地址为 https://maven.apache.org/download.cgi。点击 “[apache-maven-3.9.8-bin.tar.gz](https://dlcdn.apache.org/maven/maven-3/3.9.8/binaries/apache-maven-3.9.8-bin.tar.gz)” 进行下载。
+
+下载完成后，解压， 假定目录为`/a/b/c/apache-maven-3.9.8/`， 后续例子中可以替换为自己实际的文件目录, 需使用到的命令为 `/a/b/c/apache-maven-3.9.8/bin/mvn`，即mvn命令（Windows下为mvn.exe）。可以将这个路径添加到环境变量`PATH`中，后续就可以直接在控制台中输入“mvn”了，而无需使用绝对路径 “/a/b/c/apache-maven-3.9.8/bin/mvn” 才能使用mvn命令了。
+
+这里推荐开发人员使用 ubuntu linux系统，ubuntu desktop版的系统提供 GUI 用户界面，对于开发人员来说，使用linux系统进行开发工作，利大于弊。当然，如果是 C#（一种微软研发的在windows生态中使用的对标 Java的开发语言）开发人员的话，那只能使用windows系统了，C#不是开源的开发语言，也无法部署在linux中（当然什么都不是绝对的，或者叫部署难度较大，与linux的生态不兼容）。对于Java开发人员来说，使用ubuntu 能够让开发人员很快熟悉起linux系统来，而且很多操作习惯，可以直接移植至 server端。
+
+如果是ubuntu系统，可以直接在终端（CTRL + ALT+T）通过以下命令安装maven工具。
+
+```sh
+sudo apt-get install maven
+```
+
+### 编译
+
+进入“代码段 4-3 XML 文件内容结构”的工程根目录，ubuntu下的执行方法如代码段4-5所示。这里假定 my.maven.demo 处于目录 /a/b/c/d/e 下。
+
+```sh
+# 进入 my.maven.demo 工程的根目录
+cd  /a/b/c/d/e/my.maven.demo
+# 使用maven 进行代码编译， 如果没有将maven的安装路径添加至系统变量 PATH中时，
+# 此处的mvn需要使用绝对路径 /***/apache-maven-3.9.8/bin/mvn
+mvn compile
+```
+
+<div align='center'><b>代码段 4-5 mvn 编译方法示例</b></div>
+
+此时，可看到如代码段 4-6 所示的输出。
+
+```sh
+[INFO] --- resources:3.3.1:resources (default-resources) @ my.maven.demo ---
+[WARNING] Using platform encoding (UTF-8 actually) to copy filtered resources, i.e. build is platform dependent!
+[INFO] Copying 0 resource from src/main/resources to target/classes
+[INFO] 
+[INFO] --- compiler:3.13.0:compile (default-compile) @ my.maven.demo ---
+[INFO] Nothing to compile - all classes are up to date.
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESS
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  0.269 s
+[INFO] Finished at: 2024-07-15T10:26:27+08:00
+[INFO] ------------------------------------------------------------------------
+```
+
+<div align='center'><b>代码段 4-6 mvn 编译输出示例</b></div>
+
+注意，执行 `mvn compile` 命令时，maven会请求网络（需保证使用的计算机能够顺畅访问网络），从默认的中央仓下载一些文件至本地。本地文件的存储路径，以ubuntu为例，若 当前操作系统登录的用户名为 avata, 则maven本地的缓存目录为`/home/avata/.m2/repository`。若为Windows系统，则在 C:/User/用户名/Application data/***/.m2/repository 下。
+
+至此，maven工程的编译完成了。
+
+### 打包
+
+上面的步骤只是将java源文件编译为 .class文件，作为一个工程来讲，有很多个.class文件，还有一些配置文件，作为可部署运行的程序，还需要通过打包（package）形成简单可部署、可执行的jar文件。
+
+ubuntu下的执行方法如代码段 4-7 所示。
+
+```sh
+# maven 首先执行clean，清空之前打包的文件，然后执行 package,打包
+mvn clean package
+```
+
+<div align='center'><b>代码段 4-7 mvn 打包命令示例</b></div>
+
+此时，可看到如代码段 4-8 所示的输出。
+
+```sh
+[INFO] --- maven-jar-plugin:2.4:jar (default-jar) @ my.maven.demo ---
+[INFO] Building jar: /home/rd/eclipse-workspace-java/my.maven.demo/target/my.maven.demo-0.0.1-SNAPSHOT.jar
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESS
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  0.511 s
+[INFO] Finished at: 2024-07-15T10:27:11+08:00
+[INFO] ------------------------------------------------------------------------
+
+```
+
+<div align='center'><b>代码段 4-8 mvn 打包输出内容示例</b></div>
+
+此时，形成了可在JVM 中执行的文件 my.maven.demo-0.0.1-SNAPSHOT.jar， 执行如下命令
+
+```sh
+java -jar target/my.maven.demo-0.0.1-SNAPSHOT.jar
+```
+
+输出
+
+```sh
+no main manifest attribute, in target/my.maven.demo-0.0.1-SNAPSHOT.jar
+```
+
+此时，说明可部署的文件 my.maven.demo-0.0.1-SNAPSHOT.jar 是没问题的，由于前面的示例`代码段 4-3 maven 工程结构示例`中， 在src/main/java目录下，没有任何的java源代码文件，所以这里提示 “no main manifest attribute”。
+
+##  hello maven
+
+添加源代码， 在src/main/java中添加源代码文件。
+
+（1）在IDE左侧导航栏中， 点击“src/main/java”图表，右键，新建(New) -> 文件(File), 在弹出的对话框中的 文件名（File name）一栏中，输入 “Test.java”, 点击 “完成(Finish)”。此时在 IDE 左侧导航栏中出现一个 “Test.java”的图标，同时在其上方出现一个“default package”的图标。可见当添加文件时，IDE默认只是添加一个普通文件，不一定是java 源代码文件。
+
+ （2）点击“src/main/java”图表，右键，新建(New) -> 类(Class), 在弹出的对话框中，在文件名（Name）一栏中，输入 “HelloMvn”, 确保其他几项正确 Source folder = my.maven.demo/src/main/java， Package=my.maven.demo， 其他保持默认项不变，点击 “完成(Finish)”。
+
+此时在 IDE 左侧导航栏中出现一个 “HelloMvn.java”的图标，同时在其上方出现一个“my.maven.demo”的包(package)图标。
+
+（3）双击打开 IDE 左侧导航栏中的 HelloMvn.java ，可见IDE 自动生成的源代码如代码段 4-9 所示。
+
+```java
+package my.maven.demo;
+
+public class HelloMvn {
+
+}
+
+```
+
+<div align='center'><b>代码段 4-9 IDE 自动生成代码示例</b></div>
+
+修改源代码，使其内容如代码段 4-10 所示。
+
+```java
+package my.maven.demo;
+
+public class HelloMvn {
+	
+	public static void main(String[] args) {
+	
+		System.out.println("Hello maven");
+	}
+
+}
+```
+
+<div align='center'><b>代码段 4-10 IDE 添加源代码示例</b></div>
+
+在 pom.xml （发音：泡母点艾可斯艾木艾奥）中添加 打包配置`<build>`节点，pom.xml 文件内容如代码段 4-11 所示。
+
+```xml
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>cn.java.study</groupId>
+  <artifactId>my.maven.demo</artifactId>
+  <version>0.0.1-SNAPSHOT</version>
+  <build>
+ 	 <plugins>
+ 	 	<plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-compiler-plugin</artifactId>
+            <version>3.6.0</version>
+            <configuration>
+                <source>1.8</source>
+                <target>1.8</target>
+                <encoding>UTF-8</encoding>
+            </configuration>
+        </plugin>
+ 	  	<plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-assembly-plugin</artifactId>
+            <version>3.6.0</version>
+            <configuration>
+                <archive>
+                    <manifest>
+                        <mainClass>my.maven.demo.HelloMvn</mainClass>
+                    </manifest>
+                </archive>
+                <descriptorRefs>
+                    <descriptorRef>jar-with-dependencies</descriptorRef>
+                </descriptorRefs>
+            </configuration>
+            <executions>
+                <execution>
+                    <id>make-assembly</id>
+                    <phase>package</phase>
+                    <goals>
+                        <goal>single</goal>
+                    </goals>
+                </execution>
+            </executions>
+        </plugin>
+ 	 </plugins>
+  </build>
+</project>
+```
+
+<div align='center'><b>代码段 4-11 pom XML build节点配置示例</b></div>
+
+开始编译打包，执行
+
+```sh
+# 首先clean,接着package, 跳过了compile.当package时，若没有compile生成的class文件 会自动执行compile
+~/software/apache-maven-3.9.8/bin/mvn clean package
+
+```
+
+此时，可以在target目录下看到生成的文件清单如下
+
+```sh
+# 执行ls
+ls -al target/
+# 输出的结果
+total 44
+drwxrwxr-x 9 rd rd 4096  7月 15 10:56 .
+drwxrwxr-x 5 rd rd 4096  7月 15 10:53 ..
+drwxrwxr-x 2 rd rd 4096  7月 15 10:56 archive-tmp
+drwxrwxr-x 4 rd rd 4096  7月 15 10:58 classes
+drwxrwxr-x 3 rd rd 4096  7月 15 10:53 generated-sources
+drwxrwxr-x 3 rd rd 4096  7月 15 10:56 generated-test-sources
+drwxrwxr-x 2 rd rd 4096  7月 15 10:56 maven-archiver
+drwxrwxr-x 3 rd rd 4096  7月 15 10:53 maven-status
+-rw-rw-r-- 1 rd rd 2520  7月 15 10:59 my.maven.demo-0.0.1-SNAPSHOT.jar
+-rw-rw-r-- 1 rd rd 2547  7月 15 10:59 my.maven.demo-0.0.1-SNAPSHOT-jar-with-dependencies.jar
+drwxrwxr-x 2 rd rd 4096  7月 15 10:54 test-classes
+
+```
+
+在JVM 中运行 jar包，执行
+
+```sh
+java -jar target/my.maven.demo-0.0.1-SNAPSHOT-jar-with-dependencies.jar
+# 输出
+Hello maven
+```
+
+可见，maven工程源文件编译成功，而且已运行起来了。
