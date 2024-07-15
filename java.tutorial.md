@@ -1,4 +1,4 @@
-# Unit 1 环境准备
+# Unit 1 开发环境准备
 
 ##  配置开发环境 
 
@@ -51,15 +51,15 @@ OpenJDK 64-Bit Server VM (build 17.0.10+7-Ubuntu-122.04.1, mixed mode, sharing)
 
 为什么要安装JDK，不安装可以进行Java开发吗？   java属于高级语言，需要编译后生成一种叫`字节码（Byte-code）`的中间二进制流，通过`Java 虚拟机（JVM, java vritual machine）`的解释后，才能成为机器可是别的机器指令。JDK提供以下功能。
 
-（1）源代码编译（%JAVA_HOME/bin/javac）。将java源代码编译为java 字节码，注意是字节码，一种字节流，这种字节流不是机器指令，机器无法识别。
+**（1）源代码编译**（%JAVA_HOME/bin/javac）。将java源代码编译为java 字节码，注意是字节码，一种字节流，这种字节流不是机器指令，机器无法识别。
 
-（2）java程序运行时（%JAVA_HOME/bin/java）。提供java虚拟机，即可以运行java字节码的环境，通过java虚拟机的翻译，将java字节码翻译为机器硬件可是别的机器指令。
+**（2）java程序运行时**（%JAVA_HOME/bin/java）。提供java虚拟机，即可以运行java字节码的环境，通过java虚拟机的翻译，将java字节码翻译为机器硬件可是别的机器指令。
 
-（3）函数库。提供常用的一些算法、数据结构、工具类的函数包，方便开发人员开箱即用，无需自己写源代码。
+**（3）函数库**。提供常用的一些算法、数据结构、工具类的函数包，方便开发人员开箱即用，无需自己写源代码。
 
 综合以上分析， （1）和（2）是必须的， （3）是可选的（如果开发人员想自己实现的花），可见JDK是必须安装的，否则无法进行java相关的的开发工作。
 
-（4）字节码。字节码是一种跟硬件无关的二进制字节流，可以被java 虚拟机识别并转换为对应的机器可执行的机器指令。之所以这么做，是为了减少对不同硬件体系结构及其对应的硬件指令集的依赖。同一套源代码，生成同一套字节码，由`JVM`去适配不同的硬件指令集。
+**（4）字节码**。字节码是一种跟硬件无关的二进制字节流，可以被 java 虚拟机识别并转换为对应的机器可执行的机器指令。之所以这么做，是为了减少对不同硬件体系结构及其对应的硬件指令集的依赖。同一套源代码，生成同一套字节码，由`JVM`去适配不同的硬件指令集。
 
 ## 安装集成开发环境
 
@@ -95,19 +95,19 @@ eclipse &
 
 但在实际的工程实践中，一般来说，都得使用一款自己熟悉的 IDE, IDE提供以下功能。
 
-（1）源代码着色。通过源代码着色，提高代码的可读性。
+**（1）源代码着色。**通过源代码着色，提高代码的可读性。
 
-（2）工程管理。对工程中所编写的源代码依赖的其他工具包进行自动管理，无需手动处理。
+**（2）工程管理。**对工程中所编写的源代码依赖的其他工具包进行自动管理，无需手动处理。
 
-（3）源代码debug GUI。能够提供源代码 debug 的GUI，更加方便地进行代码的分析和问题查找。
+**（3）源代码debug GUI。**能够提供源代码 debug 的GUI，更加方便地进行代码的分析和问题查找。
 
 目前市面上的IDE 有 Eclipse, Netbeans, Intelli IDEA，其中 Eclipse和netbeans 均为免费产品， Intelli IDEA 为收费产品。
 
-（4）代码打包及版本管理。一般IDE 可以通过插件等其他形式提供代码打包及版本管理的图形化界面。
+**（4）代码打包及版本管理。**一般IDE 可以通过插件等其他形式提供代码打包及版本管理的图形化界面。
 
 # Unit 2 Hello world
 
-## 使用 IDE 创建工程并执行代码
+## 使用 IDE 创建工程
 
 以 eclipse-jee-2024-06-R-linux-gtk-x86_64 的 eclipse为例进行说明。打开Eclipse, 选择 `文件(File)`-> `新建(New) `->`工程(Project ...)` ->` Java` -> `Java Project`， 点击 `下一步(Next)`, 输入工程名称“helloworld”， 点击`下一步（Next）`，点击`完成(Finish)`， 如果弹出“`是否打开 java 视图(Open java perspective)`”，点击是即可。
 
@@ -209,6 +209,12 @@ package 在 Java 中用于将某个功能模块涉及到的多个类文件放在
 
 package的概念在很多编程语言中（C、python）都有这个概念，主要为了方便源代码的管理，不然好几百个源代码文件放在一个文件夹下，放眼望去，太多了，无论是管理还是查找都不方便。
 
+## 工程 project
+
+工程的概念，在很多编程语言中都有，其本质上是按照一定的结构，将一组源代码及其配置文件等形成一个完整的文件目录，最终能够完成某个特定的功能。
+
+从IDE 的角度来说，工程是一个可以被 IDE识别，被 IDE 独立管理、运行的一组文件。
+
 ## 静态语言
 
 Java、C都属于静态语言，静态语言有个特征，都需要首先进行编译源文件/数据，生成一种格式的文件/数据，然后运行的时候需要运行生成的文件/数据。与此对应的有动态语言，例如Javascript、python、perl等都属于动态语言。动态语言的源代码文件无需编译，可直接加载至内存执行。
@@ -243,6 +249,7 @@ Java、C都属于静态语言，静态语言有个特征，都需要首先进行
 | 14   | where/which  | 查找某个命令的绝对路径， 例如  执行which sh 可得到 /usr/bin/sh,即可得到sh命令的绝对路径为 /usr/bin/sh |
 | 15   | tar -zxf     | 解压缩并打开一个tar（发音：踏）包， 例如执行 tar -zxf abc.tar.gz ，即可得到一个abc的文件夹。tar用于对linux下的文件夹进行打包形成一个文件，方便在脚本等环境中进行拷贝等操作。 |
 | 16   | tar -czf     | 压缩并打包为一个tar包（发音：踏）包，例如执行 tar -czf abc.tar.gz abc, 即将当前目录下的abc文件夹及其内部的所有文件打包为一个压缩文件 abc.tar.gz。 |
+| 17   | ssh          | ssh user@IP, 通过SSH在客户端连接至网络上服务端的服务器，登录网络上的某个服务器，例如  ssh guest@192.168.1.1.1,接下来输入密码就登录到远程的服务器上了，类似于Windows下的远程桌面功能，只是ssh没有图形化界面。 |
 
 # Unit 4 包依赖管理
 
@@ -256,7 +263,7 @@ Java 中如果需要使用maven（发音：mān wen）来进行依赖包（一�
 
 maven是apache（阿帕其）基金会（Apache Fundation）管理的开源（open source）项目， 是当前主流的依赖包管理工具， ant历史更早，新兴的gradle也正在被使用。典型的maven工程目录如代码段4-1所示。
 
-```shell
+```sh
 .
 ├── pom.xml
 ├── src
@@ -444,7 +451,7 @@ no main manifest attribute, in target/my.maven.demo-0.0.1-SNAPSHOT.jar
 
 （1）在IDE左侧导航栏中， 点击“src/main/java”图表，右键，新建(New) -> 文件(File), 在弹出的对话框中的 文件名（File name）一栏中，输入 “Test.java”, 点击 “完成(Finish)”。此时在 IDE 左侧导航栏中出现一个 “Test.java”的图标，同时在其上方出现一个“default package”的图标。可见当添加文件时，IDE默认只是添加一个普通文件，不一定是java 源代码文件。
 
- （2）点击“src/main/java”图表，右键，新建(New) -> 类(Class), 在弹出的对话框中，在文件名（Name）一栏中，输入 “HelloMvn”, 确保其他几项正确 Source folder = my.maven.demo/src/main/java， Package=my.maven.demo， 其他保持默认项不变，点击 “完成(Finish)”。
+（2）点击“src/main/java”图表，右键，新建(New) -> 类(Class), 在弹出的对话框中，在文件名（Name）一栏中，输入 “HelloMvn”, 确保其他几项正确 Source folder = my.maven.demo/src/main/java， Package=my.maven.demo， 其他保持默认项不变，点击 “完成(Finish)”。
 
 此时在 IDE 左侧导航栏中出现一个 “HelloMvn.java”的图标，同时在其上方出现一个“my.maven.demo”的包(package)图标。
 
@@ -468,12 +475,17 @@ package my.maven.demo;
 
 public class HelloMvn {
 	
+	/**
+	 * 主程序入口，指定了一批class文件，从哪个文件的哪个方法开始执行
+	 * @param args
+	 */
 	public static void main(String[] args) {
 	
 		System.out.println("Hello maven");
 	}
 
 }
+
 ```
 
 <div align='center'><b>代码段 4-10 IDE 添加源代码示例</b></div>
@@ -536,7 +548,6 @@ public class HelloMvn {
 ```sh
 # 首先clean,接着package, 跳过了compile.当package时，若没有compile生成的class文件 会自动执行compile
 ~/software/apache-maven-3.9.8/bin/mvn clean package
-
 ```
 
 此时，可以在target目录下看到生成的文件清单如下
@@ -548,7 +559,6 @@ ls -al target/
 total 44
 drwxrwxr-x 9 rd rd 4096  7月 15 10:56 .
 drwxrwxr-x 5 rd rd 4096  7月 15 10:53 ..
-drwxrwxr-x 2 rd rd 4096  7月 15 10:56 archive-tmp
 drwxrwxr-x 4 rd rd 4096  7月 15 10:58 classes
 drwxrwxr-x 3 rd rd 4096  7月 15 10:53 generated-sources
 drwxrwxr-x 3 rd rd 4096  7月 15 10:56 generated-test-sources
@@ -560,7 +570,9 @@ drwxrwxr-x 2 rd rd 4096  7月 15 10:54 test-classes
 
 ```
 
-在JVM 中运行 jar包，执行
+可以看到， maven默认打包生成的文件名为 artifactId-version.jar, 这个文件包含了开发人员自行写的源代码对应的所有class文件。文件artifactId-version-jar-with-dependencies.jar中，除了开发人员自行写的源代码外，还有pom文件中配置的所有依赖的jar包中的class文件。
+
+接下来，可以在JVM 中运行 jar包了，执行
 
 ```sh
 java -jar target/my.maven.demo-0.0.1-SNAPSHOT-jar-with-dependencies.jar
@@ -569,3 +581,460 @@ Hello maven
 ```
 
 可见，maven工程源文件编译成功，而且已运行起来了。
+
+# Unit 5 简单的Web 应用程序
+
+通过这个单元的学习，将构建一个简单的Web应用程序， 启动后，可以通过浏览器输入 URL 进行访问。
+
+## Hello Web
+
+在 Unit 4 中， 学习了 maven 工程的基本构建方法，本节的 Java web 工程将采用 maven类进行构建，所以这个工程是一个 Java Web 工程，又是一个Java Maven 工程，这是从两个方面来说的，不产生冲突。
+
+**（1）添加pom依赖。** 首先在上一节的 pom.xml 中添加节点 `dependencies`， 添加跟Web相关的第三方组件dependency(依赖)，形成的pom.xml 文件 如代码段 5-1 所示。
+
+```xml
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>cn.java.study</groupId>
+  <artifactId>my.maven.demo</artifactId>
+  <version>0.0.1-SNAPSHOT</version>
+  <dependencies>
+  	<dependency>
+  		<groupId>io.netty</groupId>
+        <artifactId>netty-all</artifactId>
+        <version>4.1.32.Final</version>
+  	</dependency>
+  </dependencies>
+  <build>
+ 	 <plugins>
+ 	 	<plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-compiler-plugin</artifactId>
+            <version>3.6.0</version>
+            <configuration>
+                <source>1.8</source>
+                <target>1.8</target>
+                <encoding>UTF-8</encoding>
+            </configuration>
+        </plugin>
+ 	  	<plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-assembly-plugin</artifactId>
+            <version>3.6.0</version>
+            <configuration>
+                <archive>
+                    <manifest>
+                        <mainClass>my.maven.demo.HelloMvn</mainClass>
+                    </manifest>
+                </archive>	
+                <descriptorRefs>
+                    <descriptorRef>jar-with-dependencies</descriptorRef>
+                </descriptorRefs>
+            </configuration>
+            <executions>
+                <execution>
+                    <id>make-assembly</id>
+                    <phase>package</phase>
+                    <goals>
+                        <goal>single</goal>
+                    </goals>
+                </execution>
+            </executions>
+        </plugin>
+ 	 </plugins>
+  </build>
+</project>
+```
+
+<div align='center'><b>代码段 5-1 pom 添加 web组件依赖示例</b></div>
+
+注意，节点“mainClass”中的内容，即jar 包中主程序启动的入口，后续需要修改。
+
+本节所写的代码依赖于第三方组件 
+
+```xml
+<groupId>io.netty</groupId>
+<artifactId>netty-all</artifactId>
+<version>4.1.32.Final</version>
+```
+
+添加完代码段5-1 pom中所示的依赖项有，在项目根目录中执行
+
+```sh
+# 强制更新 pom 依赖， 对项目进行编译
+mvn -U	compile
+```
+
+此时， maven的mvn命令会从默认的maven中央仓（https://repo.maven.apache.org/maven2）中拉取（pull）相应的jar 包信息，存储至本地的目录（***/.m2/repositoty）下，可以通过命令行（Windows中可以打开文件夹）查看， 如代码段 5-2 所示。
+
+```sh
+# 进入 maven本地缓存文件默认存储目录
+cd ***/.m2/repositoy
+# 进入 grouId/artifactId/version 目录下
+cd io/netty/netty-all/4.1.32.Final
+# 查看文件
+ls -al
+# 输出结果
+total 6916
+drwxrwxr-x  2 rd rd    4096  7月 15 14:09 .
+drwxrwxr-x 12 rd rd    4096  6月  6 16:40 ..
+-rw-rw-r--  1 rd rd 3915287  4月 16 14:08 netty-all-4.1.32.Final.jar
+-rw-rw-r--  1 rd rd      40  4月 16 14:08 netty-all-4.1.32.Final.jar.sha1
+-rw-rw-r--  1 rd rd   25566  4月 16 14:07 netty-all-4.1.32.Final.pom
+-rw-rw-r--  1 rd rd      40  4月 16 14:07 netty-all-4.1.32.Final.pom.sha1
+-rw-rw-r--  1 rd rd 3105409  5月 30 09:50 netty-all-4.1.32.Final-sources.jar
+-rw-rw-r--  1 rd rd     540  5月 30 09:50 netty-all-4.1.32.Final-sources.jar.lastUpdated
+-rw-rw-r--  1 rd rd      40  5月 30 09:50 netty-all-4.1.32.Final-sources.jar.sha1
+-rw-rw-r--  1 rd rd     400  7月 15 14:09 _remote.repositories
+```
+
+<div align='center'><b>代码段 5-2 maven下载到本地的jar包及相关文件信息示例</b></div>
+
+可见本地缓存目录下已经下载了 第三方jar 包 `netty-all-4.1.32.Final.jar`，说明 pom.xml 中添加的依赖是成功的。
+
+（2）提供Web 程序入口。在 IDE 左侧导航栏（Project Explorer）中选中 “src/main/java”图标，右键->新建(New) -> 包(package) , 在弹出的 “新java 包(New Java Package)”对话框中的 “名称(Name)”中输入 “my.web.demo”， 确保对话框中的 Source Folder=my.maven.demo/src/main/java， 点击"Finish(完成)"。
+
+此时 IDE 左侧导航栏(Project Explorer) 中出现一个 my.web.demo的图标， 表示刚才新建的包(package)是成功的。左键点击该图表，右键->新建(New)->类(class)， 在“Name”输入框中输入 “Bootstrap”，点击确定。文件“Bootstrap.java" 中的代码内容如代码段 5-3 所示。
+
+```java
+package my.web.demo;
+
+/**
+ * 程序启动（自举）入口
+ */
+public class Bootstrap {
+	
+	/**
+	 * 定义了Web监听的端口号
+	 */
+	private static Integer PORT = 8080;
+
+    public static void main(String[] args) throws Exception {
+    	
+    	/**
+    	 * 实例化Server 对象
+    	 */
+        final Server srv = new Server();
+        /**
+         * 启动Server
+         */
+        srv.start(Bootstrap.PORT);
+    }
+}
+
+```
+
+<div align='center'><b>代码段 5-3 Web 程序启动(自举)入口</b></div>
+
+在包(package) my.web.demo 中新建类(class) Server, Server.java中的代码内容如代码段 5-4 所示。
+
+```java
+package my.web.demo;
+import io.netty.bootstrap.ServerBootstrap;
+import io.netty.channel.ChannelFuture;
+import io.netty.channel.ChannelInitializer;
+import io.netty.channel.ChannelOption;
+import io.netty.channel.EventLoopGroup;
+import io.netty.channel.epoll.Epoll;
+import io.netty.channel.epoll.EpollServerSocketChannel;
+import io.netty.channel.nio.NioEventLoopGroup;
+import io.netty.channel.socket.SocketChannel;
+import io.netty.channel.socket.nio.NioServerSocketChannel;
+import io.netty.handler.codec.http.HttpObjectAggregator;
+import io.netty.handler.codec.http.HttpServerCodec;
+
+/**
+ *  一个标准的 HttpServer
+ */
+public class Server {
+	
+	private static final int BS_NUM = Runtime.getRuntime().availableProcessors();
+	private static final int WK_NUM = BS_NUM * 2;
+	private static final EventLoopGroup BS_GRP = new NioEventLoopGroup(BS_NUM);
+	private static final EventLoopGroup WK_GRP = new NioEventLoopGroup(WK_NUM);
+	
+	public void start(final int port) throws Exception {
+	    try {
+	        final ServerBootstrap boot = new ServerBootstrap();
+	        boot.channel(NioServerSocketChannel.class)
+	            .option(ChannelOption.SO_BACKLOG, 1024)
+	            .childOption(ChannelOption.SO_KEEPALIVE, true)
+	            .childOption(ChannelOption.TCP_NODELAY, true)
+	            .group(Server.BS_GRP, Server.WK_GRP)
+	            .childHandler(this.buildInitializer());
+	        ChannelFuture future = boot.bind(port).sync();
+	        System.out.println("my_web_demo_server_started, listen " + port);
+	        future.channel().closeFuture().sync();
+	    } finally {
+	        Server.BS_GRP.shutdownGracefully();
+	        Server.WK_GRP.shutdownGracefully();
+	        System.out.println("mt_api_srv_shutdown");
+	    }
+	}
+	
+	private ChannelInitializer<SocketChannel> buildInitializer() {
+	    return new ChannelInitializer<SocketChannel>() {
+	        @Override
+	        protected void initChannel(SocketChannel ch) throws Exception {
+	            ch.pipeline()
+	                .addLast("httpDec", new HttpServerCodec())
+	                .addLast("httpAgr", new HttpObjectAggregator(65536))
+	                /**
+	                 * 添加自定义的Http处理器
+	                 */
+	                .addLast("htpHdl", new HttpHandler());
+	        }
+	    };
+	}
+}
+
+```
+
+<div align='center'><b>代码段 5-4 Web 服务器(Server)核心代码示例</b></div>
+
+在包(package) my.web.demo 中新建类(class) HttpHandler, HttpHandler.java中的代码内容如代码段 5-5 所示。
+
+```java
+package my.web.demo;
+
+import io.netty.channel.ChannelFutureListener;
+import io.netty.channel.ChannelHandlerContext;
+import io.netty.channel.SimpleChannelInboundHandler;
+import io.netty.handler.codec.http.*;
+import io.netty.util.CharsetUtil;
+
+/**
+ * 自定义的 Http 处理器
+ */
+public class HttpHandler extends SimpleChannelInboundHandler<FullHttpRequest> {
+
+	/**
+	 * 当服务器端收到客户端的请求数据，该做的处理
+	 * FullHttpRequest req 代表来自客户端的请求数据
+	 * ChannelHandlerContext ctx 为上下文信息
+	 */
+    @Override
+    protected void channelRead0(ChannelHandlerContext ctx, FullHttpRequest req) {
+    	final long id = System.currentTimeMillis();
+        System.out.println(id + ", rcv_rq_addr, " + ctx.channel().remoteAddress() + ",  " + req.uri());
+        final String data = req.content().toString(CharsetUtil.UTF_8);
+        boolean keepAlive = HttpUtil.isKeepAlive(req);
+        final String uri = req.uri();
+        final String txt = String.format("{\"status\":200, \"timestamp\":%s}", System.currentTimeMillis());
+        final FullHttpResponse response =
+            new DefaultFullHttpResponse(HttpVersion.HTTP_1_1, HttpResponseStatus.OK);
+        response.content().writeBytes(txt.getBytes());
+        response.headers().set(HttpHeaderNames.SERVER, "my_web_demo_server");
+        response.headers().set(HttpHeaderNames.CONTENT_TYPE, "application/json;charset=UTF-8");
+        response.headers().setInt(HttpHeaderNames.CONTENT_LENGTH, response.content().readableBytes());
+        if (keepAlive) {
+            response.headers().set(HttpHeaderNames.CONNECTION, HttpHeaderValues.KEEP_ALIVE);
+            ctx.writeAndFlush(response);
+        } else {
+            ctx.writeAndFlush(response).addListener(ChannelFutureListener.CLOSE);
+        }
+    }
+
+    /**
+     * 当发生异常后，需要做的处理
+     */
+    @Override
+    public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) {
+        if (cause.getMessage().contains("certificate_unknown")) {
+            System.out.println("ssl_error, " +  cause.getMessage());
+        } else {
+        	System.out.println("error, "  + cause);
+        ctx.channel().close();
+        }
+    }
+}
+
+```
+
+<div align='center'><b>代码段 5-5 HTTP 请求核心代码示例</b></div>
+
+至此，源代码已经完成了，需要修改 pom文件中的主程序入口，将pom.xml中的节点project/build/plugins下的 `<artifactId>maven-assembly-plugin</artifactId>`下的 configuration/archive/manifest/mainClass修改为 “my.web.demo.Bootstrap”，即` <mainClass>my.web.demo.Bootstrap</mainClass>`。
+
+开始打包并运行，执行
+
+```sh
+# 使用mvn安装的的绝对路径，进行 清理已打包的jar包(clean),重新打包(package)
+/xxxx/apache-maven-3.9.8/bin/mvn clean package
+# 运行打包形成的jar包， 启动 HTTP  server
+java -jar target/my.maven.demo-0.0.1-SNAPSHOT-jar-with-dependencies.jar
+#输出结果
+my_web_demo_server_started, listen 8080
+```
+
+至此， 一个简单的 HTTP Server 已经启动了。接下来验证下这个Server是否可以正常工作，打开浏览器，输入 http://localhost:8080, 回车，会看到以下结果
+
+```json
+{"status":200, "timestamp":1721027033026}
+```
+
+说明刚建立的 HTTP server已经在工作了，可以在启动 HTTP server执行`java -jar target/my.maven.demo-0.0.1-SNAPSHOT-jar-with-dependencies.jar`的控制台（Windows里的cmd, Ubuntu里的Terminal(CTRL+ALT+T)）界面下，看到输出的日志
+
+```sh
+1721027313965, rcv_rq_addr, /[0:0:0:0:0:0:0:1]:49422,  /
+1721027313975, rcv_rq_addr, /[0:0:0:0:0:0:0:1]:49422,  /favicon.ico
+1721027314339, rcv_rq_addr, /[0:0:0:0:0:0:0:1]:49422,  /
+1721027314346, rcv_rq_addr, /[0:0:0:0:0:0:0:1]:49422,  /favicon.ico
+```
+
+每请求一次，就会输出几行日志信息。
+
+## 几个概念
+
+**（1）HTTP请求。**HTTP 是 Hypertext Transfer Protocol（超文本传输协议）的简称。当用户打开浏览器，输入一个地址（例如， https://www.baidu.com）时，浏览器开始构建相关的 HTTP请求报文，相对应的服务器发起请求，服务器返回相关的数据信息（可能是一个html页面，一个电影、一个图片、一段文本），此时浏览器根据返回数据的类型，来决定如何展示给用户，如果是一个网页那么直接渲染（就像我们看到的新闻页面那样），如果是一个电影（例如某种流媒体格式）可能会在浏览器中直接播放。
+
+**（2）HTTP服务器。**作为相应客户端请求的一个实时运行（监听）的程序，等待客户端发起的请求，并根据客户端的请求，返回相应的内容。打一个比喻，HTTP服务器类似于咖啡店的服务员，等待着喝咖啡顾客（HTTP请求）的到来，当客户点了某种咖啡（浏览器发起了某种HTTP请求）后，咖啡店的服务员开始制作，等待一段时间后将咖啡提供给顾客（从服务端返回给浏览器后被浏览器渲染出来的用户可见的内容）。
+
+**（3）端口监听。**一台主机（即日常我们使用的台式电脑、笔记本电脑）上可以启动多个网络服务（Web服务），供用户通过浏览器访问。为了区分同一个地之下的多个网络服务，引入了端口的概念。打个比喻，一台主机相当于一栋大学宿舍楼，很多人都住在这栋楼里，那么这些同学的联系地址都是某大学某栋楼，那如何定位到某个宿舍呢，端口号类似于宿舍房间号。端口号的范围从1-65535共计6万多个，不过一般来说1-1024这1000多个端口号作为操作系统网络服务的默认端口号，例如默认HTTP 的端口号为80, HTTPS的端口号为443, SSH 端口号为22, ftp服务的端口号为21等。
+
+那我们日常浏览网站感觉没用到端口号啊？比如 http://www.baidu.com,事实上，这个地址使用了默认端口号80, 完整的地址为http://www.baidu.com:80。
+
+#  源代码管理
+
+## 基本概念
+
+Source Code Management(源代码管理， 简称SCM)，目前主流的源代码管理工具有 git、svn、TFS等。最受欢迎的当然是git了， svn在一些较早的开源项目中在使用，新项目一般都使用git。一些windows下的项目使用TFS,主要微软一般喜欢搞一些全家桶的东西，什么都用他自己的，跟开源精神背道而驰。
+
+**（1）必要性。**为什么要使用源代码管理工具？是不是可以不用。答案是，可以不用，但实际大型多人合作的开发项目，如果不使用源代码管理，那将是灾难性的。通过一个场景进行说明， 某大型开发项目，一共有开发人员50人，每人负责一个小模块，整个源代码所有人都可以修改（这也是开源linux的典型开发模式）。当A在修改某个文件abcde.java时，B也想修改这个文件abcde.java，怎么样让A和B同时修改，互相不干扰对方的工作，而且还不会造成混乱呢？ 还有一种场景，某大佬一个人在干某个开源项目（例如，开发curl的大佬），源代码文件有好几百个，断断续续改了2年的时间，突然有一天，他改来改去，发现其实6个月前的那一版源代码是最科学的，那怎么退回到6个月前的源代码版本呢？有没有一个工具可以一键实现这个功能？这就是SCM 工具发挥作用的时候了。
+
+**（2）工作机制**
+
+1）版本记录。git会在本地保存一份文件修改记录，当用户向远端(remote)的网络服务器(git server)提交时，这些修改记录会在git server端也保留下来，当发现同一个文件的同一行被多个人修改后，当开发人员提交修改时，会给出提醒，由开发人员决定如何合并修改（merge），然后再保存之远端的服务器。
+
+2）多分支（branch）。当一份源代码需要被多个人修改时，可以生成多个不同的分支，不同分支上的源代码可以通过 git merge进行合并。
+
+## 安装git
+
+（1）安装git。windows 系统可通过 https://git-scm.com/download/win 下载安装，安装 Standalone Installer， 下载地址为 https://github.com/git-for-windows/git/releases/download/v2.45.2.windows.1/Git-2.45.2-64-bit.exe。
+
+ubuntu系统通过如下命令进行安装
+
+```sh
+sudo apt-get install git
+```
+
+最终，验证安装是否成功， 可通过执行一下命令进行验证。
+
+```sh
+git help -a
+# 若输出如下内容，证明安装成功, 否则可通过设置环境变量等，查找问题
+See 'git help <command>' to read about a specific subcommand
+
+Main Porcelain Commands
+   add                  Add file contents to the index
+   am                   Apply a series of patches from a mailbox
+```
+
+## 代码管理
+
+使用git 进行源代码管理需要执行如代码段 6-1 所示的步骤。
+
+```sh
+# [1] 进入工程根目录
+cd project_root_dir
+# [2] 初始化git管理
+git init
+# [3] 添加需要被管理的文件、文件夹
+git add a_file
+git add b_directory
+# [4] 提交修改记录， -m 后面的内容是本次提交的内容提示
+git commit -m 'this is my first modification of source code'
+# [5] 将修改推送至远端 git server，这里还需要尽心额外配置告诉git 远端服务器的地址，以及推送的分支，这里不做演示，只展示本地修改管理
+git push
+# [6] 修改源代码 a/b/c/d.java, a/b/c/e.java
+# [7] 查看源代码状态，可以看到 git 记录了文件 a/b/c/d.java 和 a/b/c/e.java被修改了
+git status
+# [8] 添加被修改的文件
+git add a/b/c/d.java
+git add a/b/c/e.java
+# [9] 提交修改
+git commit -m 'i modified 2 files, d.java and e.java, just for fun, enjoy life'
+# [10] 查看提交记录
+git log
+```
+
+<div align='center'><b>代码段 6-1 git 源代码管理步骤示例</b></div>
+
+以 Unit 5中的代码为例，进行演示，实际操作如代码段 6-2 所示。
+
+```sh
+# 进入工程根目录，即需要管理的代码的根目录, windows下请在cmd下执行相应的命令
+cd  my.maven.demo
+# 初始化 git相关的文件
+git init
+# 查看目录下的文件， 其中的.git 就是执行完 git init 生成的文件夹
+ls -al
+# 获得输出
+total 36
+drwxrwxr-x 6 rd rd 4096  7月 15 16:21 .
+drwxrwxr-x 5 rd rd 4096  7月 15 09:28 ..
+-rw-rw-r-- 1 rd rd 1569  7月 15 09:51 .classpath
+drwxrwxr-x 7 rd rd 4096  7月 15 16:21 .git
+-rw-rw-r-- 1 rd rd 1832  7月 15 14:38 pom.xml
+-rw-rw-r-- 1 rd rd  542  7月 15 09:51 .project
+drwxrwxr-x 2 rd rd 4096  7月 15 10:53 .settings
+drwxrwxr-x 4 rd rd 4096  7月 15 09:28 src
+drwxrwxr-x 8 rd rd 4096  7月 15 15:08 target
+# 查看当前源代码的管理状态
+git status
+# 获得输出
+
+# 告诉用户当前处于分支 master上
+On branch master
+# 告诉用户尚未提交任何源代码
+No commits yet
+# 告诉用户尚未被git 管理的源代码文件或目录
+Untracked files:
+  (use "git add <file>..." to include in what will be committed)
+	.classpath
+	.project
+	.settings/
+	pom.xml
+	src/
+	target/
+# 添加 需要被管理的文件或文件目录
+git add pom.xml
+git add src
+# 查看状态
+git status
+# 获得输出
+# 告诉用户当前处于分支 master上
+On branch master
+# 告诉用户尚未提交任何源代码
+No commits yet
+# 告诉用户这些文件发生了变更，需要被提交。因为是第一次提交，所有凡是通过 git add 添加的文件均被标记为发生了变更
+Changes to be committed:
+  (use "git rm --cached <file>..." to unstage)
+	new file:   pom.xml
+	new file:   src/main/java/my/maven/demo/HelloMvn.java
+	new file:   src/main/java/my/web/demo/Bootstrap.java
+	new file:   src/main/java/my/web/demo/HttpHandler.java
+	new file:   src/main/java/my/web/demo/Server.java
+# 告诉用户这些文件尚未被git 跟踪。.classpath .project .settings 都是 IDE自动生成的，target是maven编译生成的
+# 这些文件都不是源代码，无需被git管理
+Untracked files:
+  (use "git add <file>..." to include in what will be committed)
+	.classpath
+	.project
+	.settings/
+	target/
+# 提交
+git commit -m 'init git'
+# 查看提交日志
+git log
+# 获得输出
+commit 722a4257d751e01e65e2876b6e333fd464223a56 (HEAD -> master)
+Author: aaaaa <demotest@qq.com>
+Date:   Mon Jul 15 16:36:12 2024 +0800
+
+    init git
+
+```
+
+<div align='center'><b>代码段 6-2 实际工程源代码管理示例</b></div>
