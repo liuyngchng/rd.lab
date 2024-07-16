@@ -895,7 +895,7 @@ my_web_demo_server_started, listen 8080
 
 那我们日常浏览网站感觉没用到端口号啊？比如 http://www.baidu.com,事实上，这个地址使用了默认端口号80, 完整的地址为http://www.baidu.com:80。
 
-#  源代码管理
+#  Unit 6 源代码管理
 
 ## 基本概念
 
@@ -1038,3 +1038,449 @@ Date:   Mon Jul 15 16:36:12 2024 +0800
 ```
 
 <div align='center'><b>代码段 6-2 实际工程源代码管理示例</b></div>
+
+# Unit 7 HTML
+
+HTML 是整个互联网的基础，这么说毫不夸张。
+
+## HTML 页面
+
+HTML页面相关的内容，通常称之为前端，即用户可以直接看到的。 而前面几个单元所学的内容，称之为后端，即用户不能够直接看到的，但能够控制用户看到些什么。一般来说，前端的主要任务是提供优秀的用户体验，也就是说不管用户打开浏览器，还是打开一款APP,用起来感觉很舒服，看着舒心，操作不反人类，各种按钮都符合人体工程学（这方面比较优秀的是Apple公司）。而后端的任务是实现各种复杂的控制，在正确的时间给用户正确的内容。
+
+作为Java开发人员，需要掌握必不可少的HTML基础知识，能够通过txt文档自己写一个简单的html页面，如果还能加入一些javascript 脚本来实现简单的页面内容控制 。熟悉form 的提交，通过javascript实现form表单的异步提交。 了解css,div等样式相关的内容。https://www.w3cschool.cn/ 是一个不错的学习网站，可以自行学习。
+
+## JavaScript
+
+JavaScript（简称JS），是HTML页面中非常流行的一种脚本语言，属于动态语言的范畴，是前端开发人员必须精通的一门编程语言。事实上， JavaScript 跟Java 一点关系也没有，虽然名称类似。
+
+JavaScript 在 1995 年由Netscape（网景）公司的Brendan Eich，在（Netscape Navigator）网景导航者浏览器上首次设计实现而成。后来Netscape与Sun Microsystems（太阳微系统公司，目前已经被甲骨文（Oracle）公司收购）合作，Netscape管理层希望它外观看起来更像Java，因此取名为JavaScript。
+
+# Unit 8 Java生态
+
+在学习 Java 生态之前，需要阅读 Java基础的书籍，这种书籍市面上很多，需要熟悉 类、对象、方法 等面对对象编程的一些概念。
+
+## 数据库（DB）
+
+需数据库相关的基础知识和实践能力，可以选取MySQL进行练习，包含以下内容。
+
+（1）通过 JDBC 连接数据库进行 CRUD（Create（新增）, Retrieve（查询）, Update（更新）, Delete（删除））。
+
+（2）通过MyBatis进行数据库的CRUD，自动生成相应的mapper，以及对应的接口以及XML 文件。
+
+（3）了解数据库的事务（原子操作）及其实现机制，数据库连接池的概念，2阶段提交实现跨数据库连接的事务。数据库的索引实现机制。
+
+（4）了解关系型数据库（例如，MySQL、Oracle）和非关系型数据库（例如，MongoDB）的区别。
+
+## 缓存（Cache）
+
+至少掌握一种缓存的使用方法，例如Redis。了解缓存和数据库的相互配合，实现数据的持久存储和快速访问。
+
+## Spring
+
+有关Spring 框架的内容，是一个庞大的体系，有专门的书籍讲解其思想，不过还得一点一点使用，得有自己的体会，光看书籍的话还是有些迷茫，一边看书籍边通过程序实践才是王道。下面内容只介绍其核心思想。
+
+**（1）重要概念。**Spring框架（Spring Framework）是 Java生态中非常重要的一个开源框架。Spring中有2个重要的概念需要掌握，控制反转和依赖注入。
+
+1）控制反转（IoC, Invert of Control）。对象的使用者只需要进行对象的声明，对象的创建由Spring框架完成。
+
+下面以一个开车到某个地方的代码段来进行说明，如果不使用控制反转，那么代码的写法如代码段 8-1所示。
+
+```java
+class DriveCar {
+	// 实例化 Driver 类的对象 driver
+    private Driver driver = new Driver();
+    // 实例化 Car 类的对象 car
+    private Car car = new Car();
+    
+    public String driveCarToSomewhere(String location) {
+        this.driver.startCar(car);
+        this.driver.addGas(car);
+        this.driver.drive(car, location);
+    }
+}
+```
+
+<div align='center'><b>代码段 8-1 常规的类对象的实例化示例</b></div>
+
+```java
+/**
+ * [1]在程序启动的时候， Spring框架会扫描所有添加了注解（Anotation）标记“@Component” 的类，记录下来
+ * [2]当程序需要运行到相应的逻辑时，Spring 会将对应类（DriveCar）中标记了注解“@Autowire”的属性进行实例化（new）
+ */
+@Component
+class DriveCar {
+    /**
+     * Spring框架根据“@Autowire”的标记，对driver进行实例化操作（driver = new Driver())
+     */
+    @Autowire
+    private Driver driver;
+    
+    @Autowire
+    private Car car;
+    
+    public String driveCarToSomewhere(String location) {
+        /**
+         * 从代码逻辑来看， this.driver会报空指针错误（NullPorintError），因为没进行实例化
+         * 但事实上不会，因为Spring框架通过注解（Anotation） @Autowire 把 “driver=new Driver()” 这个代码逻辑自己实现了。
+         * 这种思想就叫控制反转
+         */
+        this.driver.startCar(car);
+        this.driver.addGas(car);
+        this.driver.drive(car, location);
+    }
+}
+```
+
+<div align='center'><b>代码段 8-2 Spring控制反转思想示例</b></div>
+
+2）依赖注入。Spring通过容器(Spring container)管理 Spring bean。实现对象实例的注入。Spring 控制反转的思想，能够让程序在运行时（Runtime）正常运行，是通过依赖注入的方式实现的。在代码段7-2中，类DriveCar 依赖于类 Driver 和类 Car。类 Driver的实例 driver、类 Car 的实例 car 都是通过依赖注入的方式实现。
+
+**（2）单例（Singleton）**。在一定范围内（例如，Spring 容器）获取到的对象实例，都是同一个对象。下面通过一段代码来说明单例。
+
+```java
+// 类 Car 的实例 car1 是通过 new Car() 的方式创建的
+Car car1 = new Car();
+// 类 Car 的实例 car2 是通过 new Car() 的方式创建的
+Car car2 = new Car();
+// 在运行时 debug的过程中，可以看到 car1和car2的内存地址是不一样的，
+// 也就是说 car1 和 car2 是两个实例， car1 == car2 为 false
+// car1 和 car2 属于同一个类 Car 的两个实例
+```
+
+<div align='center'><b>代码段 8-3 直接创建类的对象示例</b></div>
+
+代码段 8-3 中的获取 Car 实例的方法，如果通过单例的方式，如代码段8-4所示。
+
+```java
+class CarFactory {
+    // 通过 private修饰符(modifier)，限制 CarFactory 外部无法直接访问 realCar
+    private static Car realCar; 
+    // 通过public 修饰符, 作为 CarFactory类的唯一外部可访问的方法
+	public Car getInstance() {
+    if (null == CarFactory.realCar) {
+        /**
+         * 通过 synchronized（同步）修饰符的限制，使得多线程变成单线程
+         * 可以这样理解 synchronized，等同于“一夫当关，万夫莫开”。
+         * 没有使用 synchronized， 一个门开得很大，随便三四个人并排都能同时出入
+         * 使用 synchronized 后，门被关得很严，每次只能出入一个人
+         */
+        synchronized (CarFactory.class) {
+            if (null == CarFactory.realCar) {
+                CarFactory.realCar = new Car();
+            }
+        }
+    }
+    return CarFactory.realCar;
+}
+}
+```
+
+<div align='center'><b>代码段 8-4 通过单例创建对象示例</b></div>
+
+调用代码段8-4创建Car的代码如下所示。
+
+```java
+Car singleCar = CarFactory.getInstance();
+```
+
+通过代码段 8-4 的逻辑可以看出，调用  CarFactory.getInstance() ，无论调用多少次，最终返回的都是同一个类的实例，即
+
+```java
+Car car1 = CarFactory.getInstance();
+Car car2 = CarFactory.getInstance();
+if (car1 == car2) {
+    // 程序将运行到这里， car1 和 car2 是同一个类的实例
+    System.out.println("we are the same car.");
+}
+```
+
+如果不做特殊配置（因为Spring容器也可以使用多例模式）， 从 Spring 容器中获取到的Bean 都是单例模式。
+
+## MVC的概念
+
+MVC（Model（模型）、View（视图）、Controller（控制器））。Spring框架中通过Spring MVC 模块，来实现Web 页面逻辑的MVC分离的概念。
+
+先通过一个HTML页面来解释下以上3个基本概念， 页面源代码如代码段 8-4 所示，假定这个页面的名称为“客户订单页面”，文件名称为 order.html。
+
+```html
+<html>
+    <header>
+    	<meta charset="utf-8">
+        <title>客户订单页面</title>
+        <script src="https://www.clarity.ms/s/0.7.32/clarity.js"></script>
+        <link rel="stylesheet" type="text/css" href="https://csdnimg.cn/public/sandalstrap/1.4/css/sandalstrap.min.css">
+        <style>
+            div, span, input, button {font:18px Verdana}
+            div, button {font-weight:bold;text-align: center;}
+            span {text-align: center;}
+            input {width: 300px;}
+            select {width: 308px;}
+        </style>
+    </header>
+    <body>
+        <div style="text-align: center;margin-top: 15%;" >
+            <p align="center" style="font:22px Verdana; font-weight:bold;">${user_name}的订单</p>
+            <form id = "my_form" style="margin-top: 2%" method="post" action="/adm">
+                <div align="center" style="margin-bottom: 0.5%">
+                    <span>商品名称:</span>
+                    <input id = "order_product" name = "order_product"  type="text" value="一本学MVC的书">
+                </div>
+                <input id = "t" name = "t"  type="hidden">
+            </form>
+            <div align="center"style="margin-bottom: 0.5%">
+                <span>商品价格:</span>
+                <input id = "order_price" name="order_price" type="text" value="28.80元">
+            </div>
+            <div align="center">
+                <span style="vertical-align: top;">购买时间:</span>
+                <input id = "order_time" name="order_time" type="text" value=" 2024-03-15 13：57">
+            </div>
+            <div align="center" style="margin-bottom: 0.5%">
+                <span>支付金额:</span>
+                <input id = "order_pay" name="order_pay" type="text" value="25.40元">
+            </div>
+            <div align="center" style="margin-bottom: 0.5%">
+                <span>联系人:</span>
+                <input id = "order_customer" name="order_customer" type="text" value="张先生">
+            </div>
+            <div align="center" style="margin-bottom: 0.5%">
+                <span>联系电话:</span>
+                <input id = "order_contact" name="order_contact" type="text" value="158****8803">
+            </div>
+            <div align="center" style="margin-bottom: 0.5%">
+                <span>配送地址:</span>
+                <input id = "order_address" name="order_address" type="text" value="银河系火星某基地6338号实验室">
+            </div>
+        </div>
+        <script>
+            var order_price = document.getElementById("order_price");
+            order_price.onchange = function () {
+                document.getElementById("t").value = CryptoJS.MD5(psw_input.value).toString();
+            };
+        </script>
+    </body>
+</html>
+```
+
+<div align='center'><b>代码段 8-4 HTML页面源码示例</b></div>
+
+浏览器渲染后的效果如图 8-1所示。
+
+ <div style="text-align: center;" >
+     <p align="center" style="font:22px Verdana; font-weight:bold;">${user_name}的订单</p>
+     <form id = "my_form" style="margin-top: 2%" method="post" action="/adm">
+         <div align="center" style="margin-bottom: 0.5%">
+             <span>商品名称:</span>
+             <input id = "order_product" name = "order_product"  type="text" value="一本学MVC的书">
+         </div>
+         <input id = "t" name = "t"  type="hidden">
+     </form>
+     <div align="center"style="margin-bottom: 0.5%">
+         <span>商品价格:</span>
+         <input id = "order_price" name="order_price" type="text" value="28.80元">
+     </div>
+     <div align="center">
+         <span style="vertical-align: top;">购买时间:</span>
+         <input id = "order_time" name="order_time" type="text" value=" 2024-03-15 13：57">
+     </div>
+     <div align="center" style="margin-bottom: 0.5%">
+         <span>支付金额:</span>
+         <input id = "order_pay" name="order_pay" type="text" value="25.40元">
+     </div>
+     <div align="center" style="margin-bottom: 0.5%">
+         <span>联系人:</span>
+         <input id = "order_customer" name="order_customer" type="text" value="张先生">
+     </div>
+     <div align="center" style="margin-bottom: 0.5%">
+         <span>联系电话:</span>
+         <input id = "order_contact" name="order_contact" type="text" value="158****8803">
+     </div>
+     <div align="center" style="margin-bottom: 0.5%">
+         <span>配送地址:</span>
+         <input id = "order_address" name="order_address" type="text" value="银河系火星某基地6338号实验室">
+     </div>
+</div>
+
+<div align='center'><b>图 8-1 HTML页面源码渲染效果示意图</b></div>
+
+控制这个页面的逻辑为，当用户输入 http://abc.def/user_id/order时，即 URL 以“/用户ID/login”结尾时，返回给浏览器的代码段如代码段8-4所示，其中的${user_name}替换成用户的名称，经浏览器渲染后用户看到的内容如图8-1所示。
+
+MVC的提出是有历史背景的，最初的Web页面类似于JSP（Java Server Pages， 即Java 服务端页面， 微软的C#（读作 C sharp）有类似的 asp页面）的方式，在服务端Web页面的展示方式（样式，展示的字体、字号、颜色、展示的位置等）、数据（可以想象为table中的数据）、以及生成数据的逻辑（啥情况下展示啥数据，可以想象为switch case）是混杂在一个源代码文件里的，修改起来很容易出现错误（只要是人，都会犯错误），这样导致软件的可维护性、稳定性都比较差。
+
+MVC概念的提出，是为了将不同种类的内容，分割至不同的源代码文件中，当用户发起请求后，将各种文件内容按照一定的而规则进行融合，形成一个用户可见的页面。这样用户看到的是一个综合体，而软件人员维护的是一个一个独立、清晰的源代码（数据）文件，提升了软件整体的可维护性和系统的稳定性。
+
+**（1）Model，即数据模型。**与代码段8-4的页面对应的数据模型，即用户订单的相关信息，可以拆分为几个Java类，代码段 8-5 为订单信息数据模型。
+
+```java
+class OrderInfo {
+    // 订单ID
+	private String orderId;
+    
+    // 用户ID，指哪个用户下的订单
+	private String userId;
+    //商品Id
+    private String skuId;
+    // 支付途径
+    private String payType;
+    // 支付金额
+    private String payCash;
+    // 订单创建时间
+    private Date createTime;
+    // 支付时间
+    private Date payTime;
+}
+```
+
+<div align='center'><b>代码段 8-5 订单信息 Model</b></div>
+
+代码段 8-6 为商品信息数据模型。
+
+```java
+class SkuInfo {
+    // 商品Id
+	private String skuId;
+    //商品名称
+    private String skuName;
+    // 商品价格
+    private String price;
+    // 商品重量（kg）
+    private Ingeter weight;
+    // 库存数量
+    private Integer stockNum;
+}
+```
+
+<div align='center'><b>代码段 8-6 商品信息 Model</b></div>
+
+代码段 8-7 为用户信息数据模型。
+
+```java
+class UserInfo {
+    // 用户ID
+	private String id;
+    // 用户姓名
+    private String name;
+    // 用户地址，进行订单配送
+    private String address;
+    // 用户手机号，配送订单联系用户
+    private String mobile;
+}
+```
+
+<div align='center'><b>代码段 8-7 用户信息 Model</b></div>
+
+**（2）View，即视图**。用户可见的内容，或者说将多个Model的数据组合成一个用户需要的页面。可以认为代码段8-4的页面（图8-1）就是一个视图，体现为一个 HTML页面模板及order.html，其中的几个变量商品名称（order_product）、商品价格（order_price）、支付金额（order_pay）、联系人（order_customer）、配送地址（order_address）等， 需要根据用户的ID、商品ID、订单ID等从几个数据模型（OrderInfo、SkuInfo、UserInfo）中查询后获取，然后填充在order.html相应的位置，展示给用户。
+
+**（3）Controller，即控制器。**控制器的功能就是实现“当用户输入以/用户id/order“结尾的URL时，返回如图8-1所示的页面。代码逻辑如代码段 8-8 所示，实现方式以spring MVC模块为例。
+
+```java
+/**
+ * 告诉spring 框架，这是个控制器，需要将相关的HTTP请求映射至这个class
+ * 以便这个class 处理相应的请求逻辑
+ **/
+@Controller
+class OrderController {
+    
+    // 告诉spring 框架，这块代码处理以 “/用户id/order” 结尾的 HTTP 请求
+    @RequestMapping("/{userId}/order")
+	public ModelView getOrder(String userId) {
+        // 对应 order.html的模板，将在模板中填充相应的内容，形成客户的订单信息
+        ModelView modelView = new ModelView("order");
+        // 根据用户 ID,查询订单 ID, 
+        // 根据订单 ID 中的商品 ID 查询商品信息
+        // 根据订单 ID 中的用户ID 查询用户信息
+        return modelView;
+    }
+}
+```
+
+<div align='center'><b>代码段 8-8 订单信息处理 controller</b></div>
+
+至此，对于MVC的概念应该有一些理解了吧。MVC是一种设计模式。什么是设计模式？可以理解为套公式，有一套方法论（思想），对于不同的问题采用不同的程序实现方法，这个跟编程语言无关。这种方法论，被称之为设计模式，推荐看这本书 《Design Patterns: Elements of Reusable Object-Oriented Software》，作者 Erich Gamma, Richard Helm, Ralph Johnson, John Vlissides， ISBN 978-0201633610， 出版社 Addison-Wesley Professional，网上有PDF版的，可以打印出来多看几遍。
+
+## 服务调用
+
+**（1）RESTful 。**RESTful（REST，Representational State Transfer，表述性状态转变）是一种 HTTP 接口的封装风格，本质上还是 HTTP请求，不过对于什么样的业务逻辑，该用哪种HTTP Method，以及对于HTTP接口的地址规则进行了规范，这样方便大家交流，形成一些约定成俗的最佳实践，能给跨团队合作带来很多好处。
+
+**（2）RPC。**RPC，即Remote Procedure Call（远程程序调用）。在了解RPC之前，在操作系统中，有一个IPC（Interprocess communication，进程间通信）的概念，即单个操作系统中的多个进程的通信问题，这个可以看讲操作系统方面的书籍进一步了解。
+
+这里提到IPC，IPC解决的是单个操作系统上多个进程通信的问题。那么，如果有2个进程，分布在2个不同的操作系统中（两台主机，网络是连接在一起的），这两个进程需要进行通信，如何解决？这就是RPC 需要解决的问题。当然了，当前很多微服务之间，都通过RESTful接口（HTTP请求）进行通信，不也实现了RPC？确实这么说没有问题。
+
+RPC 是让开发人员像调用本地方法（本地类库）一样的体验，来发起远程服务调用的，即隐式地进行远程网络请求， 而HTTP对于开发人员来说，是显示地发起远程网络请求。RPC本质上是将HTTP、UDP、TCP等远程网络请求进行一定的封装，使得开发人员感觉在调用本地类库，而无需去了解 HTTP协议、UDP、TCP等soket通信的一种简便的方法，而且这种封装稳定可靠，有利于对服务进行大规模部署、扩容，是互联网服务不可多得的一种好的服务调用方法。
+
+目前，服务之间的调用，除了RESTful（HTTP请求）外， RPC是另一种方式，一般来说，若涉及跨越数据中心（例如需要走公共互联网），一般采用RESTful的方式。如果是一个大型产品内部不同模块之间（多个服务都部署在一个逻辑内网中）的调用， 则采用RPC较为合适。因为RPC 一般是基于 TCP socket通信的，从调用开销上来说要比RESTful要小一些，从而性能要比RESTful要高一些。
+
+目前主流的RPC框架有Dubbo、thrift、gRPC，这三种都有团队在使用，具体使用哪种取决于团队的技术路线和个人的爱好。
+
+1）Dubbo。dubbo（发音：搭宝）最初由alibaba开发，2018年阿里巴巴已将其开源贡献给了阿帕奇基金会，可通过https://dubbo.apache.org了解。优点，使用简单方便，容易上手。
+
+2）Thrift。 Thrift（发音：[θrɪft]），Thrift最初由Facebook公司在2007年开发，目前也将其开源贡献给了阿帕奇基金会，可通过 https://thrift.apache.org/ 了解。优点，跨语言，C++, Java, Python, PHP, Ruby, Erlang, Perl, Haskell, C#, Cocoa, JavaScript, Node.js, Smalltalk, OCaml and Delphi and other languages可互相调用。
+
+3）gRPC。 gRPC是由Google开发的，基于HTTP/2协议。
+
+# Unit 9 Netty
+
+Netty 作为Java 生态中一个重量级的NIO 开源框架，初学者无需掌握，但对于高级开发人员来说是必须掌握的内容。下面提几个基本概念。
+
+**（1）NIO**。NIO 叫做 NewIO，或者叫Noblock IO，即非阻塞式IO。提到非阻塞式IO，必然有阻塞式 IO，即Blocking IO。给一个场景，写一段程序，将10GB的数据写到本地磁盘，代码段如9-1所示，发起请求后，操作系统说你等着，于是你的程序就卡顿在那个wirte的位置。
+
+类似于你在人特别多的小饭馆，点了个餐，特别饿，但餐馆老板太忙，管理也不规范，反正也没小票，过一阵子你问老板好没好，老板说我给催催，反正你一直在为吃饭操心，也没心思玩手机或干别的（相当于你的心思被做饭大厨给阻塞了）。
+
+```java
+class BlockIO {
+	Data bigData= new Data(10GB);
+    File file = new File("/tmp/test.dat");
+    file.open();
+    // 由于数据较大，程序会在这个位置卡顿一段时间，需要等待
+    file.writeBIO(bigData);
+    file.close();
+}
+```
+
+<div align='center'><b>代码段 9-1 BIO 示例</b></div>
+
+非阻塞式IO，即不管任务有多繁重，程序运行总是立即返回，然后给你一个ticket，你可以随时查询， 代码段如9-2所示。类似你在五星级大饭店下单了一顿大餐之后，服务生优雅地给你打印一个小票，让你坐那儿等着，还给你糖果零食小吃随便吃，你可以拿小票催服务员查询大餐啥时候做好（或者在线App里随时看，类似于麦当劳App在线单，会显示制作中、已完成、请去餐之类的），这时候你可以放心地玩手机，或者跟朋友闲聊（相当于你自己的心思并没有被做饭大厨阻塞）。
+
+```java
+class NoBlockIO {
+	Data bigData= new Data(10GB);
+    File file = new File("/tmp/test.dat");
+    file.open();
+    // 立即返回， 不卡顿，不等待
+    Promise promise = file.writeNIO(bigData);
+    // 会告诉你，正在处理中、已完成、已失败
+    promise.get();
+    file.close();
+}
+```
+
+<div align='center'><b>代码段 9-1 NIO 示例</b></div>
+
+说到NIO，就涉及到操作系统对IO任务队列的处理方式，涉及到2个概念， select, epoll。Ubuntu系统可以通过以下命令简单学习，深入学习还需要阅读操作系统的书籍。
+
+```sh
+man select
+man epoll
+```
+
+**（2）TCP 协议。** Netty底层有对 TCP、UDP等 TCP/IP 协议族 socket通信的封装。 什么是TCP，好像跟我日常的编程关系不大？TCP 即 Transmission Control Protocol， 传输控制协议，是当今整个网络通信的基础，日常我们浏览网页使用的 HTTP协议就是基于 TCP协议实现的。整个TCP 协议族，可以阅读《*TCP*/*IP* *Illustrated*, Volume 1: The Protocols, Second Edition 》作者Gary R. Wright，W. Richard Stevens。如果做网络变成，这本书是必读的，不但读，还得能讲得头头是道。知其然，知其所以然。知识是一片海洋，越学会越觉得自己渺小。
+
+# Unit 10 Java 内存模型
+
+Java 的底层是C语言， C语言的底层是操作系统， Java的内存分配、管理模型，不能说跟C没有关系。这里涉及到对 Java 中 volatile 修饰符的理解， C 语言中也有 volatile 关键字， 理解其含义，从 C 语言出发也是一个不错的选项。进一步理解 Java 中的  synchronized 修饰符的真正含义和底层实现，还有internal 关键字。推荐阅读《Thinking in Java》作者 Bruce Eckel。
+
+#  Unit 11 操作系统
+
+操作系统可以阅读《Computer System: A Programmer's Perspective》。这里的每一个点都是重点，对于开发人员理解软件运行内部机制来说很重要。
+
+操作系统对 IO 的处理， 磁盘 IO，网络IO、多线程任务的处理，线程同步（JDK中有一个 ThreadLocal类），进程的 fork, 临界区，PV操作、寄存器（java 中有 register）、用户态和内核态。
+
+# 架构思想
+
+架构（Architecture），主要是设计思想和方法论层面的东西。需要软件开发人员从代码中跳出来，站在更高的视角（宇宙视角）来看整个系统，从整个系统来考虑问题，由上而下地思考现实中的问题。软件是用来实现价值的，不是独立存在的，软件需要部署在硬件上，硬件又被分割在很多物理位置。很多现实中出现的问题不是单单某个软件系统的问题，举个例子，软件系统A单独运行没有问题，软件系统B单独运行也没有问题，但如果部署在一个网络内（或一台机器上），就会出现一些莫名其妙的问题。
+
+现实世界中，没有哪种思想是万能的，解决实际问题都是通过多种思想融合，并做一定的妥协，才最终达成目的（万能的上帝来了也没用），所以人们经常会说“从理论上来说没问题”， 但我们是生活在物理世界的，物理世界中受到各种条件的限制。
+
+架构设计思想，被称之为Enterprise Architecture，简称EA。可以看看 TOGAF（The Open Group Architecture Framework）和 DoDaF（Department of Defense Architecture Framework， (美国)国防部体系结构框架）相关的内容。
+
+这些架构设计，不只局限于软件，还会关注跟软件进行交互的周围系统、环境、人等因素。
