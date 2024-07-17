@@ -14,7 +14,7 @@
 
 **（1）Windows 系统**
 
-下载JDK （Java Development Kit，即 Java 开发组件）， 地址详见甲骨文(Oracle)官网 https://www.oracle.com/java/technologies/downloads/， 选择对应的操作系统（Windows、MacOS、Linux）和硬件架构（x86, aarch）的安装包。解压后安装。
+下载JDK （Java Development Kit，即 Java 开发组件）， 地址详见甲骨文(Oracle)官网 https://www.oracle.com/java/technologies/downloads/ ， 选择对应的操作系统（Windows、MacOS、Linux）和硬件架构（x86, aarch）的安装包。解压后安装。
 
 **（2）Ubuntu(乌班图) 系统**
 
@@ -73,11 +73,11 @@ OpenJDK 64-Bit Server VM (build 17.0.10+7-Ubuntu-122.04.1, mixed mode, sharing)
 
 ### GUI IDE 安装
 
-安装集成开发环境（IDE， Integrated Development Environment ），能够为开发人员提供源代码输入，代码补全，代码编译，运行时调试等便利的功能。本节以开源的Eclipse 为例， 下载地址  https://www.eclipse.org/downloads/packages/。
+安装集成开发环境（IDE， Integrated Development Environment ），能够为开发人员提供源代码输入，代码补全，代码编译，运行时调试等便利的功能。本节以开源的Eclipse 为例， 下载地址  https://www.eclipse.org/downloads/packages/ 。
 
 **（1）Windows**
 
-下载 `Windows x86-64` 版本的 `Eclipse IDE for Enterprise Java and Web Developers`， https://www.eclipse.org/downloads/download.php?file=/technology/epp/downloads/release/2024-06/R/eclipse-jee-2024-06-R-win32-x86_64.zip。
+下载 `Windows x86-64` 版本的 `Eclipse IDE for Enterprise Java and Web Developers`， https://www.eclipse.org/downloads/download.php?file=/technology/epp/downloads/release/2024-06/R/eclipse-jee-2024-06-R-win32-x86_64.zip 。
 
 下载完成后，解压缩，双击解压后文件夹中的 `eclipse.exe` 即可直接使用。
 
@@ -170,7 +170,7 @@ class Hello {
 }
 ```
 
-注意：如果在`windows` 下编辑文件， 则最好将 `hell.java` 保存为` UTF-8` 文件（`windows` 默认为 `ASCII` 编码格式），保持良好的编程习惯。linux默认的文件编码格式为UTF-8，不存在这个问题。另外需要说明的是，linux下严格区分文件名称大小写，而windows中则不区分文件名称的大小写。
+注意：如果在`Windows` 下编辑文件， 则最好将 `hell.java` 保存为` UTF-8` 文件（`Windows` 默认为 `ASCII` 编码格式），保持良好的编程习惯。linux默认的文件编码格式为UTF-8，不存在这个问题。另外需要说明的是，linux下严格区分文件名称大小写，而windows中则不区分文件名称的大小写。
 
 java 源代码文件的文件名（Hello.java）称跟其内容中的 class 名称（Hello）保持一致，这是默认规则。当然不一样可以吗？也可以，但初学者暂时按这个规则来，后续再讲不一样的处理方法。
 
@@ -184,20 +184,20 @@ ls										# 查看当前目录下的文件
 Hello.java Hello.class					# 可以看到编译生成的字节码文件 hello.class
 ```
 
-`javac` 为 java 的编译器，作用是将 java源代码文件 hello.java 编译为 字节码文件(java规范定义的一种可以在任意平台上被 java 运行时翻译为机器二进制可执行文件的文件格式) `hello.class ` 
+`javac` 为 java 的编译器，作用是将 java源代码文件 hello.java 编译为 字节码文件(java规范定义的一种可以在任意平台上被 java 运行时翻译为机器二进制可执行文件的文件格式) `Hello.class ` 
 
 * **运行字节码文件**
 
   执行
 
 ```shell
-java hello					# 运行字节码文件
+java Hello					# 运行字节码文件
 hello world					# 可以看到控制台的输出
 ```
 
-java 命令在 执行后形成的进程在Java 中叫做 Java 虚拟机（Java Virtual Machine，简称 JVM）。之所以叫虚拟机， 是因为 Java跨平台，Java 规范定义了一套运行字节码文件的规则，类似于操作系统执行可执行文件，所以叫做java 虚拟机。
+java 命令在 执行后形成的进程在Java 中叫做 Java 虚拟机（Java Virtual Machine，简称 JVM）。之所以叫虚拟机， 是因为JVM中有一套虚拟的机器指令，就像是一台物理硬件一样，所以叫“虚拟机器”。Java之所以这么做，是因为不同的硬件平台，其机器语言存在差异，如果像C语言那样编译，则必须编译多套目标代码，来适配不同的硬件。Java为了跨平台，实现它自己立的flag“write once, run any where”, 通过JVM来映射适配不同的硬件平台，而开发人员只需要编译一次，将源代码编译为Java 规范定义的一套字节码即可。
 
-注意，此处命令为`java`，后面的参数为 hello，即 hello.class的前缀， JVM 默认会找到当前目录下的 hello.class 文件，读取，加载至内存，然后解析，找到其中的入口 （main函数），然后执行。
+注意，此处命令为`java`，后面的参数为 hello，即 Hello.class的前缀， JVM 默认会找到当前目录下的 Hello.class 文件，读取，加载至内存，然后解析，找到这个类的入口 （main函数），然后执行。
 
 # Unit 4 几个基础概念
 
@@ -282,7 +282,6 @@ maven是apache（阿帕其）基金会（Apache Fundation）管理的开源（op
 │       ├── java
 │       └── resources
 └── target
-
 ```
 
 <div align='center'><b>代码段 5-1 maven 项目文件目录结构</b></div>
@@ -668,7 +667,7 @@ Hello maven
 <version>4.1.32.Final</version>
 ```
 
-添加完代码段 6-1 pom中所示的依赖项有，在项目根目录中执行
+添加完代码段 6-1 pom 中所示的依赖项有，在项目根目录中执行
 
 ```sh
 # 强制更新 pom 依赖， 对项目进行编译
@@ -698,7 +697,7 @@ drwxrwxr-x 12 rd rd    4096  6月  6 16:40 ..
 -rw-rw-r--  1 rd rd     400  7月 15 14:09 _remote.repositories
 ```
 
-<div align='center'><b>代码段 6-2 maven下载到本地的jar包及相关文件信息示例</b></div>
+<div align='center'><b>代码段 6-2 maven下载到本地的 jar 包及相关文件信息示例</b></div>
 
 可见本地缓存目录下已经下载了 第三方jar 包 `netty-all-4.1.32.Final.jar`，说明 pom.xml 中添加的依赖是成功的。
 
@@ -941,7 +940,7 @@ Main Porcelain Commands
 
 ## 代码管理
 
-使用git 进行源代码管理需要执行如代码段 7-1 所示的步骤。
+使用 git 进行源代码管理需要执行如代码段 7-1 所示的步骤。
 
 ```sh
 # [1] 进入工程根目录
@@ -969,7 +968,7 @@ git log
 
 <div align='center'><b>代码段 7-1 git 源代码管理步骤示例</b></div>
 
-以 Unit 5中的代码为例，进行演示，实际操作如代码段 7-2 所示。
+以 Unit 6 中的代码为例，进行演示，实际操作如代码段 7-2 所示。
 
 ```sh
 # 进入工程根目录，即需要管理的代码的根目录, windows下请在cmd下执行相应的命令
@@ -1055,7 +1054,7 @@ HTML 是整个互联网的基础，这么说毫不夸张。
 
 HTML页面相关的内容，通常称之为前端，即用户可以直接看到的。 而前面几个单元所学的内容，称之为后端，即用户不能够直接看到的，但能够控制用户看到些什么。一般来说，前端的主要任务是提供优秀的用户体验，也就是说不管用户打开浏览器，还是打开一款APP,用起来感觉很舒服，看着舒心，操作不反人类，各种按钮都符合人体工程学（这方面比较优秀的是Apple公司）。而后端的任务是实现各种复杂的控制，在正确的时间给用户正确的内容。
 
-作为Java开发人员，需要掌握必不可少的HTML基础知识，能够通过txt文档自己写一个简单的html页面，如果还能加入一些javascript 脚本来实现简单的页面内容控制 。熟悉form 的提交，通过javascript实现form表单的异步提交。 了解css,div等样式相关的内容。https://www.w3cschool.cn/ 是一个不错的学习网站，可以自行学习。
+作为 Java 开发人员，需要掌握必不可少的 HTML 基础知识，能够通过 txt 文本文档自己写一个简单的 html 页面，如果还能加入一些javascript 脚本来实现简单的页面内容控制，通过浏览器打开该文件，能够达到预期的效果。熟悉 form 的提交，通过javascript实现form表单的异步提交。 了解css,div等样式相关的内容。https://www.w3cschool.cn/ 是一个不错的学习网站，可以自行学习。
 
 ## JavaScript
 
@@ -1326,7 +1325,7 @@ MVC（Model（模型）、View（视图）、Controller（控制器））。Spri
 </div>
 <div align='center'><b>图 10-1 HTML页面源码渲染效果示意图</b></div>
 
-控制这个页面的逻辑为，当用户输入 http://abc.def/user_id/order时，即 URL 以“/用户ID/login”结尾时，返回给浏览器的代码段如代码段 10-6 所示，其中的${user_name}替换成用户的名称，经浏览器渲染后用户看到的内容如图8-1所示。
+控制这个页面的逻辑为，当用户输入 http://abc.def/user_id/order 时，即 URL 以“/用户ID/login”结尾时，返回给浏览器的代码段如代码段 10-6 所示，其中的${user_name}替换成用户的名称，经浏览器渲染后用户看到的内容如图8-1所示。
 
 MVC 的提出是有历史背景的，最初的Web页面类似于JSP（Java Server Pages， 即Java 服务端页面， 微软的C#（读作 C sharp）有类似的 asp页面）的方式，在服务端Web页面的展示方式（样式，展示的字体、字号、颜色、展示的位置等）、数据（可以想象为table中的数据）、以及生成数据的逻辑（啥情况下展示啥数据，可以想象为switch case）是混杂在一个源代码文件里的，修改起来很容易出现错误（只要是人，都会犯错误），这样导致软件的可维护性、稳定性都比较差。
 
