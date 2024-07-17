@@ -1,4 +1,10 @@
-# Unit 1 开发环境准备
+# Unit 1文档说明
+
+本文档适用的读者为具有基本的编程语言基础，而缺乏实践经验，希望能够成为Java开发人员的读者。文档内容偏重实践，理论基础等涉及较少，在需要理论的地方推荐读者阅读相应的书籍。本文档内容较为浅显，不使用于 Java高级以上的开发人员阅读。
+
+本文档的读者需熟悉Windows或Ubuntu中的一种操作系统而常规操作，无需其他基础。
+
+# Unit 2 开发环境准备
 
 ##  配置开发环境 
 
@@ -105,13 +111,13 @@ eclipse &
 
 **（4）代码打包及版本管理。**一般IDE 可以通过插件等其他形式提供代码打包及版本管理的图形化界面。
 
-# Unit 2 Hello world
+# Unit 3 Hello world
 
 ## 使用 IDE 创建工程
 
 以 eclipse-jee-2024-06-R-linux-gtk-x86_64 的 eclipse为例进行说明。打开Eclipse, 选择 `文件(File)`-> `新建(New) `->`工程(Project ...)` ->` Java` -> `Java Project`， 点击 `下一步(Next)`, 输入工程名称“helloworld”， 点击`下一步（Next）`，点击`完成(Finish)`， 如果弹出“`是否打开 java 视图(Open java perspective)`”，点击是即可。
 
-双击IDE左侧区域 “`package Explorer`” 中的 “helloworld”， 出现2个下拉菜单： JRE System Library 和 src， 其中的 src就是源代码文件所在的目录。点击 src，右键点击新建(New) -> 包(package) ， 名称就是用默认的helloworld， 点击完成。此时在src下出现一个类似于小魔方的图标(田字形)，后面紧跟着helloworld,这就是刚创建的package。在田字形和helloworld上点击右键，点击新建(New)->类(class), 输入名称Hello,注意首字母大写，这是Java 类名称的规范写法，点击确认。此时出现了一个 Hello.java的打开文件，其中内容如代码段2-1所示。
+双击IDE左侧区域 “`package Explorer`” 中的 “helloworld”， 出现2个下拉菜单： JRE System Library 和 src， 其中的 src就是源代码文件所在的目录。点击 src，右键点击新建(New) -> 包(package) ， 名称就是用默认的helloworld， 点击完成。此时在src下出现一个类似于小魔方的图标(田字形)，后面紧跟着helloworld,这就是刚创建的package。在田字形和helloworld上点击右键，点击新建(New)->类(class), 输入名称Hello,注意首字母大写，这是Java 类名称的规范写法，点击确认。此时出现了一个 Hello.java的打开文件，其中内容如代码段3-1所示。
 
 ```java
 package helloworld;
@@ -121,9 +127,9 @@ public class Helllo {
 }
 ```
 
-<div align='center'><b>代码段 2-1 类框架示例</b></div>
+<div align='center'><b>代码段 3-1 类框架示例</b></div>
 
-在其中编写源代码， 如代码段 2-2 所示。
+在其中编写源代码， 如代码段 3-2 所示。
 
 ```java
 package helloworld;
@@ -135,7 +141,7 @@ public class Helllo {
 }
 ```
 
-<div align='center'><b>代码段 2-2 helloworld代码示例</b></div>
+<div align='center'><b>代码段 3-2 helloworld代码示例</b></div>
 
 点击菜单栏上的 运行(Run) -运行(Run CTRL+F11)，此时，会在IDE的最下方的 Console Tab 栏中，出现一行 “hello world, i am here”。
 
@@ -191,7 +197,7 @@ java 命令在 执行后形成的进程在Java 中叫做 Java 虚拟机（Java V
 
 注意，此处命令为`java`，后面的参数为 hello，即 hello.class的前缀， JVM 默认会找到当前目录下的 hello.class 文件，读取，加载至内存，然后解析，找到其中的入口 （main函数），然后执行。
 
-# Unit 3 几个基础概念
+# Unit 4 几个基础概念
 
 ## 源文件
 
@@ -227,9 +233,9 @@ Java、C都属于静态语言，静态语言有个特征，都需要首先进行
 
 ## linux 命令
 
-在linux上，需要掌握一些基础的linux命令，很多时候会起到事半功倍的效果， 如表 3-1 所示。
+在linux上，需要掌握一些基础的linux命令，很多时候会起到事半功倍的效果， 如表 4-1 所示。
 
-<div align='center'><b>表 3-1 常用 linux 命令清单</b></div>
+<div align='center'><b>表 4-1 常用 linux 命令清单</b></div>
 
 | No   | 命令（Name） | 描述（DESCRIPTION）                                          |
 | ---- | ------------ | ------------------------------------------------------------ |
@@ -251,7 +257,7 @@ Java、C都属于静态语言，静态语言有个特征，都需要首先进行
 | 16   | tar -czf     | 压缩并打包为一个tar包（发音：踏）包，例如执行 tar -czf abc.tar.gz abc, 即将当前目录下的abc文件夹及其内部的所有文件打包为一个压缩文件 abc.tar.gz。 |
 | 17   | ssh          | ssh user@IP, 通过SSH在客户端连接至网络上服务端的服务器，登录网络上的某个服务器，例如  ssh guest@192.168.1.1.1,接下来输入密码就登录到远程的服务器上了，类似于Windows下的远程桌面功能，只是ssh没有图形化界面。 |
 
-# Unit 4 包依赖管理
+# Unit 5 包依赖管理
 
 在程序运行的时候，总是需要一些第三方（其他开发者开发的）的工具， 例如JSON对象解析，ZIP文件解压缩，作为开发人员来说，不可能所有的工具都需要自己去做（重复发明轮子）。这就涉及到如何有效、便捷地使用第三方软件（包、类库等）的问题。在Java的生态中，有 ant、maven、gradle等构建工具（builld tool）可以使用。
 
@@ -261,7 +267,7 @@ Java、C都属于静态语言，静态语言有个特征，都需要首先进行
 
 Java 中如果需要使用maven（发音：mān wen）来进行依赖包（一般称为jar包（发音：榨包），因为java中第三方打的包都是xxxx.jar格式的），则需要按照一定的文件目录格式放置相应的文件，maven才能正常工作。就是说maven比较挑起，必须按照她的要求把文件放好，它才好好干活儿。
 
-maven是apache（阿帕其）基金会（Apache Fundation）管理的开源（open source）项目， 是当前主流的依赖包管理工具， ant历史更早，新兴的gradle也正在被使用。典型的maven工程目录如代码段4-1所示。
+maven是apache（阿帕其）基金会（Apache Fundation）管理的开源（open source）项目， 是当前主流的依赖包管理工具， ant历史更早，新兴的gradle也正在被使用。典型的maven工程目录如代码段5-1所示。
 
 ```sh
 .
@@ -277,7 +283,7 @@ maven是apache（阿帕其）基金会（Apache Fundation）管理的开源（op
 
 ```
 
-<div align='center'><b>代码段 4-1 maven 项目文件目录结构</b></div>
+<div align='center'><b>代码段 5-1 maven 项目文件目录结构</b></div>
 
 pom.xml 是一个 XML 配置文件，内容涉及当前项目的名称、项目构建方法、依赖包的清单、依赖的父工程（maven工程可以嵌套）等信息。
 
@@ -285,7 +291,7 @@ src为源文件目录， target为编译生成的文件所在目录。src/main/j
 
 这里提到了“单元测试”的概念，还是以建设一栋房屋为例，来介绍单元测试的概念。建设一栋房屋，不能等房屋完全竣工再去查看地基是否达标、窗户是否达标、防水是否达标，而应该是在各个重要的阶段就对前一阶段的建设成果（一个单元）进行检验，这个就叫单元测试。虽然单元测试不能保证最终的房屋能够完全达标，但却可以事先发现某个单元存在的问题。或者说，当房屋最终质量出现问题时，通过单元测试能很快定位到是哪个部分（单元）出了问题。
 
-这里还提到了 XML 文件，XML（可扩展标记语言 (Extensible Markup Language, 简称 XML)）文件是一个文本文件，文件内容结构代码段 4-2所示。
+这里还提到了 XML 文件，XML（可扩展标记语言 (Extensible Markup Language, 简称 XML)）文件是一个文本文件，文件内容结构代码段 5-2所示。
 
 ```xml
 <?xml version="1.0" encoding="utf-8"?>
@@ -299,7 +305,7 @@ src为源文件目录， target为编译生成的文件所在目录。src/main/j
 </myfile>
 ```
 
-<div align='center'><b>代码段 4-2 XML 文件内容结构</b></div>
+<div align='center'><b>代码段 5-2 XML 文件内容结构</b></div>
 
 相当于在文本文档的基础上，通过添加标签`<tag></tag>`，将文本进行分割，添加了说明，方便阅读，另外一个重要的作用，可以方便计算机进行处理。如果是文本文档，只能要求计算机读取第几行，但是XML 文档，就可以要求计算机读取代码段 4-2中的 myfile/name/firstname中的内容，这样是不是更加方便呢？这就是 XML 文件的作用了。这里的 “myfile/name/firstname” 被称之为 XPATH，有兴趣可以阅读 XML相关的书籍进行了解。
 
@@ -307,7 +313,7 @@ src为源文件目录， target为编译生成的文件所在目录。src/main/j
 
 maven工程目录结构，可以手动进行创建，也可以通过IDE进行创建，一般IDE都提供有创建maven工程的图形化界面。
 
-打开Eclipse（以 eclipse-jee-2024-06-R-linux-gtk-x86_64 为例），点击 文件（File）->新建（New）->Maven Project（Maven 工程），在弹出的对话框中，选中“Create a simple project(skip archetype selection)”，选中“Use default workspace location”, 点击“下一步（Next）”， 在 group id 中填写 "cn.java.study",， 在 artifact Id 中填写 “my.maven.demo”， 点击“完成(Finish)”。此时，在IDE 左侧的导航栏中能够看到如代码段 4-3 所示的目录结构。
+打开Eclipse（以 eclipse-jee-2024-06-R-linux-gtk-x86_64 为例），点击 文件（File）->新建（New）->Maven Project（Maven 工程），在弹出的对话框中，选中“Create a simple project(skip archetype selection)”，选中“Use default workspace location”, 点击“下一步（Next）”， 在 group id 中填写 "cn.java.study",， 在 artifact Id 中填写 “my.maven.demo”， 点击“完成(Finish)”。此时，在IDE 左侧的导航栏中能够看到如代码段 5-3 所示的目录结构。
 
 ```sh
 my.maven.demo
@@ -322,7 +328,7 @@ my.maven.demo
     └── target
 ```
 
-<div align='center'><b>代码段 4-3 maven 工程结构示例</b></div>
+<div align='center'><b>代码段 5-3 maven 工程结构示例</b></div>
 
 可能在pom.xml 的图标上出现了了红色的x符号，表示此文件存在错误，可以打开pom.xml文件，将 `<project>`所在的行替换为如下内容
 
@@ -332,7 +338,7 @@ my.maven.demo
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 ```
 
-使得最终pom.xml的内容如代码段4-4所示。
+使得最终pom.xml的内容如代码段 5-4 所示。
 
 ```xml
 <project xmlns="http://maven.apache.org/POM/4.0.0"
@@ -345,7 +351,7 @@ my.maven.demo
 </project>
 ```
 
-<div align='center'><b>代码段 4-4 pom.xml 文件内容</b></div>
+<div align='center'><b>代码段 5-4 pom.xml 文件内容</b></div>
 
 然后在 IDE左侧导航界面中选中“my.maven.demo”的图表， 右键菜单中点击“Maven”-> "Update Project"，在弹出的对话框中点击 其他错误，暂时忽略。
 
@@ -367,7 +373,7 @@ sudo apt-get install maven
 
 ### 编译
 
-进入“代码段 4-3 XML 文件内容结构”的工程根目录，ubuntu下的执行方法如代码段4-5所示。这里假定 my.maven.demo 处于目录 /a/b/c/d/e 下。
+进入“代码段 5-3 maven 工程结构”的工程根目录，ubuntu下的执行方法如代码段 5-5 所示。这里假定 my.maven.demo 处于目录 /a/b/c/d/e 下。
 
 ```sh
 # 进入 my.maven.demo 工程的根目录
@@ -377,9 +383,9 @@ cd  /a/b/c/d/e/my.maven.demo
 mvn compile
 ```
 
-<div align='center'><b>代码段 4-5 mvn 编译方法示例</b></div>
+<div align='center'><b>代码段 5-5 mvn 编译方法示例</b></div>
 
-此时，可看到如代码段 4-6 所示的输出。
+此时，可看到如代码段 5-6 所示的输出。
 
 ```sh
 [INFO] --- resources:3.3.1:resources (default-resources) @ my.maven.demo ---
@@ -396,7 +402,7 @@ mvn compile
 [INFO] ------------------------------------------------------------------------
 ```
 
-<div align='center'><b>代码段 4-6 mvn 编译输出示例</b></div>
+<div align='center'><b>代码段 5-6 mvn 编译输出示例</b></div>
 
 注意，执行 `mvn compile` 命令时，maven会请求网络（需保证使用的计算机能够顺畅访问网络），从默认的中央仓下载一些文件至本地。本地文件的存储路径，以ubuntu为例，若 当前操作系统登录的用户名为 avata, 则maven本地的缓存目录为`/home/avata/.m2/repository`。若为Windows系统，则在 C:/User/用户名/Application data/***/.m2/repository 下。
 
@@ -406,16 +412,16 @@ mvn compile
 
 上面的步骤只是将java源文件编译为 .class文件，作为一个工程来讲，有很多个.class文件，还有一些配置文件，作为可部署运行的程序，还需要通过打包（package）形成简单可部署、可执行的jar文件。
 
-ubuntu下的执行方法如代码段 4-7 所示。
+ubuntu下的执行方法如代码段 5-7 所示。
 
 ```sh
 # maven 首先执行clean，清空之前打包的文件，然后执行 package,打包
 mvn clean package
 ```
 
-<div align='center'><b>代码段 4-7 mvn 打包命令示例</b></div>
+<div align='center'><b>代码段 5-7 mvn 打包命令示例</b></div>
 
-此时，可看到如代码段 4-8 所示的输出。
+此时，可看到如代码段 5-8 所示的输出。
 
 ```sh
 [INFO] --- maven-jar-plugin:2.4:jar (default-jar) @ my.maven.demo ---
@@ -429,7 +435,7 @@ mvn clean package
 
 ```
 
-<div align='center'><b>代码段 4-8 mvn 打包输出内容示例</b></div>
+<div align='center'><b>代码段 5-8 mvn 打包输出内容示例</b></div>
 
 此时，形成了可在JVM 中执行的文件 my.maven.demo-0.0.1-SNAPSHOT.jar， 执行如下命令
 
@@ -455,7 +461,7 @@ no main manifest attribute, in target/my.maven.demo-0.0.1-SNAPSHOT.jar
 
 此时在 IDE 左侧导航栏中出现一个 “HelloMvn.java”的图标，同时在其上方出现一个“my.maven.demo”的包(package)图标。
 
-（3）双击打开 IDE 左侧导航栏中的 HelloMvn.java ，可见IDE 自动生成的源代码如代码段 4-9 所示。
+（3）双击打开 IDE 左侧导航栏中的 HelloMvn.java ，可见IDE 自动生成的源代码如代码段 5-9 所示。
 
 ```java
 package my.maven.demo;
@@ -466,9 +472,9 @@ public class HelloMvn {
 
 ```
 
-<div align='center'><b>代码段 4-9 IDE 自动生成代码示例</b></div>
+<div align='center'><b>代码段54-9 IDE 自动生成代码示例</b></div>
 
-修改源代码，使其内容如代码段 4-10 所示。
+修改源代码，使其内容如代码段 5-10 所示。
 
 ```java
 package my.maven.demo;
@@ -488,9 +494,9 @@ public class HelloMvn {
 
 ```
 
-<div align='center'><b>代码段 4-10 IDE 添加源代码示例</b></div>
+<div align='center'><b>代码段 5-10 IDE 添加源代码示例</b></div>
 
-在 pom.xml （发音：泡母点艾可斯艾木艾奥）中添加 打包配置`<build>`节点，pom.xml 文件内容如代码段 4-11 所示。
+在 pom.xml （发音：泡母点艾可斯艾木艾奥）中添加 打包配置`<build>`节点，pom.xml 文件内容如代码段 5-11 所示。
 
 ```xml
 <project xmlns="http://maven.apache.org/POM/4.0.0"
@@ -541,7 +547,7 @@ public class HelloMvn {
 </project>
 ```
 
-<div align='center'><b>代码段 4-11 pom XML build节点配置示例</b></div>
+<div align='center'><b>代码段 5-11 pom XML build节点配置示例</b></div>
 
 开始编译打包，执行
 
@@ -582,7 +588,7 @@ Hello maven
 
 可见，maven工程源文件编译成功，而且已运行起来了。
 
-# Unit 5 简单的Web 应用程序
+# Unit 6 简单的Web 应用程序
 
 通过这个单元的学习，将构建一个简单的Web应用程序， 启动后，可以通过浏览器输入 URL 进行访问。
 
@@ -590,7 +596,7 @@ Hello maven
 
 在 Unit 4 中， 学习了 maven 工程的基本构建方法，本节的 Java web 工程将采用 maven类进行构建，所以这个工程是一个 Java Web 工程，又是一个Java Maven 工程，这是从两个方面来说的，不产生冲突。
 
-**（1）添加pom依赖。** 首先在上一节的 pom.xml 中添加节点 `dependencies`， 添加跟Web相关的第三方组件dependency(依赖)，形成的pom.xml 文件 如代码段 5-1 所示。
+**（1）添加pom依赖。** 首先在上一节的 pom.xml 中添加节点 `dependencies`， 添加跟Web相关的第三方组件dependency(依赖)，形成的pom.xml 文件 如代码段 6-1 所示。
 
 ```xml
 <project xmlns="http://maven.apache.org/POM/4.0.0"
@@ -648,7 +654,7 @@ Hello maven
 </project>
 ```
 
-<div align='center'><b>代码段 5-1 pom 添加 web组件依赖示例</b></div>
+<div align='center'><b>代码段 6-1 pom 添加 web组件依赖示例</b></div>
 
 注意，节点“mainClass”中的内容，即jar 包中主程序启动的入口，后续需要修改。
 
@@ -660,7 +666,7 @@ Hello maven
 <version>4.1.32.Final</version>
 ```
 
-添加完代码段5-1 pom中所示的依赖项有，在项目根目录中执行
+添加完代码段 6-1 pom中所示的依赖项有，在项目根目录中执行
 
 ```sh
 # 强制更新 pom 依赖， 对项目进行编译
@@ -690,13 +696,13 @@ drwxrwxr-x 12 rd rd    4096  6月  6 16:40 ..
 -rw-rw-r--  1 rd rd     400  7月 15 14:09 _remote.repositories
 ```
 
-<div align='center'><b>代码段 5-2 maven下载到本地的jar包及相关文件信息示例</b></div>
+<div align='center'><b>代码段 6-2 maven下载到本地的jar包及相关文件信息示例</b></div>
 
 可见本地缓存目录下已经下载了 第三方jar 包 `netty-all-4.1.32.Final.jar`，说明 pom.xml 中添加的依赖是成功的。
 
 （2）提供Web 程序入口。在 IDE 左侧导航栏（Project Explorer）中选中 “src/main/java”图标，右键->新建(New) -> 包(package) , 在弹出的 “新java 包(New Java Package)”对话框中的 “名称(Name)”中输入 “my.web.demo”， 确保对话框中的 Source Folder=my.maven.demo/src/main/java， 点击"Finish(完成)"。
 
-此时 IDE 左侧导航栏(Project Explorer) 中出现一个 my.web.demo的图标， 表示刚才新建的包(package)是成功的。左键点击该图表，右键->新建(New)->类(class)， 在“Name”输入框中输入 “Bootstrap”，点击确定。文件“Bootstrap.java" 中的代码内容如代码段 5-3 所示。
+此时 IDE 左侧导航栏(Project Explorer) 中出现一个 my.web.demo的图标， 表示刚才新建的包(package)是成功的。左键点击该图表，右键->新建(New)->类(class)， 在“Name”输入框中输入 “Bootstrap”，点击确定。文件“Bootstrap.java" 中的代码内容如代码段 6-3 所示。
 
 ```java
 package my.web.demo;
@@ -726,9 +732,9 @@ public class Bootstrap {
 
 ```
 
-<div align='center'><b>代码段 5-3 Web 程序启动(自举)入口</b></div>
+<div align='center'><b>代码段 6-3 Web 程序启动(自举)入口</b></div>
 
-在包(package) my.web.demo 中新建类(class) Server, Server.java中的代码内容如代码段 5-4 所示。
+在包(package) my.web.demo 中新建类(class) Server, Server.java中的代码内容如代码段 6-4 所示。
 
 ```java
 package my.web.demo;
@@ -792,9 +798,9 @@ public class Server {
 
 ```
 
-<div align='center'><b>代码段 5-4 Web 服务器(Server)核心代码示例</b></div>
+<div align='center'><b>代码段 6-4 Web 服务器(Server)核心代码示例</b></div>
 
-在包(package) my.web.demo 中新建类(class) HttpHandler, HttpHandler.java中的代码内容如代码段 5-5 所示。
+在包(package) my.web.demo 中新建类(class) HttpHandler, HttpHandler.java中的代码内容如代码段 6-5 所示。
 
 ```java
 package my.web.demo;
@@ -853,7 +859,7 @@ public class HttpHandler extends SimpleChannelInboundHandler<FullHttpRequest> {
 
 ```
 
-<div align='center'><b>代码段 5-5 HTTP 请求核心代码示例</b></div>
+<div align='center'><b>代码段 6-5 HTTP 请求核心代码示例</b></div>
 
 至此，源代码已经完成了，需要修改 pom文件中的主程序入口，将pom.xml中的节点project/build/plugins下的 `<artifactId>maven-assembly-plugin</artifactId>`下的 configuration/archive/manifest/mainClass修改为 “my.web.demo.Bootstrap”，即` <mainClass>my.web.demo.Bootstrap</mainClass>`。
 
@@ -895,7 +901,7 @@ my_web_demo_server_started, listen 8080
 
 那我们日常浏览网站感觉没用到端口号啊？比如 http://www.baidu.com,事实上，这个地址使用了默认端口号80, 完整的地址为http://www.baidu.com:80。
 
-#  Unit 6 源代码管理
+#  Unit 7 源代码管理
 
 ## 基本概念
 
@@ -933,7 +939,7 @@ Main Porcelain Commands
 
 ## 代码管理
 
-使用git 进行源代码管理需要执行如代码段 6-1 所示的步骤。
+使用git 进行源代码管理需要执行如代码段 7-1 所示的步骤。
 
 ```sh
 # [1] 进入工程根目录
@@ -959,9 +965,9 @@ git commit -m 'i modified 2 files, d.java and e.java, just for fun, enjoy life'
 git log
 ```
 
-<div align='center'><b>代码段 6-1 git 源代码管理步骤示例</b></div>
+<div align='center'><b>代码段 7-1 git 源代码管理步骤示例</b></div>
 
-以 Unit 5中的代码为例，进行演示，实际操作如代码段 6-2 所示。
+以 Unit 5中的代码为例，进行演示，实际操作如代码段 7-2 所示。
 
 ```sh
 # 进入工程根目录，即需要管理的代码的根目录, windows下请在cmd下执行相应的命令
@@ -1037,9 +1043,9 @@ Date:   Mon Jul 15 16:36:12 2024 +0800
 
 ```
 
-<div align='center'><b>代码段 6-2 实际工程源代码管理示例</b></div>
+<div align='center'><b>代码段 7-2 实际工程源代码管理示例</b></div>
 
-# Unit 7 HTML
+# Unit 8 HTML
 
 HTML 是整个互联网的基础，这么说毫不夸张。
 
@@ -1055,13 +1061,17 @@ JavaScript（简称JS），是HTML页面中非常流行的一种脚本语言，�
 
 JavaScript 在 1995 年由Netscape（网景）公司的Brendan Eich，在（Netscape Navigator）网景导航者浏览器上首次设计实现而成。后来Netscape与Sun Microsystems（太阳微系统公司，目前已经被甲骨文（Oracle）公司收购）合作，Netscape管理层希望它外观看起来更像Java，因此取名为JavaScript。
 
-# Unit 8 Java生态
+# Unit 9 Java 基础
 
-在学习 Java 生态之前，需要阅读 Java基础的书籍，这种书籍市面上很多，需要熟悉 类、对象、方法 等面对对象编程的一些概念。
+通过阅读Java基础的书籍（推荐《Core Java Volume I--Fundamentals(11th Edition)》，作者: [Cay S. Horstmann]， 出版社: Prentice Hall，初学者随便再找一本中文的，中英文同时看，毕竟这东西是老外发明的，中文翻译过来有些内涵就变了），通过一门编程语言，熟悉面对对象的编程思想。每种编程语言都有其特点，但面对对象的编程思想是相同的。
+
+熟悉 Java 基本数据类型、类、抽象类、接口、类的对象、重载、重写、构造函数、方法、类的继承（扩展）、类的多态、反射、代理、堆、栈、集合（Map、List、Set、Arrays）等。
+
+# Unit 10 Java生态
 
 ## 数据库（DB）
 
-需数据库相关的基础知识和实践能力，可以选取MySQL进行练习，包含以下内容。
+需数据库相关的基础知识和实践能力，可以选取MySQL（一款开源免费的数据库，目前由Oracle 公司拥有）进行练习，包含以下内容。
 
 （1）通过 JDBC 连接数据库进行 CRUD（Create（新增）, Retrieve（查询）, Update（更新）, Delete（删除））。
 
@@ -1083,7 +1093,7 @@ JavaScript 在 1995 年由Netscape（网景）公司的Brendan Eich，在（Nets
 
 1）控制反转（IoC, Invert of Control）。对象的使用者只需要进行对象的声明，对象的创建由Spring框架完成。
 
-下面以一个开车到某个地方的代码段来进行说明，如果不使用控制反转，那么代码的写法如代码段 8-1所示。
+下面以一个开车到某个地方的代码段来进行说明，如果不使用控制反转，那么代码的写法如代码段 10-1所示。
 
 ```java
 class DriveCar {
@@ -1100,7 +1110,9 @@ class DriveCar {
 }
 ```
 
-<div align='center'><b>代码段 8-1 常规的类对象的实例化示例</b></div>
+<div align='center'><b>代码段 10-1 常规的类对象的实例化示例</b></div>
+
+Spring 控制反转思想示范，如代码段 10-2 所示。
 
 ```java
 /**
@@ -1131,11 +1143,17 @@ class DriveCar {
 }
 ```
 
-<div align='center'><b>代码段 8-2 Spring控制反转思想示例</b></div>
+<div align='center'><b>代码段 10-2 Spring控制反转思想示例</b></div>
 
-2）依赖注入。Spring通过容器(Spring container)管理 Spring bean。实现对象实例的注入。Spring 控制反转的思想，能够让程序在运行时（Runtime）正常运行，是通过依赖注入的方式实现的。在代码段7-2中，类DriveCar 依赖于类 Driver 和类 Car。类 Driver的实例 driver、类 Car 的实例 car 都是通过依赖注入的方式实现。
+2）依赖注入。Spring通过容器(Spring container)管理 Spring bean（什么是Spring 豆子？）。实现对象实例的注入。Spring 控制反转的思想，能够让程序在运行时（Runtime）正常运行，是通过依赖注入的方式实现的。在代码段7-2中，类DriveCar 依赖于类 Driver 和类 Car。类 Driver的实例 driver、类 Car 的实例 car 都是通过依赖注入的方式实现。
 
-**（2）单例（Singleton）**。在一定范围内（例如，Spring 容器）获取到的对象实例，都是同一个对象。下面通过一段代码来说明单例。
+Spring bean 是那些被Spring容器管理的类的对象（实例化的类），容器（container）管理的对象叫豆子（bean），老外搞得挺形象，就好像一个大篮子（Spring 容器）里装满了各种各样的豆子（Spring bean，类的对象）。
+
+Spring container, 可以理解为一个Map<String, Object>，就像是一个班级里头班主任手里的花名册，里头有每个人的名字，只要点到哪个名字，那么叫这个名字的Human的实例（某同学肉身）就会被找到。Spring container 就好像是一个班主任，班级外面的人（自己开发的应用程序）需要排练一个节目，那么先设计队形的时候，在那个空缺位子上写上某同学的名字（只声明变量，而不用立即把这个同学肉身叫来站在队伍里（实例化））。当开始排练的时候（程序运行起来了），排练老师一看这个空位子需要某个同学，立即找他们班班主任（程序运行时调用Spring容器）， 班主任立即把那个同学肉身给拎过来（Spring容器立即返回这个同学名字代表的Human实例），填充到排练空位上（依赖注入），节目排练丝毫不受影响。这就是控制反转、依赖注入的思想。
+
+那么如果不使用依赖注入、控制反转，是如何做的呢？还是以节目排练来做比喻，节目开始设计队形时，排练老师说需要A班B同学，这时候A班B同学的肉身必须站到队形相应位子上，然后干等着，B同学也很无聊，总体来说也很浪费人力。
+
+**（2）单例（Singleton）**。在一定范围内（例如，Spring 容器）获取到的对象实例，都是同一个对象。下面通过一段代码段 10-3 来说明单例。
 
 ```java
 // 类 Car 的实例 car1 是通过 new Car() 的方式创建的
@@ -1147,9 +1165,9 @@ Car car2 = new Car();
 // car1 和 car2 属于同一个类 Car 的两个实例
 ```
 
-<div align='center'><b>代码段 8-3 直接创建类的对象示例</b></div>
+<div align='center'><b>代码段 10-3 直接创建类的对象示例</b></div>
 
-代码段 8-3 中的获取 Car 实例的方法，如果通过单例的方式，如代码段8-4所示。
+代码段 8-3 中的获取 Car 实例的方法，如果通过单例的方式，如代码段 10-4 所示。
 
 ```java
 class CarFactory {
@@ -1175,15 +1193,15 @@ class CarFactory {
 }
 ```
 
-<div align='center'><b>代码段 8-4 通过单例创建对象示例</b></div>
+<div align='center'><b>代码段 10-4 通过单例创建对象示例</b></div>
 
-调用代码段8-4创建Car的代码如下所示。
+调用代码段 10-4 创建Car的代码如下所示。
 
 ```java
 Car singleCar = CarFactory.getInstance();
 ```
 
-通过代码段 8-4 的逻辑可以看出，调用  CarFactory.getInstance() ，无论调用多少次，最终返回的都是同一个类的实例，即
+通过代码段 10-4 的逻辑可以看出，调用  CarFactory.getInstance() ，无论调用多少次，最终返回的都是同一个类的实例，如代码段 10-5 所示。
 
 ```java
 Car car1 = CarFactory.getInstance();
@@ -1194,13 +1212,17 @@ if (car1 == car2) {
 }
 ```
 
+<div align='center'><b>代码段 10-5 调用单例创建方法创建对象示例</b></div>
+
 如果不做特殊配置（因为Spring容器也可以使用多例模式）， 从 Spring 容器中获取到的Bean 都是单例模式。
+
+（3）Spring家族。Spring 家族目前有 Spring-Core、Spring-MVC、Spring-boot、Spring-Cloud等多个框架，形成了一个框架家族。core主要提供Spring 容器，来管理Spring bean。mvc 主要提供进行web开发相关的 mvc功能。boot提供了一个servlet容器插件，解决了无需再打war包再由servlet容器（例如Tomcat）启动程序的问题。cloud则提供了一系列跟微服务相关的组件，如负载均衡、熔断、限流、降级等相关的组件。
 
 ## MVC的概念
 
 MVC（Model（模型）、View（视图）、Controller（控制器））。Spring框架中通过Spring MVC 模块，来实现Web 页面逻辑的MVC分离的概念。
 
-先通过一个HTML页面来解释下以上3个基本概念， 页面源代码如代码段 8-4 所示，假定这个页面的名称为“客户订单页面”，文件名称为 order.html。
+先通过一个HTML页面来解释下以上3个基本概念， 页面源代码如代码段 10-6 所示，假定这个页面的名称为“客户订单页面”，文件名称为 order.html。
 
 ```html
 <html>
@@ -1262,9 +1284,9 @@ MVC（Model（模型）、View（视图）、Controller（控制器））。Spri
 </html>
 ```
 
-<div align='center'><b>代码段 8-4 HTML页面源码示例</b></div>
+<div align='center'><b>代码段 10-6 HTML页面源码示例</b></div>
 
-浏览器渲染后的效果如图 8-1所示。
+浏览器渲染后的效果如图 10-1 所示。
 
  <div style="text-align: center;" >
      <p align="center" style="font:22px Verdana; font-weight:bold;">${user_name}的订单</p>
@@ -1300,16 +1322,15 @@ MVC（Model（模型）、View（视图）、Controller（控制器））。Spri
          <input id = "order_address" name="order_address" type="text" value="银河系火星某基地6338号实验室">
      </div>
 </div>
+<div align='center'><b>图 10-1 HTML页面源码渲染效果示意图</b></div>
 
-<div align='center'><b>图 8-1 HTML页面源码渲染效果示意图</b></div>
+控制这个页面的逻辑为，当用户输入 http://abc.def/user_id/order时，即 URL 以“/用户ID/login”结尾时，返回给浏览器的代码段如代码段 10-6 所示，其中的${user_name}替换成用户的名称，经浏览器渲染后用户看到的内容如图8-1所示。
 
-控制这个页面的逻辑为，当用户输入 http://abc.def/user_id/order时，即 URL 以“/用户ID/login”结尾时，返回给浏览器的代码段如代码段8-4所示，其中的${user_name}替换成用户的名称，经浏览器渲染后用户看到的内容如图8-1所示。
+MVC 的提出是有历史背景的，最初的Web页面类似于JSP（Java Server Pages， 即Java 服务端页面， 微软的C#（读作 C sharp）有类似的 asp页面）的方式，在服务端Web页面的展示方式（样式，展示的字体、字号、颜色、展示的位置等）、数据（可以想象为table中的数据）、以及生成数据的逻辑（啥情况下展示啥数据，可以想象为switch case）是混杂在一个源代码文件里的，修改起来很容易出现错误（只要是人，都会犯错误），这样导致软件的可维护性、稳定性都比较差。
 
-MVC的提出是有历史背景的，最初的Web页面类似于JSP（Java Server Pages， 即Java 服务端页面， 微软的C#（读作 C sharp）有类似的 asp页面）的方式，在服务端Web页面的展示方式（样式，展示的字体、字号、颜色、展示的位置等）、数据（可以想象为table中的数据）、以及生成数据的逻辑（啥情况下展示啥数据，可以想象为switch case）是混杂在一个源代码文件里的，修改起来很容易出现错误（只要是人，都会犯错误），这样导致软件的可维护性、稳定性都比较差。
+MVC 概念的提出，是为了将不同种类的内容，分割至不同的源代码文件中，当用户发起请求后，将各种文件内容按照一定的而规则进行融合，形成一个用户可见的页面。这样用户看到的是一个综合体，而软件人员维护的是一个一个独立、清晰的源代码（数据）文件，提升了软件整体的可维护性和系统的稳定性。
 
-MVC概念的提出，是为了将不同种类的内容，分割至不同的源代码文件中，当用户发起请求后，将各种文件内容按照一定的而规则进行融合，形成一个用户可见的页面。这样用户看到的是一个综合体，而软件人员维护的是一个一个独立、清晰的源代码（数据）文件，提升了软件整体的可维护性和系统的稳定性。
-
-**（1）Model，即数据模型。**与代码段8-4的页面对应的数据模型，即用户订单的相关信息，可以拆分为几个Java类，代码段 8-5 为订单信息数据模型。
+**（1）Model，即数据模型。**与代码段10-6的页面对应的数据模型，即用户订单的相关信息，可以拆分为几个Java类，代码段 10-7 为订单信息数据模型。
 
 ```java
 class OrderInfo {
@@ -1331,9 +1352,9 @@ class OrderInfo {
 }
 ```
 
-<div align='center'><b>代码段 8-5 订单信息 Model</b></div>
+<div align='center'><b>代码段 10-7 订单信息 Model</b></div>
 
-代码段 8-6 为商品信息数据模型。
+代码段 10-8 为商品信息数据模型。
 
 ```java
 class SkuInfo {
@@ -1350,9 +1371,9 @@ class SkuInfo {
 }
 ```
 
-<div align='center'><b>代码段 8-6 商品信息 Model</b></div>
+<div align='center'><b>代码段 10-8 商品信息 Model</b></div>
 
-代码段 8-7 为用户信息数据模型。
+代码段 10-9 为用户信息数据模型。
 
 ```java
 class UserInfo {
@@ -1367,11 +1388,23 @@ class UserInfo {
 }
 ```
 
-<div align='center'><b>代码段 8-7 用户信息 Model</b></div>
+<div align='center'><b>代码段 10-9 用户信息 Model</b></div>
 
-**（2）View，即视图**。用户可见的内容，或者说将多个Model的数据组合成一个用户需要的页面。可以认为代码段8-4的页面（图8-1）就是一个视图，体现为一个 HTML页面模板及order.html，其中的几个变量商品名称（order_product）、商品价格（order_price）、支付金额（order_pay）、联系人（order_customer）、配送地址（order_address）等， 需要根据用户的ID、商品ID、订单ID等从几个数据模型（OrderInfo、SkuInfo、UserInfo）中查询后获取，然后填充在order.html相应的位置，展示给用户。
+在关系型数据库中，一般通过数据建模形成一个表的表结构，这个表结构也相当于是一个数据模型。在XML 文档中，对数据的定义，即DTD，也是一种数据模型。注意，数据模型与数据本身的区别， 以地址信息为例，如表10-1所示。
 
-**（3）Controller，即控制器。**控制器的功能就是实现“当用户输入以/用户id/order“结尾的URL时，返回如图8-1所示的页面。代码逻辑如代码段 8-8 所示，实现方式以spring MVC模块为例。
+<div align='center'><b>表 10-1 数据模型和数据本身的区别</b></div>
+
+| 地址信息数据模型                                           | 地址数据                                                     |
+| ---------------------------------------------------------- | ------------------------------------------------------------ |
+| 国别-省-市-区-县-街道-道路号-小区名称-楼栋号-单元号-房间号 | 中国广东省广州市花西区莲花街道光明路华侨小区2号楼3单元405房间 |
+
+的模型为地址通过
+
+**（2）View，即视图**。用户可见的内容，或者说将多个Model的数据组合成一个用户需要的页面。可以认为代码段 10-6 的页面（图10-1）就是一个视图，体现为一个 HTML页面模板及 order.html，其中的几个变量商品名称（order_product）、商品价格（order_price）、支付金额（order_pay）、联系人（order_customer）、配送地址（order_address）等， 需要根据用户的ID、商品ID、订单ID等从几个数据模型（OrderInfo、SkuInfo、UserInfo）中查询后获取，然后填充在order.html相应的位置，展示给用户。
+
+在关系型数据库中，也存在视图的概念， 视图不存储数据，而是在几个数据表（模型）中部分字段（模型属性）进行组合后，形成的一种数据展示形式，即视图。
+
+**（3）Controller，即控制器。**控制器的功能就是实现“当用户输入以/用户id/order“结尾的URL时，返回如图 10-1 所示的页面。代码逻辑如代码段 10-10 所示，实现方式以spring MVC模块为例。
 
 ```java
 /**
@@ -1394,13 +1427,13 @@ class OrderController {
 }
 ```
 
-<div align='center'><b>代码段 8-8 订单信息处理 controller</b></div>
+<div align='center'><b>代码段 10-10 订单信息处理 controller</b></div>
 
 至此，对于MVC的概念应该有一些理解了吧。MVC是一种设计模式。什么是设计模式？可以理解为套公式，有一套方法论（思想），对于不同的问题采用不同的程序实现方法，这个跟编程语言无关。这种方法论，被称之为设计模式，推荐看这本书 《Design Patterns: Elements of Reusable Object-Oriented Software》，作者 Erich Gamma, Richard Helm, Ralph Johnson, John Vlissides， ISBN 978-0201633610， 出版社 Addison-Wesley Professional，网上有PDF版的，可以打印出来多看几遍。
 
 ## 服务调用
 
-**（1）RESTful 。**RESTful（REST，Representational State Transfer，表述性状态转变）是一种 HTTP 接口的封装风格，本质上还是 HTTP请求，不过对于什么样的业务逻辑，该用哪种HTTP Method，以及对于HTTP接口的地址规则进行了规范，这样方便大家交流，形成一些约定成俗的最佳实践，能给跨团队合作带来很多好处。
+**（1）RESTful 。**RESTful（REST，Representational State Transfer，表述性状态转变）是一种 HTTP 接口的封装风格，本质上还是 HTTP请求，不过对于什么样的业务逻辑（获取信息、提交数据、修改数据等）该用哪种HTTP Method，以及对于 HTTP 接口的地址规则进行了规范，这样方便大家交流，形成一些约定俗成的最佳实践，能给跨团队合作带来很多好处。
 
 **（2）RPC。**RPC，即Remote Procedure Call（远程程序调用）。在了解RPC之前，在操作系统中，有一个IPC（Interprocess communication，进程间通信）的概念，即单个操作系统中的多个进程的通信问题，这个可以看讲操作系统方面的书籍进一步了解。
 
@@ -1418,13 +1451,13 @@ RPC 是让开发人员像调用本地方法（本地类库）一样的体验，�
 
 3）gRPC。 gRPC是由Google开发的，基于HTTP/2协议。
 
-# Unit 9 Netty
+# Unit 11 Netty
 
-Netty 作为Java 生态中一个重量级的NIO 开源框架，初学者无需掌握，但对于高级开发人员来说是必须掌握的内容。下面提几个基本概念。
+Netty 作为Java 生态中一个重量级的NIO 开源框架，初学者无需掌握，但对于做网络相关的高级开发人员来说是必须掌握的内容。下面提几个基本概念。
 
-**（1）NIO**。NIO 叫做 NewIO，或者叫Noblock IO，即非阻塞式IO。提到非阻塞式IO，必然有阻塞式 IO，即Blocking IO。给一个场景，写一段程序，将10GB的数据写到本地磁盘，代码段如9-1所示，发起请求后，操作系统说你等着，于是你的程序就卡顿在那个wirte的位置。
+**（1）NIO**。NIO 叫做 NewIO，或者叫Noblock IO，即非阻塞式IO。提到非阻塞式IO，必然有阻塞式 IO，即Blocking IO。给一个场景，写一段程序，将10GB的数据写到本地磁盘，代码段如 11-1 所示，发起请求后，操作系统说你等着，于是你的程序就卡顿在那个wirte的位置。
 
-类似于你在人特别多的小饭馆，点了个餐，特别饿，但餐馆老板太忙，管理也不规范，反正也没小票，过一阵子你问老板好没好，老板说我给催催，反正你一直在为吃饭操心，也没心思玩手机或干别的（相当于你的心思被做饭大厨给阻塞了）。
+举个例子进行类比，你在人特别多的小饭馆，点了个餐，特别饿，但餐馆老板太忙，管理也不规范，反正也没小票，过一阵子你问老板好没好，老板说我给催催，反正你一直在为吃饭操心，也没心思玩手机或干别的（相当于你的心思被做饭大厨给阻塞了）。
 
 ```java
 class BlockIO {
@@ -1437,9 +1470,9 @@ class BlockIO {
 }
 ```
 
-<div align='center'><b>代码段 9-1 BIO 示例</b></div>
+<div align='center'><b>代码段 11-1 BIO 示例</b></div>
 
-非阻塞式IO，即不管任务有多繁重，程序运行总是立即返回，然后给你一个ticket，你可以随时查询， 代码段如9-2所示。类似你在五星级大饭店下单了一顿大餐之后，服务生优雅地给你打印一个小票，让你坐那儿等着，还给你糖果零食小吃随便吃，你可以拿小票催服务员查询大餐啥时候做好（或者在线App里随时看，类似于麦当劳App在线单，会显示制作中、已完成、请去餐之类的），这时候你可以放心地玩手机，或者跟朋友闲聊（相当于你自己的心思并没有被做饭大厨阻塞）。
+非阻塞式IO，即不管任务有多繁重，程序运行总是立即返回，然后给你一个ticket，你可以随时查询， 代码段如 11-2 所示。类似你在五星级大饭店下单了一顿大餐之后，服务生优雅地给你打印一个小票，让你坐那儿等着，还给你糖果零食小吃随便吃，你可以拿小票催服务员查询大餐啥时候做好（或者在线App里随时看，类似于麦当劳App在线单，会显示制作中、已完成、请去餐之类的），这时候你可以放心地玩手机，或者跟朋友闲聊（相当于你自己的心思并没有被做饭大厨阻塞）。
 
 ```java
 class NoBlockIO {
@@ -1454,7 +1487,7 @@ class NoBlockIO {
 }
 ```
 
-<div align='center'><b>代码段 9-1 NIO 示例</b></div>
+<div align='center'><b>代码段 11-2 NIO 示例</b></div>
 
 说到NIO，就涉及到操作系统对IO任务队列的处理方式，涉及到2个概念， select, epoll。Ubuntu系统可以通过以下命令简单学习，深入学习还需要阅读操作系统的书籍。
 
@@ -1465,22 +1498,96 @@ man epoll
 
 **（2）TCP 协议。** Netty底层有对 TCP、UDP等 TCP/IP 协议族 socket通信的封装。 什么是TCP，好像跟我日常的编程关系不大？TCP 即 Transmission Control Protocol， 传输控制协议，是当今整个网络通信的基础，日常我们浏览网页使用的 HTTP协议就是基于 TCP协议实现的。整个TCP 协议族，可以阅读《*TCP*/*IP* *Illustrated*, Volume 1: The Protocols, Second Edition 》作者Gary R. Wright，W. Richard Stevens。如果做网络变成，这本书是必读的，不但读，还得能讲得头头是道。知其然，知其所以然。知识是一片海洋，越学会越觉得自己渺小。
 
-# Unit 10 Java 内存模型
+# Unit 12 Java 内存模型
 
-Java 的底层是C语言， C语言的底层是操作系统， Java的内存分配、管理模型，不能说跟C没有关系。这里涉及到对 Java 中 volatile 修饰符的理解， C 语言中也有 volatile 关键字， 理解其含义，从 C 语言出发也是一个不错的选项。进一步理解 Java 中的  synchronized 修饰符的真正含义和底层实现，还有internal 关键字。推荐阅读《Thinking in Java》作者 Bruce Eckel。
+Java 的底层是C语言， C语言的底层是操作系统， Java的内存分配、管理模型，不能说跟 C 没有关系。这里涉及到对 Java 中 volatile 修饰符的理解， C 语言中也有 volatile 关键字， 理解其含义，从 C 语言出发也是一个不错的选项。进一步理解 Java 中的  synchronized 修饰符的真正含义和底层实现，还有internal 关键字。推荐阅读《Thinking in Java》作者 Bruce Eckel。
 
-#  Unit 11 操作系统
+#  Unit 13 操作系统
 
 操作系统可以阅读《Computer System: A Programmer's Perspective》。这里的每一个点都是重点，对于开发人员理解软件运行内部机制来说很重要。
 
-操作系统对 IO 的处理， 磁盘 IO，网络IO、多线程任务的处理，线程同步（JDK中有一个 ThreadLocal类），进程的 fork, 临界区，PV操作、寄存器（java 中有 register）、用户态和内核态。
+操作系统对 IO 的处理（ 磁盘 IO，网络IO， NIO, BIO, epoll）、多线程处理（Thread，CPU时间片），线程同步（JDK中有一个 ThreadLocal类、synchronized, Lock, Monitor），进程的 fork，临界区，PV操作、寄存器（java 中有 register）、用户态和内核态（零拷贝、内存映射、数据区、代码区）、堆栈。
 
-# 架构思想
+# Unit 14 算法
 
-架构（Architecture），主要是设计思想和方法论层面的东西。需要软件开发人员从代码中跳出来，站在更高的视角（宇宙视角）来看整个系统，从整个系统来考虑问题，由上而下地思考现实中的问题。软件是用来实现价值的，不是独立存在的，软件需要部署在硬件上，硬件又被分割在很多物理位置。很多现实中出现的问题不是单单某个软件系统的问题，举个例子，软件系统A单独运行没有问题，软件系统B单独运行也没有问题，但如果部署在一个网络内（或一台机器上），就会出现一些莫名其妙的问题。
+算法（Algorithm）是比较基础的内容，也是软件的核心，决定着软件的性能（单位时间内对同一个任务的处理能力），可以看看基础的书籍，同时可以在刷题网站（https://leetcode.cn/）做做算法题，能够提高自己的思维能力以及实践能力。算法也是软件开发人员入职面试的必考科目。
 
-现实世界中，没有哪种思想是万能的，解决实际问题都是通过多种思想融合，并做一定的妥协，才最终达成目的（万能的上帝来了也没用），所以人们经常会说“从理论上来说没问题”， 但我们是生活在物理世界的，物理世界中受到各种条件的限制。
+# Unit 15 软件架构
 
-架构设计思想，被称之为Enterprise Architecture，简称EA。可以看看 TOGAF（The Open Group Architecture Framework）和 DoDaF（Department of Defense Architecture Framework， (美国)国防部体系结构框架）相关的内容。
+## 基本原则
 
-这些架构设计，不只局限于软件，还会关注跟软件进行交互的周围系统、环境、人等因素。
+软件架构（software architecture），即如何设计软件系统，使得在满足产品（用户）需求的基础上，使软件系统便于维护（后期代码修改）、横向扩展（当用户访问量增加时，如何提升系统处理能力）。
+
+**（1）抽象能力。**一个软件系统，抽象能力发挥得越好，那么同样的功能所需的代码量（行数）将会越少。在进行接口设计的时候，一般依赖于抽象的接口（例如List），而不依赖于具体的接口实现（ArrayList）。
+
+**（2）开闭原则**（Open-Close Principle，简称OCP）。开闭原则是指一个软件实体（类、模块、方法等）应该对扩展（扩展一个类、接口）开放，对修改（直接修改当前的类、接口）关闭。因为直接修改当前的类、接口，满足了新的需求，但可能会影响到已经在运行的历史系统，导致某些地方出现问题。而扩展一个类和方法，因为原来的类、方法未做改动，所以对历史业务不会造成影响，同时扩展的类又可以满足新的业务需求。
+
+（3）模块化。模块化，就是把不同的功能放在不同的模块中，相同的功能放在同一模块中，便于后期维护。同时，部分模块可以被其他系统复用，减少重复开发的工作量。
+
+（4）微服务化。由多个服务（进程）协同完成一项任务，这样需要升级维护某一个服务时，其他服务不受影响（系统影响面较小），而不是搞一个超级无敌大的服务（单体服务，Monolithic Service）。在单体服务模式下，当需要更改一个很小的模块时，整个服务都要停止重新启动，系统影响面较大。当然，这也不是绝对的，很多传统企业因为人力不足，采用单体服务可以节约运维成本。
+
+（5）分层设计。TCP/IP协议参考模型就是这种思想的一种很好的实践。一般有网络层（公网、内网、VPN网等）、容器层（OS、JDK、Docker）、数据层（MySQL、Redis）、中间服务层（数据访问、缓存控制、权限控制服务、客户管理服务、互联互通服务等）、应用层（桌面Web端、IOS App、Android App、H5、Websocket、第三方开放API）。
+
+（6）高可用原则。任何一个节点都不能发生单点失败，即任何一个物理服务节点发生故障，都有与其功能相同的节点迅速接管这部分任务。从系统外部来看，似乎没有发生任何故障。
+
+## 基本步骤
+
+本节内容涉及到软件工程方面的知识。一个软件的设计，一般分为以下步骤进行。
+
+**（1）确定需求和目标。**需要确定软件系统所需要解决的问题是什么，划清问题的边界，哪些问题不是所开发软件系统需要去解决的。需求有功能需求（例如能够查看订单）、性能需求（例如，点击某链接响应时间不应该超过2秒，系统可支持1000人同时在线使用）、软件需求（例如，支持在ARM Linux系统上运行、支持权限的在线更改和配置）。
+
+**（2）概要设计。**在确定了基本需求之后，就可以开始软件系统的概要设计了，概要设计完成软件系统的大致功能模块，每个模块的功能边界即可，不用过多考虑内部细节。类似于画素描的时候，先画出一个大概的轮廓出来。
+
+**（3）详细设计。**在概要设计的基础上，对每个功能细节进行丰富，需要考虑实际开发的工程实现，每个细节都是能够落地的，除了写代码之外的所有细节，都是需要在详细设计文档中体现的，例如采用哪种数据库，采用哪些开源组件，服务交互是用HTTP还是TCP，数据库访问到底有哪些接口。在这个过程中，可能会回退到需求确定阶段，因为发现某项需求不明确，无法做出详细设计。
+
+**（4）软件开发。**这个阶段需要按照前期的详细设计输出的文档，进行软件开发工作，一般分为以下几个步骤。
+
+1）UI原型设计。即用户可见的部分，是什么页面、什么按钮、怎么交互，有没有跟第三方的交互，一般由负责产品功能的人员来做，需要用到一些类似于Axure的原型设计工具。
+
+2）UI 静态页面（美术）设计。按照功能要求，设计出div、css、图片等静态页面，这部分对HTML 的要求较高，需要较为专业的前端人员来做，而且需要具备一定的美术功底，具备一定的审美能力。
+
+3）Web前端代码和后端代码开发。如果采用前后端分离的设计，则前端人员在静态页面设计的基础上，进行前端代码开发，同时调用后端人员提供的接口，实现数据的填充。后端开发人员需要参考详细设计文档以及UI静态页面的设计，通过接口（一般为RESTful API）提供方便前端人员使用的数据。
+
+前后端开发人员需要密切配合，后端人员提供的接口需要有明确的接口文档。
+
+**（5）单元测试。**不管是前端人员还是后端人员，都需要对自己负责的代码各个模块提供单元测试，保证代码功能正常。一般来说，单元测试与软件开发是同时进行的，开发完一个小模块，即可进行单元测试代码，maven工程中 src/test目录下的代码就是用来进行单元测试的。
+
+**（6）系统测试。**测试部分一般有有系统功能测试、接口功能测试和性能测试。
+
+1）系统功能测试。功能测试人员按照详细设计中的功能描述，列举功能测试点及测试方法。测试开发人员提供的系统的功能是否如设计文档描述的内容达到预期效果。例如，点击登录，可正常登录。点击订单提交，可提交订单等。测试要点基本上围绕用户可使用、可见的部分，一般包括web页面的使用，App界面的使用等。可以人工手动进行测试，也可以借助自动化测试工具（如Selenium等）。
+
+2）接口功能测试。接口测试人员按照后端人员提供的接口文档，通过接口测试工具（例如PostMan, JMeter等）构造接口入口参数，查看输出是否正常。通过接口测试人员的测试，判定软件接口功能与接口文档描述的一致性。
+
+3）性能测试。性能测试用于判定系统的性能指标是否能够达到预期的设计指标（例如，可保证1000人同时在线使用，某功能的响应时间不超过1s）。对于大型的软件系统，可先进行各个分系统的性能测试，再进行整个系统的性能测试。由于最终用户使用的系统一般为集群（多台服务器），在进行性能测试时，一般会先进行单台服务器的性能，再测试集群的性能。性能测试一般会使用到JMeter、LoadRunner之类的工具，通过脚本来模拟一定的并发用户量（例如1000个人同时使用系统），来看整个系统的吞吐量、响应时间以及并发量。
+
+以上测试过程中，存在的问题，一般记录在专门的测试系统里（例如 TestDirector、 Jira等），每个记录为1个bug，需要对存在的问题进行详细描述，包括时间、位置、发生的前置条件、产生的问题、导致的错误的数据等，必要时辅助以图片、视频进行说明，开发人员按照测试系统中记录的bug，逐个进行调试并解决。
+
+**（7）系统上线。**系统测试完成后，整个系统需要部署在生产环境（用户真正使用的环境为生产环境，测试时使用的环境为测试环境，一般来说测试环境和生产环境是隔离开的）。部署完成后，一般来说由测试人员模拟真实的用户，进行“冒烟测试”（即保证系统基本功能可用），然后向真正的用户开放。
+
+**（8）系统更新。**生产环境下，如果有部分功能需要更新，则由开发人员提供部署安装包，由运维人员进行部署，大型系统（例如微信）一般采用灰度发布的模式。所谓的灰度发布，即新老系统并存，新功能只选择性地开放给一小部分用户（拿用户当小白鼠），这样万一新功能有问题，影响的只是一小部分用户。若经过一段时间的运行，这一小部分用户没出什么大问题，则逐步开放给所有用户。
+
+**（9）系统运维。**系统在交付使用（或交付给用户）后，需要专门的运维人员进行系统运维。软件系统是一个动态系统，需要随时关注其运行状态，例如磁盘是否被占满，CPU利用率是否过高（系统计算任务负载高或程序bug导致）、内存利用率（有些应用比较消耗内存，比如将一个2GB的大文件全部加载至内存），磁盘IO（是否有磁盘读写的任务处于等待状态）、网络IO（网络带宽是否被消耗殆尽）、集群负载是否均衡（部分节点负载高、部分节点闲置）。
+
+所有这些都需要通过监控系统来完成，监控系统具备以下能力。
+
+1）收集数据。监控系统收集业务软件系统运行的各种数据，并将一定时间内的历史数据存储下来，方便进行分析。
+
+2）数据可视化。监控系统将近期的数据进行数据可视化，展现形式有饼图、二维曲线等。
+
+3）数据预警。监控系统中可设置各种阈值，当某个指标达到设定的阈值时，系统即刻以声光电等形式发出警告，也可以发送mail、短信，拨打制定电话等。
+
+4）集群管理。监控系统提供一定的集群管理功能，方便运维人员批量操作几十至几百台服务器。
+
+5）关键数据备份。通过定时任务（例如crontab）等，定期备份业务系统关键数据，一旦发生灾难（例如地震、火灾、网络黑客攻击、数据库系统崩溃、停电、停网等）后，方便异地恢复数据，保证为用户提供的服务不发生变化。例如，谷歌在全球的多个数据中心部署有其服务，当某个数据中心发生灾难后，可迅速将关键数据通过异地容灾恢复至其他数据中心，同时将用户的请求转发至相应的数据中心上，这样用户基本上感觉不到数据中心服务器宕机造成的影响。
+
+**（10）配置管理。**配置管理（Software configuration management ，简称SCM）是软件开发过程中通过版本控制和变更控制的一套程序，以保证交付给客户的系统能够稳定运行。举个例子，某关键系统运行了20年，交付了多个客户，客户使用中的系统存在使用5年前、10年前以及最新版本的多个软件版本。当使用10年前软件版本系统的客户需要升级一个子模块时，这时候该怎么做？这就是SCM 发挥作用的时候了。从SCM系统中可以获取10年前指定软件版本（V3.2.1193）对应的各个子系统的软件版本号以及部署安装包、安装手册、用户手册、运维手册等一系列软件和文档全部精确无误地获取到，然后形成一套交付方案，由实施人员在客户的硬件环境中进行实施。
+
+# Unit 16 系统架构
+
+系统架构（Architecture），或者叫做企业架构，主要是设计思想和方法论层面的东西。需要设计人员从软件中脱离出来，站在更高的视角（宇宙视角）来看整个系统，从整个系统来考虑问题，由上而下地思考现实中的问题。软件是用来实现价值的，不是独立存在的，软件需要部署在硬件上，硬件又被分割在很多物理位置。很多现实中出现的问题不是单单某个软件系统的问题，举个例子，软件系统A单独运行没有问题，软件系统B单独运行也没有问题，但如果部署在一个网络内（或一台机器上），就会出现一些莫名其妙的问题。
+
+系统架构设计思想，被称之为Enterprise Architecture，简称EA。可以看看 TOGAF（The Open Group Architecture Framework）和 DoDaF（Department of Defense Architecture Framework， (美国)国防部体系结构框架）相关的内容。
+
+系统架构设计，不只局限于软件系统，还会关注跟软件系统进行交互的周围系统、环境、人等因素。
+
+客观的系统，是一个物理的客体，是不变的，但对于不同的人来讲，因为关注点不同，所以对与同一个系统的理解会有不同，这样就衍生除了数据架构、业务架构、功能架构、软件架构等不同的视角。对于一个大型系统来讲，需要满足不同的利益要害人的要求，例如负责管理数据的希望看到整个系统的数据流是如何流动的，负责管理业务功能的希望看到整个系统的业务是如何运作的，在什么节点有哪些参与方需要参与；负责软件系统的希望看到系统都是用了哪些开源组件，对应的开源协议是否合规，是什么操作系统，什么数据库，是不是微服务架构，上层应用和中间层的划分是否合理，运行是否稳定，软件维护是否方便快捷；负责财务审计的管理人员希望看到整个项目在什么里程碑节点给谁支付什么款项，各种财务开支是否符合财务管理规定。
