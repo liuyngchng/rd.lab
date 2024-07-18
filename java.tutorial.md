@@ -75,6 +75,8 @@ OpenJDK 64-Bit Server VM (build 17.0.10+7-Ubuntu-122.04.1, mixed mode, sharing)
 
 安装集成开发环境（IDE， Integrated Development Environment ），能够为开发人员提供源代码输入，代码补全，代码编译，运行时调试等便利的功能。本节以开源的Eclipse 为例， 下载地址  https://www.eclipse.org/downloads/packages/ 。
 
+集成开发环境相当于一个干某个工种工人的工具箱，把特定职业所需的武器全部放一起，方便搞事情。
+
 **（1）Windows**
 
 下载 `Windows x86-64` 版本的 `Eclipse IDE for Enterprise Java and Web Developers`， https://www.eclipse.org/downloads/download.php?file=/technology/epp/downloads/release/2024-06/R/eclipse-jee-2024-06-R-win32-x86_64.zip 。
@@ -205,9 +207,59 @@ java 命令在 执行后形成的进程在Java 中叫做 Java 虚拟机（Java V
 
 java 中的源文件是以.java为后缀的编码为UTF-8的纯文本文档。源文件的名称一般以大写字母开头，例如Animal.java, Cat.java, Car.java。
 
+源代码文件，就是编程人员手写输出的文件，不管是.java（Java 源代码文件）, .py（Python源代码文件）,.c（C语言源代码文件）.html（HTML源代码文件），本质上就是一个文本文件。只不过为了方便管理，改了个后缀名而已。 
+
 ## 类（class）
 
 Java 中的 类 （class）， 表示对物理世界中的一个名词（例如，MyCat）、动词（例如，DrinkWater）。类在源文件中体现为以class开头，包含在{}中的部分源代码。通过java编译后，会生成一个与源文件同名但以.class为后缀名的类文件，例如 Animal.class, Cat.class, Car.class。`.class`文件一般称之为类文件，是一个类的字节码文件。
+
+类可以理解为对自然界中某一种事物的描述。
+
+## 对象（Object）
+
+在面对对象的编程中，对象是经常会遇到的一个名词，而对象又是和类直接相关的，有时候又称之为类的实例（Instance of the class）。对象可以理解为具体的事物。一个类表示一种对事物的描述方法， 而类的对象（Object）/实例（instance）表示具体的某个类。举例说明，类Person 如代码段 4-1 所示，类 Person 表示对“人”这个事物的一种描述方法，这种描述方法叫“Person”。
+
+```java
+class Person {
+    // 姓名
+	String name;
+    // 年龄
+    Integer age;
+    // 地址
+    String address;
+    // 身高
+    double height;
+    // 体重
+    double weight; 
+}
+```
+
+<div align='center'><b>代码段 4-1 类 Person</b></div>
+
+接着，创建一个类的对象 “person”，并给如代码段 4-2 所示。
+
+```java
+Person person = new Person();
+person.name = "张三";
+person.age=18;
+person.address="银河系火星";
+person.height=175;
+person.weight=70;
+```
+
+<div align='center'><b>代码段 4-2 类 Person</b></div>
+
+代码段4-2 中， 类“Person”的对象（实例）为“person”。在现实生活中，类“Person”是我们书本上写的“人”这个字，反正没啥感觉，就是个概念。而实例“person”则代表“你这个人”， “你这个家伙”，person是有血有肉的肉身人。
+
+在软件世界中，类相当于是数据的定义，而实例是按照这种定义的实际的数据，以一个表格来说明，如表 4-1所示。
+
+<div align='center'><b>表 4-1 类和类的对象（实例）类比</b></div>
+
+| Person（人） | name（姓名） | age（年龄） | address（地址） | height（身高:cm） | weight（体重:kg） |
+| ------------ | ------------ | ----------- | --------------- | ----------------- | ----------------- |
+| person       | 张三         | 18          | 银河系火星      | 175               | 70                |
+
+如表4-1所示， 表头相当于是类， 而表格中的一行数据相当于类的一个实例（对象）。
 
 ## 包（package）
 
@@ -215,13 +267,13 @@ package 在linux、windows中体现为一堆嵌套的文件夹， 在 Java IDE �
 
 package 在 Java 中用于将某个功能模块涉及到的多个类文件放在一起，以方便管理。如果把一个源代码项目比喻成是一个衣柜，那么每个package可以理解为不同的衣橱，有的专门放外套，有的专门放鞋子，有的专门放裤子。
 
-package的概念在很多编程语言中（C、python）都有这个概念，主要为了方便源代码的管理，不然好几百个源代码文件放在一个文件夹下，放眼望去，太多了，无论是管理还是查找都不方便。
+package的概念在很多编程语言中（C、python、C++）都有，主要为了方便源代码的管理，不然好几百个源代码文件放在一个文件夹下，放眼望去，太多了，无论是管理还是查找都不方便。
 
 ## 工程（project）
 
 工程的概念，在很多编程语言中都有，其本质上是按照一定的结构，将一组源代码及其配置文件等形成一个完整的文件目录，最终能够完成某个特定的功能。
 
-从IDE 的角度来说，工程是一个可以被 IDE识别，被 IDE 独立管理、运行的一组文件。
+从IDE 的角度来说，工程是一个可以被 IDE 识别，被 IDE 独立管理、运行的一组文件。
 
 ## 静态语言
 
