@@ -28,13 +28,21 @@ sudo apt-get install openjdk-17-jdk
 
 ###  配置环境变量
 
+环境变量的作用，就是当用户在操作系统的控制台（Windows的cmd）中，输入一个命令时，操作系统会按照环境变量中设置的文件目录，逐个去查找。
+
 **（1）Windows 系统**
 
 1）点击 “我的电脑”->"属性"->高级系统设置->环境变量->系统变量->新建
 
-JAVA_HOME=java安装路径
+JAVA_HOME=java安装路径，例如
 
-2）在“我的电脑”->"属性"->高级系统设置->环境变量->系统变量-> 选择PATH ->编辑 ， 在PATH环境变量中添加一个value, %JAVA_HOME%\bin
+```powershell
+ JAVA_HOME=C:\Program files\jdk22
+```
+
+2）在“我的电脑”->"属性"->高级系统设置->环境变量->系统变量-> 选择PATH ->编辑 ， 在PATH环境变量中添加一个value, %JAVA_HOME%\bin。
+
+注意，环境变量PATH的值中有多个文件路径，不要覆盖已有的文件路径，在当前值下新增一个文件路径即可。
 
 3）验证。按下  Windows键+R，输入cmd，确定，输入 `java -version`，验证环境，若输出如下内容，则表示安装成功。
 
