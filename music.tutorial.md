@@ -37,3 +37,5 @@ C大调音阶也称之为 Ionian（伊奥尼亚）音阶。
 # 调式音阶
 
 调式音阶就是分别把自然大调音阶 CDEFGABC中的7个音分别当成主音，组成新的音阶顺序，它们的音阶名称分别为**Ionian**、**Dorian**、**Phrygian**、**Lydian**、**Mixolydian**、**Aeolian**、**Locrian**。
+
+https://mp.weixin.qq.com/s?__biz=MzA3NDU1NjgwOQ==&mid=2649408282&idx=1&sn=c1a662cb0055d8fe332d089663bb00e3&chksm=876397fcb0141eea9608e637b31e079acbcc6f01637c681fac55256e9e234827d587c33a8ca7&scene=27
