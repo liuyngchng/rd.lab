@@ -1223,7 +1223,9 @@ cd ./graalvm-jdk-17.0.10+11.1/bin
 （4）将 `java -jar app-1.0.jar` 转换为可直接执行`./myapp`可运行的 `native code`
 
 ```sh
-**/graalvm-jdk-17.0.10+11.1/bin/native-image -march=compatibility --no-fallback -jar app-1.0.jar myapp
+# --static 编译成静态可执行文件， 不添加--static时，除生成可执行文件之外，还会生成一批该可执行文件的动态链接库
+# --no-fallback 运行时不依赖JDK的native library
+**/graalvm-jdk-17.0.10+11.1/bin/native-image -march=compatibility --no-fallback --static -jar app-1.0.jar myapp
 
 ```
 
@@ -1543,3 +1545,8 @@ public class LogFormatter extends Formatter {
 </dependency>
 ```
 
+# Eclipse 配置
+
+## 添加头文件路径（include -I）
+
+左键选中项目， 点击右键， 选择“Properties”，-> "C/C++ General" -> "Paths and Symbols" -> "Includes" 
