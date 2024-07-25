@@ -42,7 +42,7 @@ locate libgtk2.0-dev
 
 GTK 源代码 https://gitlab.gnome.org/GNOME/gtk。
 
-GTK 在线文档  ， GTK3： https://docs.gtk.org/gtk3/, GTK4：https://docs.gtk.org/gtk4/。
+GTK 在线文档  ， GTK3： https://docs.gtk.org/gtk3/, GTK4：https://docs.gtk.org/gtk4/, 更低版本的文档官网无法看到。 目前Ubuntu 22.04LTS可安装的最高版本为gtk2.0。
 
 ```sh
 # 执行完安装文档语句 
