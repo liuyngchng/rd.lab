@@ -24,7 +24,25 @@ sudo apt-get install libglib2.0-dev
 sudo apt-get install libconfig-dev
 ```
 
+解决 “Failed to load module "canberra-gtk-module"”， 执行
+
+```sh
+sudo apt-get install libcanberra-gtk-module
+```
+
+查找某个模块所在的位置
+
+```sh
+locate libgtk2.0-dev
+```
+
+
+
 #  查看文档
+
+GTK 源代码 https://gitlab.gnome.org/GNOME/gtk。
+
+GTK 在线文档  ， GTK3： https://docs.gtk.org/gtk3/, GTK4：https://docs.gtk.org/gtk4/。
 
 ```sh
 # 执行完安装文档语句 
@@ -36,4 +54,6 @@ sudo apt-get install libgtk2.0-doc
 ```html
 file:///usr/share/doc/libgtk2.0-doc/tutorial/index.html
 ```
+
+# API
 

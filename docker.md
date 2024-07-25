@@ -947,3 +947,15 @@ mydocker                           latest    8f88a6999f73   4 minutes ago    900
 docker run --rm mydocker
 ```
 
+# docker inspect
+
+```sh
+# 获取容器信息
+docker ps -a	
+CONTAINER ID   IMAGE     COMMAND       CREATED       STATUS                   PORTS     NAMES
+40811498e373   centos    "/bin/bash"   2 hours ago   Up 2 hours                         test
+# 查看某个容器的信息 ， 网络模式， IP 等	
+docker inspect test | grep network -i
+docker inspect test | grep ipadd -i
+```
+
