@@ -80,7 +80,7 @@ drwxr-xr-x@  36 richard  staff   1.1K Jul 26 09:44 gettext-0.22.5
 -rw-r--r--@   1 richard  staff    26M Jul 26 09:37 gettext-0.22.5.tar.gz
 drwxr-xr-x@ 104 richard  staff   3.3K Jul 26 10:13 glib-2.28.0
 -rw-r--r--@   1 richard  staff   9.3M Jul 26 09:31 glib-2.28.0.tar.gz
-drwxr-xr-x@  83 richard  staff   2.6K Jul 26 14:31 gtk+-2.24.33
+drwxr-xr-x@  83 richard  staff   2.6K Jul 26 14:48 gtk+-2.24.33
 -rw-r--r--@   1 richard  staff    12M Jul 26 09:29 gtk+-2.24.33.tar.xz
 drwxr-xr-x@ 328 richard  staff    10K Jul 26 13:51 jpeg-9f
 -rw-r--r--@   1 richard  staff   1.0M Jul 26 13:49 jpegsrc.v9f.tar.gz
@@ -88,17 +88,13 @@ drwxr-xr-x@  46 richard  staff   1.4K Jul 26 10:07 libiconv-1.16
 -rw-r--r--@   1 richard  staff   4.9M Jul 26 10:06 libiconv-1.16.tar.gz
 drwxr-xr-x@ 134 richard  staff   4.2K Jul 26 14:05 libpng-1.6.43
 -rw-r--r--@   1 richard  staff   1.5M Jul 26 14:03 libpng-1.6.43.tar.gz
-drwxr-xr-x@  77 richard  staff   2.4K Jul 26 14:25 pango-1.20.5
--rw-r--r--@   1 richard  staff   2.0M Jul 26 09:32 pango-1.20.5.tar.gz
-drwxr-xr-x@  65 richard  staff   2.0K Jul 26 14:43 pango-1.24.0
+drwxr-xr-x@  80 richard  staff   2.5K Jul 26 14:43 pango-1.24.0
 -rw-r--r--@   1 richard  staff   2.1M Jul 26 14:42 pango-1.24.0.tar.gz
-drwxr-xr-x@  67 richard  staff   2.1K Jul 26 14:41 pango-1.30.0
 -rw-r--r--@   1 richard  staff   1.1M Jul 26 14:41 pango-1.30.0.tar.xz
 drwxr-xr-x@  39 richard  staff   1.2K Jul 26 10:51 pixman-0.38.0
 -rw-r--r--@   1 richard  staff   870K Jul 26 10:50 pixman-0.38.0.tar.gz
 drwxr-xr-x@  33 richard  staff   1.0K Jul 26 11:13 tiff-4.6.0t
 -rw-r--r--@   1 richard  staff   3.7M Jul 26 11:11 tiff-4.6.0t.tar.gz
-
 ```
 
 首先安装 gettext，这个是glib依赖的，进入页面下载。
@@ -138,7 +134,7 @@ cd atk-1.29.2
 sudo make install
 ```
 
-安装pango
+安装pango , 实际使用版本1.24.0
 
 ```sh
 tar -zxf pango-1.20.5.tar.gz
