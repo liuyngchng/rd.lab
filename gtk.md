@@ -36,6 +36,16 @@ sudo apt-get install libcanberra-gtk-module
 locate libgtk2.0-dev
 ```
 
+查看gtk版本号
+
+```sh
+# 查看 GTK 的详细版本号
+pkg-config --modversion gtk+-2.0
+
+# 查看安装的 GTK 及其相关库的信息
+pkg-config --list-all | grep gtk
+```
+
 
 
 #  查看文档
