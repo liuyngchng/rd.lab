@@ -1,8 +1,8 @@
 <div align='center'><font size='5'>窄带物联网智能燃气表通信中的时钟同步方法设计</font></div>
 
-<div align='center'><font size='4'>AAA<sup>1</sup>，BBB<sup>1</sup>，CCC<sup>1</sup></font></div>
+<div align='center'><font size='4'>刘永成<sup>1</sup></font></div>
 
-<div align='center'><font size='4'>（1. XXXX，北京，102206）</font></div>
+<div align='center'><font size='4'>（1. 昆仑数智科技有限责任公司，北京，102206）</font></div>
 
 <div align='right'>中图分类号：TP311.1</div>
 
@@ -11,9 +11,9 @@
 
 <div align='center'><font size='5'>Time synchronization design for smart gas meter communicating with server via NB-IoT network</font></div>
 
-<div align='center'><font size='4'>AAA<sup>1</sup>, BBB<sup>1</sup>, CCC<sup>1</sup></font></div>
+<div align='center'><font size='4'>Liu YongCheng<sup>1</sup></font></div>
 
-<div align='center'><font size='4'>（1. XXX Technology Co. Ltd.，Beijing，102206）</font></div>
+<div align='center'><font size='4'>（1. Kunlun Digital Technology Co. Ltd.，Beijing，102206）</font></div>
 
 <div>&nbsp;&nbsp;<font size='3'><strong>Abstract: </strong> Time synchronization should to be done when smart gas meter communicates with remote data collecting system via NB-IoT network. The time synchronization AT command of NB-IoT module extended by manufacture was a possible way to be used, but the difference among gas meters in aspect of embedded system, NB-IoT module type and access of internet service provider let the way be difficult. In fact there was no uniform time synchronization channel could be used in such situation. A simplified time synchronization method was designed according to NTP, which could be used in communication between embedded system and general X86 system via NB-IoT with uniformed application layer protocol self-defined by gas suppliers. Time synchronization was implemented between smart gas meter and data collecting server, and experiments shew that the time synchronization accuracy of the system can meet 5ms.</font></div>
 <div>&nbsp;&nbsp;<font size='3'><strong>Keywords: </strong> time synchronization; NB-IoT; narrow band internet of things; NTP; network time protocol; smart gas meter</font></div>
@@ -261,4 +261,4 @@ $$
 
 
 
-<div>通信作者介绍：XXX，男，1983年11月生，工学硕士研究生。研究方向为计算机网络通信，网络仿真. E-mail： liuyngchng@163.com </div>
+<div>通信作者介绍：刘永成，男，1983年11月生，工学硕士研究生。研究方向为计算机网络通信，网络仿真. E-mail： liuyngchng@163.com </div>
