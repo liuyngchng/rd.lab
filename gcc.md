@@ -440,3 +440,19 @@ int main() {
 }
 ```
 
+#  window 中文乱码问题
+
+（1）确保编译的文件格式是 UTF-8 编码的；
+
+（2）修改控制台的代码页为 65001
+
+```powershell
+chcp.com 65001
+```
+
+（3）添加编译参数
+
+```shell
+gcc -o target -finput-charset=UTF-8 -fexec-charset=UTF-8 source.c
+```
+

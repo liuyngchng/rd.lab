@@ -50,12 +50,28 @@ pkg-config --list-all | grep gtk
 
 ## Mac OS
 
+
 使用的系统为 Mac OS 10.14.6，
 
 https://www.cnblogs.com/suugee/p/15853135.html
 
 采用源码安装方式。 整个GTK+源码依赖如下所示。第三极依赖可能还有遗漏
+=======
+​		使用的系统为 Mac OS 10.14.6。
 
+### brew install
+
+```
+brew update --force --quiet
+brew install pkg-config
+
+```
+
+
+
+### 源码安装
+
+整个GTK+源码依赖如下所示。全部依赖包括 docbook, docbook-xsl, libyaml, openssl@3, m4, autoconf, libssh2, cmake, libgit2@1.7, mpdecimal, readline, sqlite, xz, libffi, python@3.12, z3, lz4, zstd, ninja, pcre2, swig, llvm, rust, ruby, asciidoctor, automake, gnu-getopt, xmlto, dbus, gettext, bison, meson, python-setuptools, glib, util-macros, xorgproto, libxau, libxdmcp, xcb-proto, libxcb, xtrans, libx11, libxext, libxfixes, libxi, libxtst, libpng, freetype, fontconfig, libxrender, lzo, pixman, cairo, gobject-introspection, at-spi2-core, nasm, jpeg-turbo, libtiff, docutils, gdk-pixbuf, hicolor-icon-theme, fribidi, graphite2, icu4c, harfbuzz and pango
 ```
 GTK+
 	+ glib
