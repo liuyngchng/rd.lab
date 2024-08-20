@@ -50,7 +50,11 @@ pkg-config --list-all | grep gtk
 
 ## Mac OS
 
-使用的系统为 Mac OS 10.14.6，采用源码安装方式。 整个GTK+源码依赖如下所示。第三极依赖可能还有遗漏
+使用的系统为 Mac OS 10.14.6，
+
+https://www.cnblogs.com/suugee/p/15853135.html
+
+采用源码安装方式。 整个GTK+源码依赖如下所示。第三极依赖可能还有遗漏
 
 ```
 GTK+
