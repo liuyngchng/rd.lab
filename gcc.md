@@ -456,3 +456,89 @@ chcp.com 65001
 gcc -o target -finput-charset=UTF-8 -fexec-charset=UTF-8 source.c
 ```
 
+# Makefile
+
+## make 编译源文件
+
+在 `.c` 和`.h` 源文件的跟目录中创建 Makefile 文件
+
+```sh
+cd src
+touch Makefile
+```
+
+文件 `Makefile` 的内容如下所示
+
+```makefile
+# 变量定义
+CC=gcc
+MYSQL_HD=/home/rd/software/mysql-8.4.0-linux-glibc2.28-x86_64/include
+REDIS_HD=/home/rd/workspace/hiredis
+KAFKA_HD=/home/rd/workspace/librdkafka/src
+#CFLAGS += -D__SSL1_0__
+CM_OBJ:= utl.o prsr.o pttn.o http.o peer.o rgx.o md5.o cfg.o
+CLI_OBJ:=clt.o peer.o http.o utl.o cfg.o
+all: obj _tls _tcp _clt _test
+obj:tls.c tcp.c pttn.c utl.c prsr.c http.c peer.c rgx.c md5.c cfg.c
+	${CC} -c -g -Wpedantic *.c -I ${REDIS_HD} -I ${MYSQL_HD} -I ${KAFKA_HD}
+_tls:${CM_OBJ} tls.o
+	openssl version
+	${CC} -g ${CFLAGS} -o _tls ${CM_OBJ} tls.o -lpthread -lssl -lcrypto
+_tcp:${CM_OBJ} tcp.o
+	${CC} -g --static -o _tcp ${CM_OBJ} tcp.o -lpthread
+_clt:${CLI_OBJ}
+	${CC} -o _clt ${CLI_OBJ}
+_test:test.o peer.o http.o utl.o rgx.o md5.o cfg.o hmac_md5.o
+	${CC} -g -o _test test.o peer.o http.o utl.o rgx.o md5.o cfg.o hmac_md5.o test/*.o -I ${REDIS_HD} -I ${MYSQL_HD}
+clean:
+	rm -fr _* *.o *.so *.out
+```
+
+有了 `Makefile` 文件，就可以直接执行 `make` 命令进行源程序的编译了
+
+```sh
+# 按照 Makefile 中的内容执行源程序的编译
+make
+# 清理编译生成的文件
+make clean
+```
+
+对于存在 `CMakeLists.txt ` 文件的工程来说， 首先在目录下执行 `cmake`， 生成文件 `Makefile`，然后再执行 make
+
+## Makefile语法
+
+（1）=。 Makefile中的 `=` 赋值是将整个 Makefile 展开后，最终决定其变量的值
+
+```makefile
+x=foo
+y=${x}bar
+x=xyz
+# 最终 y的值为 xyzbar， 在计算y的值时，需要评估x的值， x的值取决于其最后一次的赋值
+```
+
+（2）:=。Makefile中的 `:=` 赋值取决于被赋值的变量在 Makefile 文件中的位置。
+
+```makefile
+x=foo
+y=${x}bar
+x=xyz
+# 最终 y的值为 foobar, 在计算y的值时，评估x的值只与第一行有关
+```
+
+（3）?=。 Makefile中的 `?=` 赋值，在当前变量没有被赋值时则执行，否则忽略当前赋值。
+
+```makefile
+x?=foo
+x?=bar
+# 最终 x的值为foo
+```
+
+（4）+=。 Makefile中的 `+=` 赋值， 对当前变量进行接续赋值。
+
+```makefile
+x+=foo
+x+=bar
+x+=who
+# 最终 x的值为foobarwho
+```
+
