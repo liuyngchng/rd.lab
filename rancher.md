@@ -180,7 +180,32 @@ https://docs.rancher.cn/docs/rancher1/infrastructure/cattle/adding-load-balancer
 Load balancers will only work for services that are using the managed network. If you select any other network choice for your target services, it will not work with the load balancer.
 ```
 
+## docker compose yaml
 
+rancher 支持上传 docker compose yml文件， 下面以mysql8.4为例进行说明
+
+```sh
+version: '2'
+services:
+  mysql84:
+    image: mysql:8.4.0
+    container_name: mysql84
+    privileged: true
+    environment:
+      - MYSQL_ROOT_PASSWORD=your_db_pswd
+      - LANG=C.UTF-8
+    ports:
+      - 3306:3306
+    volumes:
+      - /data/mysql84/my.cnf:/etc/my.cnf
+      - /data/mysql84/my.cnf.d:/etc/my.cnf.d
+      - /data/mysql84/conf:/etc/mysql
+      - /data/mysql84/data:/var/lib/mysql
+      - /data/mysql84/mysqld:/var/run/mysqld
+    network_mode: bridge
+    labels:
+      io.rancher.scheduler.affinity:host_label: ip=192.168.0.2
+```
 
 # rancher 2.x
 
