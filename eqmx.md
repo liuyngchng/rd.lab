@@ -2,7 +2,7 @@
 
 ```sh
 docker pull emqx/emqx
-docker run -d --name emqx -p 1883:1883 -p 8083:8083 -p 8084:8084 -p 8883:8883 -p 18083:18083 emqx/emqx:5.7.1
+docker run -d --name emqx -p 4370:4370 -p 1883:1883 -p 8083:8083 -p 8084:8084 -p 8883:8883 -p 18083:18083 emqx/emqx:5.7.1
 ```
 
 EMQX 默认使用以下端口，请确保这些端口未被其他应用程序占用，并按照需求开放防火墙以保证 EMQX 正常运行。
@@ -29,5 +29,70 @@ http://localhost:18083
 
 默认用户名 admin, 密码 public，登录后修改密码
 
+# config
 
+以docker 版的 emqx （emqx/emqx: 5.7.1）为例，
+
+```shell
+cat /opt/emqx/etc/emqx.conf
+```
+
+# cluster
+
+EMQX 5.0单节点支持500万设备， EMQX 5.0 单集群可支撑1亿并发连接。集群相关的文档详见  https://docs.emqx.com/zh/emqx/latest/deploy/cluster/introduction.html。
+
+集群各个节点间的网络时延应小于10ms, 当节点间网络时延大于100ms,集群将不可用。
+
+# 将数据转发至 HTTP server
+
+可以在emqx中配置一个 http server 地址，将符合指定规则的数据自动发送至相应的 http server
+
+（1）配置 HTTP Server。在数据集成(Integration) -> 连接器(Connector) 中添加 Http Server。
+
+（2）配置转发规则。 在数据集成(Integration) -> 规则(Rules) 中添加 规则。在 SQL 中添加 SQL 语句
+
+````sh
+# your_topic 为需要转发的 topic, 或者使用默认的通配符。
+SELECT
+  *
+FROM
+  "your_topic"
+````
+
+至此，数据输入(Data Inputs)已经配置好了。接下来需要配置动作输出(Action Outputs)， 在添加动作处选择 Http Server，在 连接器(Connector) 下拉菜单中选择上一步已配置好的的连接器。可配置 URL 相对路径、Http Method 以及 Http Header，保存即可。
+
+# 数据持久化至MySQL
+
+详见文档  https://docs.emqx.com/zh/emqx/latest/data-integration/data-bridge-mysql.html
+
+```sh
+# 创建并选择数据库
+CREATE DATABASE emqx_data CHARACTER SET utf8mb4;
+use emqx_data;
+```
+
+我们需要在 MySQL 中创建两张表：
+
+数据表 `emqx_messages` 存储每条消息的发布者客户端 ID、主题、Payload 以及发布时间：
+
+```sql
+CREATE TABLE emqx_messages (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    clientid VARCHAR(255),
+    topic VARCHAR(255),
+    payload TEXT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+```
+
+数据表 `emqx_client_events` 存储上下线的客户端 ID、事件类型以及事件发生时间：
+
+```sql
+CREATE TABLE emqx_client_events (
+      id INT AUTO_INCREMENT PRIMARY KEY,
+      clientid VARCHAR(255),
+      event VARCHAR(255),
+      created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+```
 
