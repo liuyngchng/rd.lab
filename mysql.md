@@ -153,10 +153,20 @@ mysql>RESET MASTER;
 ls -al /MYSQL_DIR/mysql/mysqllog/binlog
 ```
 
+##  生成新的bin log file
+
+```sh
+# 可以手动刷新日志，生成一个新的 binlog 文件
+flush logs
+```
+
+
+
 # general query log
 
 修改 my.cnf  
 查看my.cnf的位置 `file /etc/mysql/my.cnf`  
+
 ```sh
 cd /etc/mysql/mysql.conf.d
 vim mysqld.cnf
@@ -545,5 +555,22 @@ SELECT @@global.time_zone;
 mysql -h 11.10.36.1 -u foo -p'fooxfdsf#$%' -s -e 'select count(1) from db.my_tb'
 ```
 
+# MySQL 增量备份
 
+## 开启 binlog
+
+##  增量备份
+
+```shell
+# 备份全备份数据库
+mysqldump -u 用户名 -p 数据库名 > database_full_backup.sql
+ 
+# 备份自上次全备份以来的binlog日志（start-position 为上次全备份时binlog的位置， mysql-bin.000001 为binlog文件名称 ）
+# binlog 位置 可以通过  'show binlog events in 'binlog.000024'' 中的 End_log_pos 字段查看， 
+# binlog 也可以通过直接查看 binlog 文件中的 end_log_pos 字段查看 
+mysqlbinlog --start-position=123 mysql-bin.000001 > database_binlog_backup.sql
+ 
+# 应用binlog日志到备份的数据库中
+mysql -u 用户名 -p 数据库名 < database_binlog_backup.sql
+```
 
