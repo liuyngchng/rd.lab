@@ -39,3 +39,53 @@ C大调音阶也称之为 Ionian（伊奥尼亚）音阶。
 调式音阶就是分别把自然大调音阶 CDEFGABC中的7个音分别当成主音，组成新的音阶顺序，它们的音阶名称分别为**Ionian**、**Dorian**、**Phrygian**、**Lydian**、**Mixolydian**、**Aeolian**、**Locrian**。
 
 https://mp.weixin.qq.com/s?__biz=MzA3NDU1NjgwOQ==&mid=2649408282&idx=1&sn=c1a662cb0055d8fe332d089663bb00e3&chksm=876397fcb0141eea9608e637b31e079acbcc6f01637c681fac55256e9e234827d587c33a8ca7&scene=27
+
+#  大小调
+
+音乐中的大调和小调是两种基本调式，它们的音程结构和特征音程不同，从而形成不同的色彩和情感表达。
+
+**大调**
+
+大调又称自然大调，是中古调式中的伊奥尼亚调式，包含七个音符：Do、Re、Mi、Fa、Sol、La、Si（或Ti）。在现代音乐中，它是最常用的调式。C大调是最简单的自然大调，因为它的音阶只使用白键，没有升号或降号。
+
+大调的音阶结构为：全-全-半-全-全-全-半。特征音程是：大三度（Do到Mi）、小三度（Mi到Sol）、纯四度（Sol到Do）。大调一般具有明朗、光辉的色彩，常用于表现喜悦、欢快等情绪。
+
+**小调**
+
+小调是相对于大调而言的调式。特色是音阶的第一音到第三音是个小三度音程。小调通常用以表达负面的情感，常用来表达悲伤、阴沉、恐怖的情感。
+
+小调的音阶结构为：全-半-全-全-半-全-全。特征音程是小三度（Do到Mi）。小调根据七级音的处理，又可以分为三种类型：
+
+· **自然小调：**七级音保持原状。
+
+· **和声小调：**七级音升高半音。
+
+· **旋律小调：**上行时七级音和六级音均升高半音，下行时还原为自然小调。
+
+小调的色彩通常柔和暗淡，具有哀伤、忧郁的感觉。
+
+**大调和小调的区别**
+
+大调和小调的主要区别在于：
+
+· 主音不同：大调的主音是1（Do），而小调的主音是6（La）。
+
+· 音阶结构不同：大调音阶为全-全-半-全-全-全-半，而小调音阶为全-半-全-全-半-全-全。
+
+· 调式色彩不同：大调色彩明亮开阔，而小调色彩柔和暗淡。
+
+| 调性名称（[等音调]中采用基本音级最多的） | 各[音级]（[简谱]· [唱名]）对应[音名](https://baike.baidu.com/item/音名/1355359?fromModule=lemma_inlink) | 数量统计     |              |              |         |              |              |         |                                                              |                                                              |
+| ------------------------------------------------------------ | ------------------------------------------------------------ | ------------ | ------------ | ------------ | ------- | ------------ | ------------ | ------- | ------------------------------------------------------------ | ------------------------------------------------------------ |
+| [大调式](https://baike.baidu.com/item/大调式/10837833?fromModule=lemma_inlink)的调性（[主音](https://baike.baidu.com/item/主音/19363196?fromModule=lemma_inlink)为1） | [小调式](https://baike.baidu.com/item/小调式/10837848?fromModule=lemma_inlink)的调性（主音为6） | 1Do  | 2Re          | 3Mi          | 4Fa     | 5Sol         | 6La  | 7Ti     | [基本音级](https://baike.baidu.com/item/基本音级/9431463?fromModule=lemma_inlink) | **[变化音级](https://baike.baidu.com/item/变化音级/9431512?fromModule=lemma_inlink)** |
+| [C大调](https://baike.baidu.com/item/C大调/7535142?fromModule=lemma_inlink) | [a小调](https://baike.baidu.com/item/a小调/5867715?fromModule=lemma_inlink) | C            | D            | E            | F       | G            | A            | B       | 7                                                            | **0**                                                        |
+| [降D大调](https://baike.baidu.com/item/降D大调/24208719?fromModule=lemma_inlink) | [降b小调](https://baike.baidu.com/item/降b小调/24219330?fromModule=lemma_inlink) | **♭D**       | **♭E**       | F            | **♭G**  | **♭A**       | **♭B**       | C       | 2                                                            | **5**                                                        |
+| [D大调](https://baike.baidu.com/item/D大调/10589539?fromModule=lemma_inlink) | [b小调](https://baike.baidu.com/item/b小调/723108?fromModule=lemma_inlink) | D            | E            | **♯F**       | G       | A            | B            | **♯C**  | 5                                                            | **2**                                                        |
+| [降E大调](https://baike.baidu.com/item/降E大调/24213393?fromModule=lemma_inlink) | [c小调](https://baike.baidu.com/item/c小调/652811?fromModule=lemma_inlink) | **♭E**       | F            | G            | **♭A**  | **♭B**       | C            | D       | 4                                                            | **3**                                                        |
+| [E大调](https://baike.baidu.com/item/E大调/8400142?fromModule=lemma_inlink) | [升c小调](https://baike.baidu.com/item/升c小调/15421362?fromModule=lemma_inlink) | E            | **♯F**       | **♯G**       | A       | B            | **♯C**       | **♯D**  | 3                                                            | **4**                                                        |
+| [F大调](https://baike.baidu.com/item/F大调/654392?fromModule=lemma_inlink) | [d小调](https://baike.baidu.com/item/d小调/2689181?fromModule=lemma_inlink) | F            | G            | A            | **♭B**  | C            | D            | E       | 6                                                            | **1**                                                        |
+| [升F大调](https://baike.baidu.com/item/升F大调/24210126?fromModule=lemma_inlink)[降G大调](https://baike.baidu.com/item/降G大调/24219336?fromModule=lemma_inlink) | [升d小调](https://baike.baidu.com/item/升d小调/24220370?fromModule=lemma_inlink)[降e小调](https://baike.baidu.com/item/降e小调/24219345?fromModule=lemma_inlink) | **♯F****♭G** | **♯G****♭A** | **♯A****♭B** | B**♭C** | **♯C****♭D** | **♯D****♭E** | **♯E**F | 1                                                            | **6**                                                        |
+| [G大调](https://baike.baidu.com/item/G大调/8120824?fromModule=lemma_inlink) | [e小调](https://baike.baidu.com/item/e小调/723239?fromModule=lemma_inlink) | G            | A            | B            | C       | D            | E            | **♯F**  | 6                                                            | **1**                                                        |
+| [降A大调](https://baike.baidu.com/item/降A大调/24201051?fromModule=lemma_inlink) | [f小调](https://baike.baidu.com/item/f小调/723337?fromModule=lemma_inlink) | **♭A**       | **♭B**       | C            | **♭D**  | **♭E**       | F            | G       | 3                                                            | **4**                                                        |
+| [A大调](https://baike.baidu.com/item/A大调/1255716?fromModule=lemma_inlink) | [升f小调](https://baike.baidu.com/item/升f小调/24217599?fromModule=lemma_inlink) | A            | B            | **♯C**       | D       | E            | **♯F**       | **♯G**  | 4                                                            | **3**                                                        |
+| [降B大调](https://baike.baidu.com/item/降B大调/23815937?fromModule=lemma_inlink) | [g小调](https://baike.baidu.com/item/g小调/723501?fromModule=lemma_inlink) | **♭B**       | C            | D            | **♭E**  | F            | G            | A       | 5                                                            | **2**                                                        |
+| [B大调](https://baike.baidu.com/item/B大调/656971?fromModule=lemma_inlink) | [升g小调](https://baike.baidu.com/item/升g小调/24217583?fromModule=lemma_inlink) | B            | **♯C**       | **♯D**       | E       | **♯F**       | **♯G**       | **♯A**  | 2                                                            | **5**                                                        |
