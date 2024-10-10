@@ -91,3 +91,19 @@ https://mp.weixin.qq.com/s?__biz=MzA3NDU1NjgwOQ==&mid=2649408282&idx=1&sn=c1a662
 | [A大调](https://baike.baidu.com/item/A大调/1255716?fromModule=lemma_inlink) | [升f小调](https://baike.baidu.com/item/升f小调/24217599?fromModule=lemma_inlink) | A            | B            | **♯C**       | D       | E            | **♯F**       | **♯G**  | 4                                                            | **3**                                                        |
 | [降B大调](https://baike.baidu.com/item/降B大调/23815937?fromModule=lemma_inlink) | [g小调](https://baike.baidu.com/item/g小调/723501?fromModule=lemma_inlink) | **♭B**       | C            | D            | **♭E**  | F            | G            | A       | 5                                                            | **2**                                                        |
 | [B大调](https://baike.baidu.com/item/B大调/656971?fromModule=lemma_inlink) | [升g小调](https://baike.baidu.com/item/升g小调/24217583?fromModule=lemma_inlink) | B            | **♯C**       | **♯D**       | E       | **♯F**       | **♯G**       | **♯A**  | 2                                                            | **5**                                                        |
+
+#  弦类乐器各音阶弦长计算
+
+对于弦类乐器，音高与弦的振动频率呈线性关系，而其振动频率与弦长有关。
+
+根据12平均律，相邻音高的频率倍率关系为2的开12次方，即  $\sqrt[12]{2}=1.059463 $
+相邻音高的频率倍率为1.059463,
+因波长（弦长）与频率成倒数关系，即
+
+ $$波长(λ)=\frac{光速(c)}{频率(f)}$$
+
+则每升高一个音高（频率值增大为原值的 1.059463倍），弦长为上一个弦长的 
+
+$\frac{1}{1.059463} $
+
+例如， 音高`C`的弦长为L, 则音高`C`<sup>#</sup>的弦长为L/1.059463, 音高 `D` 的弦长为 L/1.059463<sup>2</sup>
