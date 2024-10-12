@@ -13,7 +13,7 @@
 
 | 音程 | 0    | 1                            | 2    | 3                            | 4    | 5    | 6                            | 7    | 8                            | 9    | 10                           | 11   | 12   |
 | ---- | ---- | ---------------------------- | ---- | ---------------------------- | ---- | ---- | ---------------------------- | ---- | ---------------------------- | ---- | ---------------------------- | ---- | ---- |
-| 音高 | C    | <sup>#</sup>C(<sup>b</sup>D) | D    | <sup>#</sup>D(<sup>b</sup>E) | E    | F    | <sup>#</sup>F(<sup>b</sup>G) | G    | <sup>#</sup>G(<sup>b</sup>A) | A    | <sup>#</sup>A(<sup>b</sup>B) | B    | C    |
+| 音高 | C    | <sup>♯</sup>C(<sup>♭</sup>D) | D    | <sup>♯</sup>D(<sup>♭</sup>E) | E    | F    | <sup>♯</sup>F(<sup>♭</sup>G) | G    | <sup>♯</sup>G(<sup>♭</sup>A) | A    | <sup>♯</sup>A(<sup>♭</sup>B) | B    | C    |
 
 
 
@@ -23,10 +23,10 @@ C大调音阶（即简谱中的1=C）是一组音高的组合，各音高如表1
 
 <div align="center"><b>表1-1 C大调音程关系</b></div>
 
-| 音程 | 0     | 1    | 2     | 3    | 4     | 5     | 6    | 7      | 8    | 9     | 10   | 11    | 12   |
-| ---- | ----- | ---- | ----- | ---- | ----- | ----- | ---- | ------ | ---- | ----- | ---- | ----- | ---- |
-| 音高 | C     |      | D     |      | E     | F     |      | G      |      | A     |      | B     | C    |
-| 唱名 | 1(do) |      | 2(re) |      | 3(me) | 4(fa) |      | 5(sol) |      | 6(la) |      | 7(si) |      |
+| 音程 | 0     | 1                            | 2     | 3                           | 4     | 5     | 6                           | 7     | 8                           | 9     | 10                           | 11    | 12   |
+| ---- | ----- | ---------------------------- | ----- | --------------------------- | ----- | ----- | --------------------------- | ----- | --------------------------- | ----- | ---------------------------- | ----- | ---- |
+| 音高 | C     | <sup>♯</sup>C  <sup>♭</sup>D | D     | <sup>♯</sup>D <sup>♭</sup>E | E     | F     | <sup>♯</sup>F <sup>♭</sup>G | G     | <sup>♯</sup>G <sup>♭</sup>A | A     | <sup>♯</sup>A  <sup>♭</sup>B | B     | C    |
+| 唱名 | 1(do) | di                           | 2(re) | ri                          | 3(me) | 4(fa) | fi                          | 5(so) | si                          | 6(la) | li                           | 7(ti) |      |
 
 
 
@@ -37,8 +37,6 @@ C大调音阶也称之为 Ionian（伊奥尼亚）音阶。
 # 调式音阶
 
 调式音阶就是分别把自然大调音阶 CDEFGABC中的7个音分别当成主音，组成新的音阶顺序，它们的音阶名称分别为**Ionian**、**Dorian**、**Phrygian**、**Lydian**、**Mixolydian**、**Aeolian**、**Locrian**。
-
-https://mp.weixin.qq.com/s?__biz=MzA3NDU1NjgwOQ==&mid=2649408282&idx=1&sn=c1a662cb0055d8fe332d089663bb00e3&chksm=876397fcb0141eea9608e637b31e079acbcc6f01637c681fac55256e9e234827d587c33a8ca7&scene=27
 
 #  大小调
 
@@ -66,7 +64,7 @@ https://mp.weixin.qq.com/s?__biz=MzA3NDU1NjgwOQ==&mid=2649408282&idx=1&sn=c1a662
 
 ## 大调和小调的对应关系
 
-大调和小调的主要区别在于：
+大调和小调的主要区别在以下几个方面：
 
 （1）主音不同：大调的主音是1（Do），而小调的主音是6（La）。
 
@@ -74,36 +72,42 @@ https://mp.weixin.qq.com/s?__biz=MzA3NDU1NjgwOQ==&mid=2649408282&idx=1&sn=c1a662
 
 （3）调式色彩不同：大调色彩明亮开阔，而小调色彩柔和暗淡。
 
-各大调和小调的对应关系如下表所示。
+各大调和小调的对应关系如表 4-1 所示。
 
-| 调性名称 <br>等音调中采用基本音级最多的 | 各[音级]简谱· 唱名对应音名 | 数量统计     |              |              |         |              |              |         |                                                              |                                                              |
+<p align='center' style="font-weight:bold;">表 4-1 大小调对应关系</p>
+
+|  |                         | 唱名 | 唱名 | 唱名 | 唱名 | 唱名 | 唱名 | 唱名 | 统计 | 统计 |
 | ------------------------------------------------------------ | ------------------------------------------------------------ | ------------ | ------------ | ------------ | ------- | ------------ | ------------ | ------- | ------------------------------------------------------------ | ------------------------------------------------------------ |
-| [大调式](https://baike.baidu.com/item/大调式/10837833?fromModule=lemma_inlink)的调性（[主音](https://baike.baidu.com/item/主音/19363196?fromModule=lemma_inlink)为1） | [小调式](https://baike.baidu.com/item/小调式/10837848?fromModule=lemma_inlink)的调性（主音为6） | 1Do  | 2Re          | 3Mi          | 4Fa     | 5Sol         | 6La  | 7Ti     | [基本音级](https://baike.baidu.com/item/基本音级/9431463?fromModule=lemma_inlink) | **[变化音级](https://baike.baidu.com/item/变化音级/9431512?fromModule=lemma_inlink)** |
-| [C大调](https://baike.baidu.com/item/C大调/7535142?fromModule=lemma_inlink) | [a小调](https://baike.baidu.com/item/a小调/5867715?fromModule=lemma_inlink) | C            | D            | E            | F       | G            | A            | B       | 7                                                            | **0**                                                        |
-| [降D大调](https://baike.baidu.com/item/降D大调/24208719?fromModule=lemma_inlink) | [降b小调](https://baike.baidu.com/item/降b小调/24219330?fromModule=lemma_inlink) | **♭D**       | **♭E**       | F            | **♭G**  | **♭A**       | **♭B**       | C       | 2                                                            | **5**                                                        |
-| [D大调](https://baike.baidu.com/item/D大调/10589539?fromModule=lemma_inlink) | [b小调](https://baike.baidu.com/item/b小调/723108?fromModule=lemma_inlink) | D            | E            | **♯F**       | G       | A            | B            | **♯C**  | 5                                                            | **2**                                                        |
-| [降E大调](https://baike.baidu.com/item/降E大调/24213393?fromModule=lemma_inlink) | [c小调](https://baike.baidu.com/item/c小调/652811?fromModule=lemma_inlink) | **♭E**       | F            | G            | **♭A**  | **♭B**       | C            | D       | 4                                                            | **3**                                                        |
-| [E大调](https://baike.baidu.com/item/E大调/8400142?fromModule=lemma_inlink) | [升c小调](https://baike.baidu.com/item/升c小调/15421362?fromModule=lemma_inlink) | E            | **♯F**       | **♯G**       | A       | B            | **♯C**       | **♯D**  | 3                                                            | **4**                                                        |
-| [F大调](https://baike.baidu.com/item/F大调/654392?fromModule=lemma_inlink) | [d小调](https://baike.baidu.com/item/d小调/2689181?fromModule=lemma_inlink) | F            | G            | A            | **♭B**  | C            | D            | E       | 6                                                            | **1**                                                        |
-| [升F大调](https://baike.baidu.com/item/升F大调/24210126?fromModule=lemma_inlink)[降G大调](https://baike.baidu.com/item/降G大调/24219336?fromModule=lemma_inlink) | [升d小调](https://baike.baidu.com/item/升d小调/24220370?fromModule=lemma_inlink)[降e小调](https://baike.baidu.com/item/降e小调/24219345?fromModule=lemma_inlink) | **♯F****♭G** | **♯G****♭A** | **♯A****♭B** | B**♭C** | **♯C****♭D** | **♯D****♭E** | **♯E**F | 1                                                            | **6**                                                        |
-| [G大调](https://baike.baidu.com/item/G大调/8120824?fromModule=lemma_inlink) | [e小调](https://baike.baidu.com/item/e小调/723239?fromModule=lemma_inlink) | G            | A            | B            | C       | D            | E            | **♯F**  | 6                                                            | **1**                                                        |
-| [降A大调](https://baike.baidu.com/item/降A大调/24201051?fromModule=lemma_inlink) | [f小调](https://baike.baidu.com/item/f小调/723337?fromModule=lemma_inlink) | **♭A**       | **♭B**       | C            | **♭D**  | **♭E**       | F            | G       | 3                                                            | **4**                                                        |
-| [A大调](https://baike.baidu.com/item/A大调/1255716?fromModule=lemma_inlink) | [升f小调](https://baike.baidu.com/item/升f小调/24217599?fromModule=lemma_inlink) | A            | B            | **♯C**       | D       | E            | **♯F**       | **♯G**  | 4                                                            | **3**                                                        |
-| [降B大调](https://baike.baidu.com/item/降B大调/23815937?fromModule=lemma_inlink) | [g小调](https://baike.baidu.com/item/g小调/723501?fromModule=lemma_inlink) | **♭B**       | C            | D            | **♭E**  | F            | G            | A       | 5                                                            | **2**                                                        |
-| [B大调](https://baike.baidu.com/item/B大调/656971?fromModule=lemma_inlink) | [升g小调](https://baike.baidu.com/item/升g小调/24217583?fromModule=lemma_inlink) | B            | **♯C**       | **♯D**       | E       | **♯F**       | **♯G**       | **♯A**  | 2                                                            | **5**                                                        |
+| **大调**<br>（主音为1） | **小调**<br>（主音为6） | 1Do  | 2Re          | 3Mi          | 4Fa     | 5Sol         | 6La  | 7Ti     |  |  |
+| **调性名称** | **调性名称** | **音名** | **音名** | **音名** | **音名** | **音名** | **音名** | **音名** | **基本音级** | **变化音级** |
+| C大调 | a小调 | C            | D            | E            | F       | G            | A            | B       | 7                                                            | 0                                                        |
+| 降D大调 | 降b小调 | <sup>♭</sup>D | <sup>♭</sup>E | F            | <sup>♭</sup>G | <sup>♭</sup>A | <sup>♭</sup>B               | C       | 2                                                            | 5                                                        |
+| D大调 | b小调 | D            | E            | <sup>♯</sup>F | G       | A            | B            | <sup>♯</sup>C | 5                                                            | 2                                                        |
+| 降E大调 | c小调 | <sup>♭</sup>E | F            | G            | <sup>♭</sup>A | <sup>♭</sup>B | C            | D       | 4                                                            | 3                                                        |
+| E大调 | 升c小调 | E            | <sup>♯</sup>F | <sup>♯</sup>G | A       | B            | <sup>♯</sup>C | <sup>♯</sup>D | 3                                                            | 4                                                        |
+| F大调 | d小调 | F            | G            | A            | ♭B  | C            | D            | E       | 6                                                            | 1                                                        |
+| 升F大调/降G大调 | 升d小调/降e小调 | <sup>♯</sup>F    <sup>♭</sup>G | <sup>♯</sup>G  <sup>♭</sup>A | <sup>♯</sup>A   <sup>♭</sup>B | B   <sup>♭</sup>C | <sup>♯</sup>C   <sup>♭</sup>D | <sup>♯</sup>D <sup>♭</sup>E | <sup>♯</sup>E F | 1                                                            | 6                                                        |
+| G大调 | e小调 | G            | A            | B            | C       | D            | E            | <sup>♯</sup>F | 6                                                            | 1                                                        |
+| 降A大调 | f小调 | <sup>♭</sup>A | <sup>♭</sup>B | C            | <sup>♭</sup>D | <sup>♭</sup>E | F            | G       | 3                                                            | 4                                                        |
+| A大调 | 升f小调 | A            | B            | <sup>♯</sup>C | D       | E            | <sup>♯</sup>F | <sup>♯</sup>G | 4                                                            | 3                                                        |
+| 降B大调 | g小调 | <sup>♭</sup>B | C            | D            | <sup>♭</sup>E | F            | G            | A       | 5                                                            | 2                                                        |
+| B大调 | 升g小调 | B            | <sup>♯</sup>C | <sup>♯</sup>D | E       | <sup>♯</sup>F | <sup>♯</sup>G | <sup>♯</sup>A | 2                                                            | 5                                                        |
 
-#  弦类乐器各音阶弦长计算
+#  弦长计算
 
 对于弦类乐器，音高与弦的振动频率呈线性关系，而其振动频率与弦长有关。
 
 根据12平均律，相邻音高的频率倍率关系为2的开12次方，即  $\sqrt[12]{2}=1.059463 $
-相邻音高的频率倍率为1.059463,
+，即相邻音高的频率倍率为 1.059463。
+
 因波长（弦长）与频率成倒数关系，即
 
  $$波长(λ)=\frac{光速(c)}{频率(f)}$$
 
 则每升高一个音高（频率值增大为原值的 1.059463倍），弦长为上一个弦长的 
 
-$\frac{1}{1.059463} $
+$\frac{1}{1.059463}=0.943874397 $
 
-例如， 音高`C`的弦长为L, 则音高`C`<sup>#</sup>的弦长为L/1.059463, 音高 `D` 的弦长为 L/1.059463<sup>2</sup>
+例如， 音高`C`的弦长为L, 则音高<sup>♯</sup>`C`的弦长为 0.943874397 L , 音高 `D` 的弦长为0.943874397<sup>2</sup>L
+
+由此可见，各个音阶对应的弦长形成了一个等比数列，该等比数列的公比为 0.943874397。
