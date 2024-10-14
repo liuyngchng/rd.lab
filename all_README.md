@@ -1550,3 +1550,31 @@ public class LogFormatter extends Formatter {
 ## 添加头文件路径（include -I）
 
 左键选中项目， 点击右键， 选择“Properties”，-> "C/C++ General" -> "Paths and Symbols" -> "Includes" 
+
+#  WeMeet（腾讯会议）问题
+
+在 ubuntu 22.04 上运行 腾讯会议，启动时报错
+
+```sh
+检测到窗口系统采用wayland协议，腾讯会议暂不兼容，程序即将退出！
+```
+
+修改 wemeetapp.sh 文件
+
+```sh
+sudo gedit /opt/wemeet/wemeetapp.sh
+```
+
+
+
+
+在 if [ "$XDG_SESSION_TYPE" = "wayland" ]前面加上：
+
+```sh
+ #force x11 instead of Wayland
+  export XDG_SESSION_TYPE=x11
+  export EGL_PLATFORM=x11 
+  export QT_QPA_PLATFORM=xcb
+  unset WAYLAND_DISPLAY 
+  unset WAYLAND_DISPLAYCOPY
+```
