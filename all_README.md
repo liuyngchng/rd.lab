@@ -1578,3 +1578,25 @@ sudo gedit /opt/wemeet/wemeetapp.sh
   unset WAYLAND_DISPLAY 
   unset WAYLAND_DISPLAYCOPY
 ```
+
+ubuntu 登录成功后，修改 `/etc/gdm3/custom.conf`文件
+
+在 Ubuntu 22.04 LTS (Ubuntu with GNOME 42) 中，默认的显示服务器依然是使用 Wayland. 但是，用户依然可以选择切换到 Xorg。如果直接编辑 /etc/gdm3/custom.conf 文件以禁用 Wayland 导致了系统出错。
+要将 Ubuntu 默认设置为使用 X11 而不是 Wayland，可以按照以下步骤操作：
+\1. 打开 /etc/gdm3/custom.conf 文件编辑，可以使用文本编辑器，比如 nano:  
+
+```bash
+sudo vi /etc/gdm3/custom.conf
+```
+
+ \2. 找到这一行（一般位于文件的一开始部分）：  
+
+```bash
+#WaylandEnable=false
+```
+
+  将其修改为：  
+
+```bash
+WaylandEnable=false
+```
