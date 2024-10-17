@@ -14,12 +14,3 @@ sudo mount -t fuse-ext2 /dev/disk0s3 ./ubuntu/
 ```sh
 sudo umount /dev/disk0s3
 ```
-
-# locate
-
-Linux 下的 locate 命令，对应的mac命令为 glocate， 通过 brew 安装
-
-```sh
-brew install findutils
-```
-

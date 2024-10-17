@@ -20,7 +20,7 @@ start DmServiceDMSERVER, to run
 DmServiceDMSERVER start
 ```
 test you dm server
-```sh
+```sql
 disql SYSDBA/SYSDBA@localhost:5236
 create table t(a int,b int,c int);
 insert into t values(1,2,3);
