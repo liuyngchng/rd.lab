@@ -12,7 +12,7 @@ plot[-3.14: 3.14] sin(x), cos(x)
 ```
 #  3D plot
 
-```shell
+```sh
 #!/bin/bash
 echo '
 reset
@@ -30,7 +30,20 @@ splot besj0(x**2+y**2)' | gnuplot
 
 ```
 
-# 散点图
+```sh
+set samples 25
+set isosamples 26
+set title "Test 3D gnuplot"
+set contour base
+set hidden3d offset 1
+splot [-12:12.01] [-12:12.01] sin(sqrt(x**2+y**2))/sqrt(x**2+y**2)
+```
+
+
+
+
+
+# 数据文件画图
 
 ##  生成散点数据文件
 
@@ -49,6 +62,32 @@ gnuplot
 file = "data.dat"
 plot file using 0:1 titile "my data"  # 指定第 0 列为 x ，第 1 列为 y
 ````
+
+##  画多个数据文件
+
+```sh
+gnuplot>set multiplot 			% 设置为多图模式
+gnuplot>set origin 0.0,0.0 		% 设置第一个图的原点的位置
+gnuplot>set size 0.5,0.5 		% 设置第一个图的大小
+gnuplot>plot “a1.dat”
+gnuplot>set origin 0.0,0.5 		% 设置第二个图的原点的位置
+gnuplot>set size 0.5,0.5 		% 设置第二个图的大小
+gnuplot>plot “a2.dat”
+gnuplot>set origin 0.0,0.0 		% 设置第三个图的原点的位置
+gnuplot>set size 0.5,0.5 		% 设置第三个图的大小
+gnuplot>plot “a3.dat”
+gnuplot>set origin 0.0,0.0 		% 设置第四个图的原点的位置
+gnuplot>set size 0.5,0.5 		% 设置第四个图的大小
+```
+
+
+
+gnuplot>plot “a4.dat”
+--------------------------------------------------------
+作者：wuh雨点
+链接：https://wenku.baidu.com/view/a3dd536448d7c1c708a145b9.html
+来源：百度文库
+著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
 
 # 画多个图
 
