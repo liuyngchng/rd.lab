@@ -255,3 +255,9 @@ file:///usr/share/doc/libgtk2.0-doc/tutorial/index.html
 
 # API
 
+窗口大小默认是可调整的， 若想设置窗口大小不可调整，可通过以下函数实现
+
+```c
+gtk_window_set_resizable (GTK_WINDOW (window), FALSE);
+```
+
