@@ -147,3 +147,6 @@ scrape_configs:
 # 主机监控
 
 进入 grafana  官网 https://grafana.com/, 在dashboard 页面（https://grafana.com/grafana/dashboards/）搜索 node Exporter， 下载JSON模板，在 grafana Home->Dashboards, 配置好之后，即可查看主机监控数据。
+
+
+

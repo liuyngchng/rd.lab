@@ -959,3 +959,43 @@ docker inspect test | grep network -i
 docker inspect test | grep ipadd -i
 ```
 
+#  trouble shooting
+
+##  pthread_create failed
+
+​	Golang 编写项目并打包成 Docker 镜像后，容器启动时遇到了线程创建失败问题，典型错误如下：
+
+```sh
+runtime/cgo: pthread_create failed: Operation not permitted
+SIGABRT: abort
+```
+
+### 调整 seccomp 配置
+
+Seccomp 是限制系统调用的一种机制，默认情况下 Docker 使用的 seccomp 配置文件可能会阻止某些与线程相关的系统调用。解决这个问题的一个方案是禁用 seccomp 或使用自定义的 seccomp 配置文件。
+
+- **禁用 seccomp**（不推荐用于生产环境，调试时可以使用）
+
+```routeros
+docker run --rm --security-opt seccomp=unconfined ...
+```
+
+- **使用自定义 seccomp 配置**：你可以基于默认的 seccomp 配置文件，允许 `pthread_create` 所需的系统调用。
+
+###  增加 capabilities
+
+容器的默认 `Capabilities` 设置可能不允许某些系统调用，如与线程管理相关的系统调用。你可以通过 `--cap-add` 添加更多权限，或者删除不必要的限制：
+
+- **添加 `SYS_PTRACE` 权限**
+
+```routeros
+docker run --rm --cap-add=SYS_PTRACE ...
+```
+
+- **删除所有额外的 Capabilities 限制**（用于调试）：
+
+```shell
+docker run --rm --cap-drop ALL ...
+```
+
+但需要注意，移除 Capabilities 或添加过多权限会增加潜在的安全风险，因此应谨慎操作
