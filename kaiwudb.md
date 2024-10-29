@@ -2,6 +2,8 @@
 
 文档详见 https://www.kaiwudb.com/kaiwudb_docs/#/
 
+https://gitee.com/kaiwuDB-organiization/docs_kaiwuDB
+
 ubuntu 22.04
 
 ```sh

@@ -1482,3 +1482,6 @@ on ubuntu
 sudo apt install librdkafka-dev
 ```
 
+# kafka connector
+
+https://segmentfault.com/a/1190000040247682
