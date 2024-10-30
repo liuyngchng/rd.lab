@@ -42,8 +42,6 @@ cd /home/workspace/kwdb_src/src/gitee.com/kwbasedb/bin
 
 /home/workspace/kwdb_src/src/gitee.com/kwbasedb/bin/kwbase-data
 
-
-
 kwdb_Dockerfile
 
 ````sh
@@ -66,8 +64,6 @@ ENTRYPOINT ["sh", "./start.sh"]
 ```dockerfile
 docker build -f ./kwdb_Dockerfile ./ -t kaiwudb:2.0.4
 ```
-
-
 
 
 

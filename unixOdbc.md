@@ -4,7 +4,6 @@ unixodbc-dev , ODBC libraries for Unix
 
 ```sh
 sudo apt-get install unixodbc*
-
 ```
 
 odbcinst,  Helper program for accessing ODBC configuration file
@@ -66,9 +65,9 @@ UsageCount=1
 
 # 配置odbc驱动
 
-配置 ODBC 调用某个指定数据库的驱动程序
+配置 ODBC 调用某个指定数据源数据库的驱动程序
 
-```sh
+```ini
 cat /etc/odbc.ini 
 -------------------------------------------------------
 [pg]
@@ -84,6 +83,24 @@ UserName = db_user_name
 Password = db_password
 Port = db_connect_port
 ```
+
+# isql
+
+用于通过已配置的 `unixOdbc` 数据源，连接相应的数据库服务器。
+
+```sh
+# 如果某个字段有特殊字符，可以在字段外部加单引号
+isql -v <数据源名称> <用户名> <密码> -b -d <数据库名称> -t <表名>
+isql -v 'pg' 'my_db_user_name' 'my_db_password'
++---------------------------------------+
+| Connected!                            |
+| sql-statement                         |
+| help [tablename]                      |
+| quit                                  |
++---------------------------------------+
+```
+
+
 
 # code
 
@@ -110,7 +127,7 @@ int main() {
     // 连接数据库
     SQLRETURN ret;
     // 输入正确的用户名和密码
-    // pg 对应 /etc/odbc.ini 中对应的数据库配置名称
+    // pg 对应 /etc/odbc.ini 中对应的数据源名称
     ret = SQLConnect(hDbc, (SQLCHAR*)"pg", SQL_NTS, (SQLCHAR*)"db_user_name", SQL_NTS, (SQLCHAR*)"db_password", SQL_NTS);
     if (ret != SQL_SUCCESS) {
         printf("fail to connect the database, error code %d\n\n", ret);
