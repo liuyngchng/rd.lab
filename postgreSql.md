@@ -10,7 +10,12 @@ sudo passwd postgres
 sudo systemctl status postgresql
 # 启动服务
 sudo systemctl start postgresql
-#切换用户
+```
+
+# connect test
+
+```sql
+#切换用户 必须切换，否则可能连接失败
 sudo -u postgres -i
 # 查看数据库版本
 psql --version
@@ -32,5 +37,61 @@ postgres=# \l
 create database class with owner=postgres encoding='UTF-8';
 # 删除数据库
 drop database class;
+# 授权远程登录
+psql -U postgres -d postgres -h 127.0.0.1 -p 5432
+#授予psql数据库指定用户postgers用户 指定连接后的数据库是postgres 指定主机地址为127.0.0.1 指定端口为5432可以登入数据库
+# 退出控制台
+\q
+```
+
+# create user & grant privilege
+
+```sql
+# 创建用户名和密码
+create user user_name with password 'user_password';
+alter user user_name with password 'user_password';
+# 创建数据库
+create database db_name owner user_name;
+grant all privileges on database db_name to user_name;
+```
+
+# connect
+
+```sql
+# 连接数据库，无需切换用户 postgres
+psql -U user_name -h ip -d database_name
+#命令行输入密码
+PGPASSWORD=$your_password psql -U user_name -h ip -d database_name
+PGPASSWORD='123!@#$%^&456' psql -U test -h localhost -d test_dt
+
+\l                   #查看数据库
+\c databanse_name    #切换数据库
+\d                   #查看表
+\d table_name        #查看表结构
+\q                   #退出
+\dx                  #查看已安装插件
+# create table
+CREATE TABLE test_table (
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(100),
+    age INT
+);
+```
+
+# config
+
+```sql
+#数据库设为只读
+alter system set default_transaction_read_only to on;
+select pg_reload_conf();
+select pg_terminate_backend(pid) from pg_stat_activity where usename not in ('replicator', 'aurora', 'alicloud_rds_admin') and usename not like 'pg%' and pid <> pg_backend_pid();
+ 
+#（回滚）数据库关闭只读
+alter system set default_transaction_read_only to off;
+select pg_reload_conf();
+select pg_terminate_backend(pid) from pg_stat_activity where usename not in ('replicator', 'aurora', 'alicloud_rds_admin') and usename not like 'pg%' and pid <> pg_backend_pid();
+ 
+#检查当前是否只读
+show default_transaction_read_only;
 ```
 
