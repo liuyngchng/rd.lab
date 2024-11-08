@@ -1482,6 +1482,277 @@ on ubuntu
 sudo apt install librdkafka-dev
 ```
 
-# kafka connector
+# kafka JDBC connector
+
+
 
 https://segmentfault.com/a/1190000040247682
+
+通过kafka connector 的配置，可以将kafka某个主题的消息自动保存至数据库中（data sink），或将数据库中新增的记录自动提交至kafka的某个topic（data source）。 文档详见  https://www.confluent.io/hub/confluentinc/kafka-connect-jdbc。环境信息如下所示。
+
+```sh
+java -version
+openjdk version "17.0.12" 2024-07-16
+
+kafka version  kafka_2.11-2.4.1
+
+kafka-connect-jdbc onfluentinc-kafka-connect-jdbc-5.5.7
+```
+
+官方文档详见 https://docs.confluent.io/legacy/platform/5.5.7/。
+
+
+
+
+
+## 下载 
+
+https://www.confluent.io/hub/confluentinc/kafka-connect-jdbc， 下载之后解压
+
+```sh
+unzip onfluentinc-kafka-connect-jdbc-5.5.7.zip
+```
+
+## config kafka-connect-jdbc
+
+添加 kafka connect jar包和 mysql connector jar 包 至 kafka 的libs 目录下
+
+```sh
+cd kafka_2.11-2.4.1/libs
+cp confluentinc-kafka-connect-jdbc-5.5.7/lib/kafka-connect-jdbc-5.5.7.jar ./
+cp ~/.m2/repository/mysql/mysql-connector-java/8.0.22/mysql-connector-java-8.0.22.jar ./
+```
+
+配置 kafka-connecter server properties 文件
+
+```sh
+cd kafka_2.11-2.4.1/config/
+vi connect-standalone.properties
+```
+
+properties 文件内容如下所示
+
+```properties
+# kafka-connect-jdbc 将连接的 kafka 的地址，用于读取或写入
+bootstrap.servers=localhost:9092
+key.converter=org.apache.kafka.connect.json.JsonConverter
+value.converter=org.apache.kafka.connect.json.JsonConverter
+key.converter.schemas.enable=false
+value.converter.schemas.enable=false
+
+internal.key.converter=org.apache.kafka.connect.json.JsonConverter
+internal.value.converter=org.apache.kafka.connect.json.JsonConverter
+internal.key.converter.schemas.enable=false
+internal.value.converter.schemas.enable=false
+
+offset.storage.file.filename=/tmp/connect.offsets
+offset.flush.interval.ms=10000
+errors.tolerance = all
+```
+
+拷贝2个 properties 配置文件
+
+```sh
+cd kafka_2.11-2.4.1/config/
+# source properties 配置文件，用于将 数据库 的数据自动发送至 kafka 中   DB --> kafka
+cp confluentinc-kafka-connect-jdbc-5.5.7/etc/source-quickstart-sqlite.properties ./
+# sink properties 配置文件，用于将 kafka 的数据自动发送至 数据库中, kafka --> DB
+cp confluentinc-kafka-connect-jdbc-5.5.7/etc/sink-quickstart-sqlite.properties ./
+```
+
+修改文件名称
+
+```sh
+cd kafka_2.11-2.4.1/config/
+mv source-quickstart-sqlite.properties connect-mysql-source.properties
+mv sink-quickstart-sqlite.properties connect-mysql-sink.properties 
+```
+
+## DB -> kafka 任务 (source)
+
+对DB schema的要求，必须有一列id自增列，否则无法导入到kafka
+
+### config
+
+```
+vi connect-mysql-source.properties
+```
+
+内容如下所示
+
+```properties
+# A simple example that copies all tables from a SQLite database. The first few settings are
+# required for all connectors: a name, the connector class to run, and the maximum number of
+# tasks to create:
+name=test-source-mysql-jdbc-autoincrement
+connector.class=io.confluent.connect.jdbc.JdbcSourceConnector
+tasks.max=10
+# The remaining configs are specific to the JDBC source connector. In this example, we connect to a
+# SQLite database stored in the file test.db, use and auto-incrementing column called 'id' to
+# detect new rows as they are added, and output to topics prefixed with 'test-sqlite-jdbc-', e.g.
+# a table called 'users' will be written to the topic 'test-sqlite-jdbc-users'.
+#connection.url=jdbc:mysql://192.168.101.3:3306/databasename?user=xxx&password=xxx
+connection.url=jdbc:mysql://127.0.01:3306/us_app?user=test&password=test
+table.whitelist=ocm_blacklist_number
+#bulk为批量导入，此外还有incrementing和imestamp模式
+mode=bulk
+#timestamp.column.name=time
+# 可修改自增列的列名，默认列名为 ID
+#incrementing.column.name=id
+topic.prefix=connect-mysql-
+
+```
+
+### 启动任务
+
+```sh
+cd kafka_2.11-2.4.1
+./bin/connect-standalone.sh config/connect-standalone.properties config/connect-mysql-source.properties
+```
+
+### DB 插入数据
+
+```sql
+insert into db.table (a, b) values ('123', '456');
+# 进入 kafka 数据存储目录
+cd /tmp/kafka-logs
+cd topic-0
+# DB 插入数据后，日至文件中应该能看到新增的数据
+more 00000000000000000000.log
+```
+
+消费数据， 当数据库中插入数据时，会看到消费的数据
+
+```sh
+./bin/kafka-console-consumer.sh --bootstrap-server localhost:9092 --topic test_me --from-beginning
+```
+
+
+
+## kafka -> DB 任务 (sink)
+
+将kafka中的JSON消息导出失败，报错如下
+
+```sh
+Caused by: org.apache.kafka.connect.errors.DataException: JsonConverter with schemas.enable requires "schema" and "payload" fields and may not contain additional fields. If you are trying to deserialize plain JSON data, set schemas.enable=false in your converter configuration.
+```
+
+JSON 消息体如下
+
+```sh
+{"a":"kafkmsga", "b":"kafkamsgb"}
+```
+
+
+
+### config
+
+配置文档详见  https://docs.confluent.io/platform/current/connect/userguide.html#connect-configuring-converters
+
+https://docs.confluent.io/kafka-connectors/jdbc/current/sink-connector/overview.html
+
+https://docs.confluent.io/kafka-connectors/jdbc/current/sink-connector/sink_config_options.html#sink-config-options
+
+修改数据输出至DB 的配置文件  
+
+```sh
+vi connect-mysql-sink.properties
+```
+
+内容如下所示
+
+```properties
+name=test-sink
+connector.class=io.confluent.connect.jdbc.JdbcSinkConnector
+tasks.max=1
+
+# The topics to consume from - required for sink connectors like this one
+topics=test-me
+
+# Configuration specific to the JDBC sink connector.
+# We want to connect to a SQLite database stored in the file test.db and auto-create tables.
+connection.url=jdbc:mysql://127.0.01:3306/test?user=my_user&password=my_password
+auto.create=true
+errors.tolerance = all
+```
+
+### 启动任务
+
+```sh
+cd kafka_2.11-2.4.1
+./bin/connect-standalone.sh config/connect-standalone.properties config/connect-mysql-sink.properties &
+```
+
+### 生产消息
+
+```sh
+./bin/kafka-console-producer.sh --broker-list localhost:9092  --topic test-me --producer.config config/producer.properties
+> {"a":"kafkmsga", "b":"kafkamsgb"}
+
+
+./bin/kafka-console-producer.sh --broker-list localhost:9092  --topic test-me --producer.config config/producer.properties  --property value.schema='{"type":"record","name":"myrecord","fields":[{"name":"id","type":"int"},{"name":"product", "type": "string"}, {"name":"quantity", "type": "int"}, {"name":"price", "type": "float"}]}'
+
+{"id": 999, "product": "foo", "quantity": 100, "price": 50}
+```
+
+### API
+
+（1）查看 connector
+
+```sh
+curl -s -X GET http://localhost:8083/connectors | jq
+[
+  "test-sink"
+]
+```
+
+（2）查看connector 配置
+
+```sh
+curl -s -X GET http://localhost:8083/connectors/test-sink | jq
+{
+  "name": "test-sink",
+  "config": {
+    "connector.class": "io.confluent.connect.jdbc.JdbcSinkConnector",
+    "key.converter.schemas.enable": "false",
+    "tasks.max": "1",
+    "topics": "test-me",
+    "name": "test-sink",
+    "auto.create": "true",
+    "connection.url": "jdbc:mysql://127.0.01:3306/test?user=test&password=test",
+    "value.converter": "org.apache.kafka.connect.json.JsonConverter",
+    "key.converter": "org.apache.kafka.connect.json.JsonConverter"
+  },
+  "tasks": [
+    {
+      "connector": "test-sink",
+      "task": 0
+    }
+  ],
+  "type": "sink"
+}
+```
+
+
+
+```sh
+curl -X POST http://localhost:8083/connectors -H "Content-Type: application/json" -d '{
+        "name": "file_sink_01",
+        "config": {
+                "connector.class": "org.apache.kafka.connect.file.FileStreamSinkConnector",
+                "topics":"test_topic_json",
+                "value.converter":"org.apache.kafka.connect.json.JsonConverter",
+                "value.converter.schemas.enable": false,
+                "key.converter":"org.apache.kafka.connect.json.JsonConverter",
+                "key.converter.schemas.enable": false,
+                "file":"/data/file_sink_01.txt"
+                }
+        }'
+```
+
+（3）查看状态
+
+```
+http://127.0.0.1:8083/connectors/test-sink/status
+```
+

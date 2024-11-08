@@ -135,3 +135,9 @@ scrape_configs:
         cluster: 'my-kaiwudb-cluster'
 ```
 
+# sql
+
+```
+CREATE TS DATABASE iot_gas_meter;
+```
+
