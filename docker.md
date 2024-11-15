@@ -999,3 +999,14 @@ docker run --rm --cap-drop ALL ...
 ```
 
 但需要注意，移除 Capabilities 或添加过多权限会增加潜在的安全风险，因此应谨慎操作
+
+## WARNING: IPv4 forwarding is disabled. Networking will not work
+
+docker服务启动的时候报以上错误， 在centOS 上进行以下操作可排除
+
+```sh
+# 在宿主机上执行
+echo "net.ipv4.ip_forward=1" >>/usr/lib/sysctl.d/00-system.conf
+sudo systemctl restart network && systemctl restart docker
+```
+

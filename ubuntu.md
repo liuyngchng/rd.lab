@@ -429,3 +429,11 @@ ip route show
 sudo route del default gw 192.168.49.1
 ```
 
+# ubuntu 录制 gif 文件
+
+```sh
+sudo apt install byzanz imagemagick -y
+# x, y 起始点坐标， 宽度和高度， 矩形； duration 单位为秒
+byzanz-record --duration=10 --x=0 --y=0 --width=800 --height=600 git_output.gif
+```
+

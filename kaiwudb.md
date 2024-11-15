@@ -135,9 +135,21 @@ scrape_configs:
         cluster: 'my-kaiwudb-cluster'
 ```
 
-# sql
+# SQL
 
 ```
 CREATE TS DATABASE iot_gas_meter;
+```
+
+# restful API
+
+``` sh
+# 生成认证信息 java
+# String my_token =Base64.getEncoder().encodeToString("user_name:password".getBytes());
+# Authorization:Basic my_token
+curl -X POST --noproxy '*' -ks --tlsV1 'https://IP:port/restapi/query?db=db_name'\
+ -H 'Authorization:Basic dGVzdDohQCMkJV4mKigp' \
+ -H 'Content-Type: plain/text' \
+ -d 'select * from meter_detail_info limit 2' | jq
 ```
 

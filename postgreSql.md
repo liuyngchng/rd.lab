@@ -124,3 +124,10 @@ sudo apt install pgadmin4-web
 sudo /usr/pgadmin4/bin/setup-web.sh
 ```
 
+最终会弹出
+
+```shell
+Apache successfully restarted. You can now start using pgAdmin 4 in web mode at http://127.0.0.1/pgadmin4
+```
+
+可以通过 http://127.0.0.1/pgadmin4 进行配置。
