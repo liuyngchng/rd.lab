@@ -433,7 +433,10 @@ sudo route del default gw 192.168.49.1
 
 ```sh
 sudo apt install byzanz imagemagick -y
-# x, y 起始点坐标， 宽度和高度， 矩形； duration 单位为秒
-byzanz-record --duration=10 --x=0 --y=0 --width=800 --height=600 git_output.gif
+# x, y 起始点坐标， x方向为从左向右， y方向为从上到下，width为宽度；height为高度；
+# duration为整个gif的持续时长，单位为秒； delay 为延迟开始的时间，单位为秒
+byzanz-record --duration=10 --x=0 --y=50 --width=800 --height=600 --delay=5 git_output.gif
+# 
+byzanz-record --duration=15 --x=0 --y=100 --width=1280 --height=800 --delay=2  git_output.gif
 ```
 
