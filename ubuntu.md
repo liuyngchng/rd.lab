@@ -440,3 +440,18 @@ byzanz-record --duration=10 --x=0 --y=50 --width=800 --height=600 --delay=5 git_
 byzanz-record --duration=15 --x=0 --y=100 --width=1280 --height=800 --delay=2  git_output.gif
 ```
 
+# video edit
+
+```sh
+sudo apt update
+sudo apt install ffmpeg
+# 裁剪视频（截取视频的一部分）
+ffmpeg -i input.ts -ss 00:00:10 -t 00:00:30 -c copy output.ts
+# 裁剪视频中的特定区域（基于帧的坐标）
+ffmpeg -i input.ts -vf "crop=in_w-200:in_h-200:200:200" -c:a copy output.ts
+# 调整视频速度
+ffmpeg -i input.ts -filter:v "setpts=0.5*PTS" output.ts
+# 转换视频格式
+ffmpeg -i input.ts -c:v libx264 -c:a aac -strict experimental output.mp4
+```
+
