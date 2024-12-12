@@ -1600,3 +1600,48 @@ sudo vi /etc/gdm3/custom.conf
 ```bash
 WaylandEnable=false
 ```
+
+#  时间同步
+
+可选的服务有 ntpd 和 chronycd， chronycd相较于ntpd要更优秀一些
+
+```sh
+# 查看服务状态
+[user@server]$ systemctl status chronyd
+● chronyd.service - NTP client/server
+   Loaded: loaded (/usr/lib/systemd/system/chronyd.service; enabled; vendor preset: enabled)
+   Active: active (running) since 二 2024-12-03 09:15:26 CST; 1 weeks 2 days ago
+ Main PID: 2201 (chronyd)
+   Memory: 452.0K
+   CGroup: /system.slice/chronyd.service
+           └─2201 /usr/sbin/chronyd -u chrony
+# 查看时钟同步状态           
+[user@server]$ chronyc sources -v
+210 Number of sources = 4
+
+  .-- Source mode  '^' = server, '=' = peer, '#' = local clock.
+ / .- Source state '*' = current synced, '+' = combined , '-' = not combined,
+| /   '?' = unreachable, 'x' = time may be in error, '~' = time too variable.
+||                                                 .- xxxx [ yyyy ] +/- zzzz
+||                                                /   xxxx = adjusted offset,
+||         Log2(Polling interval) -.             |    yyyy = measured offset,
+||                                  \            |    zzzz = estimated error.
+||                                   |           |                         
+MS Name/IP address         Stratum Poll Reach LastRx Last sample
+===============================================================================
+^+ 11.8.13.1                     3  10   377   466  +2767us[+2767us] +/-  251ms
+^* 11.8.13.9                     3  10   377   27m   -992us[-1566us] +/-  263ms
+^? 10.30.64.17                   0  10     0   10y     +0ns[   +0ns] +/-    0ns
+^? 10.30.64.25                   0  10     0   10y     +0ns[   +0ns] +/-    0ns
+
+# 查看时间源的状态
+[user@server]$ chronyc sourcestats
+210 Number of sources = 4
+Name/IP Address            NP  NR  Span  Frequency  Freq Skew  Offset  Std Dev
+==============================================================================
+11.8.13.1                   7   5  103m     -0.482      1.018  -1585us   562us
+11.8.13.9                   4   4   51m     -0.587      2.183  -2031us   106us
+10.30.64.17                 0   0     0      0.000   2000.000     +0ns  4000ms
+10.30.64.25                 0   0     0      0.000   2000.000     +0ns  4000ms
+```
+
