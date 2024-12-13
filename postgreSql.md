@@ -1,6 +1,6 @@
 # setup
 
-env ubuntu 22.04
+##  ubuntu 22.04
 
 ```sql
 sudo apt install postgresql
@@ -11,6 +11,30 @@ sudo systemctl status postgresql
 # 启动服务
 sudo systemctl start postgresql
 ```
+
+## centOS
+
+```sh
+cat /etc/redhat-release 
+Red Hat Enterprise Linux Server release 7.1 (Maipo)
+```
+
+setup
+
+```sh
+sudo yum install postgresql-server
+sudo yum install postgresql-contrib
+sudo postgresql-setup initdb
+
+# 使服务生效
+sudo systemctl enable postgresql.service
+# 启动服务
+sudo systemctl start postgresql.service
+# 重启服务
+sudo systemctl restart postgresql.service
+```
+
+
 
 # connect test
 
@@ -40,6 +64,13 @@ drop database class;
 # 授权远程登录
 psql -U postgres -d postgres -h 127.0.0.1 -p 5432
 #授予psql数据库指定用户postgers用户 指定连接后的数据库是postgres 指定主机地址为127.0.0.1 指定端口为5432可以登入数据库
+
+# 查询配置文件所在位置
+show config_file;    
+
+# 查询数据储存目录
+show data_directory; 
+
 # 退出控制台
 \q
 ```
@@ -131,3 +162,36 @@ Apache successfully restarted. You can now start using pgAdmin 4 in web mode at 
 ```
 
 可以通过 http://127.0.0.1/pgadmin4 进行配置。
+
+# 修改数据存储目录
+
+```sh
+# 切换用户
+sudo -u postgres -i
+# 本地登录
+psql
+
+# 查询配置文件所在位置
+show config_file;    
+
+# 查询数据储存目录
+show data_directory; 
+# 修改相应文件配置中的 data_directory = '/data/pg' 的值
+sudo vi /var/lib/pgsql/data/postgresql.conf
+# 修改数据目录权限
+chown -R postgres:postgres /data/pg
+# 先切换用户，然后手动初始化自定义路径下的数据库
+sudo -u postgres -i
+/usr/bin/initdb -D /data/pg
+# 查看服务配置文件的位置
+systemctl status postgresql.service
+# 修改服务配置文件中的数据路径
+sudo vi /usr/lib/systemd/system/postgresql.service
+# 修改以下环境变量
+Environment=PGDATA=/data/pg
+# 重新加载系统文件
+sudo systemctl daemon-reload
+# 重启服务
+sudo systemctl restart postgresql.service
+```
+
