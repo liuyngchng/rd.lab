@@ -1645,3 +1645,22 @@ Name/IP Address            NP  NR  Span  Frequency  Freq Skew  Offset  Std Dev
 10.30.64.25                 0   0     0      0.000   2000.000     +0ns  4000ms
 ```
 
+# 命令行中回车未换行
+
+进到容器内部执行命令的时候，如果命令比较长，会出现折行情况，有时候会出现回车后未换行的情况，导致显示错乱，如下所示。
+
+```sh
+root@Host:~#
+dddd@Host:~# dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd
+```
+
+可以通过以下命令解决
+
+```sh
+root@TSync:~# stty size
+24 80
+root@TSync:~# stty cols 160
+root@TSync:~# ddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd
+dddddddddddddddddddddddddd
+```
+
