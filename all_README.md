@@ -1664,3 +1664,51 @@ root@TSync:~# dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd
 dddddddddddddddddddddddddd
 ```
 
+#  url encoding in shell
+
+```sh
+# 输入待编码字符串
+src_text='Qq1!@#$%^&*()'
+# URL 编码
+echo ${src_text} | xxd -plain | tr -d '\n' | sed 's/\(..\)/%\1/g'
+```
+
+#  OpenCV
+
+以 ubuntu 系统为例，
+
+```sh
+sudo apt install libopencv-dev
+```
+
+测试demo opencv.cpp，如下所示。
+
+```cpp
+
+/**
+ * 编译
+ * g++ opencv.cpp -o opencv `pkg-config --cflags --libs opencv4`
+ * 执行 ./opencv 后会显示图像
+ */
+
+#include <opencv2/highgui.hpp>
+#include <opencv2/opencv.hpp>
+using namespace cv;
+using namespace std;
+int main()
+{
+    string image_path = "/home/rd/Pictures/1.png";
+    Mat img = imread(image_path, IMREAD_COLOR);
+
+    imshow("Display window", img);
+    int k = waitKey(0);              // Wait for a keystroke in the window
+    return 0;
+}
+```
+
+# shell int to hex
+
+```sh
+echo -n -2147418093 | awk 'BEGIN{printf("0x%X\n", '$n')}'
+```
+
