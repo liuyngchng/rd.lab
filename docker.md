@@ -380,11 +380,11 @@ docker-compose up -d  // 后台启动并运行容器
 
 镜像服务器地址可以在 `docker-compose.yml` 中配置。
 
-#  centOS7 离线安装docker
+#  离线安装docker
 
+以下内容在 CentOS 7.4 、RHEL 7.4 和  docker 23.0.6 下进行了验证 
 
-
-## docker包下载地址
+## 下载静态编译包
 
 ```sh
 #下载docker-20.10.0包
@@ -408,7 +408,7 @@ docker version
 docker info
 ```
 
-##  配置Docker开机自启动服务
+##  配置系统服务
 
 #添加docker.service文件
 
@@ -439,6 +439,7 @@ Type=notify
 
 # drivermanage 使用overlay2 ，需要配置 /etc/docker/daemon.json一起使用， 详细选择见
 # docker 官网 https://docs.docker.com/storage/storagedriver/select-storage-driver/
+# docker 版本为 23.0.6 时，--graph 选项应替换为 --data-root
 ExecStart=/usr/local/bin/dockerd --graph=/data/docker --api-cors-header=*
 # drivermanage 使用devicemapper
 # 若需要在当前配置文件中添加多个私有仓库，可以在 dockerd 后面通过添加多个 --insecure-registry 来解决
@@ -466,16 +467,47 @@ StartLimitInterval=60s
 WantedBy=multi-user.target
 ```
 
- 添加配置文件， 注意，daemon.json中配置的参数不能与 /etc/systemd/system/docker.service 重复，否则启动服务会报 `start request repeated too quickly for docker.service`,    
+完整的配置文件`/etc/systemd/system/docker.service ` 内容如下所示
+
+```sh
+[Unit]
+Description=Docker Application Container Engine
+Documentation=https://docs.docker.com
+After=network-online.target firewalld.service
+Wants=network-online.target
+  
+[Service]
+Type=notify
+ExecStart=/usr/local/bin/dockerd --data-root=/data/docker --api-cors-header=*
+ExecReload=/bin/kill -s HUP $MAINPID
+LimitNOFILE=infinity
+LimitNPROC=infinity
+LimitCORE=infinity
+Delegate=yes
+KillMode=process
+Restart=on-failure
+StartLimitBurst=3
+StartLimitInterval=60s
+  
+[Install]
+WantedBy=multi-user.target
+```
+
+ 
+
+添加配置文件， 注意，daemon.json中配置的参数不能与 /etc/systemd/system/docker.service 重复，否则启动服务会报 `start request repeated too quickly for docker.service`,    
 
 注意，  `"insecure-registry": [ "hostName:port", "IP:port"]`  一行的  `[ "hostName:port", "IP:port"]  `需要替换成真是的域名端口号，或者IP和端口号，是用于 docker pull， docker push 的私有registry使用的，若不需要此功能，则不配置这一项。
 
 ```sh
 touch /etc/docker/daemon.json
 vi /etc/docker/daemon.json
-# 添加如下内容
+```
+
+添加如下内容
+
+```sh
 {
- 
  "debug": true,
  "live-restore": false,
  "hosts":["unix:///var/run/docker.sock","tcp://0.0.0.0:4243"],
@@ -487,19 +519,17 @@ vi /etc/docker/daemon.json
 }
 ```
 
-
-
 启动服务
 
 ```sh
 #添加文件可执行权限
-chmod +x /etc/systemd/system/docker.service
+sudo chmod +x /etc/systemd/system/docker.service
 
 #重新加载配置文件
-systemctl daemon-reload
+sudo systemctl daemon-reload
 
 #启动Docker
-systemctl start docker
+sudo systemctl start docker
 
 #查看docker启动状态
 systemctl status docker
@@ -507,11 +537,7 @@ systemctl status docker
 #查看启动容器
 docker ps
 
-#设置开机自启动
-systemctl enable docker.service
 
-#查看docker开机启动状态 enabled:开启, disabled:关闭
-systemctl is-enabled docker.service
 
 https://docs.docker.com/storage/storagedriver/select-storage-driver/
 
@@ -519,8 +545,18 @@ https://blog.csdn.net/doctorone/article/details/88536385
 device-mapper :需要 
 
 yum install -y yum-utils device-mapper-persistent-data lvm2
-
+# 服务启动测试命令
 /usr/local/bin/dockerd --graph=/data/docker -H tcp://0.0.0.0:4243 -H unix:///var/run/docker.sock  --insecure-registry  dev.kmx.k2data.com.cn:5001 --storage-driver=devicemapper --api-cors-header=*
+```
+
+以上配置完成后，即可配置开启自启动
+
+```sh
+#设置开机自启动
+sudo systemctl enable docker.service
+
+#查看docker开机启动状态 enabled:开启, disabled:关闭
+systemctl is-enabled docker.service
 ```
 
 
