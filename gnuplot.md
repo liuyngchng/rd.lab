@@ -82,13 +82,6 @@ gnuplot>set size 0.5,0.5 		% 设置第四个图的大小
 
 
 
-gnuplot>plot “a4.dat”
---------------------------------------------------------
-作者：wuh雨点
-链接：https://wenku.baidu.com/view/a3dd536448d7c1c708a145b9.html
-来源：百度文库
-著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
-
 # 画多个图
 
 ```sh
@@ -113,4 +106,10 @@ gnuplot>
 f(x)=sin(x)
 plot f(x)
 ```
+
+$$
+[
+\delta_t = \frac{\partial L}{\partial y_t}
+]
+$$
 

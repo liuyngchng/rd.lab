@@ -767,7 +767,9 @@ Filesystem                 Size  Used Avail Use% Mounted on
 tmpfs                      3.2G     0  3.2G   0% /run/user/0
 ```
 
-# 挂载数据盘
+# 挂载磁盘
+
+## 挂载
 
 ```shell
 # 能够看到物理磁盘， 比如 sdbc
@@ -776,16 +778,27 @@ lsblk
 mount /dev/sdb /data
 # 若提示 /dev/sdb is write-protected, mounting read-only
 #		mount: unknown filesystem type '(null)' 则执行以下语句，否则跳过
-mkfs.ext4 /dev/sdb 					#输入y，回车
+mkfs.xfs /dev/sdb 					#输入y，回车
 ```
 此时已挂载完毕， 通过 `df -h` 能够看到磁盘空间  
 但是重启后挂载的盘会看不到，还需要执行   
 
 ```shell
 vi /etc/fstab
-/dev/sdb                /data                   ext4    defaults        0 0
+/dev/sdb                /data                   xfs    defaults        0 0
 ```
 其中， ext4 通过执行 `blkid /dev/sdb`  获取
+
+## 卸载
+
+```sh
+lsblk
+umount /dev/sdb
+```
+
+
+
+
 
 # crontab
 
