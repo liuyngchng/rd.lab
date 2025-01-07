@@ -212,17 +212,17 @@ stop
 ./bin/kafka-server-stop.sh config/server1.properties
 ```
 
-# 3. op
+# op
 
 
 
-## 3.1 创建 topic
+## 创建 topic
 
 ```sh
 ./bin/kafka-topics.sh --zookeeper localhost:2181 --create  --partitions 3 --replication-factor 3  --topic test_me 
 ```
 
-## 3.2 查看topic
+##  查看topic
 
 ```sh
 ./bin/kafka-topics.sh --zookeeper localhost:2181 --list
@@ -238,7 +238,7 @@ Topic: test_me	PartitionCount: 3	ReplicationFactor: 3	Configs:
 
 
 
-## 3.3 删除 topic
+##  删除 topic
 
 ```sh
 ./bin/kafka-topics.sh --zookeeper localhost:2181 --delete --topic test_me
@@ -261,7 +261,7 @@ delete.topic.enable=true
 
 如果kafka启动之前没有配置delete.topic.enable=true，topic只会标记为marked for deletion，加上配置，重启kafka，之前的topick就真正删除了
 
-## 3.4 发送msg
+##  发送msg
 
 * snd 从第1,2 个broker发送
 
@@ -274,7 +274,7 @@ delete.topic.enable=true
 ./bin/kafka-console-consumer.sh --bootstrap-server localhost:9094 --topic test_me --from-beginning --consumer.config config/consumer.properties
 ```
 
-## 3.5 获取topic list
+##  获取topic list
 
 
 
@@ -282,13 +282,13 @@ delete.topic.enable=true
 ./bin/kafka-topics.sh --bootstrap-server localhost:9093 --list
 ```
 
-## 3.6 压测
+##  压测
 
 ```sh
 bin/kafka-producer-perf-test.sh --topic test --num-records 100 --record-size 1 --throughput 100  --producer-props bootstrap.servers=localhost:9092
 ```
 
-## 3.7 数据导入导出
+##  数据导入导出
 
 * 导入
 
@@ -302,21 +302,21 @@ bin/kafka-producer-perf-test.sh --topic test --num-records 100 --record-size 1 -
 ./bin/kafka-console-consumer.sh --bootstrap-server localhost:9092 --topic test_me --from-beginning > /tmp/test_me.txt &
 ```
 
-## 3.8 查看ZK中注册的 brokers
+##  查看ZK中注册的 brokers
 
 ```sh
 ./bin/zookeeper-shell.sh localhost:2181
 ls /brokers/ids
 ```
 
-## 3.9 leader election
+##  leader election
 
 ```sh
 # server增加了权限验证后 执行timeout， 未成功，不设置权限验证执行形成
 ./bin/kafka-leader-election.sh --bootstrap-server localhost:9092 --topic test_me --election-type PREFERRED  --partition 1
 ```
 
-## 3.10 查看消息总量
+##  查看消息总量
 
 查看指定topic中的消息总量
 
@@ -329,7 +329,7 @@ test_me:3:3
 test_me:4:0
 ```
 
-## 3.11 查看消息消费进度
+##  查看消息消费进度
 
 * 版本小于 0.9.0.0
 
@@ -363,18 +363,24 @@ console-consumer-85822 test_me         1          -               5             
 
 LOG-END-OFFSET为各个partition中的消息数量，求和后的总数即为某个topic下的消息数量
 
-## 3.12 查看版本
+##  查看版本
 
 ```
 ./bin/kafka-topics.sh --version
 2.4.1 (Commit:c57222ae8cd7866b)
 ```
 
+## 删除分组记录
+
+```sh
+./bin/kafka-consumer-groups.sh --bootstrap-server <broker-list> --group <group-id> --delete
+```
 
 
-# 4. 扩容
 
-## 4.1 吞吐量提升方案	
+#  扩容
+
+##  吞吐量提升方案	
 
 ​        通过扩容，提升系统的整体吞吐量。
 
@@ -386,7 +392,7 @@ LOG-END-OFFSET为各个partition中的消息数量，求和后的总数即为某
 
 （4）对于数据量较大的topic，迁移replica，需要一定的时间，需要进行测试评估。
 
-## 4.2 系统稳定性提升方案
+##  系统稳定性提升方案
 
 ​       通过扩容，提升系统的稳定性，即当部分实例（服务器）失效后，系统依然可以正常工作。
 
@@ -396,9 +402,9 @@ LOG-END-OFFSET为各个partition中的消息数量，求和后的总数即为某
 
 （3）对于数据量较大的topic，生成新的达到ISR要求的replica，需要一定的时间，需要进行测试评估。
 
-# 5. 分区扩容
+#  分区扩容
 
-## 5.1 新增分区
+##  新增分区
 
 * kafka版本 < 2.2
 
@@ -410,9 +416,9 @@ LOG-END-OFFSET为各个partition中的消息数量，求和后的总数即为某
 ```sh
 ./bin/kafka-topics.sh --bootstrap-server localhost:9092 --alter --topic test_me --partitions 5
 ```
-## 5.2 迁移副本
+##  迁移副本
 
-### 5.2.1 查看目前的负载现状
+###  查看目前的负载现状
 
 ```sh
 ./bin/kafka-topics.sh --zookeeper localhost:2181 --describe --topic test_me
@@ -423,7 +429,7 @@ Topic: test_me	PartitionCount: 3	ReplicationFactor: 3	Configs:
 	Topic: test_me	Partition: 2	Leader: 0	Replicas: 0,1,2	Isr: 0,1,2
 ```
 
-### 5.2.2  启动新的实例
+###  启动新的实例
 
 * 修改配置
 
@@ -462,7 +468,7 @@ cat > topic.json <<EOF
 EOF
 ```
 
-###  5.2.3  生成reassignment执行计划
+###   生成reassignment执行计划
 ```sh
 ./bin/kafka-reassign-partitions.sh --zookeeper localhost:2181  --topics-to-move-json-file /tmp/topic.json  --broker-list "0,1,2,3,4"  --generate
 Current partition replica assignment
@@ -520,7 +526,7 @@ Proposed partition reassignment configuration
 
 ```
 
-### 5.2.4 创建规则reassignment.json
+###  创建规则reassignment.json
 
 ```sh
 cat > reassignment.json <<EOF
@@ -556,7 +562,7 @@ cat > reassignment.json <<EOF
 EOF
 ```
 
-### 5.2.5 执行
+###  执行
 
 这个过程对于数据量较大时耗时较长，通过--throttle 参数(100000000, 100Mbps)限制对网络的占用，单位byte/s
 
@@ -567,7 +573,7 @@ Current partition replica assignment
 {"version":1,"partitions":[{"topic":"test_me","partition":3,"replicas":[2,3,4],"log_dirs":["any","any","any"]},{"topic":"test_me","partition":4,"replicas":[3,4,0],"log_dirs":["any","any","any"]},{"topic":"test_me","partition":2,"replicas":[1,0,2],"log_dirs":["any","any","any"]},{"topic":"test_me","partition":0,"replicas":[4,3,0],"log_dirs":["any","any","any"]},{"topic":"test_me","partition":1,"replicas":[0,4,1],"log_dirs":["any","any","any"]}]}
 ```
 
-### 5.2.6 检查进度（验证）
+###  检查进度（验证）
 
 ```sh
 ./bin/kafka-reassign-partitions.sh --zookeeper localhost:2181  --reassignment-json-file /tmp/reassignment.json  --verify
@@ -581,7 +587,7 @@ Reassignment of partition test_me-1 completed successfully
 
 
 
-### 5.2.7 查看topic的分区及负载情况
+###  查看topic的分区及负载情况
 
 ```sh
 ./bin/kafka-topics.sh --zookeeper localhost:2181 --describe --topic test_me
@@ -596,7 +602,7 @@ Topic: test_me	PartitionCount: 5	ReplicationFactor: 3	Configs:
 
 # 6.  扩充副本
 
-## 6.1  创建规则json
+##  创建规则json
 注意，此处replica中副本节点的顺序会影响到leader的选举
 
 ```shell
@@ -611,21 +617,21 @@ cat > increase-replication-factor.json <<EOF
 EOF
 ```
 
-## 6.2 执行
+##  执行
 
 ```sh
 ./bin/kafka-reassign-partitions.sh --zookeeper localhost:2181 --reassignment-json-file increase-replication-factor.json -- execute
 ```
 
-## 6.3 验证
+##  验证
 
 ```sh
 ./bin/kafka-reassign-partitions.sh --zookeeper localhost:2181 --reassignment-json-file increase-replication-factor.json --verify
 ```
 
-# 7. 设置JAAS验证
+#  设置JAAS验证
 
-## 7.1 增加用户密码配置文件
+##  增加用户密码配置文件
 
 在config下面新建kafka_client_jaas.conf文件内容如下
 
@@ -648,7 +654,7 @@ KafkaServer {
 };
 ```
 
-## 7.2 修改 server 启动脚本
+##  修改 server 启动脚本
 
 vim ./bin/kafka-server-start.sh
 
@@ -667,7 +673,7 @@ base_dir=$(dirname $0)
 export KAFKA_OPTS="-Djava.security.auth.login.config=$base_dir/../config/kafka_client_jaas.conf"
 ```
 
-## 7.3  修改 server 配置文件
+##  修改 server 配置文件
 
 vim ./config/server.properties
 
@@ -688,7 +694,7 @@ authorizer.class.name=kafka.security.auth.SimpleAclAuthorizer
 super.users=User:admin
 ```
 
-## 7.4 修改 producer 和 consumer 配置文件
+##  修改 producer 和 consumer 配置文件
 
 vim ./config/consumer.properties
 
@@ -702,9 +708,9 @@ sasl.mechanism=PLAIN
 
 
 
-#  8. 扩容测试
+#   扩容测试
 
-## 8.1 扩容计划
+##  扩容计划
 
 broker清单如下所示
 
@@ -718,7 +724,7 @@ broker清单如下所示
 
 
 
-## 8.2 测试 producer 和 consumer 使用不同的 borker list
+##  测试 producer 和 consumer 使用不同的 borker list
 
 从broker AB发送， 从broker C接收
 
@@ -793,7 +799,7 @@ rd@rd-ubt:/tmp/kafka3-logs$
 
 
 
-## 8.3 启动新的实例
+##  启动新的实例
 
 在8.1节已有的3个节点基础上，新启动2个实例
 
@@ -817,7 +823,7 @@ ls /brokers/ids
 [0, 1, 2, 3, 4]
 ```
 
-## 8.4 启动新实例对现有系统的影响
+##  启动新实例对现有系统的影响
 
 收发消息，发送
 
@@ -856,7 +862,7 @@ Topic: test_me	PartitionCount: 3	ReplicationFactor: 3	Configs:
 	Topic: test_me	Partition: 2	Leader: 1	Replicas: 1,2,0	Isr: 1,2,0
 ```
 
-## 8.5 扩容 partition
+##  扩容 partition
 
 在8.2节基础上， 新增2个分区，replica自动迁移，但leader中没有新增节点。由于消息量较少，新节点3, 4 很快加入到了isr
 
@@ -882,7 +888,7 @@ drwxrwxr-x  2 rd   rd    4096 4月  13 14:55 test_me-1
 drwxrwxr-x  2 rd   rd    4096 4月  13 14:55 test_me-2
 ```
 
-## 8.6 扩容 partition 对现有系统的影响
+##  扩容 partition 对现有系统的影响
 
 在生产者没有生产新消息的情况下， 原来的consumer收到了重复消息
 
@@ -996,7 +1002,7 @@ drwxrwxr-x  2 rd   rd    4096 4月  13 15:29 test_me-3
 drwxrwxr-x  2 rd   rd    4096 4月  13 15:20 test_me-4
 ```
 
-## 8.7 从新增节点收消息
+##  从新增节点收消息
 
 从新节点收取消息
 
@@ -1023,9 +1029,9 @@ msg7-after_2_new_partition
 
 
 
-## 8.8 迁移副本
+##  迁移副本
 
-### 8.8.1 确定需要迁移的 topic
+###  确定需要迁移的 topic
 
 创建需要迁移的topic文件topic.json
 
@@ -1107,7 +1113,7 @@ Proposed partition reassignment configuration
 }
 ```
 
-### 8.8.2  生成迁移计划文件
+###  生成迁移计划文件
 
 ```sh
 cat > reassignment.json <<EOF
@@ -1143,7 +1149,7 @@ cat > reassignment.json <<EOF
 EOF
 ```
 
-### 8.8.3 执行迁移
+###  执行迁移
 
 记录迁移前副本情况
 
@@ -1254,14 +1260,14 @@ rd@rd-ubt:/tmp$
 
 
 
-## 8.9 重新选举分区 leader
+##  重新选举分区 leader
 
 ```sh
 # 测试未成功
 /bin/kafka-leader-election.sh --bootstrap-server localhost:9092 --topic test_me --election-type PREFERRED --partition 1
 ```
 
-## 8.10 批量生产消息
+## 批量生产消息
 
 执行脚本 batch_producer.sh
 
@@ -1347,7 +1353,7 @@ done
 
 
 
-# 9. 总结
+#  总结
 
 * 扩容后，已有的代码连接扩容前的borker list，依然可以正常进行消息的生产和消费，不受扩容影响
 * 扩容过程中，如果不停止consumer，可能会收到之前已经收到的消息（**重复消息**）
@@ -1464,7 +1470,7 @@ run script
 
 
 
-# 13 C API
+#  C API
 
 详见  https://github.com/confluentinc/librdkafka。
 
