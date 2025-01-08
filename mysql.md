@@ -613,3 +613,4 @@ cmake ./ -DWITH_BOOST=/usr/local/boost/boost_1_59_0
 make -j 3 && make install
 ```
 
+安装完的应用程序在目录 `/usr/local/mysql` 下。
