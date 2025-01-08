@@ -574,3 +574,42 @@ mysqlbinlog --start-position=123 mysql-bin.000001 > database_binlog_backup.sql
 mysql -u 用户名 -p 数据库名 < database_binlog_backup.sql
 ```
 
+# 源码编译安装
+
+源码编译安装mysql5.7, 从网址 https://downloads.mysql.com/archives/community/ 下载mysql源码  mysql-5.7.9_source.tar.gz。目标平台 RHEL7.4
+
+```sh
+Product Version:5.7.9
+Operating System:Source Code
+OS Version:All Operating Systems(Generic)(Architechture Independent)
+```
+
+下载boost 库,  MySQL 源代码依赖 boost库。
+
+```sh
+wget  http://www.sourceforge.net/projects/boost/files/boost/1.59.0/boost_1_59_0.tar.gz
+mkdir -p /usr/local/boost/
+cp boost_1_59_0.tar.gz /usr/local/boost/
+cd /usr/local/boost/
+tar -zxf boost_1_59_0.tar.gz
+```
+
+安装编译工具
+
+```sh
+yum -y install gcc gcc-c++ ncurses ncurses-devel bison cmake
+```
+
+开始`cmake`编译
+
+````sh
+cd /data/app/mysql-5.7.9
+cmake ./ -DWITH_BOOST=/usr/local/boost/boost_1_59_0
+````
+
+执行完成之后，再make
+
+```sh
+make -j 3 && make install
+```
+
