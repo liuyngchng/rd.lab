@@ -209,3 +209,14 @@ ollama create lama3.1:8b -f lama3_1_8b.Modelfile
 ollama show --modelfile llama3.1:8b
 ```
 
+# 测试环境
+
+
+windows 10
+Intel(R) Core(TM) i5-9500 CPU @ 3.00GHz   3.00 GHz
+内存 32.0 GB (31.9 GB 可用) 
+集成显卡
+非stream输出
+ollama 0.3.12
+模型全称 ： llama3.2:1b
+因为设备比较差，基本上是CPU被榨干，100%的跑，输出时间还可接受，5-30s，设备越好提示词越短响应更快！
