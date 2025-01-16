@@ -32,6 +32,8 @@ ollama serve &
 
 #  下载模型镜像
 
+## 模型清单
+
 各个模型的参数大小以及文件大小详见  https://github.com/ollama/ollama#model-library。
 
 | Model              | Parameters | Size  | Download & Run                   |
@@ -57,11 +59,13 @@ ollama serve &
 | LLaVA              | 7B         | 4.5GB | `ollama run llava`               |
 | Solar              | 10.7B      | 6.1GB | `ollama run solar`               |
 
+## 拉取并运行模型
+
 详见 https://ollama.com/library/llama3:8b
 
 ```sh
 # GPU 有 24G 显存 可运行 llama3:8b
-# 拉去大模型镜像
+# 拉取大模型镜像
 ollama pull llama3.1:8b
 # 运行大模型
 ollama run llama3.1:8b
