@@ -128,7 +128,42 @@ ollama help
 
 
 
+# 导入导出模型
 
+## 导出模型
 
+```sh
+# 查看模型信息, 获得类似信息 FROM /Users/m2max/.ollama/models/blobs/sha256-87f26aae09c7f052de93ff98a2282f05822cc6de4af1a2a159c5bd1acbd10ec4
+ollama show --modelfile llama3.1:8b
+# 导出模型
+cp /Users/m2max/.ollama/models/blobs/sha256-87f26aae09c7f052de93ff98a2282f05822cc6de4af1a2a159c5bd1acbd10ec4 /data/model/lama3_1_8b.gguf
 
+```
+
+## 导入模型
+
+准备Modelfile文件
+
+```sh
+vi lama3_1_8b.Modelfile
+```
+
+内容如下所示
+
+```sh
+From /data/model/lama3_1_8b.gguf
+# 其他参数，例如 template 和 stop parameter 取决于具体的模型，可暂时不写
+```
+
+执行以下语句，导入模型， 导入模型的时候，确保硬盘可用空间至少为模型大小的2倍以上
+
+```sh
+ollama create lama3.1:8b -f lama3_1_8b.Modelfile
+```
+
+查看确认已经导入的模型 
+
+```sh
+ollama show --modelfile llama3.1:8b
+```
 
