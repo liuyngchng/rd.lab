@@ -220,3 +220,14 @@ Intel(R) Core(TM) i5-9500 CPU @ 3.00GHz   3.00 GHz
 ollama 0.3.12
 模型全称 ： llama3.2:1b
 因为设备比较差，基本上是CPU被榨干，100%的跑，输出时间还可接受，5-30s，设备越好提示词越短响应更快！
+
+实际测试环境
+
+| No.  | key    | value                                               |
+| ---- | ------ | --------------------------------------------------- |
+| 1    | Server | Red Hat Enterprise Linux Server release 7.4 (Maipo) |
+| 2    | CPU    | Intel(R) Xeon(R) CPU E7-4820 v3 @ 1.90GHz 16核      |
+| 3    | Memory | 32GB                                                |
+
+
+
