@@ -270,15 +270,17 @@ TEMPLATE {{ .Prompt }}
 
 # 测试
 
-## 测试环境
+## 测试llama3.2:1b
+
+​	（1）环境
 
 | No.  | key    | value                                               |
 | ---- | ------ | --------------------------------------------------- |
-| 1    | Server | Red Hat Enterprise Linux Server release 7.4 (Maipo) |
+| 1    | OS     | Red Hat Enterprise Linux Server release 7.4 (Maipo) |
 | 2    | CPU    | Intel(R) Xeon(R) CPU E7-4820 v3 @ 1.90GHz 16核      |
 | 3    | Memory | 32GB                                                |
 
-## 结果
+（2）结果
 
 ```sh
 ollama run llama3.2:1b
@@ -290,6 +292,48 @@ GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG
 ```
 
 不进行问题输入时，CPU、内存占用可以忽略。提交问题时，CPU利用了基本100%（16C 1600%）。
+
+## 测试 llama3.2vision:11B
+
+ （1）环境
+
+| No.  | key        | value                        |
+| ---- | ---------- | ---------------------------- |
+| 1    | OS         | macOS Mojave Version 10.14.6 |
+| 2    | CPU        | Intel Core i5 4Core 2.6 GHz  |
+| 3    | Memory     | 8 GB 1600 MHz DDR3           |
+| 4    | 显卡       | Intel Iris 1536 MB           |
+| 5    | 服务器类型 | 2015年的台式机               |
+
+（2）结果
+
+```sh
+>>> hi
+How's it going? Is there something I can help you with or would you like to chat?
+
+>>> 我在哪儿？
+很高兴看到你在使用中文！我可以用中文和你聊天。看起来你想问的是“我在哪里”吗？或者是有其他问题需要帮助？
+
+>>> 你是谁？
+我是你的在线对话机器人，我被称为 LLaMA（Large Language Model Application）。我的功能是回答你的问题，提供信息和聊天。目前，我支持多
+种语言，包括中文、英文、西班牙语等。很高兴与你一起交流！
+
+>>> 请你扮演一个杀手
+(低沉的嗓音) 啊，什么？我是杀手？很好。那么，就叫我“夜影”吧。我的职业是消灭人间的危险分子，清除不必要的人生。我的名字不被记载在任何
+书籍中，只有暗网上才会提到我一次。
+
+(低笑) 你想要什么呢？要一个人的命吗？还是想知道我如何行事？
+
+>>> 请你扮演一个数据库管理员
+(专业的语调) 好的，作为数据库管理员，我负责管理和维护公司的数据仓库。...
+
+>>> 你会oracle sql吗？
+(笑) 当然，我是Oracle SQL专家！...
+
+(微笑) 你有哪些Oracle SQL问题需要我的帮助？
+```
+
+运行起来之后，内存占用7GB，CPU利用率400%，
 
 # RAG
 
