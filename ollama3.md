@@ -42,38 +42,24 @@ ollama serve &
 其他配置选项如下所示
 
 ```sh
-OLLAMA_DEBUG：					是否开启调试模式，默认为 false。
+OLLAMA_DEBUG：								是否开启调试模式，默认为 false。
 OLLAMA_FLASH_ATTENTION：			是否闪烁注意力，默认为 true。
-OLLAMA_HOST：					Ollama 服务器的主机地址，默认为空。
-OLLAMA_KEEP_ALIVE：				保持连接的时间，默认为 5m。
-OLLAMA_LLM_LIBRARY：				LLM 库，默认为空。
+OLLAMA_HOST：								Ollama 服务器的主机地址，默认为空。
+OLLAMA_KEEP_ALIVE：					保持连接的时间，默认为 5m。
+OLLAMA_LLM_LIBRARY：					LLM 库，默认为空。
 OLLAMA_MAX_LOADED_MODELS：		最大加载模型数，默认为 1。
-OLLAMA_MAX_QUEUE：				最大队列数，默认为空。
-OLLAMA_MAX_VRAM：				最大虚拟内存，默认为空。
-OLLAMA_MODELS：					模型目录，默认为空。
-OLLAMA_NOHISTORY：				是否保存历史记录，默认为 false。
-OLLAMA_NOPRUNE：					是否启用剪枝，默认为 false。
-OLLAMA_NUM_PARALLEL：			并行数，默认为 1。
-OLLAMA_ORIGINS：					允许的来源，默认为空。
-OLLAMA_RUNNERS_DIR：				运行器目录，默认为空。
-OLLAMA_SCHED_SPREAD：			调度分布，默认为空。
-OLLAMA_TMPDIR：					临时文件目录，默认为空。Here is the optimized list in the desired format:
-OLLAMA_DEBUG：					是否开启调试模式，默认为 false。
+OLLAMA_MAX_QUEUE：						最大队列数，默认为空。
+OLLAMA_MAX_VRAM：						最大虚拟内存，默认为空。
+OLLAMA_MODELS：							模型目录，默认为空。
+OLLAMA_NOHISTORY：						是否保存历史记录，默认为 false。
+OLLAMA_NOPRUNE：							是否启用剪枝，默认为 false。
+OLLAMA_NUM_PARALLEL：				并行数，默认为 1。
+OLLAMA_ORIGINS：							允许的来源，默认为空。
+OLLAMA_RUNNERS_DIR：					运行器目录，默认为空。
+OLLAMA_SCHED_SPREAD：				调度分布，默认为空。
+OLLAMA_TMPDIR：							临时文件目录，默认为空。Here is the optimized list in the desired format:
+OLLAMA_DEBUG：								是否开启调试模式，默认为 false。
 OLLAMA_FLASH_ATTENTION：			是否闪烁注意力，默认为 true。
-OLLAMA_HOST：					Ollama 服务器的主机地址，默认为空。
-OLLAMA_KEEP_ALIVE：				保持连接的时间，默认为 5m。
-OLLAMA_LLM_LIBRARY：				LLM 库，默认为空。
-OLLAMA_MAX_LOADED_MODELS：		最大加载模型数，默认为 1。
-OLLAMA_MAX_QUEUE：				最大队列数，默认为空。
-OLLAMA_MAX_VRAM：				最大虚拟内存，默认为空。
-OLLAMA_MODELS：					模型目录，默认为空。
-OLLAMA_NOHISTORY：				是否保存历史记录，默认为 false。
-OLLAMA_NOPRUNE：					是否启用剪枝，默认为 false。
-OLLAMA_NUM_PARALLEL：			并行数，默认为 1。
-OLLAMA_ORIGINS：					允许的来源，默认为空。
-OLLAMA_RUNNERS_DIR：				运行器目录，默认为空。
-OLLAMA_SCHED_SPREAD：			调度分布，默认为空。
-OLLAMA_TMPDIR：					临时文件目录，默认为空。
 ```
 
 
