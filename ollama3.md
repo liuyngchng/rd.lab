@@ -84,28 +84,28 @@ OLLAMA_TMPDIR：					临时文件目录，默认为空。
 
 各个模型的参数大小以及文件大小详见  https://github.com/ollama/ollama#model-library。
 
-| Model              | Parameters | Size  | Download & Run                   |
-| ------------------ | ---------- | ----- | -------------------------------- |
-| Llama 3.3          | 70B        | 43GB  | `ollama run llama3.3`            |
-| Llama 3.2          | 3B         | 2.0GB | `ollama run llama3.2`            |
-| Llama 3.2          | 1B         | 1.3GB | `ollama run llama3.2:1b`         |
-| Llama 3.2 Vision   | 11B        | 7.9GB | `ollama run llama3.2-vision`     |
-| Llama 3.2 Vision   | 90B        | 55GB  | `ollama run llama3.2-vision:90b` |
-| Llama 3.1          | 8B         | 4.7GB | `ollama run llama3.1`            |
-| Llama 3.1          | 405B       | 231GB | `ollama run llama3.1:405b`       |
-| Phi 4              | 14B        | 9.1GB | `ollama run phi4`                |
-| Phi 3 Mini         | 3.8B       | 2.3GB | `ollama run phi3`                |
-| Gemma 2            | 2B         | 1.6GB | `ollama run gemma2:2b`           |
-| Gemma 2            | 9B         | 5.5GB | `ollama run gemma2`              |
-| Gemma 2            | 27B        | 16GB  | `ollama run gemma2:27b`          |
-| Mistral            | 7B         | 4.1GB | `ollama run mistral`             |
-| Moondream 2        | 1.4B       | 829MB | `ollama run moondream`           |
-| Neural Chat        | 7B         | 4.1GB | `ollama run neural-chat`         |
-| Starling           | 7B         | 4.1GB | `ollama run starling-lm`         |
-| Code Llama         | 7B         | 3.8GB | `ollama run codellama`           |
-| Llama 2 Uncensored | 7B         | 3.8GB | `ollama run llama2-uncensored`   |
-| LLaVA              | 7B         | 4.5GB | `ollama run llava`               |
-| Solar              | 10.7B      | 6.1GB | `ollama run solar`               |
+| Model              | Parameters | Size  | note                                                     | Download & Run                   |
+| ------------------ | ---------- | ----- | -------------------------------------------------------- | -------------------------------- |
+| Llama 3.3          | 70B        | 43GB  |                                                          | `ollama run llama3.3`            |
+| Llama 3.2          | 3B         | 2.0GB |                                                          | `ollama run llama3.2`            |
+| Llama 3.2          | 1B         | 1.3GB |                                                          | `ollama run llama3.2:1b`         |
+| Llama 3.2 Vision   | 11B        | 7.9GB |                                                          | `ollama run llama3.2-vision`     |
+| Llama 3.2 Vision   | 90B        | 55GB  |                                                          | `ollama run llama3.2-vision:90b` |
+| Llama 3.1          | 8B         | 4.7GB |                                                          | `ollama run llama3.1`            |
+| Llama 3.1          | 405B       | 231GB |                                                          | `ollama run llama3.1:405b`       |
+| Phi 4              | 14B        | 9.1GB | 微软推出,号称最先进的小型大模型,擅长数学等领域的复杂推理 | `ollama run phi4`                |
+| Phi 3 Mini         | 3.8B       | 2.3GB |                                                          | `ollama run phi3`                |
+| Gemma 2            | 2B         | 1.6GB | Google DeepMind团队发布                                  | `ollama run gemma2:2b`           |
+| Gemma 2            | 9B         | 5.5GB |                                                          | `ollama run gemma2`              |
+| Gemma 2            | 27B        | 16GB  |                                                          | `ollama run gemma2:27b`          |
+| Mistral            | 7B         | 4.1GB |                                                          | `ollama run mistral`             |
+| Moondream 2        | 1.4B       | 829MB | 轻量级的视觉语言模型，可以理解图像                       | `ollama run moondream`           |
+| Neural Chat        | 7B         | 4.1GB |                                                          | `ollama run neural-chat`         |
+| Starling           | 7B         | 4.1GB |                                                          | `ollama run starling-lm`         |
+| Code Llama         | 7B         | 3.8GB | Meta推出的代码生成大模型                                 | `ollama run codellama`           |
+| Llama 2 Uncensored | 7B         | 3.8GB | 提供未经过滤的回答版本,参数和大小与Llama 2相同           | `ollama run llama2-uncensored`   |
+| LLaVA              | 7B         | 4.5GB | Large Language and Visual Assistant，图像生成、图像编辑  | `ollama run llava`               |
+| Solar              | 10.7B      | 6.1GB | 韩国Upstage AI公司搞出的大模型                           | `ollama run solar`               |
 
 ## 拉取并运行模型
 
