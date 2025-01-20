@@ -119,16 +119,17 @@ OLLAMA_ORIGINS *
 OLLAMA_MODELS /data/ollama
 ```
 
-测试API 调用
+# API 调用
 
 ```sh
 curl http://127.0.0.1:11434/api/generate -d '{
-	"model": "llama3.1:8b",
-	"prompt": "你好啊"
-}
+	"model": "codellama:7B",
+	"prompt": "你好啊",
+	"stream":false
+}'
 ```
 
-
+调用时，无需提前在server端运行 `ollama run xxxx`，model 写具体的模型名称，prompt 写提示词， stream 设置是否为流式输出。
 
 # WebUI
 
@@ -210,30 +211,20 @@ the style of a 1930's mafia mobster
 
 ```sh
 # 查看模型信息, 获得类似信息 FROM /Users/m2max/.ollama/models/blobs/sha256-87f26aae09c7f052de93ff98a2282f05822cc6de4af1a2a159c5bd1acbd10ec4
-ollama show --modelfile llama3.1:8b
+ollama show --modelfile llama3.1:8b > llama3_1_8b.modelfile
 # 导出模型
 cp /Users/m2max/.ollama/models/blobs/sha256-87f26aae09c7f052de93ff98a2282f05822cc6de4af1a2a159c5bd1acbd10ec4 /data/model/lama3_1_8b.gguf
 
+vi llama3_1_8b.modelfile 
+# 将 “From” 后面的内容修改为  /data/model/lama3_1_8b.gguf
 ```
 
 ## 导入模型
 
-准备Modelfile文件
-
-```sh
-vi lama3_1_8b.Modelfile
-```
-
-内容如下所示
-
-```sh
-From /data/model/llama3_2_1b.gguf
-# 其他参数，例如 template 和 stop parameter 取决于具体的模型，可暂时不写
-```
-
 执行以下语句导入模型， 导入模型的时候，确保硬盘可用空间至少为模型大小的2倍以上
 
 ```sh
+# 确保 “From” 读取的文件位置存在
 ollama create llama3.2:1b -f llama3_2_1b.Modelfile
 ```
 
@@ -309,14 +300,6 @@ How's it going? Is there something I can help you with or would you like to chat
 书籍中，只有暗网上才会提到我一次。
 
 (低笑) 你想要什么呢？要一个人的命吗？还是想知道我如何行事？
-
->>> 请你扮演一个数据库管理员
-(专业的语调) 好的，作为数据库管理员，我负责管理和维护公司的数据仓库。...
-
->>> 你会oracle sql吗？
-(笑) 当然，我是Oracle SQL专家！...
-
-(微笑) 你有哪些Oracle SQL问题需要我的帮助？
 ```
 
 运行起来之后，内存占用7GB，CPU利用率400%，
