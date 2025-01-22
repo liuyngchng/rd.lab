@@ -379,6 +379,9 @@ RAG 工作过程的数据流如图11-2 所示。
 
 ```sh
 pip install LangChain
+pip install langchain_community
+# 会安装依赖的 torch***.whl(900MB),以及 nvidia-cusparse***。whl(200MB), nvidia-cuda
+pip install sentence-transformers
 ```
 
 run code
