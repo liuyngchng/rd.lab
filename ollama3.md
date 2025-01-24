@@ -302,7 +302,23 @@ How's it going? Is there something I can help you with or would you like to chat
 (低笑) 你想要什么呢？要一个人的命吗？还是想知道我如何行事？
 ```
 
-运行起来之后，内存占用7GB，CPU利用率400%，
+运行起来之后，内存占用7GB，CPU利用率400%
+
+通过 Langchain 调用 Ollama
+
+```python
+pip install langchain
+```
+
+调用
+
+```python
+from langchain.llms import Ollama
+ollama = Ollama(model="llama2", base_url='http://localhost:11434')
+print(ollama("why is the sky blue"))
+```
+
+
 
 # RAG
 
@@ -408,8 +424,10 @@ embeddings = HuggingFaceEmbeddings(model_name="D:/models/bge-large-zh-v1.5")
 # 创建向量数据库
 db = FAISS.from_documents(texts, embeddings)
 
-# 创建本地OllieAI LLM
-llm = Ollama(model="gemma:2b")
+# 创建本地 OllamaAI LLM
+llm = Ollama(model="llama2")
+# 创建远程 Ollama API代理
+llm = Ollama(model="llama2", base_url='http://192.168.0.1:11434')
 
 # 创建检索问答链
 qa = RetrievalQA.from_chain_type(llm=llm, chain_type="stuff", retriever=db.as_retriever())
