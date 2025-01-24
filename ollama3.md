@@ -402,7 +402,7 @@ documents = loader.load()
 text_splitter = CharacterTextSplitter(chunk_size=1000, chunk_overlap=0)
 texts = text_splitter.split_documents(documents)
 
-# 加载Embedding模型，进行自然语言处理
+# 加载Embedding模型，进行自然语言处理, 详见 https://huggingface.co/BAAI/bge-large-zh-v1.5/tree/main
 embeddings = HuggingFaceEmbeddings(model_name="D:/models/bge-large-zh-v1.5")
 
 # 创建向量数据库
