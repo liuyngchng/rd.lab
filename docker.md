@@ -43,7 +43,8 @@ docker ps
 | CMD | NOTE |
 | --- | ---  |
 | docker rename hardcore_curie test | 重命名容器 |
-| docker tag img_id name(repository:tag) | 重命名镜像(rename image) |
+| docker tag img_id name(repository:tag) | 重命名镜像(rename image)，生成一条新的记录 |
+| docker tag SOURCE_IMAGE[:TAG] TARGET_IMAGE[:TAG] | 重命名镜像(rename image)，更改原始的记录 |
 | docker exec -it test bash         | 进入容器   |
 | vi /root/.bashrc                  | 配置环境变量，重新进入容器依然有效 |
 | export PATH=$PATH:/opt/jre        | 配置 java 环境变量 |
