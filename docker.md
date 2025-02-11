@@ -831,7 +831,7 @@ openssl x509 -req -days 365 -sha256 -in server.csr -CA ca.pem -CAkey ca-key.pem 
 ```sh
 sudo mkdir /data/ssl/srv
 cd /data/ssl/srv
-# 生成 PEM RSA private key
+# 生成 PEM RSA private key(客户端私钥 key.pem)
 openssl genrsa -out key.pem 4096
 # 生成 PEM certificate request
 openssl req -subj '/CN=client' -new -key key.pem -out client.csr
@@ -922,7 +922,8 @@ sudo systemctl restart docker
 （3）client 端的私钥。
 
 ```sh
-curl --cacert ../srv/ca.pem --cert ./cert.pem --key ./key.pem  'https://my.docker.test:4243/version'
+cd /data/ssl/srv
+curl --cacert ./ca.pem --cert ./cert.pem --key ./key.pem  'https://IP:port/version'
 ```
 
 #  docker registry(docker 镜像仓库)	
