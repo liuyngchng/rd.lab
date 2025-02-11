@@ -478,7 +478,9 @@ Wants=network-online.target
   
 [Service]
 Type=notify
-ExecStart=/usr/local/bin/dockerd --data-root=/data/docker --api-cors-header=*
+# docker 版本为 20 时，--graph 选项应替换为 --data-root
+#ExecStart=/usr/local/bin/dockerd --data-root=/data/docker --api-cors-header=*
+ExecStart=/usr/local/bin/dockerd --graph=/data/docker --api-cors-header=*
 ExecReload=/bin/kill -s HUP $MAINPID
 LimitNOFILE=infinity
 LimitNPROC=infinity
@@ -529,7 +531,7 @@ sudo chmod +x /etc/systemd/system/docker.service
 sudo systemctl daemon-reload
 
 #启动Docker
-sudo systemctl start docker
+sudo systemctl restart docker
 
 #查看docker启动状态
 systemctl status docker
@@ -557,6 +559,14 @@ sudo systemctl enable docker.service
 
 #查看docker开机启动状态 enabled:开启, disabled:关闭
 systemctl is-enabled docker.service
+```
+
+当执行 `sudo systemctl start docker` 没有明显错误的时候，仍然无法正常启动服务时，需要杀掉2个服务，dockerd 和 containerd
+
+```sh
+ps -ef | grep docker
+root     15195     1  1 16:54 ?        00:00:00 /usr/local/bin/dockerd --graph=/data/docker --api-cors-header=*
+root     15270 15195  1 16:54 ?        00:00:00 containerd --config /var/run/docker/containerd/containerd.toml 
 ```
 
 
@@ -756,7 +766,7 @@ chown -R 1234：5678 dir
 生成 CA 认证机构的 key 和 证书签名请求（CSR）
 
 ```sh
-sudo mkdir /data/ssl/srv
+sudo mkdir -p /data/ssl/srv
 cd /data/ssl/srv
 # 生成私钥(PEM RSA private key)
 openssl genrsa -aes256 -out ca-key.pem 4096
@@ -879,6 +889,20 @@ vim /lib/systemd/system/docker.service
 vim /etc/systemd/system/docker.service
 ExecStart=/usr/bin/dockerd --tlsverify --tlscacert=/usr/local/ca/ca.pem --tlscert=/usr/local/ca/server-cert.pem --tlskey=/usr/local/ca/server-key.pem -H tcp://0.0.0.0:2375 -H unix:///var/run/docker.sock
 ```
+
+或者修改配置文件 /etc/docker/daemon.json, 添加的内容如下
+
+```json
+{
+  "tls": true,
+  "tlscacert": "/usr/local/ca/ca.pem",
+  "tlscert": "/usr/local/ca/server-cert.pem",
+  "tlskey": "/usr/local/ca/server-key.pem",
+  "hosts": ["tcp://0.0.0.0:2376", "unix:///var/run/docker.sock"]
+}
+```
+
+
 
 ## 重启 docker
 

@@ -54,7 +54,7 @@ rancher 1.x 适配的 MySQL 为5.7, MySQL 8 会报错。
 
 ```sh
 docker pull mysql:5.7
-docker run --name mysql5.7 -p 3307:3306 -e MYSQL_ROOT_PASSWORD='*****' -d mysql:5.7
+docker run --name mysql5.7 -p 13307:3306 -e MYSQL_ROOT_PASSWORD='*****' -d mysql:5.7
 docker exec -it mysql5.7 /bin/bash
 cd /etc/
 # /etc/mysql 是容器里mysql的配置文件夹

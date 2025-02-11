@@ -275,7 +275,7 @@ docker images
 初始化mysql密码，打包配置文件
 
 ```sh
-docker run --name mysql -p 3306:3306 -e MYSQL_ROOT_PASSWORD='yourMySqlPassword' -d mysql:8.0.28
+docker run --name mysql --privileged=true -p 3306:3306 -e MYSQL_ROOT_PASSWORD='yourMySqlPassword' -d mysql:8.0.28 
 docker ps
 docker exec -it mysql /bin/bash
 cd /etc/
@@ -311,7 +311,8 @@ docker rm mysql
 # 启动容器，将 yourMySqlPassword 替换为自己的密码
 docker run -dit \
 --name mysql \
--p 3306:3306 \
+--privileged=true \
+-p 33003:3306 \
 -e MYSQL_ROOT_PASSWORD='yourMySqlPassword' \
 -e LANG=C.UTF-8 \
 -v /data/mysql/conf:/etc/mysql \
