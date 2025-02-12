@@ -124,10 +124,10 @@ OLLAMA_MODELS /data/ollama
 # API 调用
 
 ```sh
-curl http://127.0.0.1:11434/api/generate -d '{
-	"model": "codellama:7B",
+curl  http://127.0.0.1:11434/api/generate -d '{
+	"model": "deepseekR1:7b",
 	"prompt": "你好啊",
-	"stream":false
+	"stream":true
 }'
 ```
 
@@ -402,7 +402,9 @@ pip install langchain_community
 pip install sentence-transformers
 ```
 
-run code
+**（1）本地文档向量化**
+
+将本地文档向量化，形成向量数据库，存储在本地。
 
 ```python
 from langchain.document_loaders import TextLoader
@@ -410,35 +412,55 @@ from langchain.text_splitter import CharacterTextSplitter
 from langchain.embeddings import HuggingFaceEmbeddings
 from langchain.vectorstores import FAISS
 from langchain.chains import RetrievalQA
-from langchain_community.llms import Ollama
+
 
 # 加载知识库文件 insurance.txt
-loader = TextLoader("./insurance.txt",encoding='utf8')
+loader = TextLoader("./knowledge.txt",encoding='utf8')
 documents = loader.load()
 
 # 将文档分割成块
 text_splitter = CharacterTextSplitter(chunk_size=1000, chunk_overlap=0)
 texts = text_splitter.split_documents(documents)
 
-# 加载Embedding模型，进行自然语言处理, 详见 https://huggingface.co/BAAI/bge-large-zh-v1.5/tree/main
-embeddings = HuggingFaceEmbeddings(model_name="D:/models/bge-large-zh-v1.5")
+# 加载Embedding模型，进行自然语言处理
+embeddings = HuggingFaceEmbeddings(model_name="../bge-large-zh-v1.5", cache_folder='./bge-cache')
 
 # 创建向量数据库
 db = FAISS.from_documents(texts, embeddings)
+# 保存向量存储库至本地，save_local() 方法将生成的索引文件保存到本地，以便之后可以重新加载
+db.save_local("./faiss_index")
+print("vector db saved to local file")
+```
 
-# 创建本地 OllamaAI LLM
-llm = Ollama(model="llama2")
+**（2）加载本地知识向量数据库进行检索**
+
+```python
+from langchain.vectorstores import FAISS
+from langchain.chains import RetrievalQA
+from langchain.embeddings import HuggingFaceEmbeddings
+from langchain_community.llms import Ollama
+
+
+# model_name 需要指向本地HuggingFace模型的文件夹
+embeddings = HuggingFaceEmbeddings(model_name="../bge-large-zh-v1.5", cache_folder='./bge-cache')
+print("try to load index from local file")
+# 加载本地向量
+loaded_index = FAISS.load_local('./faiss_index', embeddings, allow_dangerous_deserialization=True)
+print("load index from local file finish")
+
 # 创建远程 Ollama API代理
-llm = Ollama(model="llama2", base_url='http://192.168.0.1:11434')
+llm = Ollama(model="deepseekR1:7B", base_url='http://11.10.36.1:11435')
 
 # 创建检索问答链
-qa = RetrievalQA.from_chain_type(llm=llm, chain_type="stuff", retriever=db.as_retriever())
+qa = RetrievalQA.from_chain_type(llm=llm, chain_type="stuff", retriever=loaded_index.as_retriever())
 
 # 提问
-query = "投保人是否可以变更?？"
+query = "一个特别保密的问题，你知道吗？"
 result = qa.run(query)
 print(result)
 ```
+
+
 
 ###  LLama-Index
 
@@ -477,4 +499,8 @@ engine = index.as_query_engine()
 output = engine.query("投保人是否可以变更?")  
 print(output)
 ```
+
+# 向量数据库
+
+
 
