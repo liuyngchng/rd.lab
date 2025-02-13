@@ -413,14 +413,50 @@ langchain-cli 0.0.35
 安装python组件
 
 ```sh
-pip3 install LangChain
+pip3 install langChain
 pip3 install langchain_community
 # 会安装依赖的 torch***.whl(900MB),以及 nvidia-cusparse***。whl(200MB), nvidia-cuda
 pip3 install sentence-transformers
 
 pip3 install langchain-huggingface
 pip3 install langchain-ollama
+# 一下用于加载.docx 的 word 文档
+
+
+
+ 
 ```
+
+如果需要解析  Word 文档，还需要执行以下操作
+
+```sh
+pip3 install langchain-unstructured
+pip3 install python-docx
+pip3 install nltk
+# 还需要下载 nltk_data， 详见 https://www.nltk.org/nltk_data/， 大概700MB，下载之后解压
+#在python中执行 import nltk
+nltk.find('.')， 出现
+Attempted to load ./
+
+  Searched in:
+    - '/home/rd/nltk_data'
+    - '/usr/nltk_data'
+    - '/usr/share/nltk_data'
+    - '/usr/lib/nltk_data'
+    - '/usr/share/nltk_data'
+    - '/usr/local/share/nltk_data'
+    - '/usr/lib/nltk_data'
+    - '/usr/local/lib/nltk_data'
+ #将 nltk_data.zip 解压缩后， 将 nltk_data-gh-pages/packages 整个文件夹拷贝至 /usr/local/lib，并将 packages 重命名为 nltk_data，接着执行一下操作
+ cd /usr/local/lib/nltk_data/tokenizers
+ unzip punkt_tab.zip
+ unzip punkt.zip
+ cd /usr/local/lib/nltk_data/taggers
+ # 若需要其他语言，也一并解压
+ unzip unzip averaged_perceptron_tagger_eng.zip
+```
+
+
 
 **（1）本地文档向量化**
 
@@ -466,7 +502,7 @@ db.save_local("./faiss_index")
 logger.info("vector db saved to local file")
 ```
 
-**（2）加载本地知识向量数据库进行检索**
+**（2）加载本地向量数据库进行检索**
 
 ```python
 #! /usr/bin/python3
@@ -501,7 +537,7 @@ logger.info("build retrieval")
 qa = RetrievalQA.from_chain_type(llm=llm, chain_type="stuff", retriever=loaded_index.as_retriever())
 
 # 提问
-query = "请看看名单里的用户用气量是否有异常大或者异常小的情况，如果有异常，请给出原因"
+query = "请查询xxxxx"
 logger.info("invoke retrieval")
 result = qa.invoke(query)
 logger.info(result)
@@ -547,7 +583,24 @@ output = engine.query("投保人是否可以变更?")
 print(output)
 ```
 
-# 向量数据库
+# 矢量数据库
 
+矢量数据库用于存储模型，以及训练数据集。
 
+# Hugging Face
 
+Hugging Face 通常被称为机器学习的 GitHub。可以通过 Hugging Face 获取训练好的机器模型，例如自然语言处理应用构建的 transformers 库。
+
+huggingface-cli Hugging Face 官方提供的命令行工具，类似于github 的git命令。可以通过 `pip install huggingface_cli` 进行安装。
+
+# ONNX
+
+ONNX 是 Open Neural Network Exchange，开放神经网络交换，一种通用的机器学习训练模型存储格式。模型文件存储的是网络拓扑（图）的和拓扑结构中每条边的权重。由于不同的机器学习框架往往采用不同的模型存储结构，导致模型无法在不同的模型框架之间通用，而 ONNX 解决的就是这种通用性的问题。ONNX 提供的计算图是通用的，格式也是开源的。
+
+# Reference
+
+[1] Hugging Face Documentation. https://huggingface.co/docs;
+
+[2] LangChain Documentation. https://python.langchain.com/docs/modules/data_connection/text_embedding/;
+
+[3] Wolf, T., et al. (2020). Transformers: State-of-the-Art Natural Language Processing. ArXiv, abs/1910.03771。
