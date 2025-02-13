@@ -207,9 +207,9 @@ the style of a 1930's mafia mobster
 
 （7）**SYSTEM**。SYSTEM 不是 LLM 本身的自然语言理解或生成能力的一部分，而是控制LLM运行系统的命令。我希望LLM以1930年代黑手党暴徒的风格回应提示。我们如何做到这一点？很简单，只需将该指令放入SYSTEM指令中。
 
-# 导入导出模型
+# 模型导入导出
 
-## 导出模型
+## 导出
 
 ```sh
 # 查看模型信息, 获得类似信息 FROM /Users/m2max/.ollama/models/blobs/sha256-87f26aae09c7f052de93ff98a2282f05822cc6de4af1a2a159c5bd1acbd10ec4
@@ -221,7 +221,7 @@ vi llama3_1_8b.modelfile
 # 将 “From” 后面的内容修改为  /data/model/lama3_1_8b.gguf
 ```
 
-## 导入模型
+## 导入
 
 执行以下语句导入模型， 导入模型的时候，确保硬盘可用空间至少为模型大小的2倍以上
 
@@ -374,7 +374,7 @@ print(ollama("why is the sky blue"))
 
 （4）生成阶段。基于增强的信息，使用大型语言模型生成最终的回答或内容。即将`数据3` 输入大模型，由大模型输出 `数据4`。
 
-RAG 工作过程的数据流如图11-2 所示。
+RAG 工作过程的数据流如图11-1 所示。
 
 <img src="img/rag_dataflow.png" style="zoom:60%;" />
 
@@ -393,13 +393,33 @@ RAG 工作过程的数据流如图11-2 所示。
 
 ###  langchain
 
+python组件如下所示
+
+```python
+Python 3.10.12 (main, Sep 11 2024, 15:47:36) [GCC 11.4.0] on linux
+Type "help", "copyright", "credits" or "license" for more information.
+>>> 
+
+langchain-cli --version
+langchain-cli 0.0.35
+
+>>> import torch
+>>> print(torch.__version__)
+2.5.1+cu124
+```
+
+
+
 安装python组件
 
 ```sh
-pip install LangChain
-pip install langchain_community
+pip3 install LangChain
+pip3 install langchain_community
 # 会安装依赖的 torch***.whl(900MB),以及 nvidia-cusparse***。whl(200MB), nvidia-cuda
-pip install sentence-transformers
+pip3 install sentence-transformers
+
+pip3 install langchain-huggingface
+pip3 install langchain-ollama
 ```
 
 **（1）本地文档向量化**
@@ -407,57 +427,84 @@ pip install sentence-transformers
 将本地文档向量化，形成向量数据库，存储在本地。
 
 ```python
-from langchain.document_loaders import TextLoader
-from langchain.text_splitter import CharacterTextSplitter
-from langchain.embeddings import HuggingFaceEmbeddings
-from langchain.vectorstores import FAISS
+#! /usr/bin/python3
+from langchain_community.document_loaders import TextLoader
+from langchain_text_splitters import CharacterTextSplitter
+from langchain_huggingface import HuggingFaceEmbeddings
+from langchain_community.vectorstores import FAISS
 from langchain.chains import RetrievalQA
 
+import logging
+import logging.config
+ 
+# 加载配置
+logging.config.fileConfig('logging.conf')
+ 
+# 创建 logger
+logger = logging.getLogger()
 
-# 加载知识库文件 insurance.txt
-loader = TextLoader("./knowledge.txt",encoding='utf8')
+# 加载知识库文件
+logger.info("load doc")
+loader = TextLoader("./data.csv",encoding='utf8')
 documents = loader.load()
 
 # 将文档分割成块
+logger.info("split doc")
 text_splitter = CharacterTextSplitter(chunk_size=1000, chunk_overlap=0)
 texts = text_splitter.split_documents(documents)
 
 # 加载Embedding模型，进行自然语言处理
+logger.info("load embedding model")
 embeddings = HuggingFaceEmbeddings(model_name="../bge-large-zh-v1.5", cache_folder='./bge-cache')
 
 # 创建向量数据库
+logger.info("build vector db")
 db = FAISS.from_documents(texts, embeddings)
 # 保存向量存储库至本地，save_local() 方法将生成的索引文件保存到本地，以便之后可以重新加载
+logger.info("save vector db to local file")
 db.save_local("./faiss_index")
-print("vector db saved to local file")
+logger.info("vector db saved to local file")
 ```
 
 **（2）加载本地知识向量数据库进行检索**
 
 ```python
-from langchain.vectorstores import FAISS
+#! /usr/bin/python3
+
+from langchain_community.vectorstores import FAISS
 from langchain.chains import RetrievalQA
-from langchain.embeddings import HuggingFaceEmbeddings
-from langchain_community.llms import Ollama
+from langchain_huggingface import HuggingFaceEmbeddings
+from langchain_ollama import OllamaLLM
 
+import logging
+import logging.config
 
-# model_name 需要指向本地HuggingFace模型的文件夹
+# 加载配置
+logging.config.fileConfig('logging.conf')
+
+# 创建 logger
+logger = logging.getLogger()
+
+# for test purpose only, read index from local file
 embeddings = HuggingFaceEmbeddings(model_name="../bge-large-zh-v1.5", cache_folder='./bge-cache')
-print("try to load index from local file")
-# 加载本地向量
+logger.info("try to load index from local file")
 loaded_index = FAISS.load_local('./faiss_index', embeddings, allow_dangerous_deserialization=True)
-print("load index from local file finish")
+logger.info("load index from local file finish")
 
 # 创建远程 Ollama API代理
-llm = Ollama(model="deepseekR1:7B", base_url='http://11.10.36.1:11435')
+logger.info("get remote llm agent")
+llm = OllamaLLM(model="deepseekR1:7B", base_url='http://11.10.36.1:11435')
+#llm = OllamaLLM(model="llama2:7B", base_url='http://11.10.36.1:11435')
 
 # 创建检索问答链
+logger.info("build retrieval")
 qa = RetrievalQA.from_chain_type(llm=llm, chain_type="stuff", retriever=loaded_index.as_retriever())
 
 # 提问
-query = "一个特别保密的问题，你知道吗？"
-result = qa.run(query)
-print(result)
+query = "请看看名单里的用户用气量是否有异常大或者异常小的情况，如果有异常，请给出原因"
+logger.info("invoke retrieval")
+result = qa.invoke(query)
+logger.info(result)
 ```
 
 
@@ -469,7 +516,7 @@ print(result)
 ```sh
 pip install llama-index-llms-ollama 
 pip install llama-index
-ip install llama-index-embeddings-huggingface
+pip install llama-index-embeddings-huggingface
 ```
 
 run code
