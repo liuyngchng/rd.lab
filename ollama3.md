@@ -456,6 +456,13 @@ Attempted to load ./
  unzip unzip averaged_perceptron_tagger_eng.zip
 ```
 
+如果需要解析  PDF 文档，还需安装依赖包
+
+```python
+# 会下载依赖的 torch-2.6.0-cp310-*.whl(766.7MB)
+pip3 install "unstructured[pdf]"
+```
+
 
 
 **（1）本地文档向量化**
