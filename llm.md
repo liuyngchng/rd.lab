@@ -1,4 +1,8 @@
-# ollama
+# LLM 部署
+
+##  ollama
+
+**（1）download**
 
 首先拉取 ollama， ollama 相当于大模型界的 docker, 用于运行、管理大模型，详见 https://ollama.com/download。
 
@@ -6,7 +10,7 @@
 
 https://github.com/ollama/ollama/releases/download/v0.5.1/ollama-linux-amd64.tgz
 
-# 启动服务
+**（2）start ollama**
 
 下载了 ollama-linux-amd64.tgz 之后，执行
 
@@ -21,7 +25,7 @@ nohup ollama serve > ollama.log 2>&1 &
 
 此时服务已经运行了， 可通过 查看 http://127.0.0.1:11434/ ，显示 “Ollama is running”
 
-# Config
+**（3）config ollama**
 
 ollama 修改模型存储路径，可以通过修改环境变量 OLLAMA_MODELS 来实现
 
@@ -64,9 +68,9 @@ OLLAMA_FLASH_ATTENTION：			是否闪烁注意力，默认为 true。
 
 
 
-#  下载模型镜像
+##  下载LLM镜像
 
-## 模型清单
+**（1）模型清单**
 
 各个模型的参数大小以及文件大小详见  https://github.com/ollama/ollama#model-library。
 
@@ -95,7 +99,7 @@ OLLAMA_FLASH_ATTENTION：			是否闪烁注意力，默认为 true。
 | LLaVA              | 7B         | 4.5GB | Large Language and Visual Assistant，图像生成、图像编辑  | `ollama run llava`               |
 | Solar              | 10.7B      | 6.1GB | 韩国Upstage AI公司搞出的大模型                           | `ollama run solar`               |
 
-## 拉取并运行模型
+**（2）拉取并运行模型**
 
 详见 https://ollama.com/library/llama3:8b
 
@@ -121,7 +125,7 @@ OLLAMA_ORIGINS *
 OLLAMA_MODELS /data/ollama
 ```
 
-# API 调用
+（3）API 调用
 
 ```sh
 curl  http://127.0.0.1:11434/api/generate -d '{
@@ -133,15 +137,13 @@ curl  http://127.0.0.1:11434/api/generate -d '{
 
 调用时，无需提前在server端运行 `ollama run xxxx`，model 写具体的模型名称，prompt 写提示词， stream 设置是否为流式输出。
 
-# WebUI
-
 如果觉得通过命令行的方式使用起来不太友好，可以通过WebUI来调用相关的 API ，进行用户请求的调用以及结果的展示
 
 ```sh
 docker run -d -p 3000:8080 --add-host=host.docker.internal:host-gateway -v open-webui:/app/backend/data --name open-webui --restart always ghcr.io/open-webui/open-webui:main
 ```
 
-# cmd
+##  cmd
 
 ```sh
 ## 启动Ollama服务
@@ -166,7 +168,7 @@ ollama rm model_name
 ollama help
 ```
 
-# Modelfile
+##  Modelfile
 
  `Modelfile` 的作用类似于 `Dockerfile`，完整的 `modelfile` 如下所示 ，可通过命令 `ollama show --modelfile modelname > modelname.modelfile` 获取。
 
@@ -207,7 +209,7 @@ the style of a 1930's mafia mobster
 
 （7）**SYSTEM**。SYSTEM 不是 LLM 本身的自然语言理解或生成能力的一部分，而是控制LLM运行系统的命令。我希望LLM以1930年代黑手党暴徒的风格回应提示。我们如何做到这一点？很简单，只需将该指令放入SYSTEM指令中。
 
-# 模型导入导出
+# LLM导入导出
 
 ## 导出
 
@@ -247,34 +249,11 @@ FROM /data/.ollama/blobs/sha256-ea3e27b32f043de9546bc4f3fe6c7ec83bc6fa2372dc9fd8
 TEMPLATE {{ .Prompt }}
 ```
 
-# 测试
+# LLM test
 
-## 测试llama3.2:1b
+部署好环境后，进行 llama3.2vision:11B 的测试。
 
-​	（1）环境
-
-| No.  | key    | value                                               |
-| ---- | ------ | --------------------------------------------------- |
-| 1    | OS     | Red Hat Enterprise Linux Server release 7.4 (Maipo) |
-| 2    | CPU    | Intel(R) Xeon(R) CPU E7-4820 v3 @ 1.90GHz 16核      |
-| 3    | Memory | 32GB                                                |
-
-（2）结果
-
-```sh
-ollama run llama3.2:1b
->>> who are you?
-GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG
-
->>> where are you?
-GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG
-```
-
-不进行问题输入时，CPU、内存占用可以忽略。提交问题时，CPU利用了基本100%（16C 1600%）。
-
-## 测试 llama3.2vision:11B
-
- （1）环境
+ **（1）环境**
 
 | No.  | key        | value                        |
 | ---- | ---------- | ---------------------------- |
@@ -284,7 +263,7 @@ GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG
 | 4    | 显卡       | Intel Iris 1536 MB           |
 | 5    | 服务器类型 | 2015年的台式机               |
 
-（2）结果
+**（2）测试结果**
 
 ```sh
 >>> hi
@@ -306,6 +285,8 @@ How's it going? Is there something I can help you with or would you like to chat
 
 运行起来之后，内存占用7GB，CPU利用率400%
 
+**（3）编程**
+
 通过 Langchain 调用 Ollama
 
 ```python
@@ -322,9 +303,9 @@ print(ollama("why is the sky blue"))
 
 
 
-# RAG
+# RAG简介
 
-##  简介
+##  基本概念
 
 检索增强生成（Retrieval-Augmented Generation，`RAG`）是一种结合检索和生成技术的模型。它通过引用外部知识库的信息来生成答案或内容，具有较强的可解释性和定制能力，适用于问答系统、文档生成、智能助手等多个自然语言处理任务中。
 
@@ -345,9 +326,9 @@ print(ollama("why is the sky blue"))
 
 可用于`RAG`的比较成熟的框架有  `LlamaIndex`、`LangChain` 。
 
-##  为什么要使用RAG
+##  基本功能
 
- LLM 面临的主要问题有以下几个。
+ LLM 面临的主要问题有以下几个， 可以通过 RAG 来逐个解决。
        **（1）信息偏差/幻觉。**LLM 有时会生成与客观事实不符的信息，导致用户接收到不准确的信息（通俗来讲，就是感觉大模型在一本正经地胡说八道）。RAG 通过检索数据源辅助模型生成过程，确保输出内容的精确性和可信度，减少信息偏差。
 
 **（2）知识更新滞后性。**LLM 基于静态数据集训练，可能导致知识更新滞后，无法及时反映最新信息动态（通俗来讲，大模型只知道在它训练的时候的知识集，对于之后发生的事情完全不知道）。RAG 通过实时检索最新数据，保持内容的时效性，确保信息的持续更新和准确性。
@@ -389,11 +370,13 @@ RAG 工作过程的数据流如图11-1 所示。
 
 
 
-##  RAG in Action
+#  RAG in Action
 
-###  langchain
+##   langchain
 
-python组件如下所示
+###  环境准备
+
+python组件信息如下所示
 
 ```python
 Python 3.10.12 (main, Sep 11 2024, 15:47:36) [GCC 11.4.0] on linux
@@ -408,8 +391,6 @@ langchain-cli 0.0.35
 2.5.1+cu124
 ```
 
-
-
 安装python组件
 
 ```sh
@@ -420,11 +401,6 @@ pip3 install sentence-transformers
 
 pip3 install langchain-huggingface
 pip3 install langchain-ollama
-# 一下用于加载.docx 的 word 文档
-
-
-
- 
 ```
 
 如果需要解析  Word 文档，还需要执行以下操作
@@ -434,8 +410,9 @@ pip3 install langchain-unstructured
 pip3 install python-docx
 pip3 install nltk
 # 还需要下载 nltk_data， 详见 https://www.nltk.org/nltk_data/， 大概700MB，下载之后解压
-#在python中执行 import nltk
-nltk.find('.')， 出现
+#在python中执行 
+>>>import nltk
+>>>nltk.find('.')， 出现
 Attempted to load ./
 
   Searched in:
@@ -447,7 +424,8 @@ Attempted to load ./
     - '/usr/local/share/nltk_data'
     - '/usr/lib/nltk_data'
     - '/usr/local/lib/nltk_data'
- #将 nltk_data.zip 解压缩后， 将 nltk_data-gh-pages/packages 整个文件夹拷贝至 /usr/local/lib，并将 packages 重命名为 nltk_data，接着执行一下操作
+ #获取python查找 nltk_data的路径后，选择其中之一
+ # 将 nltk_data.zip 解压缩后， 将 nltk_data-gh-pages/packages 整个文件夹拷贝至 /usr/local/lib，并将 packages 重命名为 nltk_data，接着执行一下操作
  cd /usr/local/lib/nltk_data/tokenizers
  unzip punkt_tab.zip
  unzip punkt.zip
@@ -463,9 +441,7 @@ Attempted to load ./
 pip3 install "unstructured[pdf]"
 ```
 
-
-
-**（1）本地文档向量化**
+###  本地文档向量化
 
 将本地文档向量化，形成向量数据库，存储在本地。
 
@@ -509,7 +485,7 @@ db.save_local("./faiss_index")
 logger.info("vector db saved to local file")
 ```
 
-**（2）加载本地向量数据库进行检索**
+###  检索参数增强
 
 ```python
 #! /usr/bin/python3
@@ -550,9 +526,7 @@ result = qa.invoke(query)
 logger.info(result)
 ```
 
-
-
-###  LLama-Index
+##   LLama-Index
 
 安装 python 组件
 
