@@ -582,7 +582,9 @@ ONNX 是 Open Neural Network Exchange，开放神经网络交换，一种通用�
 
 # AI 智能体（agent）
 
-本文中以 LangGraph 为例， 介绍智能体的基本开发途径。LangGraph 是 LangChainAI 开发的一个工具库，用于创建代理和多代理智能体工作流。它提供了以下核心优势：周期、可控性和持久性， 可以减少Agent智能体开发者的工作量。
+AI 智能体通过一套框架，对输入信息和最终的输出索要经过的工作流进行规划和设计，使AI 模型的输出能够按照最终的预期进行输出。
+
+本文中以 LangGraph 为例， 介绍智能体的基本开发途径。LangGraph 是 LangChainAI 开发的一个工具库，用于创建代理和多代理智能体工作流， 可以减少Agent智能体开发者的工作量。
 
 ##  env 准备
 
