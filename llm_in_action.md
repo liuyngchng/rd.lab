@@ -1,5 +1,7 @@
 # LLM 部署
 
+LLM (Large Language Model，大语言模型), 如目前的 ChatGPT、DeepSeek等。
+
 ##  ollama
 
 **（1）download**
@@ -577,6 +579,62 @@ huggingface-cli Hugging Face 官方提供的命令行工具，类似于github �
 # ONNX
 
 ONNX 是 Open Neural Network Exchange，开放神经网络交换，一种通用的机器学习训练模型存储格式。模型文件存储的是网络拓扑（图）的和拓扑结构中每条边的权重。由于不同的机器学习框架往往采用不同的模型存储结构，导致模型无法在不同的模型框架之间通用，而 ONNX 解决的就是这种通用性的问题。ONNX 提供的计算图是通用的，格式也是开源的。
+
+# AI 智能体（agent）
+
+本文中以 LangGraph 为例， 介绍智能体的基本开发途径。LangGraph 是 LangChainAI 开发的一个工具库，用于创建代理和多代理智能体工作流。它提供了以下核心优势：周期、可控性和持久性， 可以减少Agent智能体开发者的工作量。
+
+##  env 准备
+
+需要安装以下python组件。
+
+```sh
+pip3 install -U langgraph
+```
+
+LangGraph的StateGraph是一种状态机，包含了节点和边，节点一般是定义好的函数，边用于连接不同的节点，用于表示图的执行顺序。使用LangGraph构建工作流的步骤如下：初始化模型和工具、定义图的状态信息、定义图节点、定义图的入口节点和边关系、编译图执行图。
+
+##  demo
+
+```python
+#! /usr/bin/python3
+from typing import Annotated
+from typing_extensions import TypedDict
+from langgraph.graph import StateGraph, START, END
+from langgraph.graph.message import add_messages
+from langchain_ollama import OllamaLLM
+
+# 初始化模型
+llm = OllamaLLM(model="deepseekR1:7B", base_url='http://11.10.36.1:11435')
+
+# 定义图的状态信息
+class State(TypedDict):
+    # Messages have the type "list". The `add_messages` function
+    # in the annotation defines how this state key should be updated
+    # (in this case, it appends messages to the list, rather than overwriting them)
+    messages: Annotated[list, add_messages]
+    
+# 定义图节点
+def chatbot(state: State):
+    return {"messages": [llm.invoke(state["messages"])]}
+# 创建一个 StateGraph 对象
+graph_builder = StateGraph(State)
+# 定义图的入口和边
+graph_builder.add_node("chatbot", chatbot)
+graph_builder.add_edge(START, "chatbot")
+graph_builder.add_edge("chatbot", END)
+
+# 编译图
+graph = graph_builder.compile()
+
+# 执行图
+user_input = '介绍你自己'
+for event in graph.stream({"messages": [("user", user_input)]}):
+    for value in event.values():
+        print("Assistant:", value["messages"])
+```
+
+
 
 # Reference
 
