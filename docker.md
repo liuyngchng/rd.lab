@@ -953,6 +953,26 @@ curl -XGET --noproxy '*' http://localhost:5001/v2/_catalog
 # 可见 {"repositories":[]}
 ```
 
+启用证书
+
+```sh
+docker run -d \
+  --restart=always \
+  --name registry \
+  --memory 512m \
+  -p 443:443  \
+  -v /root/regimages:/var/lib/registry \
+  --memory-swap -1 \
+  -v /root/docker/pki:/etc/certs.d \   # 把刚才生成证书的目录挂载到 容器中
+  -e REGISTRY_HTTP_ADDR=0.0.0.0:443 \
+  -e REGISTRY_HTTP_SECRET=secret \
+  -e REGISTRY_HTTP_TLS_CERTIFICATE=/etc/certs.d/registry.crt \  #指定了https的证书
+  -e REGISTRY_HTTP_TLS_KEY=/etc/certs.d/registry_private.key \    #指定了https的私钥
+  registry:2
+```
+
+
+
 # build base image
 
 ```sh

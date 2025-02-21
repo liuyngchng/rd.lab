@@ -455,3 +455,118 @@ ffmpeg -i input.ts -filter:v "setpts=0.5*PTS" output.ts
 ffmpeg -i input.ts -c:v libx264 -c:a aac -strict experimental output.mp4
 ```
 
+# Geforce RTX 3090 TI
+
+OS
+
+```sh
+uname -a
+Linux rd-lt 6.8.0-52-generic #53~22.04.1-Ubuntu SMP PREEMPT_DYNAMIC Wed Jan 15 19:18:46 UTC 2 x86_64 x86_64 x86_64 GNU/Linux
+```
+
+查看显卡信息
+
+```sh
+lspci | grep -i vga
+22:00.0 VGA compatible controller: NVIDIA Corporation Device 2203 (rev a1)
+```
+
+在页面 https://admin.pci-ids.ucw.cz/read/PC/10de/2203 查询， 输入2203 ，获得
+
+```
+Name: GA102 [GeForce RTX 3090 Ti]
+Stefan
+2022-03-25 16:26:23
+```
+
+进入官网  https://www.nvidia.cn/drivers/lookup/， 下载驱动， 选项如下所示
+
+<form class="minHeight" action="" method="post" id="manualSearchForm" style="padding: 5px 40px;" __bizdiag="360597525" __biza="WJ__"> 
+  <div id="manualSearchElements" style="z-index: 1"> 
+   <div id="manualSearchElementsSpinner" style="visibility: hidden;"> 
+    <div class="brand-spinner" style="margin: 15vh 30vh; position: absolute; opacity: 0;"></div> 
+   </div> 
+   <div class="drvrContainer"> 
+    <div class="search-query-box"> 
+     <input id="nvProductInput" type="text" name="nvProductAutoCompletePOC" class="input-medium search-query search_1 ui-autocomplete-input" placeholder="按产品、产品类型或系列搜索" autocomplete="off"> 
+     <i class="fa fa-search"></i> 
+    </div> 
+   </div> 
+  </div> 
+  <div id="driverDropdowns" style="z-index: 2; visibility: visible; opacity: 1;"><div class="drvrContainer" name="manualSearch-0-div" id="manualSearch-0-div"><select class="drvrtoField ui-selectmenu-button ui-widget ui-state-default ui-corner-all" name="manualSearch-0" id="manualSearch-0" style="display: none;"><option value="1" id="manualSearch-0-0">GeForce</option><option value="11" id="manualSearch-0-1">TITAN</option><option value="3" id="manualSearch-0-2">NVIDIA RTX / Quadro</option><option value="7" id="manualSearch-0-3">Data Center / Tesla</option><option value="9" id="manualSearch-0-4">GRID</option><option value="8" id="manualSearch-0-5">NVS</option><option value="6" id="manualSearch-0-6">ION</option><option value="4" id="manualSearch-0-7">Legacy</option><option value="5" id="manualSearch-0-8">3D Vision</option></select><span tabindex="0" id="manualSearch-0-button" role="combobox" aria-expanded="false" aria-autocomplete="list" aria-owns="manualSearch-0-menu" aria-haspopup="true" class="ui-selectmenu-button ui-selectmenu-button-closed ui-corner-all ui-button ui-widget"><span class="ui-selectmenu-icon ui-icon ui-icon-triangle-1-s"></span><span class="ui-selectmenu-text">GeForce</span></span><a id="IdentifyGpuSeries-Modal" class="btn-content btncta" tabindex="0" style="cursor:pointer;"><span class="fal fa-info-circle"></span></a></div><div class="drvrContainer" name="manualSearch-1-div" id="manualSearch-1-div"><select class="drvrtoField ui-selectmenu-button ui-widget ui-state-default ui-corner-all" name="manualSearch-1" id="manualSearch-1" style="display: none;"><option value="131" id="manualSearch-1-0">GeForce RTX 50 Series</option><option value="129" id="manualSearch-1-1">GeForce RTX 40 Series (Notebooks)</option><option value="127" id="manualSearch-1-2">GeForce RTX 40 Series</option><option value="123" id="manualSearch-1-3">GeForce RTX 30 Series (Notebooks)</option><option value="120" id="manualSearch-1-4">GeForce RTX 30 Series</option><option value="111" id="manualSearch-1-5">GeForce RTX 20 Series (Notebooks)</option><option value="107" id="manualSearch-1-6">GeForce RTX 20 Series</option><option value="125" id="manualSearch-1-7">GeForce MX500 Series (Notebooks)</option><option value="121" id="manualSearch-1-8">GeForce MX400 Series (Notebooks)</option><option value="117" id="manualSearch-1-9">GeForce MX300 Series (Notebooks)</option><option value="113" id="manualSearch-1-10">GeForce MX200 Series (Notebooks)</option><option value="104" id="manualSearch-1-11">GeForce MX100 Series (Notebook)</option><option value="115" id="manualSearch-1-12">GeForce GTX 16 Series (Notebooks)</option><option value="112" id="manualSearch-1-13">GeForce 16 Series</option><option value="101" id="manualSearch-1-14">GeForce 10 Series</option><option value="102" id="manualSearch-1-15">GeForce 10 Series (Notebooks)</option><option value="98" id="manualSearch-1-16">GeForce 900 Series</option><option value="99" id="manualSearch-1-17">GeForce 900M Series (Notebooks)</option><option value="97" id="manualSearch-1-18">GeForce 800M Series (Notebooks)</option><option value="95" id="manualSearch-1-19">GeForce 700 Series</option><option value="92" id="manualSearch-1-20">GeForce 700M Series (Notebooks)</option><option value="85" id="manualSearch-1-21">GeForce 600 Series</option><option value="84" id="manualSearch-1-22">GeForce 600M Series (Notebooks)</option><option value="76" id="manualSearch-1-23">GeForce 500 Series</option><option value="78" id="manualSearch-1-24">GeForce 500M Series (Notebooks)</option><option value="71" id="manualSearch-1-25">GeForce 400 Series</option><option value="72" id="manualSearch-1-26">GeForce 400M Series (Notebooks)</option><option value="70" id="manualSearch-1-27">GeForce 300 Series</option><option value="69" id="manualSearch-1-28">GeForce 300M Series (Notebooks)</option><option value="52" id="manualSearch-1-29">GeForce 200 Series</option><option value="62" id="manualSearch-1-30">GeForce 200M Series (Notebooks)</option><option value="59" id="manualSearch-1-31">GeForce 100 Series</option><option value="61" id="manualSearch-1-32">GeForce 100M Series (Notebooks)</option><option value="51" id="manualSearch-1-33">GeForce 9 Series</option><option value="53" id="manualSearch-1-34">GeForce 9M Series (Notebooks)</option><option value="1" id="manualSearch-1-35">GeForce 8 Series</option><option value="54" id="manualSearch-1-36">GeForce 8M Series (Notebooks)</option><option value="2" id="manualSearch-1-37">GeForce 7 Series</option><option value="55" id="manualSearch-1-38">GeForce Go 7 Series (Notebooks)</option><option value="3" id="manualSearch-1-39">GeForce 6 Series</option><option value="4" id="manualSearch-1-40">GeForce 5 FX Series</option></select><span tabindex="0" id="manualSearch-1-button" role="combobox" aria-expanded="false" aria-autocomplete="list" aria-owns="manualSearch-1-menu" aria-haspopup="true" class="ui-selectmenu-button ui-selectmenu-button-closed ui-corner-all ui-button ui-widget"><span class="ui-selectmenu-icon ui-icon ui-icon-triangle-1-s"></span><span class="ui-selectmenu-text">GeForce RTX 30 Series</span></span></div><div class="drvrContainer" name="manualSearch-2-div" id="manualSearch-2-div"><select class="drvrtoField ui-selectmenu-button ui-widget ui-state-default ui-corner-all" name="manualSearch-2" id="manualSearch-2" style="display: none;"><option value="985" id="manualSearch-2-0">GeForce RTX 3090 Ti</option><option value="930" id="manualSearch-2-1">GeForce RTX 3090</option><option value="964" id="manualSearch-2-2">GeForce RTX 3080 Ti</option><option value="929" id="manualSearch-2-3">GeForce RTX 3080</option><option value="965" id="manualSearch-2-4">GeForce RTX 3070 Ti</option><option value="933" id="manualSearch-2-5">GeForce RTX 3070</option><option value="934" id="manualSearch-2-6">GeForce RTX 3060 Ti</option><option value="942" id="manualSearch-2-7">GeForce RTX 3060</option><option value="975" id="manualSearch-2-8">GeForce RTX 3050</option></select><span tabindex="0" id="manualSearch-2-button" role="combobox" aria-expanded="false" aria-autocomplete="list" aria-owns="manualSearch-2-menu" aria-haspopup="true" class="ui-selectmenu-button ui-selectmenu-button-closed ui-corner-all ui-button ui-widget"><span class="ui-selectmenu-icon ui-icon ui-icon-triangle-1-s"></span><span class="ui-selectmenu-text">GeForce RTX 3090 Ti</span></span></div><div class="drvrContainer" name="manualSearch-4-div" id="manualSearch-4-div"><select class="drvrtoField ui-selectmenu-button ui-widget ui-state-default ui-corner-all" name="manualSearch-4" id="manualSearch-4" style="display: none;"><option value="57" id="manualSearch-4-0">Windows 10 64-bit</option><option value="135" id="manualSearch-4-1">Windows 11</option><option value="19" id="manualSearch-4-2">Windows 7 64-bit</option><option value="124" id="manualSearch-4-3">Linux aarch64</option><option value="12" id="manualSearch-4-4">Linux 64-bit</option><option value="22" id="manualSearch-4-5">FreeBSD x64</option></select><span tabindex="0" id="manualSearch-4-button" role="combobox" aria-expanded="false" aria-autocomplete="list" aria-owns="manualSearch-4-menu" aria-haspopup="true" class="ui-selectmenu-button ui-button ui-widget ui-selectmenu-button-closed ui-corner-all" aria-activedescendant="ui-id-109" aria-labelledby="ui-id-109" aria-disabled="false"><span class="ui-selectmenu-icon ui-icon ui-icon-triangle-1-s"></span><span class="ui-selectmenu-text">Linux 64-bit</span></span></div><div class="drvrContainer" name="manualSearch-5-div" id="manualSearch-5-div"><select class="drvrtoField ui-selectmenu-button ui-widget ui-state-default ui-corner-all" name="manualSearch-5" id="manualSearch-5" style="display: none;"><option value="1033" id="manualSearch-5-0">English (US)</option><option value="1078" id="manualSearch-5-1">English (UK)</option><option value="1093" id="manualSearch-5-2">English (India)</option><option value="2052" id="manualSearch-5-3">Chinese (Simplified)</option><option value="1028" id="manualSearch-5-4">Chinese (Traditional)</option><option value="1041" id="manualSearch-5-5">Japanese</option><option value="1042" id="manualSearch-5-6">Korean</option><option value="1031" id="manualSearch-5-7">Deutsch</option><option value="1069" id="manualSearch-5-8">Español (España)</option><option value="11274" id="manualSearch-5-9">Español (América Latina)</option><option value="1036" id="manualSearch-5-10">Français</option><option value="1040" id="manualSearch-5-11">Italiano</option><option value="1045" id="manualSearch-5-12">Polski</option><option value="1046" id="manualSearch-5-13">Português (Brazil)</option><option value="2092" id="manualSearch-5-14">Русский</option><option value="1055" id="manualSearch-5-15">Turkish</option><option value="1116" id="manualSearch-5-16">Other</option></select><span tabindex="0" id="manualSearch-5-button" role="combobox" aria-expanded="false" aria-autocomplete="list" aria-owns="manualSearch-5-menu" aria-haspopup="true" class="ui-selectmenu-button ui-selectmenu-button-closed ui-corner-all ui-button ui-widget"><span class="ui-selectmenu-icon ui-icon ui-icon-triangle-1-s"></span><span class="ui-selectmenu-text">Chinese (Simplified)</span></span></div><div id="driverTypeWindowsDiv" class="drvrContainer" style="display: none;"><span id="driverTypeWindowsSpan" style="display: none;"><select class="drvrtoField ui-selectmenu-button ui-widget ui-state-default ui-corner-all" name="driverTypeWindowsDCH" id="driverTypeWindowsDCH" style="display: none;"><option value="0">标准</option><option value="1">DCH</option></select><span tabindex="0" id="driverTypeWindowsDCH-button" role="combobox" aria-expanded="false" aria-autocomplete="list" aria-owns="driverTypeWindowsDCH-menu" aria-haspopup="true" class="ui-selectmenu-button ui-selectmenu-button-closed ui-corner-all ui-button ui-widget"><span class="ui-selectmenu-icon ui-icon ui-icon-triangle-1-s"></span><span class="ui-selectmenu-text">标准</span></span><a href="#DCH-Modal" data-href="#DCH-Modal" target="overlay" onclick="NVIDIAGDC.button.click(this, $(this).data(&quot;href&quot;),true, function() { ;return NVIDIAGDC.button.callbacks(this); }); return false;"><span class="fal fa-question-circle" id="DCHModal"></span></a></span></div><div id="driverTypeDiv" class="drvrContainer" style="display: none;"><span id="driverTypeSpan"><select class="drvrtoField ui-selectmenu-button ui-widget ui-state-default ui-corner-all" id="driverType" style="display: none;"><option value="all">All</option><option value="grd">Game Ready Driver</option><option value="qnf">New Feature Branch</option></select><span tabindex="0" id="driverType-button" role="combobox" aria-expanded="false" aria-autocomplete="list" aria-owns="driverType-menu" aria-haspopup="true" class="ui-selectmenu-button ui-selectmenu-button-closed ui-corner-all ui-button ui-widget"><span class="ui-selectmenu-icon ui-icon ui-icon-triangle-1-s"></span><span class="ui-selectmenu-text">All</span></span><a id="WqhlGrdSlb-Modal" class="btn-content btncta" style="cursor:pointer;"><span class="fal fa-info-circle"></span></a></span></div><div id="manualSearchButtonDiv" class="drvrContainer drvrContainerBtn text-right"> <a href="#" id="manualSearchButton" data-href="" data-analytics="btn-manual:" target="_self"><div class="btn">查找</div></a></div></div> 
+  <!-- <div id="driverDropdowns"> --> 
+ </form>
+
+首先卸载原有驱动
+
+```sh
+sudo apt-get remove --purge nvidia*   # 或者nvidia-*
+```
+
+禁用自带驱动
+
+```sh
+sudo vim /etc/modprobe.d/blacklist.conf
+# 在blacklist.conf文件中最后添加如下内容
+blacklist nouveau 
+options nouveau modeset=0 
+```
+
+更新
+
+```sh
+sudo update-initramfs -u
+```
+
+
+
+重启， 然后查看禁用是否成功
+
+```sh
+lsmod | grep nouveau
+# 没有结果输出，则表示屏蔽成功
+```
+
+然后执行
+
+```sh
+chmod +x NVIDIA-Linux-x86_64-550.144.03.run
+sudo ./NVIDIA-Linux-x86_64-550.144.03.run
+```
+
+检查是否安装成功
+
+```sh
+nvidia-smi
+```
+
+出现
+
+```sh
+Fri Feb 21 11:18:48 2025       
++-----------------------------------------------------------------------------------------+
+| NVIDIA-SMI 550.144.03             Driver Version: 550.144.03     CUDA Version: 12.4     |
+|-----------------------------------------+------------------------+----------------------+
+| GPU  Name                 Persistence-M | Bus-Id          Disp.A | Volatile Uncorr. ECC |
+| Fan  Temp   Perf          Pwr:Usage/Cap |           Memory-Usage | GPU-Util  Compute M. |
+|                                         |                        |               MIG M. |
+|=========================================+========================+======================|
+|   0  NVIDIA GeForce MX450           Off |   00000000:01:00.0 Off |                  N/A |
+| N/A   51C    P0             N/A /    9W |       1MiB /   2048MiB |      1%      Default |
+|                                         |                        |                  N/A |
++-----------------------------------------+------------------------+----------------------+
+|   1  NVIDIA GeForce RTX 3090 Ti     Off |   00000000:22:00.0 Off |                  Off |
+| 34%   55C    P0            103W /  450W |       1MiB /  24564MiB |      0%      Default |
+|                                         |                        |                  N/A |
++-----------------------------------------+------------------------+----------------------+
+                                                                                         
++-----------------------------------------------------------------------------------------+
+| Processes:                                                                              |
+|  GPU   GI   CI        PID   Type   Process name                              GPU Memory |
+|        ID   ID                                                               Usage      |
+|=========================================================================================|
+|  No running processes found                                                             |
++-----------------------------------------------------------------------------------------+
+```
+
+看到出现了  `NVIDIA GeForce RTX 3090 Ti`， 说明安装成功了。
