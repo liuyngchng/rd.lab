@@ -790,6 +790,12 @@ export_graphviz(graph.get_graph()).render("graph")
 
 详细见  https://langchain-ai.github.io/langgraph/tutorials/sql-agent/。
 
+# 查看显卡
+
+```
+nvidia-smi
+```
+
 
 
 # Reference
