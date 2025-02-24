@@ -4,21 +4,21 @@
 
 <span style='font:32px Verdana;font-weight:bold;margin-left:500px'> ——A Programer's Perspective</span>
 
-# LLM 部署
+# 1. LLM 部署
 
-LLM （Large Language Model，大语言模型），如目前的 ChatGPT、DeepSeek等。目前已比较成熟，可进行模块化部署运行，即使没有GPU，也可以通过CPU运行demo进行学习。
+​		LLM （Large Language Model，大语言模型），如目前的 ChatGPT、DeepSeek等。目前已比较成熟，可进行模块化部署运行，即使没有GPU，也可以通过CPU运行demo进行学习。
 
-##  ollama
+##  1.1 ollama
 
-**（1）download**
+​		**（1）download**
 
-首先拉取 ollama， ollama 相当于大模型界的 docker, 用于运行、管理大模型，详见 https://ollama.com/download。
+​		首先拉取 ollama， ollama 相当于大模型界的 docker, 用于运行、管理大模型，详见 https://ollama.com/download。
 
 可以进行离线下载， 下载地址详见  https://github.com/ollama/ollama/releases/,  amd64版本的安装包链接
 
 https://github.com/ollama/ollama/releases/download/v0.5.1/ollama-linux-amd64.tgz
 
-**（2）start ollama**
+​		**（2）start ollama**
 
 下载了 ollama-linux-amd64.tgz 之后，执行
 
@@ -33,7 +33,7 @@ nohup ollama serve > ollama.log 2>&1 &
 
 此时服务已经运行了， 可通过 查看 http://127.0.0.1:11434/ ，显示 “Ollama is running”
 
-**（3）config ollama**
+​		**（3）config ollama**
 
 ollama 修改模型存储路径，可以通过修改环境变量 OLLAMA_MODELS 来实现
 
@@ -42,7 +42,7 @@ sudo vi /etc/profile
 export OLLAMA_MODELS=/data/.ollama
 ```
 
-检查配置是否生效
+​		检查配置是否生效
 
 ```sh
 source /etc/profile
@@ -51,7 +51,7 @@ echo $OLLAMA_MODELS
 ollama serve &
 ```
 
-其他配置选项如代码段 1-1 所示。
+​		其他环境变量配置选项如代码段 1-1 所示。
 
 ```sh
 OLLAMA_DEBUG：					是否开启调试模式，默认为 false。
@@ -72,11 +72,13 @@ OLLAMA_SCHED_SPREAD：			调度分布，默认为空。
 OLLAMA_TMPDIR：					临时文件目录，默认为空。Here is the optimized list in the desired format:
 OLLAMA_DEBUG：					是否开启调试模式，默认为 false。
 OLLAMA_FLASH_ATTENTION：			是否闪烁注意力，默认为 true。
+CUDA_VISIBLE_DEVICES:			 用于控制哪些GPU对CUDA 可见， 例如 CUDA_VISIBLE_DEVICES=0,1,2 表示编号为0,1 的 GPU 对CUDA 可见
+								 GPU 编号可通过 nvidia-smi命令输出的 GPU 列查看
 ```
 
 <center><b>代码段 1-1  OLLAMA主要环境变量清单</b><center> 
 
-##  下载LLM镜像
+##  1.2 下载LLM镜像
 
 **（1）模型清单**
 
@@ -153,7 +155,7 @@ curl  http://127.0.0.1:11434/api/generate -d '{
 docker run -d -p 3000:8080 --add-host=host.docker.internal:host-gateway -v open-webui:/app/backend/data --name open-webui --restart always ghcr.io/open-webui/open-webui:main
 ```
 
-##  cmd
+##  1.3 cmd
 
 ollama 主要命令清单如代码段 1-2 所示。
 
@@ -192,7 +194,7 @@ curl http://<your_ollama_host>:11434/models
 
 
 
-##  Modelfile
+##  1.4 Modelfile
 
  `Modelfile` 的作用类似于 `Dockerfile`，完整的 `modelfile` 如下所示 ，可通过命令 `ollama show --modelfile modelname > modelname.modelfile` 获取， 如代码段 1-3所示。
 
@@ -235,9 +237,9 @@ the style of a 1930's mafia mobster
 
 （7）**SYSTEM**。SYSTEM 不是 LLM 本身的自然语言理解或生成能力的一部分，而是控制LLM运行系统的命令。我希望LLM以1930年代黑手党暴徒的风格回应提示。我们如何做到这一点？很简单，只需将该指令放入SYSTEM指令中。
 
-# LLM导入导出
+# 2. LLM导入导出
 
-## 导出
+## 2.1 导出
 
 LLM数据导出代码如代码段 2-1 所示。
 
@@ -253,7 +255,7 @@ vi llama3_1_8b.modelfile
 
 <center><b>代码段 2-1 LLM数据导出脚本代码示例</b><center>
 
-## 导入
+## 2.2 导入
 
 执行以下语句导入模型， 导入模型的时候，确保硬盘可用空间至少为模型大小的2倍以上，如代码段 2-2 所示。
 
@@ -283,7 +285,7 @@ TEMPLATE {{ .Prompt }}
 
 <center><b>代码段 2-3 查看已导入的LLM模型脚本示例</b><center>
 
-# LLM test
+# 3. LLM test
 
 部署好环境后，进行 llama3.2vision:11B 模型的测试。
 
@@ -357,9 +359,9 @@ print(answer)
 
 <center><b>代码段 3-2 Ollama API 调用代码段示例</b><center>
 
-# RAG简介
+# 4. RAG简介
 
-##  基本概念
+##  4.1 基本概念
 
 检索增强生成（Retrieval-Augmented Generation，`RAG`）是一种结合检索和生成技术的模型。它通过引用外部知识库的信息来生成答案或内容，具有较强的可解释性和定制能力，适用于问答系统、文档生成、智能助手等多个自然语言处理任务中。
 
@@ -380,7 +382,7 @@ print(answer)
 
 可用于`RAG`的比较成熟的框架有  `LlamaIndex`、`LangChain` 。
 
-##  基本功能
+##  4.2 基本功能
 
  LLM 面临的主要问题有以下几个， 可以通过 RAG 来逐个解决。
        **（1）信息偏差/幻觉。**LLM 有时会生成与客观事实不符的信息，导致用户接收到不准确的信息（通俗来讲，就是感觉大模型在一本正经地胡说八道）。RAG 通过检索数据源辅助模型生成过程，确保输出内容的精确性和可信度，减少信息偏差。
@@ -397,7 +399,7 @@ print(answer)
 
 **（7）长文本处理能力较弱。**LLM 在理解和生成长篇内容时受限于有限的上下文窗口，处理速度随着输入长度增加而减慢（通俗来讲，就是给他简单地说几句话大模型能够理解，但如果给他说一大段话的话，大模型的理解能力就受限了）。RAG 通过检索和整合长文本信息，强化模型对长上下文的理解和生成，有效突破输入长度限制，降低调用成本，提升整体处理效率。
 
-## 工作原理
+## 4.3 工作原理
 
   RAG 的工作流程的数据流如图 4-1 所示，可以简单地分为以下四个阶段。
 
@@ -414,19 +416,19 @@ print(answer)
 <center><b>图 4-1  RAG 工作过程数据流</b><center> 
 
 
-以  LangChain 为例，其工作流程如图 4-2 所示。
+​		以  LangChain 为例，其工作流程如图 4-2 所示。
 
 <img src="img/rag_principles.png" style="zoom:70%;" />
 
 <center><b>图 4-2  LangChain 工作流程示意图</b><center>
 
-#  RAG in Action
+#  5. RAG in Action
 
-##   langchain
+##   5.1 langchain
 
-###   环境准备
+###   5.1.1 环境准备
 
-python基础组件信息如代码段 5-1 所示， 建议python版本至少3.9以上，否则与langchain 相关的部分组件可能无法安装。
+​		python基础组件信息如代码段 5-1 所示， 建议python版本至少3.9以上，否则与langchain 相关的部分组件可能无法安装。
 
 ```python
 python3 -V
@@ -452,7 +454,7 @@ langchain-cli 0.0.35
 
 <center><b>代码段 5-1  python 基础组件信息</b><center>
 
-安装langChain组件， 如代码段 5-2 所示。
+​		安装langChain组件， 如代码段 5-2 所示。
 
 ```sh
 pip3 install langchain
@@ -467,7 +469,7 @@ pip3 install langchain-ollama
 
 <center><b>代码段 5-2  langChain 组件信息</b><center>
 
-如果需要解析  Word 文档，还需要执行以下操作， 如代码段 5-3 所示。
+​		如果需要解析  Word 文档，还需要执行以下操作， 如代码段 5-3 所示。
 
 ```sh
 pip3 install langchain-unstructured
@@ -500,7 +502,7 @@ Attempted to load ./
 
 <center><b>代码段 5-3  word文档解析相关组件信息</b><center>
 
-如果需要解析  PDF 文档，还需安装依赖包，如代码段 5-4 所示。
+​		如果需要解析  PDF 文档，还需安装依赖包，如代码段 5-4 所示。
 
 ```python
 # 会下载依赖的 torch-2.6.0-cp310-*.whl(766.7MB)
@@ -509,7 +511,7 @@ pip3 install "unstructured[pdf]"
 
 <center><b>代码段 5-4  PDF 文档解析相关组件信息</b><center>
 
-###   本地文档向量化
+###   5.1.2 本地文档向量化
 
 将本地文档向量化，形成向量数据库，存储在本地， 如代码段 5-5 所示。
 
@@ -555,9 +557,9 @@ logger.info("vector db saved to local file")
 
 <center><b>代码段 5-5 本地文档向量化代码段</b><center>
 
-###   检索参数增强
+###   5.1.3 检索参数增强
 
-调用大模型时，通过本地文档进行检索参数增强，如代码段 5-6 所示。
+​		调用大模型时，通过本地文档进行检索参数增强，如代码段 5-6 所示。
 
 ```python
 #! /usr/bin/python3
@@ -600,7 +602,7 @@ logger.info(result)
 
 <center><b>代码段 5-6 检索参数增强代码段</b><center>
 
-##    LLama-Index
+##    5.2 LLama-Index
 
 LLama-Index是另外一种进行 RAG的框架，此处不再详细叙述。首先续安装 python 组件，如代码段 5-7 所示。
 
@@ -642,29 +644,29 @@ print(output)
 
 <center><b>代码段 5-8 LLama-Index RAG示例代码</b><center>
 
-# 矢量数据库
+# 6. 矢量数据库
 
 矢量数据库用于存储模型，以及训练数据集。
 
 
 
-# Hugging Face
+# 7. Hugging Face
 
 Hugging Face 通常被称为机器学习的 GitHub。可以通过 Hugging Face 获取训练好的机器模型，例如自然语言处理应用构建的 transformers 库。
 
 huggingface-cli Hugging Face 官方提供的命令行工具，类似于github 的git命令。可以通过 `pip install huggingface_cli` 进行安装。
 
-# ONNX
+# 8. ONNX
 
 ONNX 是 Open Neural Network Exchange，开放神经网络交换，一种通用的机器学习训练模型存储格式。模型文件存储的是网络拓扑（图）的和拓扑结构中每条边的权重。由于不同的机器学习框架往往采用不同的模型存储结构，导致模型无法在不同的模型框架之间通用，而 ONNX 解决的就是这种通用性的问题。ONNX 提供的计算图是通用的，格式也是开源的。
 
-# AI 智能体（agent）
+# 9. AI 智能体（agent）
 
 AI 智能体通过一套框架，对输入信息和最终的输出索要经过的工作流进行规划和设计，使AI 模型的输出能够按照最终的预期进行输出。
 
 本文中以 LangGraph 为例， 介绍智能体的基本开发途径。LangGraph 是 LangChainAI 开发的一个工具库，用于创建代理和多代理智能体工作流， 可以减少Agent智能体开发者的工作量。 langgraph 官方文档详见 https://github.com/langchain-ai/langgraph， https://langchain-ai.github.io/langgraph/。
 
-##  env 准备
+##  9.1 env 准备
 
 需要安装以下python组件。
 
@@ -676,7 +678,7 @@ pip3 install mermaid
 
 LangGraph的StateGraph是一种状态机，包含了节点和边，节点一般是定义好的函数，边用于连接不同的节点，用于表示图的执行顺序。使用LangGraph构建工作流的步骤如下：初始化模型和工具、定义图的状态信息、定义图节点、定义图的入口节点和边关系、编译图执行图。
 
-##  demo
+##  9.2 demo
 
 智能体演示如代码段 9-1 所示。
 
@@ -720,13 +722,13 @@ for event in graph.stream({"messages": [("user", user_input)]}):
 
 <center><b>代码段 9-1 智能体代码段</b><center>
 
-## 图的可视化
+## 9.3 图的可视化
 
-详见文档 https://langchain-ai.github.io/langgraph/how-tos/visualization/?h=graph#mermaid。 有3种方法
+​		详见文档 https://langchain-ai.github.io/langgraph/how-tos/visualization/?h=graph#mermaid。 有3种方法
 
-（1）使用 Mermaid.ink API，无需本地安装附加包，但需要联网进行API请求;
+​	（1）使用 Mermaid.ink API，无需本地安装附加包，但需要联网进行API请求;
 
-（2）使用 Mermaid + Pyppeteer;（没调通）
+​	（2）使用 Mermaid + Pyppeteer;（没调通）
 
 ```sh
 %%capture --no-stderr
@@ -734,7 +736,7 @@ pip3 install pyppeteer
 pip3 install nest_asyncio
 ```
 
-（3）使用 graphviz（没调通）
+​	（3）使用 graphviz（没调通）
 
 ```sh
 # python package依赖的底层C库
@@ -743,7 +745,7 @@ pip3 install graphviz
 pip3 install pygraphviz
 ```
 
-demo
+​	demo
 
 ```python
 from langgraph.graph import StateGraph, START, END
@@ -786,19 +788,20 @@ graph = graph_builder.compile()
 export_graphviz(graph.get_graph()).render("graph")
 ```
 
-## SQL Agent
+## 9.4 SQL Agent
 
-详细见  https://langchain-ai.github.io/langgraph/tutorials/sql-agent/。
+​	详细见  https://langchain-ai.github.io/langgraph/tutorials/sql-agent/。
 
-# 查看显卡
+# 10. GPU
 
-```
+```sh
+# 查看可见的 GPU
 nvidia-smi
 ```
 
 
 
-# Reference
+# 11. Reference
 
 [1] Hugging Face Documentation. https://huggingface.co/docs;
 
