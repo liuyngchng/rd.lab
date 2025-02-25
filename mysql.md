@@ -1,4 +1,8 @@
-#  修改 MySQL 8密码
+#  1. 修改密码
+
+##  1.1 MySQL 8
+
+一般，在文件  /etc/mysql/debian.cnf 中有初始化安装中系统自动生成的用户名和密码。
 
 在对ubuntu 22.04 上通过sudo apt-get install 安装的 MySQL 8.0.36 中测试通过
 
@@ -34,7 +38,7 @@ mysql -h localhost -u root -p
 
 
 
-# 修改mysql5.7密码
+## 1.2 mysql5.7
 
 OS = ubuntu18
 
@@ -67,148 +71,7 @@ exit;
 sudo sudo vim /etc/mysql/my.cnf把skip-grant-tables删除掉
 sudo service mysql restart
 ```
-# binlog
-
-##   查看binlog
-
-只查看第一个binlog文件的内容
-
-```sh
-mysql -h xxx -u xxx -p;
-show binlog events;  
-```
-
-查看指定binlog文件的内容  
-
-````sh
-mysql -h xxx -u xxx -p;
-show binlog events in 'mysql-bin.000002';
-````
-
-查看当前正在写入的binlog文件  
-
-```sh
-show master status\G;
-```
-
-获取binlog文件列表  
-
-```sh
-show binary logs;
-```
-
-##   config binlog
-
-修改 my.cnf  
-查看my.cnf的位置 `file /etc/mysql/my.cnf`  
-
-```sh
-cd /etc/mysql/mysql.conf.d
-vim mysqld.cnf
-
-```
-去掉以下三项的注释
-
-```sh
-server-id       	= 1
-log_bin         	= /var/log/mysql/mysql-bin.log
-expire_logs_days    = 10
-max_binlog_size   	= 100M
-```
-执行
-
-```sh
-systemctl restart mysql 
-mysql -uroot -p
-show variables like '%log_bin%';
-```
-看到 log_bin | ON
-
-```sh
-+---------------------------------+--------------------------------+
-| Variable_name                   | Value                          |
-+---------------------------------+--------------------------------+
-| log_bin                         | ON                             |
-| log_bin_basename                | /var/log/mysql/mysql-bin       |
-| log_bin_index                   | /var/log/mysql/mysql-bin.index |
-| log_bin_trust_function_creators | OFF                            |
-| log_bin_use_v1_row_events       | OFF                            |
-| sql_log_bin                     | ON                             |
-+---------------------------------+--------------------------------+
-```
-
-
-
-##   browse binlog file
-
-```sh
-sudo mysqlbinlog  -d dbname --base64-output=decode-rows  /var/log/mysql/mysql-bin.000001
-```
-
-## 清空 binlog
-
-```sh
-mysql>RESET MASTER;
-# 可以看到文件已经清空
-ls -al /MYSQL_DIR/mysql/mysqllog/binlog
-```
-
-##  生成新的bin log file
-
-```sh
-# 可以手动刷新日志，生成一个新的 binlog 文件
-flush logs
-```
-
-
-
-# general query log
-
-修改 my.cnf  
-查看my.cnf的位置 `file /etc/mysql/my.cnf`  
-
-```sh
-cd /etc/mysql/mysql.conf.d
-vim mysqld.cnf
-
-```
-去掉以下两项的注释
-
-```sh
-general_log_file        = /var/log/mysql/mysql.log
-general_log             = 1
-```
-
-查看日志
-
-```sh
-tail -f /var/log/mysql/mysql.log
-```
- # mysqldump 数据迁移
- from MySQL8 to mysql5.7
-
-数据导出 带表结构和库结构
-
-```sh
-mysqldump --databases my_db -uroot -p > ./source.sql
-mysqldump -h host -P port -u usrname  -p password --databases dbname --dump-date > backup_file.sql
-
-mysqldump -h 192.168.1.1 -P 3306 -u whoami -p'!@#$%^&^%$#!l1#a' --databases my_db --dump-date > db_bck.sql
-```
-
-数据修改
-```sh
-sed -i "s/utf8mb4_0900_ai_ci/utf8_general_ci/g" ./source.sql
-sed -i "s/utf8mb4/utf8/g" ./source.sql
-```
-
-数据导入
-
-```sh
-mysql -h11.11.54.33 -P13307 -uroot -p ry <./source.sql
-```
-
-# 修改MySQL8 临时密码
+##  1.3 修改MySQL8 临时密码
 
 此方法在从dev.mysql.org上自行下载安装的 mysql 8.0.28 deb 中实验通过 
 
@@ -260,9 +123,167 @@ mysql8 之前的版本中加密规则是mysql_native_password，而在mysql8之�
 可以把mysql用户登录密码加密规则还原成mysql_native_password.。
 ```
 
-# docker setup MySQL 8.0.28
 
-## docker pull
+
+# 2. MySQL 增量备份
+
+##   2.1 查看binlog
+
+只查看第一个binlog文件的内容
+
+```sh
+mysql -h xxx -u xxx -p;
+show binlog events;  
+```
+
+查看指定binlog文件的内容  
+
+````sh
+mysql -h xxx -u xxx -p;
+show binlog events in 'mysql-bin.000002';
+````
+
+查看当前正在写入的binlog文件  
+
+```sh
+show master status\G;
+```
+
+获取binlog文件列表  
+
+```sh
+show binary logs;
+```
+
+##   2.2 config binlog
+
+修改 my.cnf  
+查看my.cnf的位置 `file /etc/mysql/my.cnf`  
+
+```sh
+cd /etc/mysql/mysql.conf.d
+vim mysqld.cnf
+
+```
+去掉以下三项的注释
+
+```sh
+server-id       	= 1
+log_bin         	= /var/log/mysql/mysql-bin.log
+expire_logs_days    = 10
+max_binlog_size   	= 100M
+```
+执行
+
+```sh
+systemctl restart mysql 
+mysql -uroot -p
+show variables like '%log_bin%';
+```
+看到 log_bin | ON
+
+```sh
++---------------------------------+--------------------------------+
+| Variable_name                   | Value                          |
++---------------------------------+--------------------------------+
+| log_bin                         | ON                             |
+| log_bin_basename                | /var/log/mysql/mysql-bin       |
+| log_bin_index                   | /var/log/mysql/mysql-bin.index |
+| log_bin_trust_function_creators | OFF                            |
+| log_bin_use_v1_row_events       | OFF                            |
+| sql_log_bin                     | ON                             |
++---------------------------------+--------------------------------+
+```
+
+
+
+##   2.3 browse binlog file
+
+```sh
+sudo mysqlbinlog  -d dbname --base64-output=decode-rows  /var/log/mysql/mysql-bin.000001
+```
+
+## 2.4 清空 binlog
+
+```sh
+mysql>RESET MASTER;
+# 可以看到文件已经清空
+ls -al /MYSQL_DIR/mysql/mysqllog/binlog
+```
+
+##  2.5 生成新的bin log file
+
+```sh
+# 可以手动刷新日志，生成一个新的 binlog 文件
+flush logs
+```
+
+##  2.6 增量备份
+
+```shell
+# 备份全备份数据库
+mysqldump -u 用户名 -p 数据库名 > database_full_backup.sql
+ 
+# 备份自上次全备份以来的binlog日志（start-position 为上次全备份时binlog的位置， mysql-bin.000001 为binlog文件名称 ）
+# binlog 位置 可以通过  'show binlog events in 'binlog.000024'' 中的 End_log_pos 字段查看， 
+# binlog 也可以通过直接查看 binlog 文件中的 end_log_pos 字段查看 
+mysqlbinlog --start-position=123 mysql-bin.000001 > database_binlog_backup.sql
+ 
+# 应用binlog日志到备份的数据库中
+mysql -u 用户名 -p 数据库名 < database_binlog_backup.sql
+```
+
+
+
+# 3. general query log
+
+修改 my.cnf  
+查看my.cnf的位置 `file /etc/mysql/my.cnf`  
+
+```sh
+cd /etc/mysql/mysql.conf.d
+vim mysqld.cnf
+
+```
+去掉以下两项的注释
+
+```sh
+general_log_file        = /var/log/mysql/mysql.log
+general_log             = 1
+```
+
+查看日志
+
+```sh
+tail -f /var/log/mysql/mysql.log
+```
+ # 4. mysqldump 数据迁移
+ from MySQL8 to mysql5.7
+
+数据导出 带表结构和库结构
+
+```sh
+mysqldump --databases my_db -uroot -p > ./source.sql
+mysqldump -h host -P port -u usrname  -p password --databases dbname --dump-date > backup_file.sql
+
+mysqldump -h 192.168.1.1 -P 3306 -u whoami -p'!@#$%^&^%$#!l1#a' --databases my_db --dump-date > db_bck.sql
+```
+
+数据修改
+```sh
+sed -i "s/utf8mb4_0900_ai_ci/utf8_general_ci/g" ./source.sql
+sed -i "s/utf8mb4/utf8/g" ./source.sql
+```
+
+数据导入
+
+```sh
+mysql -h11.11.54.33 -P13307 -uroot -p ry <./source.sql
+```
+
+# 5.docker setup MySQL 8.0.28
+
+## 5.1 docker pull
 
 ```sh
 docker pull mysql:8.0.28
@@ -270,7 +291,7 @@ docker images
 
 ```
 
-##  config start up
+##  5.2 config start up
 
 初始化mysql密码，打包配置文件
 
@@ -303,7 +324,7 @@ docker stop mysql
 docker rm mysql
 ```
 
-##  normal start up
+##  5.3 normal start up
 
 这么做，是为了将MySQL中存储的数据放在宿主机上，而不是放在容器里
 
@@ -356,7 +377,7 @@ systemctl start docker.service
 
 ```
 
-##  创建用户
+##  5.4 创建用户
 
 兼容老系统，使用 mysql_native_password
 
@@ -394,29 +415,28 @@ DROP USER 'foo'@'%';
 
 
 
-##  禁止root用户远程登录
+##  5.5 禁止root用户远程登录
 
 ```sql
 drop user 'root'@'%';
 ```
 
-## 查看时区
+## 5.6 查看时区
 
 ```sql
 SELECT @@global.time_zone;
 ```
 
-# docker setup MySQL 8.4.0
+# 6. docker setup MySQL 8.4.0
 
-## docker pull
+## 6.1 docker pull
 
 ```sh
 docker pull mysql:8.4.0
 docker images
-
 ```
 
-##  config start up
+##  6.2 config start up
 
 初始化mysql密码，打包配置文件
 
@@ -471,7 +491,7 @@ docker run -dit \
 	mysql:8.4.0
 ```
 
-##  normal start up
+##  6.3 normal start up
 
 这么做，是为了将MySQL中存储的数据放在宿主机上，而不是放在容器里
 
@@ -528,7 +548,7 @@ systemctl start docker.service
 
 ```
 
-##  创建用户
+##  6.4 创建用户
 
 ```sql
 CREATE USER 'foo'@'%' IDENTIFIED WITH mysql_native_password BY 'fGB#sfsfswe*&%$3^3%GN';
@@ -536,46 +556,25 @@ grant all privileges on mysql.* to 'foo'@'%';
 flush privileges;
 ```
 
-##  禁止root用户远程登录
+##  6.5 禁止root用户远程登录
 
 ```sql
 drop user 'root'@'%';
 ```
 
-## 查看时区
+## 6.6 查看时区
 
 ```sql
 SELECT @@global.time_zone;
 ```
 
-# 
-
-# shell 中执行sql语句
+# 7. shell 中执行sql语句
 
 ```sh
 mysql -h 11.10.36.1 -u foo -p'fooxfdsf#$%' -s -e 'select count(1) from db.my_tb'
 ```
 
-# MySQL 增量备份
-
-## 开启 binlog
-
-##  增量备份
-
-```shell
-# 备份全备份数据库
-mysqldump -u 用户名 -p 数据库名 > database_full_backup.sql
- 
-# 备份自上次全备份以来的binlog日志（start-position 为上次全备份时binlog的位置， mysql-bin.000001 为binlog文件名称 ）
-# binlog 位置 可以通过  'show binlog events in 'binlog.000024'' 中的 End_log_pos 字段查看， 
-# binlog 也可以通过直接查看 binlog 文件中的 end_log_pos 字段查看 
-mysqlbinlog --start-position=123 mysql-bin.000001 > database_binlog_backup.sql
- 
-# 应用binlog日志到备份的数据库中
-mysql -u 用户名 -p 数据库名 < database_binlog_backup.sql
-```
-
-# 源码编译安装
+# 8. 源码编译安装
 
 源码编译安装mysql5.7, 从网址 https://downloads.mysql.com/archives/community/ 下载mysql源码  mysql-5.7.9_source.tar.gz。目标平台 RHEL7.4
 
