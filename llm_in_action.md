@@ -72,8 +72,8 @@ OLLAMA_SCHED_SPREAD：			调度分布，默认为空。
 OLLAMA_TMPDIR：					临时文件目录，默认为空。Here is the optimized list in the desired format:
 OLLAMA_DEBUG：					是否开启调试模式，默认为 false。
 OLLAMA_FLASH_ATTENTION：			是否闪烁注意力，默认为 true。
-CUDA_VISIBLE_DEVICES:			 用于控制哪些GPU对CUDA 可见， 例如 CUDA_VISIBLE_DEVICES=0,1,2 表示编号为0,1 的 GPU 对CUDA 可见
-								 GPU 编号可通过 nvidia-smi命令输出的 GPU 列查看
+CUDA_VISIBLE_DEVICES:			 用于控制哪些GPU对CUDA 可见， 例如 CUDA_VISIBLE_DEVICES=0,1 表示编号为0,1 的 GPU 对CUDA 可见
+								 GPU 编号可通过 nvidia-smi命令输出的 GPU 列查看。也可以配置 GPU 的 UUID， UUID 通过 nvidia-smi -L获取
 ```
 
 <center><b>代码段 1-1  OLLAMA主要环境变量清单</b><center> 
