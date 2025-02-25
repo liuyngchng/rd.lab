@@ -1,8 +1,10 @@
-# Ubuntu 22.04 LTS 安装中文输入法
+# 1. Ubuntu 22.04 LTS 安装中文输入法
 
-## 检查系统中文环境
+​		目前最新的系统，设置安装语言有除英文外，额外安装中文，按照系统提示安装完包，直接在输入法中添加 智能拼音输入法即可。
 
-在 Ubuntu 设置中打开「区域与语言」—— 「管理已安装的语言」，然后会自动检查已安装语言是否完整。若不完整，根据提示安装即可
+## 1.1 检查系统中文环境
+
+​		在 Ubuntu 设置中打开「区域与语言」—— 「管理已安装的语言」，然后会自动检查已安装语言是否完整。若不完整，根据提示安装即可
 
 为使用 Fcitx 5，需要安装三部分基本内容：
 
@@ -19,7 +21,7 @@ fcitx5-frontend-gtk3 fcitx5-frontend-gtk2 \
 fcitx5-frontend-qt5 kde-config-fcitx5
 ```
 
-## 安装中文词库
+## 1.2 安装中文词库
 
 在 GitHub 打开[维基百科中文拼音词库](https://github.com/felixonmars/fcitx5-pinyin-zhwiki)的 [Releases](https://github.com/felixonmars/fcitx5-pinyin-zhwiki/releases) 界面，下载最新版的 `.dict` 文件。按照 README 的指导，将其复制到 `~/.local/share/fcitx5/pinyin/dictionaries/` 文件夹下即可。
 
@@ -32,7 +34,7 @@ mkdir ~/.local/share/fcitx5/pinyin/dictionaries/
 mv zhwiki-20220416.dict ~/.local/share/fcitx5/pinyin/dictionaries/
 ```
 
-## 设置为默认输入法
+## 1.3 设置为默认输入法
 
 使用 im-config 工具可以配置首选输入法，在任意命令行输入：
 
@@ -42,7 +44,7 @@ im-config
 
 根据弹出窗口的提示，将首选输入法设置为 Fcitx 5 即可。
 
-## 环境变量
+## 1.4 环境变量
 
 需要为桌面会话设置环境变量，即将以下配置项写入某一配置文件中：
 
@@ -58,7 +60,7 @@ export QT_IM_MODULE=fcitx
 
 将配置写入到/etc/profile文件末尾
 
-## 开机自启动
+## 1.5 开机自启动
 
 安装 Fcitx 5 后并没有自动添加到开机自启动中，每次开机后需要手动在应用程序中找到并启动，非常繁琐。
 
@@ -66,7 +68,7 @@ export QT_IM_MODULE=fcitx
 
 将Fcitx5添加到开机启动程序列表中
 
-## Fcitx 配置
+## 1.6 Fcitx 配置
 
 Fcitx 5 提供了一个基于 Qt 的强大易用的 GUI 配置工具，可以对输入法功能进行配置。有多种启动该配置工具的方法：
 
@@ -76,7 +78,7 @@ Fcitx 5 提供了一个基于 Qt 的强大易用的 GUI 配置工具，可以对
 
 根据个人偏好进行设置即可。需要注意的是「输入法」标签页下，应将「键盘 - 英语」放在首位，拼音（或其他中文输入法）放在后面的位置。
 
-## 已知问题
+## 1.6 已知问题
 
 （1）修复 JetBrains 系 IDE 显示问题。在 JetBrains 系 IDE（如 PyCharm）中，输入法选择框的位置始终固定于屏幕左下角，而非随输入光标移动，在中文输入很不方便。该问题为 IDE 的 [JetBrainsRuntime](https://github.com/JetBrains/JetBrainsRuntime) 缺陷所致。可尝试使用 [RikudouPatrickstar/JetBrainsRuntime-for-Linux-x64](https://github.com/RikudouPatrickstar/JetBrainsRuntime-for-Linux-x64) 这个仓库[发布](https://github.com/RikudouPatrickstar/JetBrainsRuntime-for-Linux-x64/releases)的 JBR 文件解决。
 
@@ -84,9 +86,9 @@ Fcitx 5 提供了一个基于 Qt 的强大易用的 GUI 配置工具，可以对
 
 检查包依赖关系，卸载 ibus 包后会自动移除 ibus-data、ibus-gtk4、python3-ibus-1.0 三个包，似乎都只是与 iBus 紧密联系的。暂为不解之谜。
 
-# Ubuntu16.04
+# 2. Ubuntu16.04
 
-##  GTK+
+##  2.1 GTK+
 
 安装gcc/g++/gdb/make 等基本编程工具  
 
@@ -131,7 +133,7 @@ sudo apt-get install libgtk2.0-dev
 ```
 sudo apt-get install libgtk2.0*
 ```
-##  查看 GTK 库版本
+##  2.2 查看 GTK 库版本
 
 查看 2.x 版本
 
@@ -149,7 +151,7 @@ pkg-config --version
 $pkg-config --list-all grep gtk
 ```
 
-#  安装字体
+#  3. 安装字体
 
 ```
 sudo cp simsun.ttc /usr/share/fonts
@@ -166,7 +168,7 @@ sudo fc-cache -fsv
 ```
 
 
-# wechat 微信
+# 4. wechat 微信
 
 ```shell
 wine '/home/rd/.wine/drive_c/Program Files (x86)/Tencent/WeChat/[3.6.0.18]/WeChat.exe'
@@ -209,7 +211,7 @@ gsettings get org.gnome.desktop.wm.keybindings switch-to-workspace-left
 修改：
 gsettings set org.gnome.desktop.wm.keybindings switch-to-workspace-left "[]"
 
-#  proxy for apt
+#  5. proxy for apt
 
 ```shell
 vi /etc/apt/apt.conf
@@ -219,7 +221,7 @@ Acquire::ftp::proxy "ftp://1.2.3.4:8080/";
 Acquire::socks::proxy "socks://1.2.3.4:8080/";
 ```
 
-#  get md5 value of a string on ubuntu
+#  6. get md5 value of a string on ubuntu
 
 ```
 echo -n 'my_str' |  md5sum
@@ -229,15 +231,15 @@ convert all char to uppercase
 ```shell
 echo -n 'my_str' | md5sum | tr [:lower:] [:upper:]
 ```
-# date
+# 7. date
 date in milliseconds 
 ```
 date +"%T.%6N"
 timedatectl timesync-status
 ```
-# network 
+# 8. network 
 
-##  对 eth0 网卡进行延迟设置
+##  8.1 对 eth0 网卡进行延迟设置
 
 ```shell
 tc qdisc add dev eth0 root netem delay 150ms
@@ -250,39 +252,39 @@ tc qdisc change dev eth0 root netem gap 5 delay 10ms
 # 设置eth0包延迟每5个包有一个包延迟10ms
 ```
 
-##  对 eth0 网卡限制带宽
+##  8.2 对 eth0 网卡限制带宽
 
 ```shell
 tc qdisc add dev eth0 root tbf rate 500Kbit latency 50ms burst 15kb
 # 将eth0网卡限速到500Kbit/s，15bk的buffer，TBF最多产生50ms的延迟
 # tbf是Token Bucket Filter的简写，适合于把流速降低到某个值
 ```
-##  列出已有的策略
+##  8.3 列出已有的策略
 
 ```shell
 tc -s qdisc ls dev eth0
 tc -q qdisc ls dev eth0
 ```
-##  解除 eth0 网卡的限制
+##  8.4 解除 eth0 网卡的限制
 
 ```shell
 tc qdisc del dev eth0 root
 ```
 
-# 录屏
+# 9. 录屏
 
 ```sh
 sudo apt install kazam
 ```
 
-# 远程桌面访问 windows
+# 10. 远程桌面访问 windows
 
 ```sh
 sudo apt-get install rdesktop
 rdesktop -f -a 16 10.0.0.1
 ```
 
-# ubuntu 访问 windows 共享文件夹
+# 11. ubuntu 访问 windows 共享文件夹
 
 ```sh
 sudo apt-get install samba
@@ -290,9 +292,9 @@ sudo apt-get install samba
 
 在ubuntu 的文件夹界面中点击 “connect to server”， 输入 smb://10.0.0.1/sharedFolderName
 
-# IP route 配置
+# 12. IP route 配置
 
-## 添加路由规则
+## 12.1 添加路由规则
 
 ```
 sudo ip route add 目标网络/子网掩码 via 网关 dev 网卡名称
@@ -300,7 +302,7 @@ sudo ip route add 目标网络/子网掩码 via 网关 dev 网卡名称
 
 子网掩码的写法示例如下，例如128.14.32.0/20，其中前20位为网络前缀，后12位为主机号。11.0.0.0/8代表 11.*的所有网络地址。
 
-## 更改metric
+## 12.2 更改metric
 
 例如，更改目标网络地址为 192.168.1.0/24路由规则中新的 metric 值为 100
 
@@ -310,9 +312,9 @@ sudo ip route change 192.168.1.0/24 metric 100
 
 
 
-# virtualBox 中 ubuntu 无法打开 terminal
+# 13. virtualBox 中 ubuntu 无法打开 terminal
 
-## 环境
+## 13.1 环境
 
  host：ubuntu 22.04 LTS
 
@@ -320,7 +322,7 @@ virtualbox：7.0
 
 v-host: ubuntu 22.04 LTS
 
-##  ToDo
+##  13.2 ToDo
 
 ```sh
 # 进入命令行模式（需要返回桌面时CTRL + ALT + F1）
@@ -339,7 +341,7 @@ exit
 # 再次执行 sudo 命令，即可成功
 ```
 
-#  cmd
+#  14. cmd
 
 netstat  need to run
 
@@ -347,7 +349,7 @@ netstat  need to run
 sudo apt install net-tools
 ```
 
-# share network between hosts 
+# 15. share network between hosts 
 
 host A：ubuntu16.04, 有两个网卡，一个接外网，一个与主机B相接  
 
@@ -355,7 +357,7 @@ hostB：ubuntu16.04
 
 两台机器通过网线共享网络
 
-## 1 config host A 
+## 15.1 config host A 
 
 run `iwconfig`  
 
@@ -382,7 +384,7 @@ ifup enp1s0
 ifconfig  命令查看enp1s0 ip配置是否成功
 ```
 
-##  config host B
+##  15.2 config host B
 
 run  `iwconfig` 
 获取网络接口卡名称 enpxxxx    
@@ -406,7 +408,7 @@ ifconfig  命令查看enpxxxx ip配置是否成功
 
 ping host A OK `ping 192.168.49.1`
 
-##  config NAT on host A
+##  15.3 config NAT on host A
 
 这一步是为了B主机能通过A主机访问外网  
 
@@ -419,7 +421,7 @@ iptables -P FORWARD ACCEPT
 iptables -t nat -A POSTROUTING -o wlp2s0 -j MASQUERADE     （wlp2s0为host A接外网的网卡）
 ```
 
-##  debug
+##  15.4 debug
 
 配置完以上信息后，若发现 host A 无法上网，则是默认路由导致的，
 执行
@@ -429,7 +431,7 @@ ip route show
 sudo route del default gw 192.168.49.1
 ```
 
-# ubuntu 录制 gif 文件
+# 16. ubuntu 录制 gif 文件
 
 ```sh
 sudo apt install byzanz imagemagick -y
@@ -440,7 +442,7 @@ byzanz-record --duration=10 --x=0 --y=50 --width=800 --height=600 --delay=5 git_
 byzanz-record --duration=15 --x=0 --y=100 --width=1280 --height=800 --delay=2  git_output.gif
 ```
 
-# video edit
+# 17. video edit
 
 ```sh
 sudo apt update
@@ -455,23 +457,35 @@ ffmpeg -i input.ts -filter:v "setpts=0.5*PTS" output.ts
 ffmpeg -i input.ts -c:v libx264 -c:a aac -strict experimental output.mp4
 ```
 
-# Geforce RTX 3090 TI
+# 18. 显卡安装
 
-OS
+## 18.1 环境信息
+
+​	（1）显卡型号。 Geforce RTX 3090 TI
+
+​	（2）OS
 
 ```sh
 uname -a
 Linux rd-lt 6.8.0-52-generic #53~22.04.1-Ubuntu SMP PREEMPT_DYNAMIC Wed Jan 15 19:18:46 UTC 2 x86_64 x86_64 x86_64 GNU/Linux
 ```
 
-查看显卡信息
+​	（3）查看显卡信息。接入硬件后，查看显卡信息，获得显卡型号为 2203
 
 ```sh
 lspci | grep -i vga
 22:00.0 VGA compatible controller: NVIDIA Corporation Device 2203 (rev a1)
 ```
 
-在页面 https://admin.pci-ids.ucw.cz/read/PC/10de/2203 查询， 输入2203 ，获得
+## 18.2 安装驱动
+
+​		**（1）通过系统提示安装**
+
+​		在 ubuntu 系统的应用界面中，打开 “附加驱动（Additional Drivers）”， 或者在 “Software & Updates” 中打开 “Additional Drivers” 选项卡， 选择靠前的第一个驱动 “nvidia-550(proprietary, tested)”, 选择 “Apply Changes”即可。
+
+​		**（2）通过英伟达官方网站安装**
+
+​		可以通过页面 https://admin.pci-ids.ucw.cz/read/PC/10de/2203 查询显卡信息， 输入2203 ，获得
 
 ```
 Name: GA102 [GeForce RTX 3090 Ti]
@@ -479,7 +493,7 @@ Stefan
 2022-03-25 16:26:23
 ```
 
-进入官网  https://www.nvidia.cn/drivers/lookup/， 下载驱动， 选项如下所示
+​		进入英伟达官网  https://www.nvidia.cn/drivers/lookup/， 下载驱动， 选项如下所示
 
 <form class="minHeight" action="" method="post" id="manualSearchForm" style="padding: 5px 40px;" __bizdiag="360597525" __biza="WJ__"> 
   <div id="manualSearchElements" style="z-index: 1"> 
@@ -497,36 +511,6 @@ Stefan
   <!-- <div id="driverDropdowns"> --> 
  </form>
 
-首先卸载原有驱动
-
-```sh
-sudo apt-get remove --purge nvidia*   # 或者nvidia-*
-```
-
-禁用自带驱动
-
-```sh
-sudo vim /etc/modprobe.d/blacklist.conf
-# 在blacklist.conf文件中最后添加如下内容
-blacklist nouveau 
-options nouveau modeset=0 
-```
-
-更新
-
-```sh
-sudo update-initramfs -u
-```
-
-
-
-重启， 然后查看禁用是否成功
-
-```sh
-lsmod | grep nouveau
-# 没有结果输出，则表示屏蔽成功
-```
-
 然后执行
 
 ```sh
@@ -534,7 +518,9 @@ chmod +x NVIDIA-Linux-x86_64-550.144.03.run
 sudo ./NVIDIA-Linux-x86_64-550.144.03.run
 ```
 
-检查是否安装成功
+​		**（3）查看GPU信息**
+
+​		检查是否安装成功
 
 ```sh
 nvidia-smi
@@ -551,11 +537,7 @@ Fri Feb 21 11:18:48 2025
 | Fan  Temp   Perf          Pwr:Usage/Cap |           Memory-Usage | GPU-Util  Compute M. |
 |                                         |                        |               MIG M. |
 |=========================================+========================+======================|
-|   0  NVIDIA GeForce MX450           Off |   00000000:01:00.0 Off |                  N/A |
-| N/A   51C    P0             N/A /    9W |       1MiB /   2048MiB |      1%      Default |
-|                                         |                        |                  N/A |
-+-----------------------------------------+------------------------+----------------------+
-|   1  NVIDIA GeForce RTX 3090 Ti     Off |   00000000:22:00.0 Off |                  Off |
+|   0  NVIDIA GeForce RTX 3090 Ti     Off |   00000000:22:00.0 Off |                  Off |
 | 34%   55C    P0            103W /  450W |       1MiB /  24564MiB |      0%      Default |
 |                                         |                        |                  N/A |
 +-----------------------------------------+------------------------+----------------------+
