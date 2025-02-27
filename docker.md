@@ -1,8 +1,8 @@
-# Introduction to docker
+# 1. Introduction to docker
 
-##  Install docker
+##  1.1 Install docker
 
-download docker desktop from [docker.com](https://www.docker.com/get-started)
+​		download docker desktop from [docker.com](https://www.docker.com/get-started)
 
 | CMD | NOTE |
 | --- |  --- |
@@ -10,30 +10,30 @@ download docker desktop from [docker.com](https://www.docker.com/get-started)
 | dockerd &                 | startup dockerd   |
 | docker pull centos        | pull centos image |  
 
-##  start up
+##  1.2 start up
 
-ubuntu
+​		ubuntu
 
-systemctl start docker
+​		systemctl start docker
 
-执行
+​		执行
 ```
 docker images
 ```
-看到  
+​		看到  
 
 | REPOSITORY | TAG | IMAGE ID | CREATED | SIZE |
 |     ---    | --- |   ---    |   ---   |  --- |
 | docker.io/centos | latest | 9f38484d220f | 13 days ago | 202 MB |
 
-执行
+​		执行
 
 ```
 docker run -dit --name test image_id
 docker ps
 ```
 
-看到
+​		看到
 
 | CONTAINER ID | IMAGE | COMMAND | CREATED | STATUS | PORTS | NAMES |
 |    ---       |  ---  |   ---   |  ---    |  ---   |  ---  |  ---  |
@@ -51,9 +51,9 @@ docker ps
 | exit                              | 退出容器  |
 |docker cp jre.tar.gz test:/opt      # 将容器外的文件拷贝到容器里||
 
-##  生成新的 image
+##  1.3 生成新的 image
 
-提交 container 生成新的 image
+​		提交 container 生成新的 image
 
 | CMD | NOTE |
 | --- | ---  |
@@ -63,8 +63,8 @@ docker ps
 |docker rmi  image_id | 删除 image |
 |docker images \| grep '<none>' \| awk -F ' ' '{print $3}' \| xargs docker rmi | 删除 tag 为 <none> 的image |
 
-##  导出及导入 image
-###  导出tar
+##  1.4 导出及导入 image
+###  1.4.1 导出tar
 
 | CMD | NOTE |
 | --- |  --- |
@@ -73,7 +73,7 @@ docker ps
 | `docker save myimage:1.0 |  gzip > myimage_1.0.tar.gz` | 导出为 tar.gz包 |
 | docker load -i ./test.tar              | 导入 tar 包 |
 
-###  导出img文件
+###  1.4.2 导出img文件
 | CMD | NOTE |
 | --- | ---  |
 | docker images | get image id |
@@ -81,8 +81,8 @@ docker ps
 | `docker load < ~/images/aaa.img` | load img file |
 
 
-##  端口和目录映射
-执行端口映射时，会调用 docker-proxy 命令，为操作系统创建软链  
+##  1.5 端口和目录映射
+​		执行端口映射时，会调用 docker-proxy 命令，为操作系统创建软链  
 
 | CMD | NOTE |
 | --- |  --- |
@@ -93,20 +93,22 @@ docker ps
 | docker run -u username | 指定运行镜像所使用的用户 |
 | docker run -it  --entrypoint="/bin/bash" | 覆盖Dockerfile中ENTRYPOINT设置的命令 |
 
-## 修改默认镜像存储目录
+## 1.6 修改默认镜像存储目录
 
-CentOS 下 docker 默认的存储路径在 /var/lib/docker下面。 
+​		CentOS 下 docker 默认的存储路径在 /var/lib/docker下面。 
 
 ```sh
 docker info | grep dir -i
 ```
-修改docker的systemd的 docker.service的配置文件
-不知道 配置文件在哪里可以使用systemd 命令显示一下.  
+​		修改docker的systemd的 docker.service的配置文件，查找配置文件位置可以使用systemd 命令显示一下.  
 
 ```sh
+# 查找 service 文件位置  Loaded: loaded 
+systemctl status docker  
 systemctl disable docker
 # 设置开机启动docker
 systemctl enable docker
+
 ```
 显示结果
 Created symlink from /etc/systemd/system/multi-user.target.wants/docker.service to /usr/lib/systemd/system/docker.service.
@@ -122,7 +124,7 @@ show
 | systemctl daemon-reload  | reload |
 | systemctl start docker   | start |
 
-##  限制 container 使用的 CPU 和 内存
+##  1.7 限制 container 使用的 CPU 和 内存
 
 | CMD | NOTE |
 | --- | ---  |
@@ -132,8 +134,8 @@ show
 | top           | 按 1 键，查看各个 CPU 的利用率，验证 CPU 限制是否生效 |
 | docker stats | 查看  MEM USAGE / LIMIT ，验证配置是否生效 |
 
-##  docker network
-###  为容器设置固定的 IP 地址
+##  1.8 docker network
+###  1.8.1 为容器设置固定的 IP 地址
 
 ```sh
 启动Docker容器的时候，使用默认的网络是不支持指派固定IP的，如下
@@ -147,13 +149,13 @@ docker: Error response from daemon: User specified IP address is supported on us
 | docker network ls | 查看自定义网络 |
 | docker run -itd --name networkTest1 --net mynetwork --ip 172.18.0.2 centos:latest /bin/bash | 启动容器 |
 
-###  使用host 网络模式
+###  1.8.2 使用host 网络模式
 使用`docker network ls` 中的 host模式，容器的网络配置与宿主机完全一样，这样也不需要在做容器内外的端口映射了。
 ```sh
 docker run -dit --name container_name --network host image_id
 ```
 
-##  gdb in docker
+##  1.9 gdb in docker
 linux 内核为了安全起见，采用了Seccomp(secure computing)的沙箱机制来保证系统不被破坏   
 它能使一个进程进入到一种“安全”运行模式，该模式下的进程只能调用4种系统调用（system calls），  
 即read(), write(), exit()和sigreturn()，否则进程便会被终止。
@@ -162,7 +164,7 @@ docker只有以--security-opt seccomp=unconfined的模式运行container才能�
 ```sh
 docker run --security-opt seccomp=unconfined -dit image_id
 ```
-##  "No manual entry for xx" in docker
+##  1.10 "No manual entry for xx" in docker
 By default the centos containers are built using yum's nodocs  
 注释掉这个选项，重新安装 rpm 包即可  
 ```sh
@@ -182,14 +184,14 @@ rpm -qa | xargs yum reinstall -y
 exit
 docker commit bbb046a8fefe image_repository
 ```
-##  docker容器内设置ubuntu语言为中文
-###  查看当前语言
+##  1.11 docker容器内设置ubuntu语言为中文
+###  1.11.1 查看当前语言
 `locale`
-###  查看当前已安装的语言
+###  1.11.2 查看当前已安装的语言
 
 `locale -a`
 
-###  安装语言包
+###  1.11.3 安装语言包
 ```   sh
 apt-get install language-pack-zh-hans
 locale-gen zh_CN.UTF-8
@@ -198,16 +200,16 @@ locale-gen zh_CN.UTF-8
 ```   sh
 locale -a
 ```
-###  添加到文件
+###  1.11.4 添加到文件
 ```sh
 echo "export LC_ALL=zh_CN.UTF-8">> /etc/profile
 source /etc/profile
 ```
 如果这里添加失败，提示没有这种语言包，退出容器，再重新进入，就可以添加了
-###  完成
+###  1.11.5 完成
 `locale`
 
-## 修改docker容器中的系统时间
+## 1.12 修改docker容器中的系统时间
 
 若需要在docker 中修改系统时间，则在执行 docker run 时需要加上参数
 ```
@@ -217,13 +219,13 @@ docker run --cap-add SYS_TIME
 
 # 2. docker permission
 
-##  问题描述  
+##  2.1 问题描述  
 在终端执行"docker version"命令，出现如下报错：
 
 ```sh
 ”Got permission denied while trying to connect to the Docker daemon socket at unix:///var/run/docker.sock: Get http://%2Fvar%2Frun%2Fdocker.sock/v1.26/images/json: dial unix /var/run/docker.sock: connect: permission denied“
 ```
-##  原因分析  
+##  2.2 原因分析  
 
 来自docker mannual：
 ```sh
@@ -236,7 +238,7 @@ If you don’t want to use sudo when you use the docker command, create a Unix g
 
 docker进程使用 Unix Socket 而不是 TCP 端口。而默认情况下，Unix socket 属于 root 用户，因此需要 root权限 才能访问。
 
-## 解决方法  
+## 2.3 解决方法  
 
 ```sh
 sudo groupadd docker			#添加docker用户组
@@ -245,7 +247,7 @@ newgrp docker					#更新docker用户组
 sudo chmod a+rw /var/run/docker.sock
 ```
 
-# docker group 
+# 3. docker group 
 when you run `docker ps` in Ubuntu and it says as following
 ```sh
 Got permission denied while trying to connect to the Docker daemon socket at
@@ -256,7 +258,7 @@ sudo gpasswd -a $USER docker
 newgrp docker
 ```
 
-# use GUI in docker
+# 4. use GUI in docker
 
 warning：非正常操作  
 在宿主机中运行
@@ -278,15 +280,15 @@ docker run -d \
 jess/libreoffice
 ```
 
-# Ubuntu Linux下修改docker镜像源  
-## 国内亲测可用的几个镜像源  
+# 5. Ubuntu Linux下修改docker镜像源  
+## 5.1 国内亲测可用的几个镜像源  
 ```sh
 Docker 官方中国区：https://registry.docker-cn.com
 网易：http://hub-mirror.c.163.com
 中国科技大学：https://docker.mirrors.ustc.edu.cn
 阿里云：https://y0qd3iq.mirror.aliyuncs.com
 ```
-## 修改配置文件  
+## 5.2 修改配置文件  
 
 增加Docker的镜像源配置文件 /etc/docker/daemon.json，  
 如果没有配置过镜像该文件默认是不存的，在其中增加如下内容  
@@ -296,7 +298,7 @@ Docker 官方中国区：https://registry.docker-cn.com
   "registry-mirrors": ["https://y0qd3iq.mirror.aliyuncs.com"]
 }
 ```
-##  restart service  
+##  5.3 restart service  
 ```sh
 service docker restart
 ```
@@ -305,7 +307,7 @@ service docker restart
 ```sh
 docker info|grep Mirrors -A 1
 ```
-# install app in ubuntu docker container
+# 6. install app in ubuntu docker container
 ```sh
 apt-get update
 apt-get install xxx
@@ -313,9 +315,9 @@ apt-get install xxx
 
 
 
-# docker-compose
+# 6.1 docker-compose
 
-## setup
+## 6.1.1 setup
 
 ```sh
 sudo curl -L https://github.com/docker/compose/releases/download/1.21.2/docker-compose-$(uname -s)-$(uname -m) -o /usr/local/bin/docker-compose
@@ -323,9 +325,7 @@ sudo chmod +x /usr/local/bin/docker-compose
 docker-compose -v
 ```
 
-##  run
-
-
+##  6.1.2 run
 
 应用打包
 
@@ -381,11 +381,11 @@ docker-compose up -d  // 后台启动并运行容器
 
 镜像服务器地址可以在 `docker-compose.yml` 中配置。
 
-#  离线安装docker
+#  6.2 离线安装docker
 
 以下内容在 CentOS 7.4 、RHEL 7.4 和  docker 23.0.6 下进行了验证 
 
-## 下载静态编译包
+## 6.2.1 下载静态编译包
 
 ```sh
 #下载docker-20.10.0包
@@ -409,7 +409,7 @@ docker version
 docker info
 ```
 
-##  配置系统服务
+##  6.2.2 配置系统服务
 
 #添加docker.service文件
 
@@ -444,7 +444,7 @@ Type=notify
 ExecStart=/usr/local/bin/dockerd --graph=/data/docker --api-cors-header=*
 # drivermanage 使用devicemapper
 # 若需要在当前配置文件中添加多个私有仓库，可以在 dockerd 后面通过添加多个 --insecure-registry 来解决
-#ExecStart=/usr/bin/dockerd --graph=/data/docker -H tcp://0.0.0.0:4243 -H unix://var/run/docker.sock  --insecure-registry test1.com.cn:5001 --insecure-registry test2.com.cn:5002 --storage-driver=devicemapper --api-cors-header=*
+#ExecStart=/usr/bin/dockerd --graph=/data/docker -H tcp://0.0.0.0:4243 -H unix://var/run/docker.sock  --insecure-registry test1.com.cn:5001 --insecure-registry test2.com.cn:5001 --storage-driver=devicemapper --api-cors-header=*
 ExecReload=/bin/kill -s HUP $MAINPID
 # Having non-zero Limit*s causes performance problems due to accounting overhead
 # in the kernel. We recommend using cgroups to do container-local accounting.
@@ -572,9 +572,9 @@ root     15270 15195  1 16:54 ?        00:00:00 containerd --config /var/run/doc
 
 
 
-# set proxy for docker in ubuntu
+# 6.3 set proxy for docker in ubuntu
 
-##  docker service
+##  6.3.1 docker service
 https://docs.docker.com/network/proxy/
 
 ```sh
@@ -589,7 +589,7 @@ Environment=HTTP_PROXY=http://xxx.com:xxx
 Environment=HTTPS_PROXY=http://xxx.com:xxx
 Environment=NO_PROXY=*.xxx.com
 ```
-##  docker config
+##  6.3.2 docker config
 run
 ```sh
 sudo mkdir -p /etc/systemd/system/docker.service.d
@@ -607,8 +607,8 @@ systemctl daemon-reload
 
 systemctl restart docker
 
-# docker push
-##  查看镜像
+# 7. docker push
+##  7.1 查看镜像
 
 查看仓库里的镜像清单
 
@@ -626,7 +626,7 @@ curl --noproxy '*' -XGET --tlsv1 -k https://hub.docker.com/v2/mysql/tags/list
 ```
 
 
-##  docker pull
+##  7.2 docker pull
 
 在本地登录到远程仓库：
 ```sh
@@ -659,7 +659,7 @@ systemctl restart docker.service
 ```
 如果是windows docker， 则在图形化界面中的 docker engine的配置 JSON中，加入以上配置，然后重启即可.
 
-##   docker 删除私有仓库中的镜像
+##   7.3 docker 删除私有仓库中的镜像
 
 首先， 镜像库服务器上需要进行配置，更改registry容器内/etc/docker/registry/config.yml文件
 
@@ -700,7 +700,7 @@ $ curl -I -X DELETE https://10.109.252.221:5000/v2/wordpress/manifests/sha256:0c
 
 
 
-# docker build
+# 8. docker build
 
 创建Dockerfile
 
@@ -731,7 +731,7 @@ run,  -f 表示要读取的Dockfile的位置， -t 镜像名称 : tag
 docker build -f ./testDockerfile ./ -t myimg:1.0.0
 ```
 
-# docker 写宿主机权限问题
+# 9. docker 写宿主机权限问题
 
 * docker 中的root 用户 和宿主机的 root 用户的uid是相同的，所以只要宿主机root用户有权限的，那么docker容器内执行也没有问题。
 
@@ -760,11 +760,11 @@ exit
 chown -R 1234：5678 dir
 ```
 
-# docker TLS
+# 10. docker TLS
 
-##  生成 CA 公私钥
+##  10.1 生成 CA 公私钥
 
-生成 CA 认证机构的 key 和 证书签名请求（CSR）
+​		生成 CA 认证机构的 key 和 证书签名请求（CSR）
 
 ```sh
 sudo mkdir -p /data/ssl/srv
@@ -774,7 +774,7 @@ openssl genrsa -aes256 -out ca-key.pem 4096
 # 输入密码 helloworld
 ```
 
-补全CA证书信息（Certificate Signing Request）
+​		补全CA证书信息（Certificate Signing Request）
 
 ```sh
 cd /data/ssl/srv
@@ -783,9 +783,9 @@ openssl req -new -x509 -days 365 -key ca-key.pem -sha256 -out ca.pem
 # 输入密码 helloworld
 ```
 
-##  生成 server 证书
+##  10.2 生成 server 证书
 
-使用 CA 签署 server 的公钥，推荐使用域名（如果没有域名，采用 host 绑定的方式， IP 的方式容易失败）的方式，生成 server 端经过 CA 签名的证书。
+​		使用 CA 签署 server 的公钥，推荐使用域名（如果没有域名，采用 host 绑定的方式， IP 的方式容易失败）的方式，生成 server 端经过 CA 签名的证书。
 
 生成 server 端的私钥以及经过 CA 签名的证书
 
@@ -798,14 +798,14 @@ openssl req -subj "/CN=my.docker.test" -sha256 -new -key server-key.pem -out ser
 ```
 
 
- 在发起请求的机器（client）的 host 里绑定域名
+ 		在发起请求的机器（client）的 host 里绑定域名
 
 ```sh
 sudo vi /etc/hosts
 123.456.789.0 my.docker.test
 ```
 
-生成 server 端扩展配置文件
+​		生成 server 端扩展配置文件
 
 ```sh
 cd /data/ssl/srv
@@ -815,7 +815,7 @@ echo subjectAltName = DNS:my.docker.test, IP:1.2.3.4, IP:2.3.4.5 >> extfile.cnf
 echo extendedKeyUsage = serverAuth >> extfile.cnf
 ```
 
-生成经过 CA 签名的服务端证书
+​		生成经过 CA 签名的服务端证书
 
 ```sh
 cd /data/ssl/srv
@@ -825,9 +825,9 @@ openssl x509 -req -days 365 -sha256 -in server.csr -CA ca.pem -CAkey ca-key.pem 
 # 输入密码 helloworld
 ```
 
-##  生成 client 证书
+##  10.3 生成 client 证书
 
-生成 client 端的私钥以及经过 CA 签名的证书
+​		生成 client 端的私钥以及经过 CA 签名的证书
 
 ```sh
 sudo mkdir /data/ssl/srv
@@ -842,27 +842,27 @@ echo extendedKeyUsage = clientAuth > extfile-client.cnf
 openssl x509 -req -days 365 -sha256 -in client.csr -CA ca.pem -CAkey ca-key.pem -CAcreateserial -out cert.pem -extfile extfile-client.cnf
 ```
 
-## 删除中间文件
+## 10.4 删除中间文件
 
-删除不必要得文件
+​		删除不必要得文件
 
 ```sh
 rm -v client.csr server.csr extfile.cnf extfile-client.cnf
 ```
 
-为了了保护密钥免于意外损坏，请删除其写入权限。要使它们仅供阅读，请按以下方式更改文件模式
+​		为了了保护密钥免于意外损坏，请删除其写入权限。要使它们仅供阅读，请按以下方式更改文件模式
 
 ```sh
 chmod -v 0400 ca-key.pem key.pem server-key.pem
 ```
 
-证书可以使对外可读的，删除写入权限以防止意外损坏
+​		证书可以使对外可读的，删除写入权限以防止意外损坏
 
 ```sh
 chmod -v 0444 ca.pem server-cert.pem cert.pem
 ```
 
-## 归集服务端证书
+## 10.5 归集服务端证书
 
 执行
 
@@ -874,9 +874,9 @@ ls -al /usr/local/ca
 .  ..  ca.pem  server-cert.pem  server-key.pem
 ```
 
-## 修改Docker配置
+## 10.6 修改Docker配置
 
-Docker守护程序仅接收来自提供CA信任的证书的客户端的链接， 需要配置 
+​		Docker守护程序仅接收来自提供CA信任的证书的客户端的链接， 需要配置 
 
 （1）CA 证书签名请求（CSR）；
 
@@ -905,16 +905,16 @@ ExecStart=/usr/bin/dockerd --tlsverify --tlscacert=/usr/local/ca/ca.pem --tlscer
 
 
 
-## 重启 docker
+## 10.7 重启 docker
 
 ```sh
 sudo systemctl daemon-reload
 sudo systemctl restart docker
 ```
 
-## 客户端验证
+## 10.8 客户端验证
 
-通过使用客户端证书，以及CA证书，验证 docker 接口，需要提供：
+​		通过使用客户端证书，以及CA证书，验证 docker 接口，需要提供：
 
 （1）CA 证书签名请求（CSR）；
 
@@ -927,9 +927,9 @@ cd /data/ssl/srv
 curl --cacert ./ca.pem --cert ./cert.pem --key ./key.pem  'https://IP:port/version'
 ```
 
-#  docker registry(docker 镜像仓库)	
+#  11. docker registry(docker 镜像仓库)	
 
-通过以下脚本，可搭建docker私有镜像仓库
+​		通过以下脚本，可搭建docker私有镜像仓库
 
 ```sh
 # pull image
@@ -953,7 +953,7 @@ curl -XGET --noproxy '*' http://localhost:5001/v2/_catalog
 # 可见 {"repositories":[]}
 ```
 
-启用证书
+​		启用证书
 
 ```sh
 docker run -d \
@@ -973,7 +973,7 @@ docker run -d \
 
 
 
-# build base image
+# 12. build base image
 
 ```sh
 mkdir test
@@ -1029,7 +1029,7 @@ mydocker                           latest    8f88a6999f73   4 minutes ago    900
 docker run --rm mydocker
 ```
 
-# docker inspect
+# 13. docker inspect
 
 ```sh
 # 获取容器信息
@@ -1041,9 +1041,9 @@ docker inspect test | grep network -i
 docker inspect test | grep ipadd -i
 ```
 
-#  trouble shooting
+#  13.1 trouble shooting
 
-##  pthread_create failed
+##  13.1.1 pthread_create failed
 
 ​	Golang 编写项目并打包成 Docker 镜像后，容器启动时遇到了线程创建失败问题，典型错误如下：
 
@@ -1052,7 +1052,7 @@ runtime/cgo: pthread_create failed: Operation not permitted
 SIGABRT: abort
 ```
 
-### 调整 seccomp 配置
+### 13.1.2 调整 seccomp 配置
 
 Seccomp 是限制系统调用的一种机制，默认情况下 Docker 使用的 seccomp 配置文件可能会阻止某些与线程相关的系统调用。解决这个问题的一个方案是禁用 seccomp 或使用自定义的 seccomp 配置文件。
 
@@ -1064,7 +1064,7 @@ docker run --rm --security-opt seccomp=unconfined ...
 
 - **使用自定义 seccomp 配置**：你可以基于默认的 seccomp 配置文件，允许 `pthread_create` 所需的系统调用。
 
-###  增加 capabilities
+###  13.1.3 增加 capabilities
 
 容器的默认 `Capabilities` 设置可能不允许某些系统调用，如与线程管理相关的系统调用。你可以通过 `--cap-add` 添加更多权限，或者删除不必要的限制：
 
@@ -1082,7 +1082,7 @@ docker run --rm --cap-drop ALL ...
 
 但需要注意，移除 Capabilities 或添加过多权限会增加潜在的安全风险，因此应谨慎操作
 
-## WARNING: IPv4 forwarding is disabled. Networking will not work
+## 13.2 WARNING: IPv4 forwarding is disabled. Networking will not work
 
 docker服务启动的时候报以上错误， 在centOS 上进行以下操作可排除
 
