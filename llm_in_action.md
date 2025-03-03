@@ -137,17 +137,17 @@ OLLAMA_ORIGINS *
 OLLAMA_MODELS /data/ollama
 ```
 
-**（3）API 调用**
+​	**（3）API 调用**
 
 ```sh
-curl  http://127.0.0.1:11434/api/generate -d '{
+curl -X POST http://127.0.0.1:11434/api/generate -d '{
 	"model": "deepseekR1:7b",
 	"prompt": "你好啊",
 	"stream":true
 }'
 ```
 
-调用时，无需提前在server端运行 `ollama run xxxx`，model 写具体的模型名称，prompt 写提示词， stream 设置是否为流式输出。
+​	调用时，无需提前在server端运行 `ollama run xxxx`，model 写具体的模型名称，prompt 写提示词， stream 设置是否为流式输出。
 
 如果觉得通过命令行的方式使用起来不太友好，可以通过WebUI来调用相关的 API ，进行用户请求的调用以及结果的展示
 
@@ -190,6 +190,8 @@ ollama help
 ```sh
 # 获取模型列表
 curl http://<your_ollama_host>:11434/models
+
+curl -k --tlsv1 -X GET  'https://{your_ollama_host}:{port}/v1/models' -H 'Authorization: Bearer <API Key>'
 ```
 
 
@@ -223,19 +225,21 @@ the style of a 1930's mafia mobster
 
 <center><b>代码段 1-3  Modelfile 文件内容示例</b><center> 
 
-（1）**FROM**。FROM 指令是定义在创建时使用的基础模型的指令，是强制性的，是 Modelfile 中必须要有的部分。
+​		（1）**FROM**。FROM 指令是定义在创建时使用的基础模型的指令，是强制性的，是 Modelfile 中必须要有的部分。
 
-（2）**TEMPLATE**。`TEMPLATE` 指令描述了要传递给模型的完整提示模板的格式。它可能包括（可选地）系统消息、用户消息和模型的响应。在这个例子中，它只包括系统提示和用户提示。
+​		（2）**TEMPLATE**。`TEMPLATE` 指令描述了要传递给模型的完整提示模板的格式。它可能包括（可选地）系统消息、用户消息和模型的响应。在这个例子中，它只包括系统提示和用户提示。
 
-（3）**PARAMETER**。`PARAMETER` 指令定义了在模型运行时可以设置的一个或多个参数。这里，它设置了要使用的停止序列。当遇到此模式时，LLM将停止生成文本并返回接受提示。我们将添加额外的PARAMETERS来定制我们的模型。
+​		（3）**PARAMETER**。`PARAMETER` 指令定义了在模型运行时可以设置的一个或多个参数。这里，它设置了要使用的停止序列。当遇到此模式时，LLM将停止生成文本并返回接受提示。我们将添加额外的PARAMETERS来定制我们的模型。
 
-（4）**temperature**。 temperature 可以设置为区间 [0, 1] 内的任何数字。0 意味着模型对问题给出可预测的、可重复的、事实性的答案。1 意味着它可以对其答案更加自由。默认值是 0.8。我们将把它设置为 1.0。
+​		（4）**SYSTEM**。SYSTEM 不是 LLM 本身的自然语言理解或生成能力的一部分，而是控制LLM运行系统的命令。我希望LLM以1930年代黑手党暴徒的风格回应提示。我们如何做到这一点？很简单，只需将该指令放入SYSTEM指令中。
 
-（5）**top_k**。top_k 参数是一个整数值，通常设置在区间 [0,100] 之间。较低的 top_k 值降低了 LLM 生成无意义内容的概率。它的默认值是 40，但我们将把它设置为 100。
+​		（5）**temperature**。 temperature 可以设置为区间 [0, 1] 内的任何数字。0 意味着模型对问题给出可预测的、可重复的、事实性的答案。1 意味着它可以对其答案更加自由。默认值是 0.8。我们将把它设置为 1.0。
 
-（6）**top_p**。top_p 参数是一个位于区间 [0,1] 之间的浮点值。较高的值，即 1.0 意味着 LLM 被允许考虑更广泛的可能下一个 token 范围，从而允许更多的创造力。我们将把它设置为 1.0。
+​		（6）**top_k**。top_k 参数是一个整数值，通常设置在区间 [0,100] 之间。较低的 top_k 值降低了 LLM 生成无意义内容的概率。它的默认值是 40，但我们将把它设置为 100。
 
-（7）**SYSTEM**。SYSTEM 不是 LLM 本身的自然语言理解或生成能力的一部分，而是控制LLM运行系统的命令。我希望LLM以1930年代黑手党暴徒的风格回应提示。我们如何做到这一点？很简单，只需将该指令放入SYSTEM指令中。
+​		（7）**top_p**。top_p 参数是一个位于区间 [0,1] 之间的浮点值。较高的值，即 1.0 意味着 LLM 被允许考虑更广泛的可能下一个 token 范围，从而允许更多的创造力。我们将把它设置为 1.0。
+
+
 
 # 2. LLM导入导出
 
@@ -285,11 +289,11 @@ TEMPLATE {{ .Prompt }}
 
 <center><b>代码段 2-3 查看已导入的LLM模型脚本示例</b><center>
 
-# 3. LLM test
+# 3. LLM API
 
-部署好环境后，进行 llama3.2vision:11B 模型的测试。
+​		部署好环境后，进行 llama3.2vision:11B 模型的测试。
 
- **（1）环境**。测试环境如表 3-1 所示。
+​	 **（1）环境**。测试环境如表 3-1 所示。
 
 <center><b>表 3-1 模型测试环境配置清单</b><center>
 
@@ -303,7 +307,7 @@ TEMPLATE {{ .Prompt }}
 | 4    | 显卡       | Intel Iris 1536 MB           |
 | 5    | 服务器类型 | 2015年的台式机               |
 
-**（2）测试结果**。测试结果如代码段 3-1 所示。
+​	**（2）测试结果**。测试结果如代码段 3-1 所示。
 
 ```sh
 >>> hi
@@ -326,11 +330,11 @@ How's it going? Is there something I can help you with or would you like to chat
 <center><b>代码段 3-1 模型测试结果代码段</b><center>
 
 
-运行起来之后，内存占用7GB，CPU利用率400%
+​	运行起来之后，内存占用7GB，CPU利用率400%
 
-**（3）API编程**
+​	**（3）API编程**
 
-通过 Langchain 调用 Ollama API，首先需要安装组件
+​		1) 通过 Langchain 调用 Ollama API，首先需要安装组件
 
 ```python
 pip3 install langchain
@@ -358,6 +362,64 @@ print(answer)
 ```
 
 <center><b>代码段 3-2 Ollama API 调用代码段示例</b><center>
+
+
+​		2） curl 调用
+```sh
+#  获取模型清单
+curl -k --tlsv1 -X GET  'https://{your_ollama_host}:{port}/v1/models' -H 'Authorization: Bearer <API Key>'
+# 获取模型清单
+curl -X GET http://127.0.0.1:11434/v1/models | jq
+# 详细的模型清单
+curl -X GET http://127.0.0.1:11434/api/tags
+
+
+# 生成文本
+curl -X POST http://127.0.0.1:11434/api/generate -d '{
+	"model": "deepseekR1:7b",
+	"prompt": "你好啊",
+	"stream":true
+}'
+
+# 多轮对话
+curl  -X POST http://127.0.0.1:11434/api/chat -d '{
+    "model": "llama3.1",
+    "messages": [
+        {"role": "system", "content": "你现在是一名合格的助理"},
+        {"role": "user", "content": "你好，我想订一张机票。"},
+        {"role": "assistant", "content": "好的，请问您要去哪里？"},
+        {"role": "user", "content": "我要去北京。"},
+        {"role": "user", "content": "有哪些航班可选？"}
+        ],
+    "stream":false
+}'
+
+# ollama ps
+curl -X GET http://127.0.0.1:11434/api/ps
+
+# ollama show llama3.1
+curl http://localhost:11434/api/show -d '{
+  "name": "llama3.1"
+}'
+```
+
+​      3）兼容 OpenAI SDK 调用(OpenAI compatibility)
+
+```python
+client = OpenAI(api_key="sk-123456789",
+                    base_url="https://my_api_/v1",
+                    http_client=httpx.Client(verify=False))
+response = client.chat.completions.create(
+    model="deepseek-r1",
+    messages=[
+        {"role": "system", "content": "You are a helpful assistant"},
+        {"role": "user", "content": "Hello"},
+    ],
+    stream=False
+)
+```
+
+
 
 # 4. RAG简介
 
