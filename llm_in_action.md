@@ -1221,9 +1221,76 @@ if __name__ == "__main__":
 
 # 10. GPU
 
+​		Ubuntu 22.04 LTS 接入显卡硬件后，从 ubuntu系统中的 Additional Drivers 中可以获取到相应的驱动安装即可。
+
 ```sh
 # 查看可见的 GPU
 nvidia-smi
+```
+
+# 11. flask
+
+​			考虑通过暴露 API 的方式提供 AI 大模型的相应能力，采用flask 框架。
+
+```sh
+pip3 install flask
+```
+
+​			demo
+
+```python
+#! /usr/bin/python3
+
+from flask import Flask, request, jsonify
+
+app = Flask(__name__)
+
+
+@app.route('/')
+def hello_world():
+    return '{"status":200, "msg":"Hello World!"}'
+
+@app.route('/greet/<name>')
+def greet(name):
+    return f'Hello {name}'
+
+
+@app.route('/msg')
+def get_msg():
+    return '{"status":200, "msg":"a new message"}'
+
+@app.route('/submit', methods=['POST'])
+def submit():
+    """
+    form submit
+    :return:
+    """
+    username = request.form.get('username')
+    return f'Hello, {username}!'
+
+
+@app.route('/data', methods=['POST'])
+def get_data():
+    """
+    JSON submit
+    curl -s --noproxy '*' -X POST  'http://127.0.0.1:19000/data' -H "Content-Type: application/json"  -d '{"msg":"who are you?"}'
+    :return:
+    """
+    data = request.get_json()
+    print(data)
+    return jsonify({"message": "Data received successfully!", "data": data}), 200
+
+
+if __name__ == '__main__':
+    app.run(host='0.0.0.0', port=19000)
+
+
+```
+
+​			test
+
+```sh
+curl -s --noproxy '*' http://127.0.0.1:19000 | jq
 ```
 
 
