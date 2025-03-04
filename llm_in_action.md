@@ -786,9 +786,9 @@ for event in graph.stream({"messages": [("user", user_input)]}):
 
 ## 9.3 图的可视化
 
-​		详见文档 https://langchain-ai.github.io/langgraph/how-tos/visualization/?h=graph#mermaid。 有3种方法
+​			详见文档 https://langchain-ai.github.io/langgraph/how-tos/visualization/?h=graph#mermaid。 有3种方法
 
-​	（1）使用 Mermaid.ink API，无需本地安装附加包，但需要联网进行API请求(httsp://mermaid.ink/img/);
+​		**（1）使用 Mermaid.ink API**。无需本地安装附加包，但需要联网进行API请求(httsp://mermaid.ink/img/);
 
 ```python
 # Define a new graph
@@ -812,17 +812,7 @@ f.write(img.data)
 
 
 
-​	（2）使用 Mermaid + Pyppeteer;（没调通）
-
-```sh
-%%capture --no-stderr
-pip3 install pyppeteer
-pip3 install nest_asyncio
-```
-
-​	（3）使用 graphviz
-
-​		可离线使用，需要安装相应的开发包。
+​		**（2）使用 graphviz。**可离线使用，需要安装相应的开发包。
 
 ```sh
 # python package依赖的底层C库
@@ -893,33 +883,19 @@ if __name__ == "__main__":
 ```python
 #! /usr/bin/python3
 
-from typing import Any
-
-from langchain_core.messages import ToolMessage
-from langchain_core.runnables import RunnableLambda, RunnableWithFallbacks
-from langgraph.prebuilt import ToolNode
-
 from langchain_community.agent_toolkits import SQLDatabaseToolkit
-from langchain_ollama import ChatOllama
-
 from langchain_community.utilities import SQLDatabase
-
 from typing import Any
-
 from langchain_core.messages import ToolMessage
 from langchain_core.runnables import RunnableLambda, RunnableWithFallbacks
 from langgraph.prebuilt import ToolNode
 from langchain_core.tools import tool
 from langchain_core.prompts import ChatPromptTemplate
-
 from typing import Annotated, Literal
-
 from langchain_core.messages import AIMessage
 from langchain_ollama import ChatOllama
-
 from pydantic import BaseModel, Field
 from typing_extensions import TypedDict
-
 from langgraph.graph import END, StateGraph, START
 from langgraph.graph.message import AnyMessage, add_messages
 
@@ -972,9 +948,13 @@ def create_tool_node_with_fallback(tools: list) -> RunnableWithFallbacks[Any, di
     """
     Create a ToolNode with a fallback to handle errors and surface them to the agent.
     """
-    return ToolNode(tools).with_fallbacks(
+    # print("input_in_create_tool_node_with_fallback", tools)
+    create_tool_node_with_fallback_result = ToolNode(tools).with_fallbacks(
         [RunnableLambda(handle_tool_error)], exception_key="error"
     )
+    # print("output_in_create_tool_node_with_fallback", create_tool_node_with_fallback_result)
+    return create_tool_node_with_fallback_result
+
 
 
 def handle_tool_error(state) -> dict:
@@ -992,7 +972,8 @@ def handle_tool_error(state) -> dict:
 
 # Add a node for the first tool call
 def first_tool_call(state: State) -> dict[str, list[AIMessage]]:
-    return {
+    # print("input_in_first_tool_call:", state)
+    first_tool_call_result= {
         "messages": [
             AIMessage(
                 content="",
@@ -1006,7 +987,25 @@ def first_tool_call(state: State) -> dict[str, list[AIMessage]]:
             )
         ]
     }
+    # print("output_in_first_tool_call:", first_tool_call_result)
+    return first_tool_call_result
 
+# def node_test(state: State) -> dict[str, list[AIMessage]]:
+#     print("########state_in_node_is######## {}".format(state))
+#     return {"messages": ["this is a test message"]}
+
+def model_get_schema_call(state: State) -> dict[str, list[AIMessage]]:
+    # print("input_in_model_get_schema_call:", state)
+    # Add a node for a model to choose the relevant tables based on the question and available tables
+    model_get_schema = ChatOllama(model="llama3.2:3B", temperature=0).bind_tools(
+        [get_schema_tool]
+    )
+    # print('model_get_schema_invoke({})'.format(state["messages"][2].content))
+    model_get_schema_call_result = {
+        "messages": [model_get_schema.invoke(state["messages"][2].content)]
+    }
+    # print("output_in_model_get_schema_call:", model_get_schema_call_result)
+    return model_get_schema_call_result
 
 def model_check_query(state: State) -> dict[str, list[AIMessage]]:
     """
@@ -1035,43 +1034,51 @@ def query_gen_node(state: State):
 # Define a conditional edge to decide whether to continue or end the workflow
 def should_continue(state: State) -> Literal[END, "correct_query", "query_gen"]:
     messages = state["messages"]
+    # print("messages_in_should_continue: {}".format(messages))
     last_message = messages[-1]
+    return END;
     # If there is a tool call, then we finish
-    if getattr(last_message, "tool_calls", None):
-        return END
-    if last_message.content.startswith("Error:"):
-        return "query_gen"
-    else:
-        return "correct_query"
+    # if getattr(last_message, "tool_calls", None):
+    #     return END
+    # if last_message.content.startswith("Error:"):
+    #     return "query_gen"
+    # else:
+    #     return "correct_query"
 
 if __name__ == "__main__":
-    # 使用 SQlite 数据库
-    # db = SQLDatabase.from_uri("sqlite:///Chinook.db")
-    
-    # 使用MySQL 数据库
-    db_user = "test"
-    db_password = "test"
-    db_host = "127.0.0.1"
-    db_name = "test"
-    db = SQLDatabase.from_uri("mysql+pymysql://{}:{}@{}/{}".format(db_user, db_password, db_host, db_name))
-    print(db.dialect)
-    print(db.get_usable_table_names())
+    # use SQLite DB
+    db = SQLDatabase.from_uri("sqlite:///test2.db")
+
+    # use MySQL DB
+    # db_user = "test"
+    # db_password = "test"
+    # db_host = "127.0.0.1"
+    # db_name = "test"
+    # db = SQLDatabase.from_uri("mysql+pymysql://{}:{}@{}/{}".format(db_user, db_password, db_host, db_name))
+    print("db dialect is: {}".format(db.dialect))
+    print("db tables is: {}".format(db.get_usable_table_names()))
     db.run("SELECT * FROM customer_info LIMIT 10;")
 
     toolkit = SQLDatabaseToolkit(db=db, llm=ChatOllama(model="llama3.2:3B"))
-    tools = toolkit.get_tools()
+    toolkit_tools = toolkit.get_tools()
 
-    list_tables_tool = next(tool for tool in tools if tool.name == "sql_db_list_tables")
-    get_schema_tool = next(tool for tool in tools if tool.name == "sql_db_schema")
+    list_tables_tool = next(tool for tool in toolkit_tools if tool.name == "sql_db_list_tables")
+    get_schema_tool = next(tool for tool in toolkit_tools if tool.name == "sql_db_schema")
 
-    print("test list_tables_tool")
-    print(list_tables_tool.invoke(""))
-    print("test get_schema_tool")
-    print(get_schema_tool.invoke("customer_info"))
-    print("test db_query_tool")
-    print(db_query_tool.invoke("SELECT * FROM customer_info LIMIT 3;"))
-    query_check_system = """You are a MySQL expert with a strong attention to detail.
-    Double check the MySQL query for common mistakes, including:
+    # for test list_tables_tool
+    # print("test list_tables_tool")
+    # print(list_tables_tool.invoke(""))
+
+    #for test get_schema_tool
+    # print("test get_schema_tool")
+    # print(get_schema_tool.invoke("customer_info"))
+
+    # for test db_query_tool
+    # print("test db_query_tool")
+    # print(db_query_tool.invoke("SELECT * FROM customer_info LIMIT 3;"))
+
+    query_check_system = """You are a SQLite expert with a strong attention to detail.
+    Double check the SQLite query for common mistakes, including:
     - Using NOT IN with NULL values
     - Using UNION when UNION ALL should have been used
     - Using BETWEEN for exclusive ranges
@@ -1092,8 +1099,10 @@ if __name__ == "__main__":
         [db_query_tool], tool_choice="required"
     )
 
-    q_c_r = query_check.invoke({"messages": [("user", "SELECT * FROM customer_info LIMIT 10;")]})
-    print("test query_check: {}".format(q_c_r))
+    # for test purpose query_check only
+    # q_c_r = query_check.invoke({"messages": [("user", "SELECT * FROM customer_info LIMIT 10;")]})
+    # print("test query_check: {}".format(q_c_r))
+
     # Define a new graph
     workflow = StateGraph(State)
     workflow.add_node("first_tool_call", first_tool_call)
@@ -1102,23 +1111,20 @@ if __name__ == "__main__":
     workflow.add_node(
         "list_tables_tool", create_tool_node_with_fallback([list_tables_tool])
     )
+
+    # a test node for check node status
+    # workflow.add_node("node_check_call", node_test)
+
+
     workflow.add_node("get_schema_tool", create_tool_node_with_fallback([get_schema_tool]))
 
-    # Add a node for a model to choose the relevant tables based on the question and available tables
-    model_get_schema = ChatOllama(model="llama3.2:3B", temperature=0).bind_tools(
-        [get_schema_tool]
-    )
-    workflow.add_node(
-        "model_get_schema",
-        lambda state: {
-            "messages": [model_get_schema.invoke(state["messages"])],
-        },
-    )
+
+    workflow.add_node("model_get_schema",model_get_schema_call)
 
     # Add a node for a model to generate a query based on the question and schema
-    query_gen_system = """You are a MySQL database expert with a strong attention to detail.
+    query_gen_system = """You are a SQLite database expert with a strong attention to detail.
     
-    Given an input question, output a syntactically correct MySQL query to run, then look at the results of the query and return the answer.
+    Given an input question, output a syntactically correct SQLite query to run, then look at the results of the query and return the answer.
     
     DO NOT call any tool besides SubmitFinalAnswer to submit the final answer.
     
@@ -1156,6 +1162,11 @@ if __name__ == "__main__":
     # Specify the edges between the nodes
     workflow.add_edge(START, "first_tool_call")
     workflow.add_edge("first_tool_call", "list_tables_tool")
+
+    # for test purpose
+    # workflow.add_edge("list_tables_tool", "node_check_call")
+    # workflow.add_edge("node_check_call", "model_get_schema")
+
     workflow.add_edge("list_tables_tool", "model_get_schema")
     workflow.add_edge("model_get_schema", "get_schema_tool")
     workflow.add_edge("get_schema_tool", "query_gen")
@@ -1168,11 +1179,11 @@ if __name__ == "__main__":
 
     # Compile the workflow into a runnable
     app = workflow.compile()
-
-    print("draw the graph")
+    img_name = "sql_agent_demo.png"
+    print("draw the graph to local file {}".format(img_name))
     from IPython.display import Image, display
     from langchain_core.runnables.graph import MermaidDrawMethod
-    #
+    # display image in Jupyter
     # display(
     #     Image(
     #         app.get_graph().draw_mermaid_png(
@@ -1180,27 +1191,29 @@ if __name__ == "__main__":
     #         )
     #     )
     # )
-    img = Image(
-        app.get_graph().draw_mermaid_png(
-            draw_method=MermaidDrawMethod.API,
-        )
-    )
 
-    with open("sql_agent_demo.png", "wb") as f:
-        f.write(img.data)
+    # save file to local file
+    # img = Image(
+    #     app.get_graph().draw_mermaid_png(
+    #         draw_method=MermaidDrawMethod.API,
+    #     )
+    # )
+    # with open(img_name, "wb") as f:
+    #     f.write(img.data)
 
-    user_question = "姓名为阿甘的客户的地址是什么？"
+    user_question = "查询姓名为 Manoj 的客户地址"
     print("invoke question: {}".format(user_question))
     messages = app.invoke(
-        {"messages": [("user", user_question)]}
+        {"messages": [("user", user_question)]}, {"recursion_limit":100 }
     )
-    json_str = messages["messages"][-1].tool_calls[0]["args"]["final_answer"]
-    json_str
+    # json_str = messages["messages"][-1].tool_calls[0]["args"]["final_answer"]
+    json_str = messages["messages"][-1].content
+    print("answer is : {}".format(json_str))
 
-    for event in app.stream(
-            {"messages": [("user", user_question)]}
-    ):
-        print(event)
+    # for event in app.stream(
+    #         {"messages": [("user", user_question)]}, {"recursion_limit":10 }
+    # ):
+    #     print(event)
 
 ```
 
