@@ -820,7 +820,9 @@ pip3 install pyppeteer
 pip3 install nest_asyncio
 ```
 
-​	（3）使用 graphviz（没调通）
+​	（3）使用 graphviz
+
+​		可离线使用，需要安装相应的开发包。
 
 ```sh
 # python package依赖的底层C库
@@ -829,54 +831,57 @@ pip3 install graphviz
 pip3 install pygraphviz
 ```
 
-​	demo
+​		demo
 
 ```python
+#! /usr/bin/python3
 from langgraph.graph import StateGraph, START, END
-from langgraph.graph.message import add_messages
-from typing_extensions import TypedDict
-from typing import Annotated
-from graphviz import Digraph
+from langchain_ollama import OllamaLLM
 
-# 定义图的状态信息
-class State(TypedDict):
-    # Messages have the type "list". The `add_messages` function
-    # in the annotation defines how this state key should be updated
-    # (in this case, it appends messages to the list, rather than overwriting them)
-    messages: Annotated[list, add_messages]
-        
-def chatbot(state: State):
-    return {"messages": ["this is a test"]}        
+# 初始化模型
+from langgraph.graph.state import CompiledStateGraph
 
-# 通过 graphviz 输出图
-def export_graphviz(graph):
-    dot = Digraph()
-    # 添加节点
-    for node in graph.nodes:
-        dot.node(str(id(node)), str(node))  # 假设节点有name属性
-    # 添加边
-    for source, target in graph.edges:
-        dot.edge(str(id(source)), str(id(target)))
-    return dot
+llm = OllamaLLM(model="llama3.1", base_url='http://127.0.0.1:11434')
 
 
-graph_builder = StateGraph(State)
-# 定义图的入口和边
-graph_builder.add_node("chatbot", chatbot)
-graph_builder.add_edge(START, "chatbot")
-graph_builder.add_edge("chatbot", END)
+# 定义图节点
+def chatbot(d):
+    return {"messages": [llm.invoke(d)]}
 
-# 编译图
-graph = graph_builder.compile()
-# 生成graph.pdf
-export_graphviz(graph.get_graph()).render("graph")
+
+def get_graph() -> "CompiledStateGraph":
+    # 创建一个 StateGraph 对象
+    graph_builder = StateGraph(dict)
+    # 定义图的入口和边
+    graph_builder.add_node("chatbot", chatbot)
+    graph_builder.add_edge(START, "chatbot")
+    graph_builder.add_edge("chatbot", END)
+
+    # 编译图
+    graph = graph_builder.compile()
+    return graph
+
+
+if __name__ == "__main__":
+    my_graph = get_graph()
+    print("save graph as png file to local")
+    my_graph.get_graph().draw_png("agent.png")
+
+    user_input = '介绍你自己'
+    print("execute graph for user input: {}".format(user_input))
+    for event in my_graph.stream(user_input):
+        for value in event.values():
+            print("Assistant:", value["messages"])
+
 ```
 
 ## 9.4 SQL Agent
 
 ​		详细见  https://langchain-ai.github.io/langgraph/tutorials/sql-agent/。目前demo代码中调用的模型需要支持Tools （工具调用功能）。
 
-​		支持 Tools 的模型，如 `deepseek-coder:33b`（代码生成场景）或 `llama3:70b`（通用场景）‌
+​		支持 Tools 的模型，如 `deepseek-coder:33b`（代码生成场景）或 `llama3:70b`（通用场景）‌。
+
+​		目前比较优秀的TextToSQL 大模型有 SQLCoder， 详见  https://github.com/defog-ai/sqlcoder。
 
 ```
 确保系统内存 ≥32GB（推荐 64GB）‌45。
