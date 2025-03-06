@@ -330,9 +330,10 @@ How's it going? Is there something I can help you with or would you like to chat
 ```
 
 <center><b>代码段 3-1 模型测试结果代码段</b><center>
-​		运行起来之后，内存占用7GB，CPU利用率400%。
 
- 	**（3）API编程**
+运行起来之后，内存占用7GB，CPU利用率400%。
+
+​    **（3）API编程**
 
 ​		1) 通过 Langchain 调用 Ollama API，首先需要安装组件
 
@@ -364,7 +365,9 @@ print(answer)
 ```
 
 <center><b>代码段 3-2 Ollama API 调用代码段示例</b><center>
-​		2） curl 调用。 Windows 环境可以通过安装 Cygwin 组建构建类 linux 命令行环境。
+
+​        2） curl 调用。 Windows 环境可以通过安装 Cygwin 组建构建类 linux 命令行环境。
+
 ```sh
 #  获取模型清单
 curl -k --tlsv1 -X GET  'https://{your_ollama_host}:{port}/v1/models' -H 'Authorization: Bearer <API Key>'
@@ -372,7 +375,6 @@ curl -k --tlsv1 -X GET  'https://{your_ollama_host}:{port}/v1/models' -H 'Author
 curl -X GET http://127.0.0.1:11434/v1/models | jq
 # 详细的模型清单
 curl -X GET http://127.0.0.1:11434/api/tags
-
 
 # 生成文本
 curl -X POST http://127.0.0.1:11434/api/generate -d '{
@@ -687,7 +689,7 @@ from llama_index.core import SimpleDirectoryReader, VectorStoreIndex
 
 # 加载 LLM
 Settings.llm =Ollama(model="gemma:2b", request_timeout=30.0)
-# 加载Embedding模型，进行自然语言处理
+# 加载Embedding模型，进行自然语言处理, 需要事先下载 bge-large-zh-v1.5 模型（2～3GB）,可自行网络搜索 
 Settings.embed_model = HuggingFaceEmbedding(
     model_name="D:/models/bge-large-zh-v1.5"
 )
@@ -832,6 +834,7 @@ from langchain_ollama import OllamaLLM
 # 初始化模型
 from langgraph.graph.state import CompiledStateGraph
 
+# 本地部署可以省略 base_url参数
 llm = OllamaLLM(model="llama3.1", base_url='http://127.0.0.1:11434')
 
 # 定义图节点
@@ -875,7 +878,7 @@ if __name__ == "__main__":
 
 ​		确保系统内存 ≥32GB（推荐 64GB）‌45。若使用 GPU，需 ≥12GB 显存并更新 NVIDIA 驱动‌， 当然了，如果没有显卡，只有 CPU ，那就选一个大小小于自己最大可用内存的模型进行调用即可，无非就是响应时间较长。
 
-​		SQL Agent 演示如代码段 9-4 所示， 官网 https://langchain-ai.github.io/langgraph/tutorials/sql-agent/ 给出的 demo 是基于在线调用 gpt的示范，在国内环境下访问较为困难，另外还需要通过 Jupyter notebook 以及 conda 等库才能流畅使用，代码段 9-4 可直接在 terminal 中运行，无需使用其他大模型生态的工具，更加具有普遍性。
+​		SQL Agent 演示如代码段 9-4 所示， 大部分采用了官网给出的 demo，但官网 demo 是基于在线调用 Chat-GPT的示范，在国内环境下访问较为困难，另外还需要通过 Jupyter notebook 以及 conda 等库才能流畅运行，代码段 9-4 可直接在 terminal 中运行，无需使用其他大模型生态的工具，更加具有普遍性。
 
 ```python
 #! /usr/bin/python3
@@ -1229,7 +1232,7 @@ nvidia-smi
 
 # 11. flask
 
-​		大模型系统目前主要使用 Python 和 C++ 进行编程，为了实现与其他编程语言的信息系统互联互通。考虑通过暴露 API 的方式提供 AI 大模型的相应能力，考虑采用flask 框架, 详见 
+​		大模型系统目前主要使用 Python 和 C++ 进行编程，为了实现与其他编程语言的信息系统进行互联互通。考虑通过暴露 API 的方式提供 AI 大模型的相应能力，考虑采用flask 框架, 详见 
 
 [Flask 说明文档]: ./flask.md
 
