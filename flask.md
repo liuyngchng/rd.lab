@@ -9,7 +9,7 @@ pip3 install gunicorn
 
 # 2. demo
 
-​		`vi test_flask.py`, 创建一个 test_flask.py 文件，内容如下。
+​		`vi my_flask.py`, 创建一个 my_flask.py 文件，内容如下。
 
 ```python
 #! /usr/bin/python3
@@ -78,13 +78,48 @@ if __name__ == '__main__':
 
 # 3. deploy
 
-​		在生产环境进行部署
+## 3.1 package
+
+​		生成项目依赖，在项目根目录下执行
+
+```sh
+pip3 freeze > requirements.txt
+```
+
+​		编写 Dockerfile, 文件名为 my_flask_Dockerfile， 内容如下所示
+
+```dockerfile
+# 使用本地镜像文件名称
+FROM python:3.10-slim
+
+WORKDIR /app
+
+COPY requirements.txt requirements.txt
+RUN pip install -r requirements.txt
+
+COPY . .
+
+CMD ["gunicorn", "-b", "0.0.0.0:8000", "my_flask:app"]
+```
+
+ 		run
+
+```sh
+docker build -f my_flask_Dockerfile ./ -t my-flask-app
+docker run -p 19000:8000 my_flask-app
+```
+
+
+
+## 3.1 run		
+
+在生产环境进行部署
 
 ```sh
 # -w 4表示使用4个工作进程。
 # -b 127.0.0.1:8000表示绑定到本地主机的8000端口。
 # test_flask是Python文件名，app是Flask实例
-gunicorn -w 4 -b 127.0.0.1:19000 test_flask:app
+gunicorn -w 4 -b 127.0.0.1:19000 my_flask:app
 ```
 
 
