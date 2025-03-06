@@ -2,7 +2,7 @@
 
 <center><span style='font:48px Verdana;font-weight:bold;'>LLM in Action</span></center>
 
-<span style='font:32px Verdana;font-weight:bold;margin-left:500px'> ——A Programer's Perspective</span>
+<span style='font:32px Verdana;font-weight:bold;margin-left:150px'> —A Programer's Perspective</span>
 
 
 
@@ -85,7 +85,18 @@ CUDA_VISIBLE_DEVICES:			 用于控制哪些GPU对CUDA 可见， 例如 CUDA_VISI
 ```
 
 <center><b>代码段 1-2  OLLAMA主要环境变量清单</b><center> 
+​       **（4）安全配置**
 
+​		考虑到安全原因，可以在环境变量中设置 OLLAMA_HOST仅供本地访问使用，Centos,  Ubuntu server 执行 `sudo vi /etc/profile`, 末尾添加
+
+
+```sh
+export OLLAMA_HOST=http://127.0.0.1:11434
+```
+
+​		windows 系统在 我的电脑->属性->高级属性中添加环境变量 key 为 OLLAMA_HOST， value 为 127.0.0.1。
+
+​       配置完成之后，重新启动 ollama服务。
 
 ##  1.2 下载LLM镜像
 
@@ -231,8 +242,6 @@ the style of a 1930's mafia mobster
 ```
 
 <center><b>代码段 1-4  Modelfile 文件内容示例</b><center> 
-
-
 ​		（1）**FROM**。FROM 指令是定义在创建时使用的基础模型的指令，是强制性的，是 Modelfile 中必须要有的部分。
 
 ​		（2）**TEMPLATE**。`TEMPLATE` 指令描述了要传递给模型的完整提示模板的格式。它可能包括（可选地）系统消息、用户消息和模型的响应。在这个例子中，它只包括系统提示和用户提示。
@@ -651,8 +660,7 @@ logger.info("load index from local file finish")
 
 # 创建远程 Ollama API代理
 logger.info("get remote llm agent")
-llm = OllamaLLM(model="deepseekR1:7B", base_url='http://11.10.36.1:11435')
-#llm = OllamaLLM(model="llama2:7B", base_url='http://11.10.36.1:11435')
+llm = OllamaLLM(model="deepseekR1:7B")
 
 # 创建检索问答链
 logger.info("build retrieval")
@@ -756,7 +764,7 @@ from langgraph.graph.message import add_messages
 from langchain_ollama import OllamaLLM
 
 # 初始化模型
-llm = OllamaLLM(model="deepseekR1:7B", base_url='http://11.10.36.1:11435')
+llm = OllamaLLM(model="deepseekR1:7B")
 
 # 定义图的状态信息
 class State(TypedDict):
