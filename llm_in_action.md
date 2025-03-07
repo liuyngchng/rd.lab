@@ -547,6 +547,8 @@ langchain-cli 0.0.35
 <center><b>代码段 5-1  python 基础组件信息</b><center>
 
 
+另外，中文文本向量化需要分词嵌入式模型，例如 bge-large-zh-v1.5（详见 https://huggingface.co/BAAI/bge-large-zh-v1.5）等。由于国内网络环境科学上网的问题，也可以通过 https://gitcode.com/hf_mirrors/ai-gitcode/bge-large-zh-v1.5 进行获取。
+
 安装langChain组件， 如代码段 5-2 所示。
 
 ```sh
@@ -639,6 +641,7 @@ texts = text_splitter.split_documents(documents)
 
 # 加载Embedding模型，进行自然语言处理
 logger.info("load embedding model")
+# bge-large-zh-v1.5 中文分词模型，由于国内网络环境的问题，需要通过科学上网 解决，或网络搜索从其他源获取
 embeddings = HuggingFaceEmbeddings(model_name="../bge-large-zh-v1.5", cache_folder='./bge-cache')
 
 # 创建向量数据库
@@ -1285,6 +1288,8 @@ Windows 10 系统的主机上，接入显卡硬件后，需要从 Nvidia 官网�
 [4] Spring-AI, https://docs.spring.io/spring-ai/reference/api/functions.html;
 
 [5] Ollama 官网. https://ollama.com/models;
+
+[6] bge-large-zh-v1.5,  https://huggingface.co/BAAI/bge-large-zh-v1.5。
 
 # 13. 附录
 
