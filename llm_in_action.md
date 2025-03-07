@@ -39,6 +39,7 @@ nohup ollama serve > ollama.log 2>&1 &
 
 <center><b>代码段 1-1  启动ollama</b><center> 
 
+
 此时服务已经运行了， 可通过在浏览器中输入  http://127.0.0.1:11434/ 查看，显示 “Ollama is running”
 
 **（3）config ollama**
@@ -85,7 +86,10 @@ CUDA_VISIBLE_DEVICES:			 用于控制哪些GPU对CUDA 可见， 例如 CUDA_VISI
 ```
 
 <center><b>代码段 1-2  OLLAMA主要环境变量清单</b><center> 
-​       **（4）安全配置**
+
+
+**（4）安全配置**
+
 
 考虑到安全原因，可以在环境变量中设置 OLLAMA_HOST仅供本地访问使用，Centos,  Ubuntu server 执行 `sudo vi /etc/profile`, 末尾添加
 
@@ -104,12 +108,14 @@ windows 系统在 我的电脑->属性->高级属性中添加环境变量 key �
 
 各个模型的参数大小以及文件大小详见  https://github.com/ollama/ollama#model-library， 如表1-1所示。
 
+
+
 <center><b>表 1-1  LLM 主流模型清单</b><center> 
 
 | Model              | Parameters | Size  | note                                                     | Download & Run                   |
 | ------------------ | ---------- | ----- | -------------------------------------------------------- | -------------------------------- |
 | DeepSeek-R1        | 7B         | 4.7GB |                                                          | `ollama run deepseek-r1`         |
-| DeepSeek-R1        | 671B       | 404GB |                                                          | ollama run deepseek-r1:671b      |
+| DeepSeek-R1        | 671B       | 404GB |                                                          | `ollama run deepseek-r1:671b`    |
 | Llama 3.3          | 70B        | 43GB  |                                                          | `ollama run llama3.3`            |
 | Llama 3.2          | 3B         | 2.0GB |                                                          | `ollama run llama3.2`            |
 | Llama 3.2          | 1B         | 1.3GB |                                                          | `ollama run llama3.2:1b`         |
@@ -243,6 +249,7 @@ the style of a 1930's mafia mobster
 
 <center><b>代码段 1-4  Modelfile 文件内容示例</b><center> 
 
+
 （1）**FROM**。FROM 指令是定义在创建时使用的基础模型的指令，是强制性的，是 Modelfile 中必须要有的部分。
 
 
@@ -283,6 +290,7 @@ vi llama3_1_8b.modelfile
 
 <center><b>代码段 2-1 LLM数据导出脚本代码示例</b><center>
 
+
 ## 2.2 导入
 
 执行以下语句导入模型， 导入模型的时候，确保硬盘可用空间至少为模型大小的2倍以上，如代码段 2-2 所示。
@@ -293,6 +301,7 @@ ollama create llama3.2:1b -f llama3_2_1b.Modelfile
 ```
 
 <center><b>代码段 2-2 LLM数据导入脚本代码示例</b><center>
+
 
 查看已经导入的模型， 脚本代码如代码段 2-3 所示。 
 
@@ -313,11 +322,14 @@ TEMPLATE {{ .Prompt }}
 
 <center><b>代码段 2-3 查看已导入的LLM模型脚本示例</b><center>
 
+
 # 3. LLM API
 
 部署好环境后，进行 llama3.2vision:11B 模型的测试。
 
 **（1）环境**。测试环境如表 3-1 所示。
+
+
 
 <center><b>表 3-1 模型测试环境配置清单</b><center>
 
@@ -341,6 +353,7 @@ How's it going? Is there something I can help you with or would you like to chat
 ```
 
 <center><b>代码段 3-1 模型测试结果代码段</b><center>
+
 
 运行起来之后，内存占用7GB，CPU利用率400%。
 
@@ -376,6 +389,7 @@ print(answer)
 ```
 
 <center><b>代码段 3-2 Ollama API 调用代码段示例</b><center>
+
 
 2） curl 调用。 Windows 环境可以通过安装 Cygwin 组建构建类 linux 命令行环境。
 
@@ -498,7 +512,8 @@ RAG 的工作流程的数据流如图 4-1 所示（网络盗图，仅供参考�
 
 <center><b>图 4-2  LangChain 工作流程示意图</b><center>
 
-#  5. RAG in Action
+
+#  5. RAG
 
 ##   5.1 langchain
 
@@ -531,6 +546,7 @@ langchain-cli 0.0.35
 
 <center><b>代码段 5-1  python 基础组件信息</b><center>
 
+
 安装langChain组件， 如代码段 5-2 所示。
 
 ```sh
@@ -545,6 +561,7 @@ pip3 install langchain-ollama
 ```
 
 <center><b>代码段 5-2  langChain 组件信息</b><center>
+
 
 如果需要解析  Word 文档，还需要执行以下操作， 如代码段 5-3 所示。
 
@@ -578,6 +595,7 @@ Attempted to load ./
 ```
 
 <center><b>代码段 5-3  word文档解析相关组件信息</b><center>
+
 
 如果需要解析  PDF 文档，还需安装额外的依赖包，如代码段 5-4 所示。
 
@@ -634,9 +652,10 @@ logger.info("vector db saved to local file")
 
 <center><b>代码段 5-5 本地文档向量化代码段</b><center>
 
-###   5.1.3 检索参数增强(案例演示)
 
-调用大模型时，通过本地文档进行检索参数增强，如代码段 5-6 所示。
+###   5.1.3 检索参数增强演示
+
+通过检索参数曾将，可以在调用大模型时，返回关于本地私有知识的内容，如代码段 5-6 所示。
 
 ```python
 #! /usr/bin/python3
@@ -678,6 +697,7 @@ logger.info(result)
 
 <center><b>代码段 5-6 检索参数增强代码段</b><center>
 
+
 ##    5.2 LLama-Index
 
 LLama-Index是另外一种进行 RAG 的框架，此处不再详细叙述。首先续安装 python 组件，如代码段 5-7 所示。
@@ -689,6 +709,7 @@ pip install llama-index-embeddings-huggingface
 ```
 
 <center><b>代码段 5-7 LLama-Index扩展组件</b><center>
+
 
 运行如代码段 5-8 所示的代码（本文中没有进行测试其可用性，仅供参考）。
 
@@ -719,6 +740,7 @@ print(output)
 ```
 
 <center><b>代码段 5-8 LLama-Index RAG示例代码</b><center>
+
 
 # 6. 矢量数据库
 
@@ -798,6 +820,7 @@ for event in graph.stream({"messages": [("user", user_input)]}):
 
 <center><b>代码段 9-1 智能体代码段</b><center>
 
+
 ## 9.3 图的可视化
 
 详见文档 https://langchain-ai.github.io/langgraph/how-tos/visualization/?h=graph#mermaid，介绍了3种方法，本文只验证了其中2种。
@@ -825,7 +848,10 @@ f.write(img.data)
 ```
 
 <center><b>代码段 9-2 在线调用 Mermaid.ink API 输出图片</b><center>
+
+
 **（2）使用 graphviz。**可离线使用，需要安装相应的开发包，适合于无法直接连接公共互联网的封闭环境。
+
 
 ```sh
 # python package graphviz 所依赖的底层C库
@@ -880,13 +906,14 @@ if __name__ == "__main__":
 
 <center><b>代码段 9-3 离线调用本地库 graphviz 输出图片</b><center>
 
-## 9.4 SQL Agent(案例演示)
+
+## 9.4 SQL Agent演示
 
 详细见  https://langchain-ai.github.io/langgraph/tutorials/sql-agent/。目前demo代码中调用的模型需要支持Tools （工具调用功能）。事实上，也可以采用不支持 tools 工具调用的模型。
 
 支持 Tools 的模型，如 `deepseek-coder:33b`（代码生成场景）或 `llama3:70b`（通用场景）‌。目前比较优秀的TextToSQL 大模型有 SQLCoder， 详见  https://github.com/defog-ai/sqlcoder（本文中尚未验证）。
 
-确保系统内存 ≥32GB（推荐 64GB）‌45。若使用 GPU，需 ≥12GB 显存并更新 NVIDIA 驱动‌， 当然了，如果没有显卡，只有 CPU ，那就选一个大小小于自己最大可用内存的模型进行调用即可，无非就是响应时间较长。
+确保系统内存 ≥32GB（推荐 64GB）‌。若使用 GPU，需 ≥12GB 显存并更新 NVIDIA 驱动‌， 当然了，如果没有显卡，只有 CPU ，那就选一个大小小于自己最大可用内存的模型进行调用即可，无非就是响应时间较长。
 
 SQL Agent 演示如代码段 9-4 所示， 大部分采用了官网给出的 demo，但官网 demo 是基于在线调用 Chat-GPT的示范，在国内环境下访问较为困难，另外还需要通过 Jupyter notebook 以及 conda 等库才能流畅运行，代码段 9-4 可直接在 terminal 中运行，无需使用其他大模型生态的工具，更加具有普遍性。
 
@@ -1229,6 +1256,7 @@ if __name__ == "__main__":
 
 <center><b>代码段 9-4 SQL Agent 演示代码段</b><center>
 
+
 # 10. GPU
 
 在Ubuntu 22.04 LTS 系统的主机上接入显卡硬件后，从 ubuntu系统中的 Additional Drivers 中可以获取到相应的驱动安装即可。
@@ -1244,9 +1272,9 @@ Windows 10 系统的主机上，接入显卡硬件后，需要从 Nvidia 官网�
 
 大模型系统目前主要使用 Python 和 C++ 进行编程，为了实现与其他编程语言的信息系统进行互联互通。考虑通过暴露 API 的方式提供 AI 大模型的相应能力，考虑采用flask 框架, 详见 
 
-[Flask 说明文档]: ./flask.md
+[Flask 说明文档]: ./flask.md	"。通过暴露相应 API 后，其他信息系统可以通过 API 调用直接使用 RAG 以及SQL Agent 的能力。"
 
-# 11. Reference
+# 12. Reference
 
 [1] Hugging Face Documentation. https://huggingface.co/docs;
 
@@ -1257,3 +1285,7 @@ Windows 10 系统的主机上，接入显卡硬件后，需要从 Nvidia 官网�
 [4] Spring-AI, https://docs.spring.io/spring-ai/reference/api/functions.html;
 
 [5] Ollama 官网. https://ollama.com/models;
+
+# 13. 附录
+
+文中所涉及到的代码 demo,详见  https://github.com/liuyngchng/llm_test。
