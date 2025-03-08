@@ -1042,7 +1042,7 @@ set startup-with-shell off
 
 （1）重启计算机，按住command+R 直到logo出现进入恢复模式。
 
-（2）进入恢复模式之后，左上角选择Utils -> Terminate 
+（2）进入恢复模式之后，左上角选择Utilitys -> Terminate 
 
 （3）输入 csrutil disable
 
