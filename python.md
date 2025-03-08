@@ -1,4 +1,20 @@
-# 1. 重要的命令
+# 1. python 文件 head
+
+（1）shebang 行。文件第一行，指定该文件应该使用的解释器。
+
+```python
+#!/usr/bin/env python3
+```
+
+（2）设置文件编码。告诉python 解释器应采用UTF-8编码格式读取文件，增加文件的跨操作系统的适应性。
+
+```python
+# -*- coding: utf-8 -*-
+```
+
+
+
+# 2. 重要的命令
 
 （1）重新强制安装损坏的包
 
@@ -7,6 +23,8 @@
 pip install --force-reinstall module
 # 卸载组件
 pip uninstall module
+# 卸载1.txt里的所有组件
+pip uninstall -r .1.txt
 ```
 
 （2）安装指定版本的组件
@@ -22,25 +40,13 @@ pip install numpy==1.26.2
 pip show numpy
 ```
 
-（4）设置解析器
-
-```python
-# 文件第一行
-#! /usr/bin/python3
-```
-
-（5）设置文件编码
-
-```python
-# 用于在不同的操作系统中使用用一个文件时，告诉解释器全部采用UTF-8编码格式读取文件，而不是采用操作系统默认的编码格式
-# -*- coding: utf-8 -*-
-```
-
 
 
 # 2. 虚拟环境
 
 构建虚拟环境，每个环境下的包与其他环境隔离，方便在不同的环境下进行不同的任务，同时不会互相干扰。官方文档详见 https://docs.python.org/3.10/library/venv.html。这里推荐 `virtualenv `命令。
+
+创建虚拟环境的缺点，就是会导致本地的package 更大。不同环境之间各自用自己的package，无法共用，这也是不可避免的。
 
 ## 2.1 创建
 
