@@ -1042,18 +1042,18 @@ set startup-with-shell off
 
 （1）重启计算机，按住command+R 直到logo出现进入恢复模式。
 
-（2）进入恢复模式之后，左上角选择Utils -> Terminate 
+（2）进入恢复模式之后，左上角选择Utilitys -> Terminate 
 
 （3）输入 csrutil disable
 
 （4）Restart
 
-# powerpoint 插入公式
+# 59. powerpoint 插入公式
 
 A Free LaTeX Add-In for PowerPoint on Windows and Mac
 http://www.jonathanleroux.org/software/iguanatex/
 
-# ubuntu latex
+# 60. ubuntu latex
 
 ```sh
 # 将下载2GB，很大
@@ -1071,7 +1071,7 @@ sudo apt-get install texstudio
 （2）Options->Configure->TeXstudio->General->Language，修改软件界面语言，此处改为zh-CN（中文）；
 （3）选项->设置->编辑器->显示行号->所有行号，以显示LaTeX代码的行号。
 
-# Message Authentication Code (MAC)
+# 61. Message Authentication Code (MAC)
 
 有关MAC 的详细描述，详见 RFC2104（https://www.rfc-editor.org/rfc/rfc2104.txt）。
 
@@ -1095,7 +1095,7 @@ echo -n $c | md5sum
 echo $a'_'
 ```
 
-# GraalVM
+# 62. GraalVM
 
 可以将.class文件以及.jar 文件编译为可执行文件。首先下载 https://www.graalvm.org/downloads/
 
@@ -1112,9 +1112,9 @@ cd graalvm-jdk-17.0.10+11.1/bin
 native-image --no-fallback -jar abc-1.0.jar  abc_elf
 ```
 
-# nginx
+# 63. nginx
 
-## CentOS 安装 nginx
+## 63.1 CentOS 安装 nginx
 
 CentOS version
 
@@ -1143,7 +1143,7 @@ cd /usr/local/nginx
 
 
 
-## nginx 添加基本登录认证(auth_basic)
+## 63.2 nginx 添加基本登录认证(auth_basic)
 
 这种认证的使用场景：请求量不大，在互联网上公开的内容，但不希望非认证用户查看。
 
@@ -1189,7 +1189,7 @@ cat /usr/local/nginx/conf/passwd.db
 /etc/init.d/nginx restart
 ```
 
-# 二进制字节数组的 hex表示和对应ASCII字符串的互相转换
+# 64. 二进制字节数组的 hex表示和对应ASCII字符串的互相转换
 
 ```sh
 echo 7B226D7367223A226869206775792C20656E6A6F79206C6966652C20686176652066756E21227D | xxd -r -p
@@ -1201,13 +1201,13 @@ echo -n {"msg":"hi guy, enjoy life, have fun!"} | hexdump -C
 00000023
 ```
 
-# java 静态编译
+# 65. java 静态编译
 
   通过对java 的class文件进行静态编译，可以将生成的jar包编译成native可执行的二进制代码，不再需要jvm来启动应用，但可能会依赖 libc库。
 
 文档详见  https://www.graalvm.org/latest/reference-manual/native-image/basics/。
 
-##  GraalVM bin
+##  65.1 GraalVM bin
 
 （1）下载并安装GraalVM。可以从GraalVM官方网站（https://www.graalvm.org/downloads/）下载GraalVM并安装。
 
@@ -1254,7 +1254,7 @@ native-image --help
 
 
 
-## GraalVM maven plugin
+## 65.2 GraalVM maven plugin
 
 maven pom.xml 中的配置如下所示。
 
@@ -1286,7 +1286,7 @@ mvn clean package
 #mvn -Pnative native:compile
 ```
 
-## 缺陷
+## 65.3 缺陷
 
 对于一些使用反射、JNI 等（ Reflection, Java Native Interface, Class Path Resources, and Dynamic Proxy）的方法，需要通过额外的配置，提前告诉 GraalVM native-image，在运行时哪些类会被调用。
 
@@ -1319,9 +1319,9 @@ ERROR StatusLogger Unable to load services for service class org.apache.logging.
 
 可以考虑通过  https://github.com/oracle/graalvm-reachability-metadata 进行解决。
 
-# log 
+# 66. log 
 
-## log4j2
+## 66.1 log4j2
 
 pom config
 
@@ -1362,7 +1362,7 @@ public class Bootstrap {
 }
 ```
 
-## logback
+## 66.2 logback
 
 logback config
 
@@ -1371,7 +1371,7 @@ logback config
 
 
 
-## logging 
+## 66.3 logging 
 
 Native Image supports logging using the `java.util.logging.*` API，详见
 
