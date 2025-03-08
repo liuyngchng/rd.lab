@@ -633,7 +633,7 @@ pip3 install "unstructured[pdf]"
 
 ###   5.1.2 本地文档向量化
 
-将本地文档向量化，形成向量数据库，存储在本地， 如代码段 5-5 所示。
+将本地文档向量化，形成向量数据库，存储在本地， 如代码段 5-5 所示。其中使用到 FAISS 向量数据库的地方，若机器上有 GPU ，则可以首先安装 cuda（详见参考文献<sup>[8]</sup>）, 然后执行 `pip install faiss-gpu`。
 
 ```python
 #! /usr/bin/python3
@@ -1283,7 +1283,9 @@ if __name__ == "__main__":
 <center><b>代码段 9-4 SQL Agent 演示代码段</b><center>
 
 
-# 10. GPU
+# 10. CUDA
+
+## 10.1 GPU
 
 在Ubuntu 22.04 LTS 系统的主机上接入显卡硬件后，从 ubuntu系统中的 Additional Drivers 中可以获取到相应的驱动安装即可。
 
@@ -1293,6 +1295,26 @@ nvidia-smi
 ```
 
 Windows 10 系统的主机上，接入显卡硬件后，需要从 Nvidia 官网下载对应的显卡驱动，可在设备管理器中看到相应的显卡，也可以在控制台中输入 `nvidia-smi` 查看相应的显卡。
+
+## 10.2 CUDA
+
+ubuntu 系统执行
+
+```sh
+# setup,较大，下载1GB，安装完占盘 4GB
+sudo apt install nvidia-cuda-toolkit
+# get version
+nvcc -V
+nvcc: NVIDIA (R) Cuda compiler driver
+Copyright (c) 2005-2021 NVIDIA Corporation
+Built on Thu_Nov_18_09:45:30_PST_2021
+Cuda compilation tools, release 11.5, V11.5.119
+Build cuda_11.5.r11.5/compiler.30672275_0
+```
+
+## 10.3 cuDNN
+
+cuDNN 与本文无关，不过若需要进行深度学习，例如在 GPU 上运行深度学习框架（如 TensorFlow、PyTorch），则安装 cuDNN 可以加速学习过程。详见官方文档 https://developer.nvidia.com/cudnn。
 
 # 11. flask
 
@@ -1314,7 +1336,11 @@ Windows 10 系统的主机上，接入显卡硬件后，需要从 Nvidia 官网�
 
 [6] bge-large-zh-v1.5,  https://huggingface.co/BAAI/bge-large-zh-v1.5;
 
-[7] bge-large-zh-v1.5, https://modelscope.cn/models/BAAI/bge-large-zh-v1.5
+[7] bge-large-zh-v1.5, https://modelscope.cn/models/BAAI/bge-large-zh-v1.5;
+
+[8] NVIDIA CUDA Installation Guide for Linux, https://docs.nvidia.com/cuda/cuda-installation-guide-linux/index.html;
+
+[9] cuDNN, https://developer.nvidia.com/cudnn;
 
 # 13. 附录
 
