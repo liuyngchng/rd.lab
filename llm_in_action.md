@@ -12,7 +12,7 @@
 
 LLM （Large Language Model，大语言模型），如目前的 ChatGPT、DeepSeek等。目前已比较成熟，可进行模块化部署运行，即使没有GPU，也可以通过CPU 运行demo进行学习。
 
-以下代码演示基于 Ubuntu 22.04 LTS，Python 3.10 环境进行了验证。
+以下代码演示基于 Ubuntu 22.04 LTS，Python 3.10 、Ollama 0.5.6 环境。
 
 ##  1.1 ollama
 
@@ -20,9 +20,7 @@ LLM （Large Language Model，大语言模型），如目前的 ChatGPT、DeepSe
 
 首先拉取 ollama， ollama 相当于大模型界的 docker, 用于运行、管理大模型，详见 https://ollama.com/download。
 
-可以进行离线下载， 下载地址详见  https://github.com/ollama/ollama/releases/,  Linux amd64 版本的安装包链接
-
-https://github.com/ollama/ollama/releases/download/v0.5.1/ollama-linux-amd64.tgz
+可以进行离线下载， 下载地址详见  https://github.com/ollama/ollama/releases/,  旧设备可以找到一些早期的历史版本。
 
 **（2）start ollama**
 
@@ -1289,7 +1287,9 @@ Windows 10 系统的主机上，接入显卡硬件后，需要从 Nvidia 官网�
 
 [5] Ollama 官网. https://ollama.com/models;
 
-[6] bge-large-zh-v1.5,  https://huggingface.co/BAAI/bge-large-zh-v1.5。
+[6] bge-large-zh-v1.5,  https://huggingface.co/BAAI/bge-large-zh-v1.5;
+
+[7] bge-large-zh-v1.5, https://modelscope.cn/models/BAAI/bge-large-zh-v1.5
 
 # 13. 附录
 
