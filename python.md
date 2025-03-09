@@ -106,5 +106,12 @@ source ./llm_py_env/bin/activate
 pip freeze --all > requirements.txt
 ```
 
+# 3. jupyter
 
+```sh
+# setup
+pip install jupyter notebook
+# run
+jupyter notebook
+```
 
