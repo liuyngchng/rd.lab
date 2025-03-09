@@ -39,7 +39,11 @@ pip install numpy==1.26.2
 ```sh
 pip show numpy
 ```
-
+（4）Python Image Library(PIL)
+PIL 也叫Pillow
+```sh
+pip install pillow
+```
 
 
 # 2. 虚拟环境
@@ -52,6 +56,7 @@ pip show numpy
 
 ```sh
 # 安装指令
+sudo apt-get install virtualenv
 pip install virtualenv
 # 也可以使用 venv, Ubuntu 系统
 sudo apt install python3.10-venv
