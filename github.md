@@ -1,3 +1,5 @@
+# 1.mirror
+
 记住三个网站：
 
 github网址查询：https://ipaddress.com/website/github.com
@@ -8,8 +10,16 @@ github静态资源ip：https://ipaddress.com/website/assets-cdn.github.com
 
 sudo vi /etc/hosts
 
-# GitHub Start
+# 2. GitHub Start
 140.82.114.4 github.com
 199.232.69.194 github.global.ssl.fastly.net
-# GitHub End
+# 3. git 撤销 modified
+
+当执行 `git status` 显示 <span style="color:red">modified:  aaaa.file</span>, 此时可以通过以下命令撤销修改
+
+
+
+```sh
+git checkout -- aaaa.file
+```
 
