@@ -10,6 +10,13 @@
 | dockerd &                 | startup dockerd   |
 | docker pull centos        | pull centos image |  
 
+目前国内环境可用的 docker 源 `https://1ms.run/`,  可执行
+
+```
+```
+
+
+
 ##  1.2 start up
 
 ​		ubuntu
