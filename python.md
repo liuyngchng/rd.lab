@@ -115,3 +115,11 @@ pip install jupyter notebook
 jupyter notebook
 ```
 
+# 4. 镜像源
+
+```sh
+# for temporay case
+pip install some-package -i https://pypi.tuna.tsinghua.edu.cn/simple
+# for all
+pip config set global.index-url https://pypi.tuna.tsinghua.edu.cn/simple
+```
