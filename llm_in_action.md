@@ -881,7 +881,12 @@ f.write(img.data)
 
 ```sh
 # python package graphviz 所依赖的底层C库
+#ubuntu
 sudo apt-get install graphviz libgraphviz-dev
+#centos
+yum install graphviz
+yum install python39-devel
+
 pip3 install graphviz
 pip3 install pygraphviz
 ```

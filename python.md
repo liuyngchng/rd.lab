@@ -25,6 +25,8 @@ pip install --force-reinstall module
 pip uninstall module
 # 卸载1.txt里的所有组件
 pip uninstall -r .1.txt
+# 安装requirements.txt 中的组件清单
+pip install -r requirements.txt
 ```
 
 （2）安装指定版本的组件
@@ -44,6 +46,7 @@ PIL 也叫Pillow
 ```sh
 pip install pillow
 ```
+
 
 
 # 2. 虚拟环境
