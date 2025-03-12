@@ -45,7 +45,6 @@ PIL 也叫Pillow
 pip install pillow
 ```
 
-
 # 2. 虚拟环境
 
 构建虚拟环境，每个环境下的包与其他环境隔离，方便在不同的环境下进行不同的任务，同时不会互相干扰。官方文档详见 https://docs.python.org/3.10/library/venv.html。这里推荐 `virtualenv `命令。
@@ -103,7 +102,16 @@ rm -fr llm_py_env
 ```sh
 # 在虚拟环境下打包
 source ./llm_py_env/bin/activate
-pip freeze --all > requirements.txt
+
+# 不推荐
+#pip freeze --all > requirements.txt
+
+# List installed packages
+pip list --format=freeze > requirements.txt 
+
+# download all package in a dir
+pip download -r requirements.txt -d ./ubuntu22_04_lts_python_3_10_12_offline_package
+pip install *.wheel
 ```
 
 # 3. jupyter
