@@ -25,6 +25,8 @@ pip install --force-reinstall module
 pip uninstall module
 # 卸载1.txt里的所有组件
 pip uninstall -r .1.txt
+# 安装requirements.txt 中的组件清单
+pip install -r requirements.txt
 ```
 
 （2）安装指定版本的组件
@@ -79,8 +81,6 @@ pwd
 
 ```
 
-
-
 ## 2.2 退出
 
 退出虚拟环境后，如果不再需求，可以直接删除。
@@ -116,6 +116,8 @@ pip install *.wheel
 
 # 3. jupyter
 
+a light UI dev and op system for data process.
+
 ```sh
 # setup
 pip install jupyter notebook
@@ -123,3 +125,11 @@ pip install jupyter notebook
 jupyter notebook
 ```
 
+# 4. 镜像源
+
+```sh
+# for temporary case
+pip install some-package -i https://pypi.tuna.tsinghua.edu.cn/simple
+# for permanent
+pip config set global.index-url https://pypi.tuna.tsinghua.edu.cn/simple
+```
