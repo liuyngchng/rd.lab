@@ -769,9 +769,12 @@ print(output)
 ```
 
 <center><b>代码段 5-8 LLama-Index RAG示例代码</b><center>
+
+
 ## 5.3 RAGFlow
 
-详见 https://ragflow.io/docs/dev/build_docker_image 。
+
+详见 https://ragflow.io/docs/dev/build_docker_image 。可以在图形化界面中配置工作流，与AI 模型调用进行集成。
 
 ```sh
 
