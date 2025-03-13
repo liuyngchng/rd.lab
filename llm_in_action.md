@@ -92,19 +92,14 @@ CUDA_VISIBLE_DEVICES:			 用于控制哪些GPU对CUDA 可见， 例如 CUDA_VISI
 <center><b>代码段 1-2  OLLAMA主要环境变量清单</b><center> 
 
 
-**（4）安全配置**
+**（4）开启远程访问**
 
-
-考虑到安全原因，可以在环境变量中设置 OLLAMA_HOST仅供本地访问使用，Centos,  Ubuntu server 执行 `sudo vi /etc/profile`, 末尾添加
 
 
 ```sh
-export OLLAMA_HOST=http://127.0.0.1:11434
+export OLLAMA_HOST=0.0.0.0
 ```
 
-windows 系统在 我的电脑->属性->高级属性中添加环境变量 key 为 OLLAMA_HOST， value 为 127.0.0.1。
-
-配置完成之后，重新启动 ollama服务。
 
 ##  1.2 下载LLM镜像
 
@@ -345,6 +340,14 @@ TEMPLATE {{ .Prompt }}
 
 <center><b>代码段 2-3 查看已导入的LLM模型脚本示例</b><center>
 
+## 2.3 set context length limit
+
+Setting the context size
+
+```sh
+FROM <some model>
+PARAMETER num_ctx <context size>
+```
 
 # 3. LLM API
 
@@ -1326,6 +1329,7 @@ cuDNN 与本文无关，不过若需要进行深度学习，例如在 GPU 上运
 大模型系统目前主要使用 Python 和 C++ 进行编程，为了实现与其他编程语言的信息系统进行互联互通。考虑通过暴露 API 的方式提供 AI 大模型的相应能力，考虑采用flask 框架, 详见 
 
 [Flask 说明文档]: ./flask.md	"。通过暴露相应 API 后，其他信息系统可以通过 API 调用直接使用 RAG 以及SQL Agent 的能力。"
+
 
 # 12. Reference
 

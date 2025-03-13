@@ -47,6 +47,13 @@ PIL 也叫Pillow
 pip install pillow
 ```
 
+ (5) requirements.txt
+ 自动生成项目依赖的包及其版本
+ 
+ ```sh
+ pip install pipreqs
+ pipreqs . --force
+ ```
 # 2. 虚拟环境
 
 构建虚拟环境，每个环境下的包与其他环境隔离，方便在不同的环境下进行不同的任务，同时不会互相干扰。官方文档详见 https://docs.python.org/3.10/library/venv.html。这里推荐 `virtualenv `命令。
