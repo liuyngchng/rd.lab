@@ -94,10 +94,11 @@ CUDA_VISIBLE_DEVICES:			 用于控制哪些GPU对CUDA 可见， 例如 CUDA_VISI
 
 **（4）开启远程访问**
 
-
-
 ```sh
+# 监听所有网卡
 export OLLAMA_HOST=0.0.0.0
+# 修改默认监听端口
+export OLLAMA_HOST=0.0.0.0:11435
 ```
 
 
@@ -342,11 +343,11 @@ TEMPLATE {{ .Prompt }}
 
 ## 2.3 set context length limit
 
-Setting the context size
+Setting the context size， context_size 单位是 token， 例如设置 `PARAMETER num_ctx 4096` 表示可处理约 3000 字的上下文
 
 ```sh
 FROM <some model>
-PARAMETER num_ctx <context size>
+PARAMETER num_ctx <context_size>
 ```
 
 # 3. LLM API
@@ -639,7 +640,9 @@ pip3 install "unstructured[pdf]"
 将本地文档向量化，形成向量数据库，存储在本地， 如代码段 5-5 所示。其中使用到 FAISS 向量数据库的地方，若机器上有 GPU ，则可以首先安装 cuda（详见参考文献<sup>[8]</sup>）, 然后执行 `pip install faiss-gpu`。
 
 ```python
-#! /usr/bin/python3
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+
 from langchain_community.document_loaders import TextLoader
 from langchain_text_splitters import CharacterTextSplitter
 from langchain_huggingface import HuggingFaceEmbeddings
@@ -687,7 +690,8 @@ logger.info("vector db saved to local file")
 通过检索参数曾将，可以在调用大模型时，返回关于本地私有知识的内容，如代码段 5-6 所示。
 
 ```python
-#! /usr/bin/python3
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
 
 from langchain_community.vectorstores import FAISS
 from langchain.chains import RetrievalQA
@@ -773,12 +777,9 @@ print(output)
 
 ## 5.3 RAGFlow
 
-
 详见 https://ragflow.io/docs/dev/build_docker_image 。可以在图形化界面中配置工作流，与AI 模型调用进行集成。
 
-```sh
-
-```
+安装步骤详见 https://github.com/infiniflow/ragflow
 
 
 
