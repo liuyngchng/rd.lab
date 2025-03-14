@@ -552,3 +552,52 @@ Fri Feb 21 11:18:48 2025
 ```
 
 看到出现了  `NVIDIA GeForce RTX 3090 Ti`， 说明安装成功了。
+
+
+
+# 19. grub 修复
+
+针对Ubuntu系统开机后，卡在GRUB的黑屏下，无法引导进入系统的问题，可以按照以下步骤进行：
+
+## 19.1 确认GRUB引导问题
+
+首先，确保Ubuntu系统无法正常启动，并且已经排除了硬件故障等其他原因。系统启动时如果出现GRUB菜单无法显示、或者无法从GRUB菜单中选择系统启动等问题，很可能是GRUB引导出现问题。
+
+## 19.2 制作Ubuntu安装介质
+
+- 准备一个Ubuntu的安装介质，如USB驱动器或光盘。
+- 确保安装介质是完整且未损坏的，可以从Ubuntu官网下载最新版本的ISO文件，并使用如Rufus（Windows）或Etcher（跨平台）等工具制作启动盘。
+
+## 19.3 从安装介质启动Ubuntu
+
+- 将制作好的Ubuntu安装介质插入电脑，并重启电脑。
+- 在启动过程中，选择从安装介质启动（通常需要在BIOS/UEFI中设置启动顺序）。
+- 在出现的启动菜单中，选择“Try Ubuntu without installing”（尝试Ubuntu而不安装）选项。
+
+## 19.4 安装并运行Boot-Repair工具来修复GRUB引导
+
+在Ubuntu的Live环境中，可以通过安装Boot-Repair工具来自动修复GRUB引导。具体步骤如下：
+
+- 打开终端，输入以下命令添加Boot-Repair的PPA源并更新软件源：
+
+```sh
+bashCopy Code
+sudo add-apt-repository ppa:yannubuntu/boot-repair
+sudo apt-get update
+```
+
+- 安装Boot-Repair工具：
+
+```sh
+bashCopy Code
+sudo apt-get install -y boot-repair
+```
+
+- 运行Boot-Repair工具：
+
+```sh
+bashCopy Code
+boot-repair
+```
+
+- 在Boot-Repair的图形界面中，选择“Recommended repair”选项，然后按照提示进行操作。Boot-Repair会自动检测并修复GRUB引导问题。
