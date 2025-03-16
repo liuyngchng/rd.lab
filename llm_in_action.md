@@ -785,6 +785,11 @@ print(output)
 
 详见 https://github.com/deepset-ai/haystack
 
+# 5.4 langflow
+
+source:  https://github.com/langflow-ai/langflow， 
+deploy: https://docs.langflow.org/deployment-docker
+
 # 6. 矢量数据库
 
 矢量数据库用于存储模型，以及训练数据集， 如上文代码段中使用到的 FAISS， 以及SQLite-VSS等。
