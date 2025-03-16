@@ -781,7 +781,9 @@ print(output)
 
 安装步骤详见 https://github.com/infiniflow/ragflow
 
+## 5.3 haystack
 
+详见 https://github.com/deepset-ai/haystack
 
 # 6. 矢量数据库
 
