@@ -49,7 +49,7 @@ pip install pillow
 
  (5) requirements.txt
  自动生成项目依赖的包及其版本
- 
+
  ```sh
  pip install pipreqs
  pipreqs . --force
@@ -136,7 +136,9 @@ jupyter notebook
 
 ```sh
 # for temporary case
-pip install some-package -i https://pypi.tuna.tsinghua.edu.cn/simple
+pip install some_package -i https://pypi.tuna.tsinghua.edu.cn/simple
 # for permanent
 pip config set global.index-url https://pypi.tuna.tsinghua.edu.cn/simple
+
+pip3 install some_package -i http://your_private_domain/root/pypi/+simple --trusted-host your_private_domain
 ```
