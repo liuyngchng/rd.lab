@@ -601,3 +601,94 @@ boot-repair
 ```
 
 - 在Boot-Repair的图形界面中，选择“Recommended repair”选项，然后按照提示进行操作。Boot-Repair会自动检测并修复GRUB引导问题。
+
+# 20. 浏览对方网站警告问题
+
+对方使用了自签名证书，导致警告，确认网站没问题后，下载对方证书（点击 not secure-> certificate detail -> detail-> export, 选择 base64-encoded ASCII, single certificate， 保存为 aaaa.crt）
+
+**Chrome英文版导出PEM证书步骤：**
+
+1. 访问目标网站，点击地址栏左侧的**锁形图标** → **"Certificate is valid"**
+2. 在弹出窗口选择**"Details"标签** → 点击**"Export..."**
+3. 保存类型选择**"PEM encoded chain"**（证书链）或**"PEM encoded"**（单证书）
+
+```sh
+# 点击Ubuntu Chrome浏览器URL前面的 not secure-> certificate detail -> detail-> export, 选择 
+base64-encoded ASCII, single certificate (选择这个)
+base64-encoded ASCII, certificate chain
+DER-encoded binary, single certificate
+PKCS#7, single certificate
+PKCS#7, certificate chain
+
+# 转换PEM证书为 crt证书, 详见 https://help.gitkraken.com/gitkraken-desktop/self-signed-certificates/
+openssl x509 -outform der -in DOWNLOADED-CERT-NAME -out DOWNLOADED-CERT-NAME.crt
+， 保存为 aaaa.crt
+# (可选) 在 /usr/local/share/ca-certificates/ 下创建一个子目录，然后拷贝文件
+mkdir 
+sudo cp aaaa.crt /usr/local/share/ca-certificates/
+
+# 执行后，有显示添加了一个证书，而且没有waring，则OK
+sudo update-ca-certificates
+#然后重启浏览器
+# 验证，应该能看到已经添加的证书
+ls -l /etc/ssl/certs | grep aaaa
+
+# 验证
+openssl s_client your_domain:443
+```
+
+重启浏览器，Chrome浏览器中依然显示 不安全。
+
+
+
+```
+1. **证书未正确安装到系统信任库**：虽然用户使用了正确的位置，但可能Chrome并没有使用系统的CA存储，而是有自己的。需要确认Chrome是否使用系统证书。
+
+2. **证书格式问题**：用户导出的是base64编码的证书，可能需要转换为PEM格式或者确保证书链完整。
+
+3. **证书名称问题**：ca-certificates目录中的文件需要以.crt结尾，用户已经做了，但可能需要正确的命名。
+
+4. **Chrome缓存问题**：重启浏览器可能不够，需要完全关闭或清除缓存。
+
+5. **自签名证书不受信任**：即使安装到系统，自签名证书可能仍需手动在Chrome中标记为信任。
+
+6. **证书主题或SAN不匹配**：证书的Subject Alternative Name可能不包含域名，导致Chrome不认可。
+
+接下来，我应该建议用户检查证书是否正确安装到系统，使用命令查看是否在/etc/ssl/certs中。然后，检查Chrome是否使用系统证书，可能需要配置策略或安装到NSS库。另外，指导用户手动在Chrome中导入证书到“受信任的根证书颁发机构”。还可以建议检查证书详细信息，确保证书有效且信息正确。如果问题依旧，可能需要重新生成包含正确SAN的自签名证书。
+```
+
+可能原因及解决步骤：
+
+1. **证书信任链未完整安装**
+   需确认导出的证书包含完整的证书链（根证书+中间证书）
+
+2. **系统证书未同步到Chrome**
+   Chrome使用自己的证书库，执行：
+
+   ```
+   bash复制sudo apt install libnss3-tools
+   certutil -d sql:$HOME/.pki/nssdb -A -t "C,," -n "证书名称" -i aaaa.crt
+   ```
+
+3. **强制HTTPS验证**
+   访问时手动输入完整地址：`https://网站域名`
+
+4. **证书信息不匹配**
+   检查证书Subject Alternative Name是否包含目标域名，可通过命令验证：
+
+   ```
+   bash复制
+   
+   openssl x509 -in aaaa.crt -text -noout | grep -A1 "Subject Alternative Name"
+   ```
+
+5. **彻底清除浏览器缓存**
+   关闭所有Chrome实例后执行：
+
+   ```
+   bash复制
+   
+   pkill chrome
+   ```
+
+若仍不生效，建议使用正规CA颁发的证书或通过`mkcert`工具生成含本地信任的证书
