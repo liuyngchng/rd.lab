@@ -1,4 +1,4 @@
-# network
+# 1. network
 解决centos minimal 安装无法上网的问题
 
 ```sh
@@ -8,14 +8,14 @@ vi ifcfg-enp0s3         //ifcfg-之后为网卡名称
 ```
 将最后一行`ONBOOT=NO` 修改为 `ONBOOT=YES`
 
-# install  docker in centos offline
+# 2. install  docker in centos offline
 
-##  update
+##  2.1 update
 ```sh
 docker pull centos          //centos8
 yum update
 ```
-###  centos8
+###  2.1.1 centos8
 
 会出现
 
@@ -42,14 +42,14 @@ or
 yum install yum-utils
 yumdownloader xxxx
 ```
-###  centos7
+###  2.1.2 centos7
 
 ```sh
 yum-config-manager --add-repo http://download.docker.com/linux/centos/docker-ce.repo
 or
 yum-config-manager --add-repo http://mirrors.aliyun.com/docker-ce/linux/centos/docker-ce.repo
 ```
-###  查看可以安装的docker 版本
+###  2.1.3 查看可以安装的docker 版本
 
 ```
 yum list docker-ce --showduplicates | sort -r
@@ -85,7 +85,7 @@ docker info
 ```
 ```
 
-##  centos7 minimal VirtualBox Insert Guest Addtions CD Image
+##  2.2 centos7 minimal VirtualBox Insert Guest Addtions CD Image
 
 download the iso file first from VirtualBox GUI, and then see
 
@@ -116,7 +116,7 @@ yum update kernel -y
 yum install kernel-headers kernel-devel gcc make -y
 ```
 
-#  install mysql8 on centos7.9 minimal
+#  3. install mysql8 on centos7.9 minimal
 
 ##  install
 
@@ -283,7 +283,7 @@ docker run -tid --name centos_1 --privileged=true centos:latest /sbin/init
 /sbin/init
 ```
 
-# FAQ
+# 4. FAQ
 
 yum install xxxx.rpm 提示 `A conflicts with file from package B`
 
@@ -301,7 +301,7 @@ yum -y remove  A, 然后再安装B
 
 
 
-#  redis
+#  5. redis
 
 ```sh
 yum -y install gcc gcc-c++ libstdc++-devel
@@ -338,7 +338,7 @@ redis-cli -h 1.2.3.4 -p 6379 -a 'password'
 # 注释掉 bind 127.0.0.1 -::1
 ```
 
-# nc
+# 6. nc
 
 ##  安装nc工具
 
@@ -388,7 +388,7 @@ nc -u -w 1 192.168.21.17 34567 < /dev/null && echo -e "udp port ok"
 udp port ok
 ```
 
-#  iptables
+#  7. iptables
 
 ##  basic
 
@@ -507,8 +507,8 @@ iptables -I INPUT -m iprange --src-range 192.168.1.1-192.168.1.2 -p tcp --dport 
 
 
 
-#  firewall
-##  status
+#  8. firewall
+##  8.1 status
 
 ```sh
 # 打开防火墙
@@ -523,7 +523,7 @@ systemctl enable firewalld
 systemctl disable firewalld
 
 ```
-##  config
+##  8.2 config
 ```sh
 # 列出所支持的zone和查看当前的默认zone
 firewall-cmd --get-zones
@@ -557,9 +557,9 @@ firewall-cmd --permanent --add-rich-rule="rule family="ipv4" source address="192
 firewall-cmd --permanent --add-rich-rule="rule family="ipv4" source address="192.168.0.142" port protocol="tcp" port="80" drop"
 ```
 
-# 系统盘扩容
+# 9. 系统盘扩容
 
-##  原始大小
+##  9.1 原始大小
 
 磁盘占用率如下
 
@@ -617,7 +617,7 @@ Filesystem                 Size  Used Avail Use% Mounted on
 tmpfs                      3.2G     0  3.2G   0% /run/user/0
 ```
 
-##  创建分区
+##  9.2 创建分区
 
 ```sh
 # shell snippet 5
@@ -661,7 +661,7 @@ lsblk
 #reboot
 ```
 
-##  扩容
+##  9.3 扩容
 
 看到出现了新的分区 vda3
 
@@ -767,9 +767,9 @@ Filesystem                 Size  Used Avail Use% Mounted on
 tmpfs                      3.2G     0  3.2G   0% /run/user/0
 ```
 
-# 挂载磁盘
+# 10. 挂载磁盘
 
-## 挂载
+## 10.1 挂载
 
 ```shell
 # 能够看到物理磁盘， 比如 sdbc
@@ -789,7 +789,7 @@ vi /etc/fstab
 ```
 其中， ext4 通过执行 `blkid /dev/sdb`  获取
 
-## 卸载
+## 10.2 卸载
 
 ```sh
 lsblk
@@ -800,7 +800,7 @@ umount /dev/sdb
 
 
 
-# crontab
+# 11. crontab
 
 ## install
 
@@ -873,3 +873,39 @@ sudo vi /etc/crontab
 ```
 
 在 /etc/crontab 中添加的任务必须提供用户名
+
+# 12. 导入证书
+
+## 12.1 setup cmd
+
+```sh
+sudo yum install ca-certificates -y
+```
+
+## 12.2 add crt 
+
+**（1）CA根证书**
+
+将证书文件（如`ca.crt`）复制到`/etc/pki/ca-trust/source/anchors/`目录中。
+
+```
+sudo cp /path/to/ca.crt /etc/pki/ca-trust/source/anchors/
+```
+
+**（2）自定义证书**
+
+同样可以将自定义证书文件放入上述目录，或者根据具体应用需求，将其放置在应用指定的证书目录中。
+
+使证书生效
+
+```
+sudo update-ca-trust extract
+```
+
+验证证书导入情况, 为了确认证书是否成功导入并被系统信任，可以使用 `openssl s_client` 命令进行验证
+
+```sh
+openssl s_client -connect www.customdomain.com:443 < /dev/null | grep "Verify return code"
+```
+
+如果输出为“Verify return code: 0 (ok)”，则表示证书验证成功，证书已成功导入并被系统信任

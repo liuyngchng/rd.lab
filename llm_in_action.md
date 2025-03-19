@@ -781,6 +781,38 @@ print(output)
 
 安装步骤详见 https://github.com/infiniflow/ragflow
 
+
+
+```sh
+http {
+    include       /etc/nginx/mime.types;
+    default_type  application/octet-stream;
+
+    log_format  main  '$remote_addr - $remote_user [$time_local] "$request" '
+                      '$status $body_bytes_sent "$http_referer" '
+                      '"$http_user_agent" "$http_x_forwarded_for"';
+
+    access_log  /var/log/nginx/access.log  main;
+    
+    # 新增这两项
+    proxy_ssl_server_name on;
+    proxy_ssl_session_reuse on;
+    
+    sendfile        on;
+    #tcp_nopush     on;
+
+    keepalive_timeout  65;
+
+    #gzip  on;
+    client_max_body_size 1024M;
+
+    include /etc/nginx/conf.d/ragflow.conf;
+}
+
+```
+
+
+
 ## 5.3 haystack
 
 详见 https://github.com/deepset-ai/haystack
