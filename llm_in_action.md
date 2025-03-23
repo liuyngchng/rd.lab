@@ -1423,6 +1423,10 @@ https://blog.csdn.net/Alex_StarSky/article/details/146300013
 
 https://www.bilibili.com/video/BV1utKKe6EfM/?vd_source=55b9aeb861b2e101362b5ca97bebf9d9
 
+所需要的内存预估方法， 以60亿规模参数为例，根据以下公式计算：
+
+模型参数 + 梯度参数 + 优化器参数 = 6B * 1bytes + 6GB + 2*6GB = 24GB
+
 ## 13.1 train
 
 ```python
