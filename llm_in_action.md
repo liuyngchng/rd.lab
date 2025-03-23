@@ -1391,7 +1391,9 @@ sudo systemctl restart docker
 
 ```
 
+## 10.5 环境变量
 
+cuda 环境变量详见  https://pytorch.org/docs/stable/notes/cuda.html#environment-variables
 
 # 11. flask
 
