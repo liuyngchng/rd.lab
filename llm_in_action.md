@@ -1550,7 +1550,9 @@ python3 -m sglang.launch_server --model deepseek-ai/DeepSeek-R1-Distill-Qwen-32B
 
 [11]  vLLM, https://github.com/vllm-project/vllm;
 
-[12] https://github.com/Zeyi-Lin/LLM-Finetune
+[12] https://github.com/Zeyi-Lin/LLM-Finetune;
+
+[13] LLM 微调， https://mp.weixin.qq.com/s/NAJo7S7V2kYnCdQLBHd6Zw
 
 # 16. 附录
 
