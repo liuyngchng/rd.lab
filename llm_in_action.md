@@ -165,19 +165,13 @@ OLLAMA_MODELS /data/ollama
 
 ```sh
 curl -X POST http://127.0.0.1:11434/api/generate -d '{
-	"model": "deepseekR1:7b",
-	"prompt": "你好啊",
-	"stream":true
-}'
+        "model": "deepseek-r1:7b",
+        "prompt": "你的提示词",
+        "stream":false
+}' | jq
 ```
 
 调用时，无需提前在server端运行 `ollama run xxxx`，model 写具体的模型名称，prompt 写提示词， stream 设置是否为流式输出。
-
-如果觉得通过命令行的方式使用起来不太友好，可以通过WebUI来调用相关的 API ，进行用户请求的调用以及结果的展示
-
-```sh
-docker run -d -p 3000:8080 --add-host=host.docker.internal:host-gateway -v open-webui:/app/backend/data --name open-webui --restart always ghcr.io/open-webui/open-webui:main
-```
 
 ##  1.3 cmd
 
@@ -431,10 +425,17 @@ curl -X GET http://127.0.0.1:11434/api/tags
 
 # 生成文本
 curl -X POST http://127.0.0.1:11434/api/generate -d '{
-	"model": "deepseekR1:7b",
+	"model": "deepseek-r1:7b",
 	"prompt": "你好啊",
-	"stream":true
+	"stream":false
 }'
+# 需配置 export OLLAMA_HOST=0.0.0.0
+curl -X POST http://192.168.1.124:11434/api/generate -d '{
+        "model": "deepseek-r1:7b",
+        "prompt": "你好啊",
+        "stream":false
+}'
+
 
 # 多轮对话
 curl  -X POST http://127.0.0.1:11434/api/chat -d '{
@@ -1376,6 +1377,24 @@ Build cuda_11.5.r11.5/compiler.30672275_0
 
 cuDNN 与本文无关，不过若需要进行深度学习，例如在 GPU 上运行深度学习框架（如 TensorFlow、PyTorch），则安装 cuDNN 可以加速学习过程。详见官方文档 https://developer.nvidia.com/cudnn。
 
+## 10.4 docker 中使用  GPU的问题
+
+Docker无法调用GPU问题，需安装nvidia-container-toolkit
+
+```sh
+curl -fsSL https://nvidia.github.io/libnvidia-container/gpgkey | sudo gpg --dearmor -o /usr/share/keyrings/nvidia-container-toolkit-keyring.gpg && curl -s -L https://nvidia.github.io/libnvidia-container/stable/deb/nvidia-container-toolkit.list | sed 's#deb https://#deb [signed-by=/usr/share/keyrings/nvidia-container-toolkit-keyring.gpg] https://#g' | sudo tee /etc/apt/sources.list.d/nvidia-container-toolkit.list
+# 安装nvidia-container-toolkit
+sudo apt-get update
+sudo apt-get install -y nvidia-container-toolkit
+# 配置 Docker 使用 NVIDIA 容器工具包
+sudo systemctl restart docker
+
+```
+
+## 10.5 环境变量
+
+cuda 环境变量详见  https://pytorch.org/docs/stable/notes/cuda.html#environment-variables
+
 # 11. flask
 
 大模型系统目前主要使用 Python 和 C++ 进行编程，为了实现与其他编程语言的信息系统进行互联互通。考虑通过暴露 API 的方式提供 AI 大模型的相应能力，考虑采用flask 框架, 详见 
@@ -1383,7 +1402,137 @@ cuDNN 与本文无关，不过若需要进行深度学习，例如在 GPU 上运
 [Flask 说明文档]: ./flask.md	"。通过暴露相应 API 后，其他信息系统可以通过 API 调用直接使用 RAG 以及SQL Agent 的能力。"
 
 
-# 12. Reference
+
+# 12.Open-WebUI
+
+如果觉得通过命令行的方式使用起来不太友好，可以通过WebUI来调用Ollama的 API ，进行用户请求的调用以及结果的展示。
+
+（1）拉取镜像
+
+```sh
+docker pull ghcr.io/open-webui/open-webui:git-75b18f9-cuda
+```
+
+（2）运行
+
+```sh
+docker run -d -p 3000:8080 -e OLLAMA_BASE_URL=http://192.168.1.124:11434 -v open-webui:/app/backend/data --name open-webui --restart always ghcr.io/open-webui/open-webui:git-75b18f9-cuda
+```
+
+# 13. Fine tune
+
+https://blog.csdn.net/Alex_StarSky/article/details/146300013
+
+https://www.bilibili.com/video/BV1utKKe6EfM/?vd_source=55b9aeb861b2e101362b5ca97bebf9d9
+
+所需要的内存预估方法， 以60亿规模参数为例，根据以下公式计算：
+
+模型参数 + 梯度参数 + 优化器参数 = 6B * 1bytes + 6GB + 2*6GB = 24GB
+
+## 13.1 train
+
+```python
+from transformers import AutoModelForCausalLM, AutoTokenizer, TrainingArguments, Trainer
+from datasets import load_dataset
+ 
+# 加载本地模型和分词器
+model = AutoModelForCausalLM.from_pretrained("你的模型路径")
+tokenizer = AutoTokenizer.from_pretrained("你的模型路径")
+ 
+# 加载训练数据
+dataset = load_dataset("csv", data_files="train_data.csv")
+ 
+# 设置训练参数
+training_args = TrainingArguments(
+    output_dir="./results",
+    num_train_epochs=3,
+    per_device_train_batch_size=2,
+    learning_rate=3e-5,
+    save_total_limit=2,
+)
+ 
+# 开始训练
+trainer = Trainer(
+    model=model,
+    args=training_args,
+    train_dataset=dataset["train"],
+)
+ trainer.train()
+```
+
+## 13.2 test
+
+
+
+```python
+ from transformers import pipeline
+ 
+ generator = pipeline('text-generation', model='D:/article_trainer/results')
+ result = generator("请写一篇xxxx的文章：", max_length=300)
+ print(result[0]['generated_text'])
+```
+
+调整参数
+
+```python
+generator = pipeline(
+     'text-generation',
+     model='你的模型路径',
+     temperature=0.9,  # 创意度（0.1-1.0）
+     top_p=0.9,  # 多样性控制
+     max_length=500  # 最大长度
+)
+```
+
+# 14. 其他大模型运行工具
+
+## 14.1 intro
+
+除了Ollama之外，其他可以运行大模型的工具(LLM inference and serviceing, servicing framework for LLM)有， SGLang、VLLM、LLaMA.cpp等。vLLM 在模型支持和应用生态方面具有优势，而 SGLang 在推理性能优化表现相对出色。性能上，SGLang 在顺序请求和并发请求场景中始终优于 vLLM。在并发负载下，差异尤其明显，SGLang 保持稳定吞吐量的能力凸显了其卓越的可扩展性和鲁棒性。这些发现表明，对于需要高并发和高效处理大量请求的应用程序来说，SGLang 是更好的选择
+
+（1）入门级轻量部署：Ollama, LM Studio, GPT4All；
+
+（2）高性能推理：Llama.cpp  LLM TGI, TensorRT-LLM；
+
+（3）本地微调：LoRA + PEFT, Axolotl, DeepSpeed；
+
+（4）企业级 API 部署：FastChat, OpenWebUI
+
+## 14.2 vLLM
+
+（1）start a service
+
+```sh
+vllm serve deepseek-ai/DeepSeek-R1-Distill-Qwen-32B --tensor-parallel-size 2 --max-model-len 32768 --enforce-eager
+```
+
+（2）use in code
+
+```python
+# pip install vllm
+from vLLM import LLM
+llm = LLM(model="huggingface/your-model-name",
+          offload_weights=True,
+          offload_activations=True,
+          dtype="fp16",
+          max_batch_size=1,
+          max_new_tokens=50)
+output = llm.generate("Hello, my name is")
+print(output)
+```
+
+## 14.3 SGLang
+
+SGLang load and run a LLM as service
+
+```python
+# pip install sglang[all]
+python3 -m sglang.launch_server --model deepseek-ai/DeepSeek-R1-Distill-Qwen-32B --trust-remote-code --tp 2
+```
+
+
+
+# 15. Reference
 
 [1] Hugging Face Documentation. https://huggingface.co/docs;
 
@@ -1403,6 +1552,14 @@ cuDNN 与本文无关，不过若需要进行深度学习，例如在 GPU 上运
 
 [9] cuDNN, https://developer.nvidia.com/cudnn;
 
-# 13. 附录
+[10] SGLang VS vLLM, https://zhuanlan.zhihu.com/p/18942501855;
+
+[11]  vLLM, https://github.com/vllm-project/vllm;
+
+[12] https://github.com/Zeyi-Lin/LLM-Finetune;
+
+[13] LLM 微调， https://mp.weixin.qq.com/s/NAJo7S7V2kYnCdQLBHd6Zw
+
+# 16. 附录
 
 文中所涉及到的代码 demo,详见  https://github.com/liuyngchng/llm_test。
