@@ -1610,6 +1610,7 @@ python3 -m sglang.launch_server --model deepseek-ai/DeepSeek-R1-Distill-Qwen-32B
 [13] LLM 微调， https://mp.weixin.qq.com/s/NAJo7S7V2kYnCdQLBHd6Zw
 [14] 消费级显卡上进行模型微调, https://blog.csdn.net/m0_59596990/article/details/135983983
 [15] https://github.com/tamiminaser/llm-single-gpu/blob/main/qlora_mistral_7b.ipynb
+[16] https://arxiv.org/pdf/2403.06504
 
 # 16. 附录
 
