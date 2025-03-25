@@ -641,3 +641,10 @@ curl -s --noproxy '*' --tlsv1  'https://www.customdomain.com:443'
 ```
 
 重启浏览器，会在 Chrome浏览器中看到已经导入的证书，需要编辑证书，选择3个“Trust***” 的复选框，此时浏览器访问的网址应该能正常工作了。
+
+# 21. 离线下载安装包及其依赖包
+
+```sh
+sudo apt-get install --download-only  nvidia-cuda-toolkit
+```
+

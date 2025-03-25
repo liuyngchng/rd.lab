@@ -436,7 +436,6 @@ curl -X POST http://192.168.1.124:11434/api/generate -d '{
         "stream":false
 }'
 
-
 # 多轮对话
 curl  -X POST http://127.0.0.1:11434/api/chat -d '{
     "model": "llama3.1",
@@ -448,6 +447,35 @@ curl  -X POST http://127.0.0.1:11434/api/chat -d '{
         {"role": "user", "content": "有哪些航班可选？"}
         ],
     "stream":false
+}'
+
+
+# chat
+curl -s --noproxy '*' -X POST http://127.0.0.1:11434/api/chat -d '{
+    "model": "llama3.1:8b",
+    "messages": [
+    	{"role": "system", "content": " You are a helpful assistant with tool calling capabilities.\r\n\r\nWhen you receive a tool call response, use the output to format an answer to the orginal user question."},
+        {"role": "user", "content": "你好，我想订一张机票。"}
+        ],
+    "stream":false
+}' | jq
+
+curl -s --noproxy '*' -X POST http://127.0.0.1:11434/api/chat -d '{
+    "model": "llama3.1:8b",
+    "messages": [
+        {"role": "user", "content": "你好，我想订一张机票。"}
+        ],
+    "stream":false
+}' | jq
+
+# tools 调用
+curl -s --noproxy '*' -X POST http://127.0.0.1:11434/api/chat -d '{
+	"model": "llama3.1:8b",
+  	"messages": [{"role": "user", "content": "查北京天气"}],
+  	"tools": [{
+    	"type": "function",
+    	"function": {"name": "get_weather"}
+  	}]
 }'
 
 # 相当于 ollama ps 命令
