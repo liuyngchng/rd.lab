@@ -1407,17 +1407,38 @@ cuDNN 与本文无关，不过若需要进行深度学习，例如在 GPU 上运
 
 ## 10.4 docker 中使用  GPU的问题
 
-Docker无法调用GPU问题，需安装nvidia-container-toolkit
+Docker无法调用GPU问题，需安装nvidia-container-toolkit, 详见  https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/latest/install-guide.html
+
+官方版本，报错
 
 ```sh
 curl -fsSL https://nvidia.github.io/libnvidia-container/gpgkey | sudo gpg --dearmor -o /usr/share/keyrings/nvidia-container-toolkit-keyring.gpg && curl -s -L https://nvidia.github.io/libnvidia-container/stable/deb/nvidia-container-toolkit.list | sed 's#deb https://#deb [signed-by=/usr/share/keyrings/nvidia-container-toolkit-keyring.gpg] https://#g' | sudo tee /etc/apt/sources.list.d/nvidia-container-toolkit.list
+
+```
+
+替换国内镜像
+
+```sh
+curl -fsSL https://mirrors.ustc.edu.cn/libnvidia-container/gpgkey | sudo gpg --dearmor -o /usr/share/keyrings/nvidia-container-toolkit-keyring.gpg
+curl -s -L https://mirrors.ustc.edu.cn/libnvidia-container/stable/deb/nvidia-container-toolkit.list | \
+  sed 's#deb https://nvidia.github.io#deb [signed-by=/usr/share/keyrings/nvidia-container-toolkit-keyring.gpg] https://mirrors.ustc.edu.cn#g' | \
+  sudo tee /etc/apt/sources.list.d/nvidia-container-toolkit.list
+```
+
+执行
+
+```sh
 # 安装nvidia-container-toolkit
 sudo apt-get update
 sudo apt-get install -y nvidia-container-toolkit
+# 验证
+nvidia-container-cli --version
 # 配置 Docker 使用 NVIDIA 容器工具包
 sudo systemctl restart docker
-
+# docker run 添加  --gpus all 选项
 ```
+
+
 
 ## 10.5 环境变量
 
@@ -1587,6 +1608,9 @@ python3 -m sglang.launch_server --model deepseek-ai/DeepSeek-R1-Distill-Qwen-32B
 [12] https://github.com/Zeyi-Lin/LLM-Finetune;
 
 [13] LLM 微调， https://mp.weixin.qq.com/s/NAJo7S7V2kYnCdQLBHd6Zw
+[14] 消费级显卡上进行模型微调, https://blog.csdn.net/m0_59596990/article/details/135983983
+[15] https://github.com/tamiminaser/llm-single-gpu/blob/main/qlora_mistral_7b.ipynb
+[16] https://arxiv.org/pdf/2403.06504
 
 # 16. 附录
 
