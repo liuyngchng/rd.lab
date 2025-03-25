@@ -644,7 +644,7 @@ curl -s --noproxy '*' --tlsv1  'https://www.customdomain.com:443'
 
 # 21. 离线下载安装包及其依赖包
 
-```sh
-sudo apt-get install --download-only  nvidia-cuda-toolkit
-```
+安装工具
+
+
 
