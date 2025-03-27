@@ -1385,6 +1385,36 @@ nvidia-smi
 
 Windows 10 系统的主机上，接入显卡硬件后，需要从 Nvidia 官网下载对应的显卡驱动，可在设备管理器中看到相应的显卡，也可以在控制台中输入 `nvidia-smi` 查看相应的显卡。
 
+nvidia-smi 各指标含义如下所示。
+
+```sh
+GPU: Graphics Processing Unit（图形处理单元），指的是显卡或图形处理器。
+Persistence-M: 持久模式（Persistence Mode）。这个模式确保即使没有活动的应用程序使用GPU，驱动程序也不会卸载GPU上下文，从而减少启动延迟并提高性能。
+Bus-Id: 总线ID（Bus Identifier），标识GPU在系统中的位置，通常由PCI总线编号、设备编号和功能编号组成。
+Disp.A: 显示激活（Display Active），表示显示器是否连接到该GPU并启用。
+Volatile Uncorr. ECC: 易失性不可纠正ECC错误（Volatile Uncorrectable ECC Errors），表示当前会话中发生的无法自动纠正的内存错误数量。
+Fan: 风扇转速百分比（Fan Speed Percentage），表示风扇当前的转速相对于其最大转速的百分比。
+Temp: 温度（Temperature），表示GPU当前的温度。
+Perf: 性能状态（Performance State），表示GPU当前的工作状态等级。P0通常代表最高性能级别，P12通常代表最低功耗状态。
+Pwr:Usage/Cap: 功率使用/容量（Power Usage/Capacity），表示当前功耗以及最大功率限制。
+Memory-Usage: 内存使用情况（Memory Usage），表示已使用的显存和总显存的数量。
+GPU-Util: GPU利用率（GPU Utilization），表示GPU在计算任务上的使用百分比。
+Compute M.: 计算模式（Compute Mode），表示GPU当前的计算模式。默认模式允许所有进程访问GPU，而其他模式可能会限制访问权限。
+MIG M.: Multi-Instance GPU模式（Multi-Instance GPU Mode），表示是否启用了MIG功能。MIG允许将一个物理GPU分割成多个逻辑实例，每个实例都可以独立运行不同的工作负载。
+```
+
+监控 GPU
+
+```sh
+# gpu monitoring tool for AMD Intel and Nvidia
+sudo apt-get install nvtop
+
+#简单监控
+watch -n 1 nvidia-smi
+```
+
+
+
 ## 10.2 CUDA
 
 ubuntu 系统执行
@@ -1552,6 +1582,7 @@ generator = pipeline(
 （1）start a service
 
 ```sh
+# pip install vllm
 vllm serve deepseek-ai/DeepSeek-R1-Distill-Qwen-32B --tensor-parallel-size 2 --max-model-len 32768 --enforce-eager
 ```
 
@@ -1608,8 +1639,11 @@ python3 -m sglang.launch_server --model deepseek-ai/DeepSeek-R1-Distill-Qwen-32B
 [12] https://github.com/Zeyi-Lin/LLM-Finetune;
 
 [13] LLM 微调， https://mp.weixin.qq.com/s/NAJo7S7V2kYnCdQLBHd6Zw
+
 [14] 消费级显卡上进行模型微调, https://blog.csdn.net/m0_59596990/article/details/135983983
+
 [15] https://github.com/tamiminaser/llm-single-gpu/blob/main/qlora_mistral_7b.ipynb
+
 [16] https://arxiv.org/pdf/2403.06504
 
 # 16. 附录
