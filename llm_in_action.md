@@ -1579,14 +1579,21 @@ generator = pipeline(
 
 ## 14.2 vLLM
 
-（1）start a service
+（1）start a vLLM service
 
 ```sh
 # pip install vllm
 vllm serve deepseek-ai/DeepSeek-R1-Distill-Qwen-32B --tensor-parallel-size 2 --max-model-len 32768 --enforce-eager
 ```
 
-（2）use in code
+（2）request service
+
+```sh
+# vllm listen 8000 for default
+curl http://127.0.0.1:8000/v1/models
+```
+
+
 
 ```python
 # pip install vllm
