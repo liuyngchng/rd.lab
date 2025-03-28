@@ -134,6 +134,8 @@ jupyter notebook
 
 # 4. 镜像源
 
+## 4.1 使用指定的镜像源
+
 ```sh
 # for temporary case
 pip install some_package -i https://pypi.tuna.tsinghua.edu.cn/simple
@@ -142,3 +144,59 @@ pip config set global.index-url https://pypi.tuna.tsinghua.edu.cn/simple
 
 pip3 install some_package -i http://your_private_domain/root/pypi/+simple --trusted-host your_private_domain
 ```
+
+## 4.2 离线安装
+
+```sh
+# 进入到储存whl package的 目录下
+cd my_whl_dir
+# 在有网络的环境下事先下载你的whl包,例如,下载 torch相关的whl， 必须确保离线和有线环境下的python pip版本号完全一致
+pip download torch
+
+#离线安装
+pip install torch --no-index --find-links=/a/b/c/my_whl_dir
+```
+
+
+
+## 4.3 搭建本地镜像源
+
+todo：尚未验证
+
+```sh
+方法2：使用local-pypi-server
+local-pypi-server是一个轻量级的本地pypi服务器，它可以帮助你管理本地Python包。
+
+安装local-pypi-server：
+
+pip install local-pypi-server
+
+启动服务器：
+
+local-pypi-server --port 8000 --repo /path/to/your/packages
+这里--repo参数指定了你的包存储位置。你可以将需要发布的包放在这个目录下。
+
+方法3：使用devpi
+devpi是一个更高级的pypi服务器，支持更多的功能和配置选项。
+
+安装devpi-server和devpi-client：
+
+pip install devpi-server devpi-client
+
+启动devpi-server：
+
+devpi-server --host 127.0.0.1 --port 3141 --start
+
+使用devpi-client创建用户和索引：
+
+devpi use http://127.0.0.1:3141/root/pypi
+devpi user -cX --password=mypass root
+devpi login root --password=mypass
+devpi index -c
+
+上传包：
+
+devpi upload /path/to/your/package/dist/*.whl
+
+```
+
