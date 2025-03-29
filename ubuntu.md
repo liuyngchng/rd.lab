@@ -648,3 +648,14 @@ curl -s --noproxy '*' --tlsv1  'https://www.customdomain.com:443'
 
 
 
+# 22. ubuntu24.02 MySQL
+
+
+
+```sh
+sudo apt install mysql-server
+mysql -V
+mysql  Ver 8.0.41-0ubuntu0.24.04.1 for Linux on x86_64 ((Ubuntu))
+sudo systemctl status mysql.service
+```
+

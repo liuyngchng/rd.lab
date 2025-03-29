@@ -9,7 +9,10 @@
 在 docker pull mysql:8.4.0 中测试通过
 
 ```sh
+# ubuntu 22.04 LTS
 sudo vi /etc/mysql/my.cnf
+# ubuntu 24.02 LTS
+sudo vi /etc/mysql/mysql.conf.d/mysqld.cnf
 # 添加如下内容
 [mysqld]
 skip-grant-tables=1
