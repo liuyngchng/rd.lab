@@ -24,6 +24,8 @@ mysql
 use mysql;
 # 首先执行 flush ***，不然会报  ERROR 1290 (HY000): The MySQL server is running with the --skip-grant-tables option so it cannot execute this statement
 flush privileges;
+update user set plugin='mysql_native_password' where user='root';
+flush privileges;
 ALTER USER 'root'@'localhost' IDENTIFIED BY 'P@$$W0rd';
 FLUSH PRIVILEGES;
 exit;
