@@ -862,6 +862,8 @@ Hugging Face 通常被称为机器学习的 GitHub。可以通过 Hugging Face �
 
 `huggingface-cli` 是 Hugging Face 官方提供的命令行工具，类似于github 的git命令。可以通过 `pip install huggingface_cli` 进行安装。
 
+国内环境无法访问 Hugging Face, 可以访问  https://www.modelscope.cn/home， 或者 https://hf-mirror.com ，下载相关模型。
+
 # 8. ONNX
 
 ONNX（ Open Neural Network Exchange，开放神经网络交换），一种通用的机器学习训练模型存储格式。模型文件存储的是网络拓扑（图）的和拓扑结构中每条边的权重。
