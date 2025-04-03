@@ -439,7 +439,7 @@ sudo apt install byzanz imagemagick -y
 # duration为整个gif的持续时长，单位为秒； delay 为延迟开始的时间，单位为秒
 byzanz-record --duration=10 --x=10 --y=50 --width=800 --height=600 --delay=5 git_output.gif
 # 
-byzanz-record --duration=15 --x=10 --y=100 --width=1280 --height=800 --delay=2  git_output.gif
+byzanz-record --duration=20 --x=10 --y=100 --width=1280 --height=800 --delay=5  git_output.gif
 ```
 
 # 17. video edit
