@@ -659,3 +659,18 @@ mysql  Ver 8.0.41-0ubuntu0.24.04.1 for Linux on x86_64 ((Ubuntu))
 sudo systemctl status mysql.service
 ```
 
+# 23. MP4 Player
+
+安装VLC播放器
+ubuntu 如果默认播放器无法播放MP4视频，可以尝试安装VLC播放器。安装步骤如下：
+
+
+
+```sh
+# 输入y并回车继续执行，等待解码器安装完成。
+sudo apt install ubuntu-restricted-extras
+
+# 安装VLC播放器：
+sudo apt-get install vlc
+```
+

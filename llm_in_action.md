@@ -1610,6 +1610,21 @@ output = llm.generate("Hello, my name is")
 print(output)
 ```
 
+asr
+
+```sh
+CUDA_LAUNCH_BLOCKING=1 CUDA_DEVICE_ORDER=PCI_BUS_ID CUDA_VISIBLE_DEVICES=1 \
+vllm serve whisper-large-v3-turbo \
+--tensor-parallel-size 1 \
+--max-model-len 448 \
+--gpu-memory-utilization 0.7 \
+--enforce-eager \
+--swap-space 0 \
+--device cuda
+```
+
+
+
 ## 14.3 SGLang
 
 SGLang load and run a LLM as service
