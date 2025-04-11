@@ -388,7 +388,7 @@ systemctl start docker.service
 
 ```sql
 CREATE USER IF NOT EXISTS 'foo'@'%' IDENTIFIED WITH mysql_native_password BY 'fGB#sfsfswe*&%$3^3%GN';
-grant all privileges on mysql.* to 'foo'@'%';
+grant all privileges on *.* to 'foo'@'%';
 flush privileges;
 ```
 
