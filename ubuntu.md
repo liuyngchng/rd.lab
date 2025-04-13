@@ -674,3 +674,25 @@ sudo apt install ubuntu-restricted-extras
 sudo apt-get install vlc
 ```
 
+# 24. 视频剪辑
+
+```sh
+sudo apt-get install ffmpeg
+
+# 使用 ffmpeg 剪掉mp4 文件中间的一部分，比如剪掉   第5秒到第10秒   之间的部分，剪掉   第15到第20秒的部分，其他部分保留 需要无损剪辑
+# -ss 设定起始时间点
+# -t 设定从该点截取的时长
+# 示例：-ss 5 -t 5 表示从第5秒开始，截取5秒内容（即5~10秒）。
+# 截取三部分（0-5秒、10-15秒、20秒到结尾）
+# 注意：-ss参数建议放在-i前加速切割，切割点必须在关键帧位置，否则时间会有偏移
+ffmpeg -i input.mp4 -t 5 -c copy p1.mp4
+ffmpeg -ss 10 -i input.mp4 -t 5 -c copy p2.mp4
+ffmpeg -ss 20 -i input.mp4 -c copy p3.mp4
+
+# 合并片段
+echo "file 'p1.mp4'" > list.txt
+echo "file 'p2.mp4'" >> list.txt
+echo "file 'p3.mp4'" >> list.txt
+ffmpeg -f concat -i list.txt -c copy output.mp4
+```
+
