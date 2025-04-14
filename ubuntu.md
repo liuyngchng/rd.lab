@@ -674,7 +674,9 @@ sudo apt install ubuntu-restricted-extras
 sudo apt-get install vlc
 ```
 
-# 24. 视频剪辑
+# 24. ffmpeg 视频编辑
+
+## 24.1 视频剪辑
 
 ```sh
 sudo apt-get install ffmpeg
@@ -694,5 +696,25 @@ echo "file 'p1.mp4'" > list.txt
 echo "file 'p2.mp4'" >> list.txt
 echo "file 'p3.mp4'" >> list.txt
 ffmpeg -f concat -i list.txt -c copy output.mp4
+```
+
+## 24.2 添加字幕
+
+
+
+```sh
+touch sub.srt
+vi sub.srt
+# 内容如下 srt字幕文件格式为编号\n开始时间 --> 结束时间\n 字幕文字\n
+1
+00:00:10,000 --> 00:00:13,000
+hello
+
+2
+00:02:00,000 --> 00:02:03,000
+world
+
+# 执行以下命令
+ffmpeg -i input.mp4 -vf "subtitles=sub.srt" -c:a copy output.mp4
 ```
 
