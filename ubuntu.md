@@ -718,3 +718,23 @@ world
 ffmpeg -i input.mp4 -vf "subtitles=sub.srt" -c:a copy output.mp4
 ```
 
+# 25. oracle client
+
+ubuntu 24.04
+
+```
+sudo apt install alien
+
+
+
+
+```
+
+在页面下  https://www.oracle.com/database/technologies/instant-client/linux-x86-64-downloads.html 选择版本 Version 11.1.0.7.0
+
+选择以下两个RPM包（需转换为Debian格式）：
+
+Basic Package（基础库，oracle-instantclient11.2-basic-11.2.0.4.0-1.x86_64.rpm）
+
+ODBC Package（ODBC驱动，oracle-instantclient11.2-odbc-11.2.0.4.0-1.x86_64.rpm）
+

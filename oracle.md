@@ -1,6 +1,6 @@
-# setup
+# 1.setup
 
-## setup
+## 1.1 setup
 
 通过 `docker` 镜像安装 `oracle`, 版本为 Oracle Database 11g Express Edition Release 11.2.0.2.0 - 64bit Production
 
@@ -21,7 +21,7 @@ select count(*) from user_tables;
 exit
 ```
 
-## config
+## 1.2 config
 
 ```sh
 # 查看环境变量
@@ -64,7 +64,7 @@ alter database open;
 
 此时，数据库的默认用户名的密码已修改，并创建了测试用户 test，可以通过客户端工具进行连接了。
 
-## test
+## 1.3 test
 
 ```sql
 create table stu(name varchar(10),code varchar(10),subject varchar(10), score number(16,2));
@@ -72,9 +72,9 @@ create table stu(name varchar(10),code varchar(10),subject varchar(10), score nu
 create table up_rpt_dt(mid varchar(64),time varchar(64),dt CLOB);
 ```
 
-# Ubuntu下安装 sqlplus 客户端
+# 2. Ubuntu下安装 sqlplus 客户端
 
-## 安装alien
+## 2.1 安装alien
 
 由于`oracle` 只提供了基于Red Hat Linux 版本的安装包， 安装包格式为`rpm` （(Red Hat Package Manager)）格式，在 Ubuntu 下安装需要进行转换。 
 
@@ -93,7 +93,7 @@ sudo alien -r test deb
 sudo apt-get install alien
 ```
 
-  ## 下载并安装sqlplus相关包
+  ## 2.2 下载并安装sqlplus相关包
 
 在 oralce 官网下载 instant client， https://www.oracle.com/database/technologies/instant-client/downloads.html, 此处以oracle11.2为例，下载以下 rpm 包。
 
@@ -112,13 +112,13 @@ sudo alien -i oracle-instantclient*-sqlplus*.rpm
 sudo alien -i oracle-instantclient*-devel*.rpm
 ```
 
-   ## 安装libaio.so
+   ## 2.3 安装libaio.so
 
 ```sh
 sudo apt-get install libaio1
 ```
 
-## 配置动态库的路径
+## 2.4 配置动态库的路径
 
 把下面的语句配置在oracle.conf中
 
@@ -135,7 +135,7 @@ sudo sensible-editor /etc/ld.so.conf.d/oracle.conf
 /usr/lib/oracle/11.2/client64/lib/
 ```
 
-## 更新动态库配置
+## 2.5 更新动态库配置
 
 执行如下语句
 
@@ -143,7 +143,7 @@ sudo sensible-editor /etc/ld.so.conf.d/oracle.conf
 sudo ldconfig
 ```
 
-## 连接数据库
+## 2.6 连接数据库
 
 * 命令格式如下：
 
@@ -189,9 +189,9 @@ XE:/u01/app/oracle/product/11.2.0/xe:N
 sqlplus64 test/test@//localhost:1521/XE
 ```
 
-# SQLPlus及常用 SQL
+# 3. SQLPlus及常用 SQL
 
-## 登录
+## 3.1 登录
 
 常用的命令如下所示
 
@@ -211,19 +211,19 @@ sqlplus username/password@//host:port/sid
 quit;
 ```
 
-## 查看版本
+## 3.2 查看版本
 
 ```sql
 SELECT * FROM v$version;
 ```
 
-## 查看 SID
+## 3.3 查看 SID
 
 ```sql
 select instance_name from V$instance; 
 ```
 
-## 查看表信息
+## 3.4 查看表信息
 
 * 查看表结构
 
@@ -264,7 +264,7 @@ SELECT t.*,i.index_type FROM user_ind_columns t,user_indexes i WHERE t.index_nam
 SELECT cu.* FROM user_cons_columns cu, user_constraints au WHERE cu.constraint_name = au.constraint_name AND au.constraint_type = 'P' AND au.table_name = 'table_name';
 ```
 
-## 导入导出数据
+## 3.5 导入导出数据
 
 * 导出文本数据
 我们使用SPOOL方法，将数据库中的表导出为文本文件的时候会采用两种方法，如下述：
@@ -297,13 +297,13 @@ exp system/123456 file= C:person.dmp full=y
 imp 管理员账号/密码 file=C:person.dmp fromuser=用户名
 ```
 
-#  GUI Client
+#  4. GUI Client
 
 客户端图形化连接工具，可以使用 Oracle 官方提供的免费工具 `Oracle SQL Developer`， 可通过链接
 
 https://www.oracle.com/database/sqldeveloper/ 下载， 支持 Windows 以及 linux。
 
-# JDBC
+# 5. JDBC
 
 oracle JDBC 连接字符串格式如下所示：
 
@@ -316,9 +316,9 @@ jdbc:oracle:thin:@host:port:SID
 
 
 
-# Sequence
+# 6. Sequence
 
-## 查看用户序列
+## 6.1 查看用户序列
 
 ```sql
 SELECT SEQUENCE_NAME,MIN_VALUE,MAX_VALUE,INCREMENT_BY,LAST_NUMBER FROM USER_SEQUENCES;
@@ -330,7 +330,7 @@ SELECT SEQUENCE_NAME,MIN_VALUE,MAX_VALUE,INCREMENT_BY,LAST_NUMBER FROM USER_SEQU
 ALTER SEQUENCE seq_name INCREMENT BY 1 MAXVALUE 10000 CYCLE     -- 到10000后从头开始 NOCACHE ;
 ```
 
-## create sequence
+## 6.2 create sequence
 
 ```sql
 CREATE SEQUENCE 序列名
@@ -356,20 +356,20 @@ example
 insert into t1 values(seq_name.nextval, 1, 1);
 ```
 
-# 解决 sequence 问题的思路
+# 7. 解决 sequence 问题的思路
 
-## 主键 number 统一设置 12 位
+## 7.1 主键 number 统一设置 12 位
 
 Number(12), 10^12 = 1000亿，远传表抄表、计费、充值记录等每天产生约 400 万条记录，一月 1.2 亿， 1年 12 亿条。
 
 Number(12) 短期内的值域够用。
 
-## sequence 最大值
+## 7.2 sequence 最大值
 
 远传表 sequence 最大值 设置为 10 ^12。
 
-## 涉及到的 sequence
-# record num
+## 7.3 涉及到的 sequence
+# 8. record num
 
 ```sql
 SELECT 
