@@ -40,6 +40,8 @@ alter user system identified by system;    	# 修改system用户账号的密码,
 alter user sys identified by system;		# 修改sys用户账号的密码, usr:sys, pwd:system
 create user test identified by test; 		# 创建内部管理员账号 test， 设置密码为 test
 grant connect,resource,dba to test; 		# 将 dba 权限授权给内部管理员账号 test
+GRANT SELECT_CATALOG_ROLE TO test; 			# 授予元数据查询权限
+GRANT SELECT ANY DICTIONARY TO test;  		# 更全面的数据字典访问权限
 ALTER PROFILE DEFAULT LIMIT PASSWORD_LIFE_TIME UNLIMITED; # 修改密码规则策略为密码永不过期
 alter system set processes=1000 scope=spfile; # 修改数据库最大连接数据
 # 修改以上信息后，需要重新启动数据库
