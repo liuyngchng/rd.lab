@@ -200,3 +200,8 @@ devpi upload /path/to/your/package/dist/*.whl
 
 ```
 
+# 5. IDE
+
+pycharm 历史版本
+
+https://www.jetbrains.com.cn/pycharm/download/other.html
