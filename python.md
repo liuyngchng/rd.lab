@@ -154,7 +154,7 @@ cd my_whl_dir
 pip download torch
 
 #离线安装
-pip install torch --no-index --find-links=/a/b/c/my_whl_dir
+pip install torch --no-cache-dir --no-index --find-links=/a/b/c/my_whl_dir
 ```
 
 
