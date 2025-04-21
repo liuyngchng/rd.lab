@@ -23,3 +23,12 @@ sudo vi /etc/hosts
 git checkout -- aaaa.file
 ```
 
+# 4. github host
+
+
+
+```sh
+140.82.121.3 github.com
+
+```
+
