@@ -1,4 +1,4 @@
-# Unit 1文档说明
+# 1. Unit 1文档说明
 
 本文档适用的读者为具有基本的编程语言基础而缺乏实践经验，或者毫无编程经验，希望能够成为Java开发人员的读者。文档内容偏重实践，理论基础等涉及较少，在需要理论的地方推荐读者阅读相应的书籍。
 
@@ -6,11 +6,11 @@
 
 本文档的读者需熟悉 Windows 或 Ubuntu 2种操作系统中的一种，无需其他基础。Unit11 之后为高阶内容，对于学有余力的读者可自行学习，相关内容较为简略，目的在于开阔视野，每一部分都有相关的书籍进行进一步的学习。
 
-# Unit 2 开发环境准备
+# 2. Unit 2 开发环境准备
 
-##  配置开发环境 
+##  2.1 配置开发环境 
 
-### 安装 JDK
+### 2.1.2 安装 JDK
 
 **（1）Windows 系统**
 
@@ -26,7 +26,7 @@ sudo apt-get install openjdk-17-jdk
 
 输入管理员密码，即可。
 
-###  配置环境变量
+###  2.1.3 配置环境变量
 
 环境变量的作用，就是当用户在操作系统的控制台（Windows的cmd）中，输入一个命令时，操作系统会按照环境变量中设置的文件目录，逐个去查找。
 
@@ -63,7 +63,7 @@ OpenJDK 64-Bit Server VM (build 17.0.10+7-Ubuntu-122.04.1, mixed mode, sharing)
 
 至此，java运行时已安装完毕。
 
-### 扩展阅读
+### 2.1.4 扩展阅读
 
 为什么要安装JDK，不安装可以进行Java开发吗？   java属于高级语言，需要编译后生成一种叫`字节码（Byte-code）`的中间二进制流，通过`Java 虚拟机（JVM, java vritual machine）`的解释后，才能成为机器可是别的机器指令。JDK提供以下功能。
 
@@ -77,9 +77,9 @@ OpenJDK 64-Bit Server VM (build 17.0.10+7-Ubuntu-122.04.1, mixed mode, sharing)
 
 **（4）字节码**。字节码是一种跟硬件无关的二进制字节流，可以被 java 虚拟机识别并转换为对应的机器可执行的机器指令。之所以这么做，是为了减少对不同硬件体系结构及其对应的硬件指令集的依赖。同一套源代码，生成同一套字节码，由`JVM`去适配不同的硬件指令集。
 
-## 安装集成开发环境
+## 2.2 安装集成开发环境
 
-### GUI IDE 安装
+### 2.2.1 GUI IDE 安装
 
 安装集成开发环境（IDE， Integrated Development Environment ），能够为开发人员提供源代码输入，代码补全，代码编译，运行时调试等便利的功能。本节以开源的Eclipse 为例， 下载地址  https://www.eclipse.org/downloads/packages/ 。
 
@@ -107,7 +107,7 @@ eclipse &
 
  即可打开图形化用户界面（GUI， Graphical User Interface）。
 
-###  扩展阅读
+###  2.2.2 扩展阅读
 
 是否可以不安装IDE,直接通过文本文档进行开发工作？ 事实上，如果只是进行一些小型的demo实验，或者复杂度较低的java 程序编写，可以不使用 IDE，直接打开一个 文本文档编辑器，写好源代码后，直接另存为 test.java（注意：文件编码格式需使用UTF-8）即可， 然后通过`java`相关的命令工具进行编译，运行。
 
@@ -123,9 +123,9 @@ eclipse &
 
 **（4）代码打包及版本管理。**一般IDE 可以通过插件等其他形式提供代码打包及版本管理的图形化界面。
 
-# Unit 3 Hello world
+# 3. Unit 3 Hello world
 
-## 使用 IDE 创建工程
+## 3.1 使用 IDE 创建工程
 
 以 eclipse-jee-2024-06-R-linux-gtk-x86_64 的 eclipse为例进行说明。打开Eclipse, 选择 `文件(File)`-> `新建(New) `->`工程(Project ...)` ->` Java` -> `Java Project`， 点击 `下一步(Next)`, 输入工程名称“helloworld”， 点击`下一步（Next）`，点击`完成(Finish)`， 如果弹出“`是否打开 java 视图(Open java perspective)`”，点击是即可。
 
@@ -157,7 +157,7 @@ public class Helllo {
 
 点击菜单栏上的 运行(Run) -运行(Run CTRL+F11)，此时，会在IDE的最下方的 Console Tab 栏中，出现一行 “hello world, i am here”。
 
-##   通过命令行执行代码
+##   3.2 通过命令行执行代码
 
 * **创建 java 源代码文件**
 
@@ -209,21 +209,21 @@ java 命令在 执行后形成的进程在Java 中叫做 Java 虚拟机（Java V
 
 注意，此处命令为`java`，后面的参数为 hello，即 Hello.class的前缀， JVM 默认会找到当前目录下的 Hello.class 文件，读取，加载至内存，然后解析，找到这个类的入口 （main函数），然后执行。
 
-# Unit 4 几个基础概念
+# 4. Unit 4 几个基础概念
 
-## 源代码文件（source code file）
+## 4.1 源代码文件（source code file）
 
 java 中的源文件是以.java为后缀的编码为UTF-8的纯文本文档。源文件的名称一般以大写字母开头，例如Animal.java, Cat.java, Car.java。
 
 源代码文件，就是编程人员手写输出的文件，不管是.java（Java 源代码文件）, .py（Python源代码文件）,.c（C语言源代码文件）.html（HTML源代码文件），本质上就是一个文本文件。只不过为了方便管理，改了个后缀名而已。 
 
-## 类（class）
+## 4.2 类（class）
 
 Java 中的 类 （class）， 表示对物理世界中的一个名词（例如，MyCat）、动词（例如，DrinkWater）。类在源文件中体现为以class开头，包含在{}中的部分源代码。通过java编译后，会生成一个与源文件同名但以.class为后缀名的类文件，例如 Animal.class, Cat.class, Car.class。`.class`文件一般称之为类文件，是一个类的字节码文件。
 
 类可以理解为对自然界中某一种事物的描述。
 
-## 对象（Object）
+## 4.3 对象（Object）
 
 在面对对象的编程中，对象是经常会遇到的一个名词，而对象又是和类直接相关的，有时候又称之为类的实例（Instance of the class）。对象可以理解为具体的事物。一个类表示一种对事物的描述方法， 而类的对象（Object）/实例（instance）表示具体的某个类。举例说明，类Person 如代码段 4-1 所示，类 Person 表示对“人”这个事物的一种描述方法，这种描述方法叫“Person”。
 
@@ -269,7 +269,7 @@ person.weight=70;
 
 如表4-1所示， 表头相当于是类， 而表格中的一行数据相当于类的一个实例（对象）。
 
-## 包（package）
+## 4.4 包（package）
 
 package 在linux、windows中体现为一堆嵌套的文件夹， 在 Java IDE 中以“.”连接的一串字符串，例如 com.alibaba.taobao.ui.user.login。那么从包名可以看出来这个是alibaba的淘宝这个应用的UI（用户界面）中的user（用户）的登录相关的而java类。
 
@@ -277,13 +277,13 @@ package 在 Java 中用于将某个功能模块涉及到的多个类文件放在
 
 package的概念在很多编程语言中（C、python、C++）都有，主要为了方便源代码的管理，不然好几百个源代码文件放在一个文件夹下，放眼望去，太多了，无论是管理还是查找都不方便。
 
-## 工程（project）
+## 4.5 工程（project）
 
 工程的概念，在很多编程语言中都有，其本质上是按照一定的结构，将一组源代码及其配置文件等形成一个完整的文件目录，最终能够完成某个特定的功能。
 
 从IDE 的角度来说，工程是一个可以被 IDE 识别，被 IDE 独立管理、运行的一组文件。
 
-## 静态语言
+## 4.6 静态语言
 
 Java、C都属于静态语言，静态语言有个特征，都需要首先进行编译源文件/数据，生成一种格式的文件/数据，然后运行的时候需要运行生成的文件/数据。与此对应的有动态语言，例如Javascript、python、perl等都属于动态语言。动态语言的源代码文件无需编译，可直接加载至内存执行。
 
@@ -293,7 +293,7 @@ Java、C都属于静态语言，静态语言有个特征，都需要首先进行
 
 两种语言各有优缺点，静态语言呢，编译时会对一些基础错误进行检查，若发现潜在问题，会事先发现。而且，各种变量是什么类型占用多少字节，都是预先规定好的，当程序运行起来（运行时，runtime）后，就只管执行就行，所以一般来说效率较高，但缺点是任何变量都需要实现进行约定，所以缺乏灵活性。动态语言的好处就是灵活性较强，一个变量，一会儿是个数字，一会儿可能就是个字符串了，使用较为方便，但缺点也很明显，就是在运行时，除了执行之外，还需要进行前置预处理，判断变量的类型从而决定内存分类，所以会有额外的开销，执行效率相较于静态语言来说要差一些。
 
-## linux 命令
+## 4.7 linux 命令
 
 在linux上，需要掌握一些基础的linux命令，很多时候会起到事半功倍的效果， 如表 4-1 所示。
 
@@ -319,13 +319,13 @@ Java、C都属于静态语言，静态语言有个特征，都需要首先进行
 | 16   | tar -czf     | 压缩并打包为一个tar包（发音：踏）包，例如执行 tar -czf abc.tar.gz abc, 即将当前目录下的abc文件夹及其内部的所有文件打包为一个压缩文件 abc.tar.gz。 |
 | 17   | ssh          | ssh user@IP, 通过SSH在客户端连接至网络上服务端的服务器，登录网络上的某个服务器，例如  ssh guest@192.168.1.1.1,接下来输入密码就登录到远程的服务器上了，类似于Windows下的远程桌面功能，只是ssh没有图形化界面。 |
 
-# Unit 5 包依赖管理
+# 5. Unit 5 包依赖管理
 
 在程序运行的时候，总是需要一些第三方（其他开发者开发的）的工具， 例如JSON对象解析，ZIP文件解压缩，作为开发人员来说，不可能所有的工具都需要自己去做（重复发明轮子）。这就涉及到如何有效、便捷地使用第三方软件（包、类库等）的问题。在Java的生态中，有 ant、maven、gradle等构建工具（builld tool）可以使用。
 
 打一个通俗的比喻，需要建设一栋房子，开发人员只需要涉及好图纸，打好地基，然后使用第三方开发人员开发的砖头、混凝土、屋顶预制板材、窗户、壁纸等，自己按照建筑设计规范组装起来，最终达到一定抗震、保暖、透光、防水要求即可。那么如何管理砖头供货商、混凝土供货商、窗户供货商的信息，以便于在必要的时间点，及时准确地让第三方的供货商参与进来，就是构建工具(build tool)要做的事情了。下面以maven为例，进行说明。
 
-## maven工程介绍
+## 5.1 maven工程介绍
 
 Java 中如果需要使用maven（发音：mān wen）来进行依赖包（一般称为jar包（发音：榨包），因为java中第三方打的包都是xxxx.jar格式的），则需要按照一定的文件目录格式放置相应的文件，maven才能正常工作。就是说maven比较挑起，必须按照她的要求把文件放好，它才好好干活儿。
 
@@ -370,7 +370,7 @@ src为源文件目录， target为编译生成的文件所在目录。src/main/j
 
 相当于在文本文档的基础上，通过添加标签`<tag></tag>`，将文本进行分割，添加了说明，方便阅读，另外一个重要的作用，可以方便计算机进行处理。如果是文本文档，只能要求计算机读取第几行，但是XML 文档，就可以要求计算机读取代码段 4-2中的 myfile/name/firstname中的内容，这样是不是更加方便呢？这就是 XML 文件的作用了。这里的 “myfile/name/firstname” 被称之为 XPATH，有兴趣可以阅读 XML相关的书籍进行了解。
 
-## maven工程创建（create）
+## 5.2 maven工程创建（create）
 
 maven工程目录结构，可以手动进行创建，也可以通过IDE进行创建，一般IDE都提供有创建maven工程的图形化界面。
 
@@ -416,9 +416,9 @@ my.maven.demo
 
 然后在 IDE左侧导航界面中选中“my.maven.demo”的图表， 右键菜单中点击“Maven”-> "Update Project"，在弹出的对话框中点击 其他错误，暂时忽略。
 
-## maven工程构建（build）
+## 5.3 maven工程构建（build）
 
-### 安装maven工具
+### 5.3.1 安装maven工具
 
 此时，maven工程已经建好了，需要使用maven工具进行代码构建了。maven工具一般可以在IDE中安装插件，也可以从apache 官方网站下载，这里使用从apache官网下载的工具为例，降低复杂性。地址为 https://maven.apache.org/download.cgi。点击 “[apache-maven-3.9.8-bin.tar.gz](https://dlcdn.apache.org/maven/maven-3/3.9.8/binaries/apache-maven-3.9.8-bin.tar.gz)” 进行下载。
 
@@ -432,7 +432,7 @@ my.maven.demo
 sudo apt-get install maven
 ```
 
-### 编译
+### 5.3.2 编译
 
 进入“代码段 5-3 maven 工程结构”的工程根目录，ubuntu下的执行方法如代码段 5-5 所示。这里假定 my.maven.demo 处于目录 /a/b/c/d/e 下。
 
@@ -469,7 +469,7 @@ mvn compile
 
 至此，maven工程的编译完成了。
 
-### 打包
+### 5.3.3 打包
 
 上面的步骤只是将java源文件编译为 .class文件，作为一个工程来讲，有很多个.class文件，还有一些配置文件，作为可部署运行的程序，还需要通过打包（package）形成简单可部署、可执行的jar文件。
 
@@ -512,7 +512,7 @@ no main manifest attribute, in target/my.maven.demo-0.0.1-SNAPSHOT.jar
 
 此时，说明可部署的文件 my.maven.demo-0.0.1-SNAPSHOT.jar 是没问题的，由于前面的示例`代码段 4-3 maven 工程结构示例`中， 在src/main/java目录下，没有任何的java源代码文件，所以这里提示 “no main manifest attribute”。
 
-##  maven demo 运行（run）
+##  5.3.4 maven demo 运行（run）
 
 添加源代码， 在src/main/java中添加源代码文件。
 
@@ -649,11 +649,11 @@ Hello maven
 
 可见，maven工程源文件编译成功，而且已运行起来了。
 
-# Unit 6 简单的Web 应用程序
+# 6. Unit 6 简单的Web 应用程序
 
 通过这个单元的学习，将构建一个简单的Web应用程序， 启动后，可以通过浏览器输入 URL 进行访问。
 
-## Hello Web
+## 6.1 Hello Web
 
 在 Unit 4 中， 学习了 maven 工程的基本构建方法，本节的 Java web 工程将采用 maven类进行构建，所以这个工程是一个 Java Web 工程，又是一个Java Maven 工程，这是从两个方面来说的，不产生冲突。
 
@@ -952,7 +952,7 @@ my_web_demo_server_started, listen 8080
 
 每请求一次，就会输出几行日志信息。
 
-## 几个概念
+## 6.2 几个概念
 
 **（1）HTTP请求。**HTTP 是 Hypertext Transfer Protocol（超文本传输协议）的简称。当用户打开浏览器，输入一个地址（例如， https://www.baidu.com）时，浏览器开始构建相关的 HTTP请求报文，相对应的服务器发起请求，服务器返回相关的数据信息（可能是一个html页面，一个电影、一个图片、一段文本），此时浏览器根据返回数据的类型，来决定如何展示给用户，如果是一个网页那么直接渲染（就像我们看到的新闻页面那样），如果是一个电影（例如某种流媒体格式）可能会在浏览器中直接播放。
 
@@ -962,9 +962,9 @@ my_web_demo_server_started, listen 8080
 
 那我们日常浏览网站感觉没用到端口号啊？比如 http://www.baidu.com,事实上，这个地址使用了默认端口号80, 完整的地址为http://www.baidu.com:80。
 
-#  Unit 7 源代码管理
+#  7. Unit 7 源代码管理
 
-## 基本概念
+## 7.1 基本概念
 
 Source Code Management(源代码管理， 简称SCM)，目前主流的源代码管理工具有 git、svn、TFS等。最受欢迎的当然是git了， svn在一些较早的开源项目中在使用，新项目一般都使用git。一些windows下的项目使用TFS,主要微软一般喜欢搞一些全家桶的东西，什么都用他自己的，跟开源精神背道而驰。
 
@@ -976,7 +976,7 @@ Source Code Management(源代码管理， 简称SCM)，目前主流的源代码�
 
 2）多分支（branch）。当一份源代码需要被多个人修改时，可以生成多个不同的分支，不同分支上的源代码可以通过 git merge进行合并。
 
-## 安装git
+## 7.2 安装git
 
 （1）安装git。windows 系统可通过 https://git-scm.com/download/win 下载安装，安装 Standalone Installer， 下载地址为 https://github.com/git-for-windows/git/releases/download/v2.45.2.windows.1/Git-2.45.2-64-bit.exe。
 
@@ -998,7 +998,7 @@ Main Porcelain Commands
    am                   Apply a series of patches from a mailbox
 ```
 
-## 代码管理
+## 7.3 代码管理
 
 使用 git 进行源代码管理需要执行如代码段 7-1 所示的步骤。
 
@@ -1106,31 +1106,31 @@ Date:   Mon Jul 15 16:36:12 2024 +0800
 
 <div align='center'><b>代码段 7-2 实际工程源代码管理示例</b></div>
 
-# Unit 8 HTML
+# 8. Unit 8 HTML
 
 HTML 是整个互联网的基础，这么说毫不夸张。
 
-## HTML 页面
+## 8.1 HTML 页面
 
 HTML页面相关的内容，通常称之为前端，即用户可以直接看到的。 而前面几个单元所学的内容，称之为后端，即用户不能够直接看到的，但能够控制用户看到些什么。一般来说，前端的主要任务是提供优秀的用户体验，也就是说不管用户打开浏览器，还是打开一款APP,用起来感觉很舒服，看着舒心，操作不反人类，各种按钮都符合人体工程学（这方面比较优秀的是Apple公司）。而后端的任务是实现各种复杂的控制，在正确的时间给用户正确的内容。
 
 作为 Java 开发人员，需要掌握必不可少的 HTML 基础知识，能够通过 txt 文本文档自己写一个简单的 html 页面，如果还能加入一些javascript 脚本来实现简单的页面内容控制，通过浏览器打开该文件，能够达到预期的效果。熟悉 form 的提交，通过javascript实现form表单的异步提交。 了解css,div等样式相关的内容。https://www.w3cschool.cn/ 是一个不错的学习网站，可以自行学习。
 
-## JavaScript
+## 8.2 JavaScript
 
 JavaScript（简称JS），是HTML页面中非常流行的一种脚本语言，属于动态语言的范畴，是前端开发人员必须精通的一门编程语言。事实上， JavaScript 跟Java 一点关系也没有，虽然名称类似。
 
 JavaScript 在 1995 年由Netscape（网景）公司的Brendan Eich，在（Netscape Navigator）网景导航者浏览器上首次设计实现而成。后来Netscape与Sun Microsystems（太阳微系统公司，目前已经被甲骨文（Oracle）公司收购）合作，Netscape管理层希望它外观看起来更像Java，因此取名为JavaScript。
 
-# Unit 9 Java 基础
+# 9. Unit 9 Java 基础
 
 通过阅读Java基础的书籍（推荐《Core Java Volume I--Fundamentals(11th Edition)》，作者: [Cay S. Horstmann]， 出版社: Prentice Hall，初学者随便再找一本中文的，中英文同时看，毕竟这东西是老外发明的，中文翻译过来有些内涵就变了），通过一门编程语言，熟悉面对对象的编程思想。每种编程语言都有其特点，但面对对象的编程思想是相同的。
 
 熟悉 Java 基本数据类型、类、抽象类、接口、类的对象、重载、重写、构造函数、方法、类的继承（扩展）、类的多态、反射、代理、堆、栈、集合（Map、List、Set、Arrays）等。
 
-# Unit 10 Java生态
+# 10. Unit 10 Java生态
 
-## 数据库（DB）
+## 10.1 数据库（DB）
 
 需数据库相关的基础知识和实践能力，可以选取MySQL（一款开源免费的数据库，目前由Oracle 公司拥有）进行练习，包含以下内容。
 
@@ -1142,11 +1142,11 @@ JavaScript 在 1995 年由Netscape（网景）公司的Brendan Eich，在（Nets
 
 （4）了解关系型数据库（例如，MySQL、Oracle）和非关系型数据库（例如，MongoDB）的区别。
 
-## 缓存（Cache）
+## 10.2 缓存（Cache）
 
 至少掌握一种缓存的使用方法，例如Redis。了解缓存和数据库的相互配合，实现数据的持久存储和快速访问。
 
-## Spring
+## 10.3 Spring
 
 有关Spring 框架的内容，是一个庞大的体系，有专门的书籍讲解其思想，不过还得一点一点使用，得有自己的体会，光看书籍的话还是有些迷茫，一边看书籍边通过程序实践才是王道。下面内容只介绍其核心思想。
 
@@ -1279,7 +1279,7 @@ if (car1 == car2) {
 
 （3）Spring家族。Spring 家族目前有 Spring-Core、Spring-MVC、Spring-boot、Spring-Cloud等多个框架，形成了一个框架家族。core主要提供Spring 容器，来管理Spring bean。mvc 主要提供进行web开发相关的 mvc功能。boot提供了一个servlet容器插件，解决了无需再打war包再由servlet容器（例如Tomcat）启动程序的问题。cloud则提供了一系列跟微服务相关的组件，如负载均衡、熔断、限流、降级等相关的组件。
 
-## MVC的概念
+## 10.4 MVC的概念
 
 MVC（Model（模型）、View（视图）、Controller（控制器））。Spring框架中通过Spring MVC 模块，来实现Web 页面逻辑的MVC分离的概念。
 
@@ -1492,7 +1492,7 @@ class OrderController {
 
 至此，对于MVC的概念应该有一些理解了吧。MVC是一种设计模式。什么是设计模式？可以理解为套公式，有一套方法论（思想），对于不同的问题采用不同的程序实现方法，这个跟编程语言无关。这种方法论，被称之为设计模式，推荐看这本书 《Design Patterns: Elements of Reusable Object-Oriented Software》，作者 Erich Gamma, Richard Helm, Ralph Johnson, John Vlissides， ISBN 978-0201633610， 出版社 Addison-Wesley Professional，网上有PDF版的，可以打印出来多看几遍。
 
-## 服务调用
+## 10.5 服务调用
 
 **（1）RESTful 。**RESTful（REST，Representational State Transfer，表述性状态转变）是一种 HTTP 接口的封装风格，本质上还是 HTTP请求，不过对于什么样的业务逻辑（获取信息、提交数据、修改数据等）该用哪种HTTP Method，以及对于 HTTP 接口的地址规则进行了规范，这样方便大家交流，形成一些约定俗成的最佳实践，能给跨团队合作带来很多好处。
 
@@ -1512,7 +1512,7 @@ RPC 是让开发人员像调用本地方法（本地类库）一样的体验，�
 
 3）gRPC。 gRPC是由Google开发的，基于HTTP/2协议。
 
-# Unit 11 Netty
+# 11. Unit 11 Netty
 
 Netty 作为Java 生态中一个重量级的NIO 开源框架，初学者无需掌握，但对于做网络相关的高级开发人员来说是必须掌握的内容。下面提几个基本概念。
 
@@ -1559,23 +1559,23 @@ man epoll
 
 **（2）TCP 协议。** Netty底层有对 TCP、UDP等 TCP/IP 协议族 socket通信的封装。 什么是TCP，好像跟我日常的编程关系不大？TCP 即 Transmission Control Protocol， 传输控制协议，是当今整个网络通信的基础，日常我们浏览网页使用的 HTTP协议就是基于 TCP协议实现的。整个TCP 协议族，可以阅读《*TCP*/*IP* *Illustrated*, Volume 1: The Protocols, Second Edition 》作者Gary R. Wright，W. Richard Stevens。如果做网络变成，这本书是必读的，不但读，还得能讲得头头是道。知其然，知其所以然。知识是一片海洋，越学会越觉得自己渺小。
 
-# Unit 12 Java 内存模型
+# 12. Unit 12 Java 内存模型
 
 Java 的底层是C语言， C语言的底层是操作系统， Java的内存分配、管理模型，不能说跟 C 没有关系。这里涉及到对 Java 中 volatile 修饰符的理解， C 语言中也有 volatile 关键字， 理解其含义，从 C 语言出发也是一个不错的选项。进一步理解 Java 中的  synchronized 修饰符的真正含义和底层实现，还有internal 关键字。推荐阅读《Thinking in Java》作者 Bruce Eckel。
 
-#  Unit 13 操作系统
+#  13. Unit 13 操作系统
 
 操作系统可以阅读《Computer System: A Programmer's Perspective》。这里的每一个点都是重点，对于开发人员理解软件运行内部机制来说很重要。
 
 操作系统对 IO 的处理（ 磁盘 IO，网络IO， NIO, BIO, epoll）、多线程处理（Thread，CPU时间片），线程同步（JDK中有一个 ThreadLocal类、synchronized, Lock, Monitor），进程的 fork，临界区，PV操作、寄存器（java 中有 register）、用户态和内核态（零拷贝、内存映射、数据区、代码区）、堆栈。
 
-# Unit 14 算法
+# 14. Unit 14 算法
 
 算法（Algorithm）是比较基础的内容，也是软件的核心，决定着软件的性能（单位时间内对同一个任务的处理能力），可以看看基础的书籍，同时可以在刷题网站（https://leetcode.cn/）做做算法题，能够提高自己的思维能力以及实践能力。算法也是软件开发人员入职面试的必考科目。
 
-# Unit 15 软件架构
+# 15. Unit 15 软件架构
 
-## 架构设计基本原则
+## 15.1 架构设计基本原则
 
 软件架构（software architecture），即如何设计软件系统，使得在满足产品（用户）需求的基础上，使软件系统便于维护（后期代码修改）、横向扩展（当用户访问量增加时，如何提升系统处理能力）。
 
@@ -1593,7 +1593,7 @@ Java 的底层是C语言， C语言的底层是操作系统， Java的内存分�
 
 **（7）容灾。**一般在部署时需要进行多数据中心备份，还需要考虑数据的备份和恢复。
 
-## 软件全生命周期管理
+## 15.2 软件全生命周期管理
 
 本节内容涉及到软件工程方面的知识。一个软件从设计开始直到后期的迭代更新的整个生命周期，是一个长期的过程，下面进行详细介绍。
 
@@ -1647,7 +1647,7 @@ Java 的底层是C语言， C语言的底层是操作系统， Java的内存分�
 
 举个例子，某关键系统运行了20年，交付了多个客户，客户使用中的系统存在使用5年前、10年前以及最新版本的多个软件版本。当使用10年前软件版本系统的客户需要升级一个子模块时，这时候该怎么做？这就是SCM 发挥作用的时候了。从SCM系统中可以获取10年前指定软件版本（V3.2.1193）对应的各个子系统的软件版本号以及部署安装包、安装手册、用户手册、运维手册等一系列软件和文档全部精确无误地获取到，然后形成一套交付方案，由实施人员在客户的硬件环境中进行实施。
 
-# Unit 16 系统架构
+# 16. Unit 16 系统架构
 
 系统架构（Architecture），或者叫做企业架构，主要是设计思想，是方法论层面的东西，通过一套比较科学的方法论来指导系统的设计，尽可能地降低风险，减少损失。需要设计人员从软件中脱离出来，站在更高的视角（宇宙视角）来看整个系统，从整个系统来考虑问题，自上而下地思考现实中的问题。软件是用来实现价值的，不是独立存在的，软件需要部署在硬件上，硬件又被分割在很多物理位置。很多现实中出现的问题不是单单某个软件系统的问题，举个例子，软件系统A单独运行没有问题，软件系统B单独运行也没有问题，但如果部署在一个网络内（或一台机器上），就会出现一些莫名其妙的问题。
 
@@ -1657,7 +1657,7 @@ Java 的底层是C语言， C语言的底层是操作系统， Java的内存分�
 
 客观的系统，是一个物理的客体，是不变的，但对于不同的人来讲，因为关注点不同，所以对与同一个系统的理解会有不同，这样就衍生除了数据架构、业务架构、功能架构、软件架构等不同的视角。对于一个大型系统来讲，需要满足不同的利益相关者（stockholder）的要求，例如负责管理数据的希望看到整个系统的数据流是如何流动的，负责管理业务功能的希望看到整个系统的业务是如何运作的，在什么节点有哪些参与方需要参与；负责软件系统的希望看到系统都是用了哪些开源组件，对应的开源协议是否合规，是什么操作系统，什么数据库，是不是微服务架构，上层应用和中间层的划分是否合理，运行是否稳定，软件维护是否方便快捷；负责财务审计的管理人员希望看到整个项目在什么里程碑节点给谁支付什么款项，各种财务开支是否符合财务管理规定。
 
-## DoDAF 视图
+## 16.1 DoDAF 视图
 
 本文选取DoDAF 的视图，来说明不同的利益相关者从不同的角度对同一套系统进行分析、理解及其关注点。在DoDAF中描述了8 种视图，‌基本上代表了不同的利益相关者。
 
@@ -1723,6 +1723,6 @@ Java 的底层是C语言， C语言的底层是操作系统， Java的内存分�
 
 以 ChatGPT 为例，其子系统有全球主要语言分类子系统、模型训练子系统、在线模型子系统、人工智能合规监督子系统、运行监控子系统等， 在线支付子系统，用户管理子系统。
 
-## 系统架构工具
+## 16.2 系统架构工具
 
 企业架构设计的工具，目前有 Enterprise Architect （EA），详见 https://sparxsystems.com/enterprise-architect/ 。该软件遵循 OMG（Object Management Group， 对象管理组织）组织制订的 BPMN （Business Process Modeling Notation）标准。这套标准规范了企业架构建模过程中各种数据的形式化表达方法。BPMN本质上是一种 UML 建模标准。

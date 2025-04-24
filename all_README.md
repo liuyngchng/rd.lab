@@ -1545,13 +1545,13 @@ public class LogFormatter extends Formatter {
 </dependency>
 ```
 
-# Eclipse 配置
+# 67. Eclipse 配置
 
-## 添加头文件路径（include -I）
+## 67.1 添加头文件路径（include -I）
 
 左键选中项目， 点击右键， 选择“Properties”，-> "C/C++ General" -> "Paths and Symbols" -> "Includes" 
 
-#  WeMeet（腾讯会议）问题
+#  68. WeMeet（腾讯会议）问题
 
 在 ubuntu 22.04 上运行 腾讯会议，启动时报错
 
@@ -1601,7 +1601,7 @@ sudo vi /etc/gdm3/custom.conf
 WaylandEnable=false
 ```
 
-#  时间同步
+#  69. 时间同步
 
 可选的服务有 ntpd 和 chronycd， chronycd相较于ntpd要更优秀一些
 
@@ -1645,7 +1645,7 @@ Name/IP Address            NP  NR  Span  Frequency  Freq Skew  Offset  Std Dev
 10.30.64.25                 0   0     0      0.000   2000.000     +0ns  4000ms
 ```
 
-# 命令行中回车未换行
+# 70. 命令行中回车未换行
 
 进到容器内部执行命令的时候，如果命令比较长，会出现折行情况，有时候会出现回车后未换行的情况，导致显示错乱，如下所示。
 
@@ -1664,7 +1664,7 @@ root@TSync:~# dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd
 dddddddddddddddddddddddddd
 ```
 
-#  url encoding in shell
+#  71. url encoding in shell
 
 ```sh
 # 输入待编码字符串
@@ -1673,7 +1673,7 @@ src_text='Qq1!@#$%^&*()'
 echo ${src_text} | xxd -plain | tr -d '\n' | sed 's/\(..\)/%\1/g'
 ```
 
-#  OpenCV
+#  72. OpenCV
 
 以 ubuntu 系统为例，
 
@@ -1706,9 +1706,20 @@ int main()
 }
 ```
 
-# shell int to hex
+# 73. shell int to hex
 
 ```sh
 echo -n -2147418093 | awk 'BEGIN{printf("0x%X\n", '$n')}'
+```
+
+# 74. ssh with private key
+
+
+
+```sh
+# ssh with private key
+ssh -i ./your_priavate_key devbox@petrotech.cnpc -p ssh_port
+# scp your localfile to server.
+scp -i ./your_priavate_key -P ssh_port your_local_file user@host:/host_dir
 ```
 
