@@ -28,7 +28,7 @@ git checkout -- aaaa.file
 
 
 ```sh
-140.82.121.3 github.com
-
+140.82.121.3 	github.com
+20.205.243.166	github.com
 ```
 
