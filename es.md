@@ -1,6 +1,6 @@
-# setup
+# 1. setup
 
-##     doc
+##     1.1 doc
 
 https://www.elastic.co/guide/en/elasticsearch/reference/7.6/targz.html
 
@@ -37,7 +37,7 @@ Generate an enrollment token for Elasticsearch nodes with
 ### You can start elasticsearch service by executing
  sudo systemctl start elasticsearch.service
 ```
-##      env config
+##      1.2 env config
 
 openfiles 配置
 
@@ -70,7 +70,7 @@ su
 sysctl -w vm.max_map_count=262144
 ```
 
-##     传输层 SSL config
+##     1.3 传输层 SSL config
 
 * 生成证书
 
@@ -116,7 +116,7 @@ xpack.security.transport.ssl.truststore.path: certs/elastic-certificates.p12
 ```
 
 
-##     开启远程访问
+##     1.4 开启远程访问
 
 elastic 默认无法远程IP 进行访问，若需要通过远程IP进行访问，则，需要尽心如下配置
 
@@ -128,7 +128,7 @@ http.port: 9200
 discovery.seed_hosts: ["127.0.0.1", "[::1]"]
 ```
 
-##    设置用户密码
+##    1.5 设置用户密码
 
 ```shell
 # 重启动服务
@@ -164,7 +164,7 @@ PASSWORD elastic = ****
 
 此时说明登录已设置成功，浏览网页 http://IP:9200 时，则会提示输入密码
 
-##   配置 HTTP 层 TLS/SSL加密传输
+##   1.6 配置 HTTP 层 TLS/SSL加密传输
 
 对于HTTP层通信，Elasticsearch节点仅用作服务器，因此可以使用服务器证书，即TLS/SSL证书不需要启用客户端身份验证。值得注意的是，用于加密HTTP通信的证书可以完全独立于用于传输通信的证书。为了简化操作，我们使用与已用于传输通信的相同的证书，即在elasticsearch.yml文件中配置如下：
 
@@ -176,7 +176,7 @@ xpack.security.http.ssl.truststore.path: certs/elastic-certificates.p12
 
 这样就能通过 HJTTPS进行浏览了，  https://IP:9200 
 
-##  启动
+##  1.7 启动
 
 ```sh
 ./bin/elasticsearch -d
@@ -184,16 +184,16 @@ xpack.security.http.ssl.truststore.path: certs/elastic-certificates.p12
 
 
 
-# API
+# 2. API
 
-##     LOGIN
+##     2.1 LOGIN
 
 https://localhost:9200/
 
 username: elastic
 passowrd: ****
 
-##     CLUSTER STATUS
+##     2.2 CLUSTER STATUS
 
 
 
@@ -203,7 +203,7 @@ curl -k --tlsv1  'https://127.0.0.1:9200/_cluster/health?pretty' -u elastic:****
 
 
 
-##  search
+##  2.3 search
 
 ```sh
 curl -k --tlsv1  'https://127.0.0.1:9200/index_name/_search?pretty' -u elastic:******
@@ -214,7 +214,7 @@ curl  -k --tlsv1  -X GET "https://11.10.36.1:9200/filebeat-rd-7.6.2-2022.05.16/_
 
 ```
 
-## grok
+## 2.4 grok
 
 通过 grok 将非结构化文本解析为结构化文本
 
@@ -259,13 +259,13 @@ curl  -k --tlsv1  -X POST "https://11.10.36.1:9200/_ingest/pipeline/example_grok
 
 
 
-#  journal
+#  3. journal
 To tail the journal:
 
 `sudo journalctl -f`
 
-# health check and Other API
-##     health check
+# 3.1 health check and Other API
+##     3.2 health check
 
 ```sh
 sudo curl --cacert /etc/elasticsearch/certs/http_ca.crt  'https://127.0.0.1:9200/_cluster/health?pretty' -u elastic
@@ -273,22 +273,22 @@ sudo curl --cacert /etc/elasticsearch/certs/http_ca.crt  'https://127.0.0.1:9200
 curl -k --tlsv1  'https://127.0.0.1:9200/_cluster/health?pretty' -u elastic:inza42ePLWcTkfxvQykd
 ```
 
-##     index list
+##     3.3 index list
 
 ```sh
 https://127.0.0.1:9200/_cat/indices?format=json&index=[索引名称，可使用通配符]
 curl -k --tlsv1  'https://127.0.0.1:9200/_cat/indices?format=json' -u elastic:inza42ePLWcTkfxvQykd
 ```
 
-#  run
+#  4. run
 
-##      run Elasticsearch as a daemon
+##      4.1 run Elasticsearch as a daemon
 
 ```
 ./bin/elasticsearch -d -p pid
 ```
 
-##      reset password
+##      4.2 reset password
 
 ```sh
 bin/elasticsearch-reset-password -u elastic
@@ -297,15 +297,15 @@ bin/elasticsearch-reset-password -u elastic
 
 
 
-#  FileBeats
+#  5. FileBeats
 
-##    Install and Config
+##    5.1 Install and Config
 
-###    doc
+###    5.1.1 doc
 
 https://www.elastic.co/guide/en/beats/filebeat/7.6/filebeat-installation.html
 
-###    install
+###    5.1.2 install
 
 ```sh
 # ubuntu
@@ -316,7 +316,7 @@ curl -L -O https://artifacts.elastic.co/downloads/beats/filebeat/filebeat-8.2.0-
 tar xzvf filebeat-8.2.0-linux-x86_64.tar.gz
 ```
 
-###     config
+###     5.1.3 config
 
 Here is a sample of the `filebeat` section of the `filebeat.yml` file. Filebeat uses predefined default values for most configuration options.
 
@@ -345,7 +345,7 @@ output.elasticsearch:
 
 
 
-##   index
+##   5.2 index
 
 Filebeat uses time series indices, by default, when index lifecycle management is disabled or unsupported. The indices are named `filebeat-7.6.2-yyyy.MM.dd`, where `yyyy.MM.dd` is the date when the events were indexed. To use a different name, you set the [`index`](https://www.elastic.co/guide/en/beats/filebeat/7.6/elasticsearch-output.html#index-option-es) option in the Elasticsearch output. The value that you specify should include the root name of the index plus version and date information. You also need to configure the `setup.template.name` and `setup.template.pattern` options to match the new name. For example:
 
@@ -355,7 +355,7 @@ setup.template.name: "rd"
 setup.template.pattern: "rd-*"
 ```
 
-##    Setup and run
+##    5.3 Setup and run
 
 生成证书
 
@@ -381,7 +381,7 @@ openssl x509 -req -in client.csr -days 1000 -CA ca.crt -CAkey ca.key -set_serial
 
 
 
-###    ES
+###    5.3.1 ES
 
 创建生产证书的文件
 
@@ -410,7 +410,7 @@ openssl pkcs12 -in elastic-stack-ca.p12 -out newfile.crt.pem -clcerts -nokeys
 
 把这个文件拷入到filebeat目录中
 
-###    config filebeats
+###    5.3.2 config filebeats
 
 ```yml
 output.elasticsearch:
@@ -437,14 +437,14 @@ output.elasticsearch:
   allow_older_versions: true
 ```
 
-###   启动filebeat
+###   5.3.3 启动filebeat
 
 ````sh
 cd /usr/share/filebeat/bin
 sudo filebeat -c /etc/filebeat/filebeat.yml
 ````
 
-###   自定义filebeat的ES索引名称
+###   5.3.4 自定义filebeat的ES索引名称
 
 ```yaml
 #==================== Elasticsearch template setting ==========================

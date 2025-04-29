@@ -9,7 +9,10 @@
 在 docker pull mysql:8.4.0 中测试通过
 
 ```sh
+# ubuntu 22.04 LTS
 sudo vi /etc/mysql/my.cnf
+# ubuntu 24.02 LTS
+sudo vi /etc/mysql/mysql.conf.d/mysqld.cnf
 # 添加如下内容
 [mysqld]
 skip-grant-tables=1
@@ -20,6 +23,8 @@ mysql
 # 修改密码
 use mysql;
 # 首先执行 flush ***，不然会报  ERROR 1290 (HY000): The MySQL server is running with the --skip-grant-tables option so it cannot execute this statement
+flush privileges;
+update user set plugin='mysql_native_password' where user='root';
 flush privileges;
 ALTER USER 'root'@'localhost' IDENTIFIED BY 'P@$$W0rd';
 FLUSH PRIVILEGES;
@@ -383,7 +388,7 @@ systemctl start docker.service
 
 ```sql
 CREATE USER IF NOT EXISTS 'foo'@'%' IDENTIFIED WITH mysql_native_password BY 'fGB#sfsfswe*&%$3^3%GN';
-grant all privileges on mysql.* to 'foo'@'%';
+grant all privileges on *.* to 'foo'@'%';
 flush privileges;
 ```
 

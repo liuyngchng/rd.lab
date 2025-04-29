@@ -437,9 +437,9 @@ sudo route del default gw 192.168.49.1
 sudo apt install byzanz imagemagick -y
 # x, y 起始点坐标， x方向为从左向右， y方向为从上到下，width为宽度；height为高度；
 # duration为整个gif的持续时长，单位为秒； delay 为延迟开始的时间，单位为秒
-byzanz-record --duration=10 --x=0 --y=50 --width=800 --height=600 --delay=5 git_output.gif
+byzanz-record --duration=10 --x=10 --y=50 --width=800 --height=600 --delay=5 git_output.gif
 # 
-byzanz-record --duration=15 --x=0 --y=100 --width=1280 --height=800 --delay=2  git_output.gif
+byzanz-record --duration=20 --x=10 --y=100 --width=1280 --height=800 --delay=5  git_output.gif
 ```
 
 # 17. video edit
@@ -552,3 +552,189 @@ Fri Feb 21 11:18:48 2025
 ```
 
 看到出现了  `NVIDIA GeForce RTX 3090 Ti`， 说明安装成功了。
+
+
+
+# 19. grub 修复
+
+针对Ubuntu系统开机后，卡在GRUB的黑屏下，无法引导进入系统的问题，可以按照以下步骤进行：
+
+## 19.1 确认GRUB引导问题
+
+首先，确保Ubuntu系统无法正常启动，并且已经排除了硬件故障等其他原因。系统启动时如果出现GRUB菜单无法显示、或者无法从GRUB菜单中选择系统启动等问题，很可能是GRUB引导出现问题。
+
+## 19.2 制作Ubuntu安装介质
+
+- 准备一个Ubuntu的安装介质，如USB驱动器或光盘。
+- 确保安装介质是完整且未损坏的，可以从Ubuntu官网下载最新版本的ISO文件，并使用如Rufus（Windows）或Etcher（跨平台）等工具制作启动盘。
+
+## 19.3 从安装介质启动Ubuntu
+
+- 将制作好的Ubuntu安装介质插入电脑，并重启电脑。
+- 在启动过程中，选择从安装介质启动（通常需要在BIOS/UEFI中设置启动顺序）。
+- 在出现的启动菜单中，选择“Try Ubuntu without installing”（尝试Ubuntu而不安装）选项。
+
+## 19.4 安装并运行Boot-Repair工具来修复GRUB引导
+
+在Ubuntu的Live环境中，可以通过安装Boot-Repair工具来自动修复GRUB引导。具体步骤如下：
+
+- 打开终端，输入以下命令添加Boot-Repair的PPA源并更新软件源：
+
+```sh
+bashCopy Code
+sudo add-apt-repository ppa:yannubuntu/boot-repair
+sudo apt-get update
+```
+
+- 安装Boot-Repair工具：
+
+```sh
+bashCopy Code
+sudo apt-get install -y boot-repair
+```
+
+- 运行Boot-Repair工具：
+
+```sh
+bashCopy Code
+boot-repair
+```
+
+- 在Boot-Repair的图形界面中，选择“Recommended repair”选项，然后按照提示进行操作。Boot-Repair会自动检测并修复GRUB引导问题。
+
+# 20. 安装证书
+
+浏览对方网站显示“Not Secure”， 因对方使用了自签名证书，导致警告。确认网站没问题后，下载对方证书（点击 not secure-> certificate detail -> detail-> export, 选择 base64-encoded ASCII, single certificate， 保存为 aaaa.crt）
+
+**Chrome英文版导出PEM证书步骤：**
+
+1. 访问目标网站，点击地址栏左侧的**锁形图标** → **"Certificate is valid"**
+2. 在弹出窗口选择**"Details"标签** → 点击**"Export..."**
+3. 保存类型选择**"PEM encoded chain"**（证书链）或**"PEM encoded"**（单证书）
+
+```sh
+# 点击Ubuntu Chrome浏览器URL前面的 not secure-> certificate detail -> detail-> export, 选择 
+base64-encoded ASCII, single certificate     # (选择这个)， 导出的证书为 PEM
+base64-encoded ASCII, certificate chain
+DER-encoded binary, single certificate
+PKCS#7, single certificate
+PKCS#7, certificate chain
+
+# 转换PEM证书为 crt证书, 详见 https://help.gitkraken.com/gitkraken-desktop/self-signed-certificates/
+openssl x509 -outform der -in DOWNLOADED-CERT-NAME -out DOWNLOADED-CERT-NAME.crt
+， 保存为 aaaa.crt
+# (可选) 在 /usr/local/share/ca-certificates/ 下创建一个子目录，然后拷贝文件
+mkdir 
+sudo cp aaaa.crt /usr/local/share/ca-certificates/
+
+# 执行后，有显示添加了一个证书，而且没有waring，则OK
+sudo update-ca-certificates
+#然后重启浏览器
+# 验证，应该能看到已经添加的证书
+ls -l /etc/ssl/certs | grep aaaa
+
+# 验证， 如果输出为“Verify return code: 0 (ok)”，则表示证书验证成功，证书已成功导入并被系统信任
+openssl s_client -connect www.customdomain.com:443 < /dev/null | grep "Verify return code"
+
+# 验证握手，不会再提示证书的问题了
+curl -s --noproxy '*' --tlsv1  'https://www.customdomain.com:443'
+```
+
+重启浏览器，会在 Chrome浏览器中看到已经导入的证书，需要编辑证书，选择3个“Trust***” 的复选框，此时浏览器访问的网址应该能正常工作了。
+
+# 21. 离线下载安装包及其依赖包
+
+安装工具
+
+
+
+# 22. ubuntu24.02 MySQL
+
+
+
+```sh
+sudo apt install mysql-server
+mysql -V
+mysql  Ver 8.0.41-0ubuntu0.24.04.1 for Linux on x86_64 ((Ubuntu))
+sudo systemctl status mysql.service
+```
+
+# 23. MP4 Player
+
+安装VLC播放器
+ubuntu 如果默认播放器无法播放MP4视频，可以尝试安装VLC播放器。安装步骤如下：
+
+
+
+```sh
+# 输入y并回车继续执行，等待解码器安装完成。
+sudo apt install ubuntu-restricted-extras
+
+# 安装VLC播放器：
+sudo apt-get install vlc
+```
+
+# 24. ffmpeg 视频编辑
+
+## 24.1 视频剪辑
+
+```sh
+sudo apt-get install ffmpeg
+
+# 使用 ffmpeg 剪掉mp4 文件中间的一部分，比如剪掉   第5秒到第10秒   之间的部分，剪掉   第15到第20秒的部分，其他部分保留 需要无损剪辑
+# -ss 设定起始时间点
+# -t 设定从该点截取的时长
+# 示例：-ss 5 -t 5 表示从第5秒开始，截取5秒内容（即5~10秒）。
+# 截取三部分（0-5秒、10-15秒、20秒到结尾）
+# 注意：-ss参数建议放在-i前加速切割，切割点必须在关键帧位置，否则时间会有偏移
+ffmpeg -i input.mp4 -t 5 -c copy p1.mp4
+ffmpeg -ss 10 -i input.mp4 -t 5 -c copy p2.mp4
+ffmpeg -ss 20 -i input.mp4 -c copy p3.mp4
+
+# 合并片段
+echo "file 'p1.mp4'" > list.txt
+echo "file 'p2.mp4'" >> list.txt
+echo "file 'p3.mp4'" >> list.txt
+ffmpeg -f concat -i list.txt -c copy output.mp4
+```
+
+## 24.2 添加字幕
+
+
+
+```sh
+touch sub.srt
+vi sub.srt
+# 内容如下 srt字幕文件格式为编号\n开始时间 --> 结束时间\n 字幕文字\n
+1
+00:00:10,000 --> 00:00:13,000
+hello
+
+2
+00:02:00,000 --> 00:02:03,000
+world
+
+# 执行以下命令
+ffmpeg -i input.mp4 -vf "subtitles=sub.srt" -c:a copy output.mp4
+```
+
+# 25. oracle client
+
+ubuntu 24.04
+
+```
+sudo apt install alien
+
+
+
+
+```
+
+在页面下  https://www.oracle.com/database/technologies/instant-client/linux-x86-64-downloads.html 选择版本 Version 11.1.0.7.0
+
+选择以下两个RPM包（需转换为Debian格式）：
+
+Basic Package（基础库，oracle-instantclient11.2-basic-11.2.0.4.0-1.x86_64.rpm）
+
+ODBC Package（ODBC驱动，oracle-instantclient11.2-odbc-11.2.0.4.0-1.x86_64.rpm）
+
