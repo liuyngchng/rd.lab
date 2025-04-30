@@ -1,7 +1,6 @@
 # 1. basic cmd
 
 ##  1.1编译
-
 ```sh
 gcc main.c -o main      # comile and link source file in one step, output a executable bin file
 gcc -c main.c           # produce object file from source, default file name is main.o, you can use -o get a customized name
@@ -30,7 +29,6 @@ gcc process step
 - link object file -> executable file
 
 #  3.`GCC` options
-
 GCC 选项区分大小写
 
 | option | note |
