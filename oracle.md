@@ -384,6 +384,8 @@ ORDER BY
 
 # 9. oracle for python
 
+## 9.1 cx_oracle
+
 python 连接 Oracle 数据库，首先需要额外安装oralce 的 instant-client 客户端动态库，另外还需要安装 libaio 动态库
 
 安装 oracle的 instant client,
@@ -411,6 +413,12 @@ export LD_LIBRARY_PATH=/usr/local/lib/oracle:$LD_LIBRARY_PATH
 安装 pip package
 
 ```sh
-pip install pymysql cx_Oracle pycryptodome 
+pip install cx_Oracle 
+```
+
+## 9.2 oracledb
+
+```sh
+pip install oracledb 
 ```
 
