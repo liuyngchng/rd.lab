@@ -1723,3 +1723,11 @@ ssh -i ./your_priavate_key devbox@petrotech.cnpc -p ssh_port
 scp -i ./your_priavate_key -P ssh_port your_local_file user@host:/host_dir
 ```
 
+# 75. telnet vs nc
+
+```sh
+telnet ip port
+nc -zv IP port
+Connection to xxxx [tcp/*] succeeded!
+```
+
