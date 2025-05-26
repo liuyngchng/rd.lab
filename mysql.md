@@ -448,7 +448,8 @@ docker images
 ```sh
 # --privileged 参数可避免如下错误
 # ls: cannot access '/docker-entrypoint-initdb.d/': Operation not permitted
-docker run --name mysql84 --privileged -p 3306:3306 -e MYSQL_ROOT_PASSWORD='yourMySqlPassword' -d mysql:8.4.0
+docker run --name mysql --privileged -p 3306:3306 -e MYSQL_ROOT_PASSWORD='yourMySqlPassword' -d mysql:8.4.0
+docker run --name mysql --privileged -p 3306:3306 -e MYSQL_ROOT_PASSWORD='nZL2%jr%vY3xGxLwtznF' -d mysql
 
 docker ps
 docker exec -it mysql /bin/bash
@@ -456,7 +457,7 @@ cd /etc/
 # /etc/mysql 是容器里mysql的配置文件夹
 tar -czf mysql.tar.gz mysql
 # 文件 /etc/my.cnf 和文件夹 /etc/my.cnf.d 是 mysql 8.4.0 的配置文件夹
-tar -czf my.cnf.d.tag.gz my.cnf.d
+tar -czf my.cnf.d.tar.gz my.cnf.d
 exit
 ```
 
@@ -464,36 +465,50 @@ exit
 
 ```sh
 su root
-mkdir -p /data/mysql84/log
-mkdir -p /data/mysql84/data
-mkdir -p /data/mysql84/mysqld
-docker cp mysql84:/etc/mysql.tar.gz /data/mysql84
-docker cp mysql84:/etc/my.cnf.d.tar.gz /data/mysql84
-docker cp mysql84:/etc/my.cnf /data/mysql84
-cd /data/mysql84
+mkdir -p /data/mysql/log
+mkdir -p /data/mysql/data
+mkdir -p /data/mysql/mysqld
+docker cp mysql:/etc/mysql.tar.gz /data/mysql
+docker cp mysql:/etc/my.cnf.d.tar.gz /data/mysql
+docker cp mysql:/etc/my.cnf /data/mysql
+cd /data/mysql
 tar -zxf mysql.tar.gz
 tar -zxf my.cnf.d.tar.gz
 mv mysql conf
 # 设置时区
-vi /data/mysql84/my.cnf
+vi /data/mysql/my.cnf
 [mysqld]
 default-time-zone = '+08:00'
 # 停止当前 mysql 服务
-docker stop mysql84
-docker rm mysql84
+docker stop mysql
+docker rm mysql
 
 docker run -dit \
-	--name mysql84 \
+	--name mysql \
 	--privileged \
 	-p 3307:3306 \
 	-e MYSQL_ROOT_PASSWORD=yourMySqlPassword \
 	-e LANG=C.UTF-8 \
-	-v /data/mysql84/my.cnf:/etc/my.cnf \
-	-v /data/mysql84/my.cnf.d:/etc/my.cnf.d \
-	-v /data/mysql84/conf:/etc/mysql \
-	-v /data/mysql84/data:/var/lib/mysql \
-	-v /data/mysql84/mysqld:/var/run/mysqld \
+	-v /data/mysql/my.cnf:/etc/my.cnf \
+	-v /data/mysql/my.cnf.d:/etc/my.cnf.d \
+	-v /data/mysql/conf:/etc/mysql \
+	-v /data/mysql/data:/var/lib/mysql \
+	-v /data/mysql/mysqld:/var/run/mysqld \
 	mysql:8.4.0
+
+
+docker run -dit \
+	--name mysql \
+	--privileged \
+	-p 3307:3306 \
+	-e MYSQL_ROOT_PASSWORD='nZL2%jr%vY3xGxLwtznF' \
+	-e LANG=C.UTF-8 \
+	-v /data/mysql/my.cnf:/etc/my.cnf \
+	-v /data/mysql/my.cnf.d:/etc/my.cnf.d \
+	-v /data/mysql/conf:/etc/mysql \
+	-v /data/mysql/data:/var/lib/mysql \
+	-v /data/mysql/mysqld:/var/run/mysqld \
+	mysql
 ```
 
 ##  6.3 normal start up
@@ -505,16 +520,16 @@ docker run -dit \
 # --privileged 参数可避免如下错误
 # ls: cannot access '/docker-entrypoint-initdb.d/': Operation not permitted
 docker run -dit \
-	--name mysql84 \
+	--name mysql \
 	--privileged \
 	-p 3307:3306 \
 	-e MYSQL_ROOT_PASSWORD=yourMySqlPassword \
 	-e LANG=C.UTF-8 \
-	-v /data/mysql84/my.cnf:/etc/my.cnf \
-	-v /data/mysql84/my.cnf.d:/etc/my.cnf.d \
-	-v /data/mysql84/conf:/etc/mysql \
-	-v /data/mysql84/data:/var/lib/mysql \
-	-v /data/mysql84/mysqld:/var/run/mysqld \
+	-v /data/mysql/my.cnf:/etc/my.cnf \
+	-v /data/mysql/my.cnf.d:/etc/my.cnf.d \
+	-v /data/mysql/conf:/etc/mysql \
+	-v /data/mysql/data:/var/lib/mysql \
+	-v /data/mysql/mysqld:/var/run/mysqld \
 	mysql:8.4.0
 ```
 
@@ -522,7 +537,7 @@ docker run -dit \
 
 ```sh
 # 进入容器
-docker exec  -it mysql84 bash
+docker exec  -it mysql bash
 # 连接数据库
 mysql -uroot -p
 # 输入密码登录成功
@@ -556,8 +571,9 @@ systemctl start docker.service
 ##  6.4 创建用户
 
 ```sql
-CREATE USER 'foo'@'%' IDENTIFIED WITH mysql_native_password BY 'fGB#sfsfswe*&%$3^3%GN';
-grant all privileges on mysql.* to 'foo'@'%';
+CREATE USER 'foo'@'%' IDENTIFIED WITH mysql_native_password BY 'nZL2%jr%vY3xGxLwtznF';
+CREATE USER 'foo'@'%' IDENTIFIED WITH caching_sha2_password BY 'nZL2%jr%vY3xGxLwtznF';
+grant all privileges on *.* to 'foo'@'%';
 flush privileges;
 ```
 
