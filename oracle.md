@@ -381,3 +381,44 @@ FROM
 ORDER BY 
     nrows DESC;
 ```
+
+# 9. oracle for python
+
+## 9.1 cx_oracle
+
+python 连接 Oracle 数据库，首先需要额外安装oralce 的 instant-client 客户端动态库，另外还需要安装 libaio 动态库
+
+安装 oracle的 instant client,
+    详见  https://www.oracle.com/database/technologies/instant-client/downloads.html
+
+```sh
+# ubuntu
+# 1) libaio
+sudo apt-get install libaio1t64
+sudo apt-get install libaio-dev
+sudo find /usr -name libaio*
+sudo ln -s /usr/lib/x86_64-linux-gnu/libaio.so.1t64 /usr/lib/x86_64-linux-gnu/libaio.so.1
+
+# 2) libclntsh.so
+cd /usr/local/lib
+sudo mkdir oracle
+cd oracle/instantclient-basic-linux.x64-12.1.0.2.0/instantclient_12_1
+sudo cp *.so /usr/local/lib/oracle/
+sudo cp *.so.* /usr/local/lib/oracle/
+cd /usr/local/lib/oracle
+sudo ln -s libclntsh.so.11.1 libclntsh.so
+export LD_LIBRARY_PATH=/usr/local/lib/oracle:$LD_LIBRARY_PATH
+```
+
+安装 pip package
+
+```sh
+pip install cx_Oracle 
+```
+
+## 9.2 oracledb
+
+```sh
+pip install oracledb 
+```
+

@@ -29,3 +29,19 @@ v 命令：在命令模式下进行文本选择。
 V 命令：在命令模式下按行进行文本选择。  
 在需要选择的文本的第一行按下 V 键，然后移动光标到块的最后一行。  
 这之间的所有行被高亮显示，表示被选中。
+
+# 4. 无法正常显示中文
+
+在linux terminal， 以及 more 命令中，中文均显示正常， 但 vi 无法正常显示中文， 可以
+
+```sh
+touch ~/.vimrc
+vi ~/.vimrc
+# 内容如下
+
+set fileencodings=utf-8,gbk
+set encoding=utf-8
+set termencoding=utf-8
+```
+
+重新打开 vi ，中文显示正常
