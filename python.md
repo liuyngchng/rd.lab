@@ -205,3 +205,23 @@ devpi upload /path/to/your/package/dist/*.whl
 pycharm 历史版本
 
 https://www.jetbrains.com.cn/pycharm/download/other.html
+
+# 6. Oracle
+
+```
+pip install cx_Oracle
+pip install oracledb
+```
+
+cx_Oracle 和 oracledb 的区别：
+
+1. **迭代关系**
+   oracledb 是 Oracle 官方推出的新版（原 cx_Oracle 的重命名升级版），推荐使用新库。
+2. **安装依赖**
+   oracledb 默认使用纯 Python 实现的 "Thin模式"，**无需安装 Oracle 客户端**；cx_Oracle 需依赖客户端。
+3. **性能优化**
+   oracledb 的 Thin 模式性能更好，且支持原生 JSON 等新特性，同时保留兼容旧版的 "Thick模式"（需客户端）。
+4. **API 兼容性**
+   oracledb 完全兼容 cx_Oracle 的 API，通常只需修改 `import` 语句即可迁移。
+
+**建议**：新项目直接用 `oracledb`，旧项目可逐步迁移。
