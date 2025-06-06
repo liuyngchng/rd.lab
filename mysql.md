@@ -500,7 +500,7 @@ docker run -dit \
 docker run -dit \
 	--name mysql \
 	--privileged \
-	-p 3307:3306 \
+	-p 3276:3306 \
 	-e MYSQL_ROOT_PASSWORD='nZL2%jr%vY3xGxLwtznF' \
 	-e LANG=C.UTF-8 \
 	-v /data/mysql/my.cnf:/etc/my.cnf \
