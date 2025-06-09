@@ -1731,3 +1731,11 @@ nc -zv IP port
 Connection to xxxx [tcp/*] succeeded!
 ```
 
+# 76. openssl
+
+一次生成 .key 和 .crt, 设置有效期为10年(3650)，指定密钥长度为 4096(rsa:4096)
+
+```sh
+openssl req -x509 -newkey rsa:4096 -keyout server.key -out server.crt -days 365 -nodes -subj "/CN=yourdomain.com"
+```
+

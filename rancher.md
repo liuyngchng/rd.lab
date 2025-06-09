@@ -1,8 +1,8 @@
-# rancher 1.x
+# 1. rancher 1.x
 
 rancher 为一个 docker 容器集群编排开源平台。
 
-## 功能介绍
+## 1.1 功能介绍
 
 （1）提供对 `docker` 容器集群的图形化界面管理功能，支持对docker 容器进行部署、启停、查看日志等操作。
 
@@ -14,7 +14,7 @@ rancher 为一个 docker 容器集群编排开源平台。
 
 （5）支持在图形化界面中进入docker容器执行命令。
 
-##  pull
+##  1.2 pull
 
 docker rancher，1.x 的 images 是 `rancher/server`。rancher1.x 所支持的docker 版本请参考 https://rancher.com/docs/rancher/v1.6/zh/hosts/#docker%E7%89%88%E6%9C%AC%E9%80%82%E7%94%A8%E5%AF%B9%E6%AF%94， 本案例中安装的docker 版本如下所示
 
@@ -48,7 +48,7 @@ docker pull rancher/agent:v1.2.11
 
 ```
 
-##  MySQL 5.7
+##  1.3 MySQL 5.7
 
 rancher 1.x 适配的 MySQL 为5.7, MySQL 8 会报错。
 
@@ -88,7 +88,7 @@ docker run -dit \
 
 
 
-##  run
+##  1.4 run
 
 ```sh
 docker run -d --restart=unless-stopped --name rancher -p 8084:8080 rancher/server --db-host 11.10.36.1 --db-port 3307 --db-user root --db-pass '**********' --db-name cattle
@@ -113,9 +113,9 @@ https://11.10.36.2:8084
 
 在页面右下角，修改语言为“简体中文”
 
-##  config
+##  1.5 config
 
-### 修改主机注册地址
+### 1.5.1 修改主机注册地址
 
 点击 系统管理-系统设置 ， 将https 修改为http， 这样通过rancher-agent 注册主机至rancher-server时，api使用 http，或者配置证书
 
@@ -129,15 +129,15 @@ openssl x509 -req -days 1825 -in /rancher/certs/rancher.csr -signkey /rancher/pr
 
 在系统界面上添加证书
 
-### 设置登录用户
+### 1.5.2 设置登录用户
 
 点击 系统管理-访问控制，点击“local”， 点击  “1. 设置管理员用户”，填写用户名和密码，点击 “启用本地验证”后， 在页面右上角点击注销用户，重新登录
 
-### 创建环境
+### 1.5.3 创建环境
 
 点击 环境-环境管理， 添加环境，例如 test
 
-### 添加主机
+### 1.5.3 添加主机
 
 注意，在添加主机前，先创建环境，这样添加的主机就在对应的环境中了，否则列入default 环境中
 
@@ -155,7 +155,7 @@ docker run -e CATTLE_AGENT_IP="11.10.36.2" \
 	http://11.10.36.2:8084/v1/scripts/167EC71967993A3160E1:1703980800000:a6HpKwjy3PQ5PAOnFIzQFBqnyUU
 ```
 
-## 启动agent
+## 1.6 启动agent
 
 通过 rancher-agent 注册 host 至 rancher server，通过1.4节的脚本
 
@@ -168,7 +168,7 @@ docker run xxxx
 
 此时，在页面中点击 基础架构-主机，可以看到容器列表
 
-## 负载均衡
+## 1.7 负载均衡
 
 rancher 中，当启动的容器数量大于1时，系统自动提供负载均衡，负载均衡微服务默认为 `rancher/lb-service-haproxy:v0.9.14`。官方文档详见
 
@@ -180,7 +180,7 @@ https://docs.rancher.cn/docs/rancher1/infrastructure/cattle/adding-load-balancer
 Load balancers will only work for services that are using the managed network. If you select any other network choice for your target services, it will not work with the load balancer.
 ```
 
-## docker compose yaml
+## 1.8 docker compose yaml
 
 rancher 支持上传 docker compose yml文件， 下面以mysql8.4为例进行说明
 
@@ -207,11 +207,11 @@ services:
       io.rancher.scheduler.affinity:host_label: ip=192.168.0.2
 ```
 
-# rancher 2.x
+# 2. rancher 2.x
 
 裸金属机器安装详见文档  https://ranchermanager.docs.rancher.com/zh/v2.8/getting-started/quick-start-guides/deploy-rancher-manager/equinix-metal。
 
-##  pull
+##  2.1 pull
 
 docker rancher，2.x 的 images 是 `rancher/rancher`。当前版本为 2.8.1, 2.x较为复杂，目前还没有玩明白。
 
@@ -222,7 +222,7 @@ mkdir -p /data/rancher/rancher
 mkdir -p /data/rancher/audit
 ```
 
-##  run
+##  2.2 run
 
 ```sh
 docker run -d --privileged --restart=unless-stopped -p 8085:80 -p 8443:443 \
@@ -238,7 +238,7 @@ docker run -d --privileged --restart=unless-stopped -p 8085:80 -p 8443:443 \
   	rancher/rancher:v2.8.1
 ```
 
-## login
+## 2.3 login
 
 ```sh
 https://localhost:8443
