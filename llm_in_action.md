@@ -1670,6 +1670,10 @@ python3 -m sglang.launch_server --model deepseek-ai/DeepSeek-R1-Distill-Qwen-32B
 
 [16] https://arxiv.org/pdf/2403.06504
 
+[17] MCP, https://github.com/modelcontextprotocol/servers
+
+[18] Microsoft AI app, https://blogs.microsoft.com/blog/2025/04/22/https-blogs-microsoft-com-blog-2024-11-12-how-real-world-businesses-are-transforming-with-ai/
+
 # 16. 附录
 
 文中所涉及到的代码 demo,详见  https://github.com/liuyngchng/llm_test。
