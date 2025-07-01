@@ -1581,6 +1581,10 @@ generator = pipeline(
 
 ## 14.2 vLLM
 
+vLLM (Virtual Large Language Model) 是一款专为大语言模型推理加速而设计的框架，其依靠卓越的推理效率和资源优化能力在全球范围内引发广泛关注。来自加州大学伯克利分校 (UC Berkeley) 的研究团队于 2023 年提出了开创性注意力算法 PagedAttention，其可以有效地管理注意力键和值。与 Hugging Face Transformers 相比，其吞吐量提升了 24 倍，而且这一性能提升不需要对模型架构进行任何更改。
+
+### 14.2.1 start service
+
 （1）start a vLLM service
 
 ```sh
@@ -1623,7 +1627,13 @@ vllm serve whisper-large-v3-turbo \
 --device cuda
 ```
 
+### 14.2.1 vLLM 解决的问题
 
+| No.  | 瓶颈问题                     | vLLM 技术解决方案      | 成果                       |
+| ---- | ---------------------------- | ---------------------- | -------------------------- |
+| 1    | KV 缓存内存管理低效          | PagedAttention         | 提高内存利用率，减少碎片   |
+| 2    | 并行采样和束搜索中的内存冗余 | KV 缓存共享机制        | 降低内存使用，提升并行能力 |
+| 3    | 批处理请求中的内存碎片化     | 细粒度批处理与动态调度 | 提升吞吐量，减少延迟       |
 
 ## 14.3 SGLang
 
@@ -1634,9 +1644,17 @@ SGLang load and run a LLM as service
 python3 -m sglang.launch_server --model deepseek-ai/DeepSeek-R1-Distill-Qwen-32B --trust-remote-code --tp 2
 ```
 
+# 15. 多模态模型
 
+ABCD 4种类型的多模态模型架构， 详见 https://doi.org/10.48550/arXiv.2405.17927。  本地论文详见 [./pdf/2405.17927v1.pdf]
 
-# 15. Reference
+多模态模型的架构设计需要考虑两个关键因素：融合方式和融合阶段。融合方式决定了不同模态信息的交互方式,主要包括连接（Concatenation）、元素级乘法（Element-wise multiplication）、注意力机制（Attention）等。融合阶段则指多模态交互发生的位置,可以是模型的输入层、中间层或输出层。论文基于这两个维度,提出了一种新颖的多模态架构分类法,将现有模型归纳为四大类：Type A，B，C，D。
+
+Type A 和 B 的核心思想是在模型的内部层实现多模态信息的交互融合。
+
+Type C 和D 是在模型的输入阶段实现多模态信息的融合，区别在于融合的粒度和方式。
+
+# 16. Reference
 
 [1] Hugging Face Documentation. https://huggingface.co/docs;
 
