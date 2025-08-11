@@ -909,3 +909,34 @@ openssl s_client -connect www.customdomain.com:443 < /dev/null | grep "Verify re
 ```
 
 如果输出为“Verify return code: 0 (ok)”，则表示证书验证成功，证书已成功导入并被系统信任
+
+
+
+# 13. setup zip unzip in source
+
+unzip
+
+```sh
+# 下载unzip源码
+wget https://downloads.sourceforge.net/infozip/unzip60.tar.gz
+tar -zxvf unzip60.tar.gz
+cd unzip60
+make -f unix/Makefile generic
+sudo make prefix=/usr MANDIR=/usr/share/man/man1 -f unix/Makefile install
+```
+
+
+
+
+
+```sh
+# 下载源码 zip
+wget https://downloads.sourceforge.net/infozip/zip30.tar.gz
+tar -xvf zip30.tar.gz
+cd zip30
+
+# 编译安装
+make -f unix/Makefile generic
+sudo make prefix=/usr MANDIR=/usr/share/man/man1 -f unix/Makefile install
+```
+
