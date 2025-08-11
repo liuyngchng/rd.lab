@@ -766,7 +766,9 @@ vi *.class
 
 # 52. 统计文件行数（不含空行）
 ```sh
-find ./ -name *.java | xargs cat | sed '/^$/d' | wc -l
+# 最好的统计方式,统计后缀为py 或者 html 或者 js 或者 css 的文件，统计其不为空的文本行数
+find . -type f \( -name "*.py" -o -name "*.java" -o -name "*.html" -o -name "*.js" -o -name "*.css" \) -exec grep -v '^\s*$' {} + | wc -l
+
 # 只查找当前目录，不递归查找子目录
 find . -maxdepth 1 -name '*.c' | xargs cat | wc -l
 ```
