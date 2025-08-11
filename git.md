@@ -236,3 +236,19 @@ deploy-job:      # This job runs in the deploy stage.
 ```
 
 在 `script` 下添加需要执行的`shell` 脚本， 在 `tags` 目录下添加之前注册`runner`的时候，填写的名称, script 下shell 的根目录(./)默认是git clone 下的项目的根目录。
+
+
+
+# 3. cross linux  and windows git repository
+
+git clone  repository cross linux and windows
+
+
+
+```sh
+# disables Git's automatic line-ending conversion globally
+git config --global core.autocrlf false
+# disables Git's tracking of file permission changes (executable bit) globally
+git config --global core.fileMode false
+```
+
