@@ -12,7 +12,9 @@
 
 目前国内环境可用的 docker 源 `https://1ms.run/`,  可执行
 
-```
+```sh
+# pull image ubuntu with tag 20.04
+docker pull docker.1ms.run/ubuntu:24.04
 ```
 
 
