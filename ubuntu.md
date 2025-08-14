@@ -738,3 +738,13 @@ Basic Package（基础库，oracle-instantclient11.2-basic-11.2.0.4.0-1.x86_64.r
 
 ODBC Package（ODBC驱动，oracle-instantclient11.2-odbc-11.2.0.4.0-1.x86_64.rpm）
 
+
+
+# 26. audio track editor
+
+
+
+```sh
+sudo apt update && sudo apt install audacity
+```
+
