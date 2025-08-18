@@ -1,5 +1,7 @@
 # 1. setup
 
+## 1.1 basic service
+
 官方网站详见  https://milvus.io/docs。
 
 docker 安装文档详见  https://milvus.io/docs/install_standalone-docker.md。
@@ -23,6 +25,43 @@ etcd **2379**
 webui **9091**
 
 查看服务状态， http://127.0.0.1:9091/webui/
+
+## 1.2 config
+
+执行完 `./standalone_embed.sh start` 后， 当前目录下会生成几个文件
+
+```sh
+ls
+embedEtcd.yaml  standalone_embed.sh  user.yaml  volumes
+cd milvus/
+[A10user@A10testapp-2 milvus]$ ls
+data  etcd  rdb_data  rdb_data_meta_kv
+```
+
+文件 `user.yaml` 可以用来对 milvus 服务进行自定义配置，如登录用户名、密码等。
+
+文件夹 `volumes` 下的文件功能如下
+
+（1）**`data`**。存储 Milvus **向量数据和索引文件**（核心数据），包含原始向量数据、索引文件（如 IVF_FLAT/HNSW）、段（segments）数据，是最核心的目录，决定数据库容量和性能
+
+（2）**`etcd`**。存储 Milvus **元数据**，包含：集合(schema)、分区(partition)、索引配置、节点状态等元信息。轻量级键值存储，保证分布式一致性。
+
+（3）**`rdb_data`**。存储 **MinIO/S3 对象存储数据**（日志和中间文件），包含日志文件（binlog）、增量数据快照、查询结果缓存，需配合 Milvus 的 `minio` 或外部 S3 服务使用。
+
+（4）**`rdb_data_meta_kv`**。存储 **MinIO/S3 的元数据信息**，包含对象存储的文件分块信息、版本控制数据，为 `rdb_data` 提供元数据管理支持。
+
+## 1.3 milvus.yaml
+
+```yaml
+# 开启数据库权限认证
+common:
+  security:
+    authorizationEnabled: true
+# 设置超级用户
+common.security.superUsers=root, foo
+```
+
+其他用户可以通过超级用户连接db后进行创建。
 
 # 2. package
 
@@ -111,4 +150,36 @@ tokenizers >=0.15.0            # 文本分词工具
     
   
 
-sdfsdfs
+# 4. connect to db
+
+```python
+# Authentication enabled with a non-root user
+client = MilvusClient(
+    uri="http://localhost:19530",
+    token="user:password", # replace this with your token
+    db_name="default"
+)
+# close the client after all work done
+client.close()
+```
+
+
+
+# 5. config
+
+
+
+# 6. CRUD
+
+对于 collection 的操作有如下几种。
+
+- [delete()](https://milvus.io/api-reference/pymilvus/v2.4.x/MilvusClient/Vector/delete.md)
+
+- [get()](https://milvus.io/api-reference/pymilvus/v2.4.x/MilvusClient/Vector/get.md)
+- [insert()](https://milvus.io/api-reference/pymilvus/v2.4.x/MilvusClient/Vector/insert.md)
+- [query()](https://milvus.io/api-reference/pymilvus/v2.4.x/MilvusClient/Vector/query.md)
+- [search()](https://milvus.io/api-reference/pymilvus/v2.4.x/MilvusClient/Vector/search.md)
+- [upsert()](https://milvus.io/api-reference/pymilvus/v2.4.x/MilvusClient/Vector/upsert.md)
+
+
+
