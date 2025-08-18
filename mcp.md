@@ -195,5 +195,8 @@ curl -X POST http://localhost:8001/mcp \
   }'
 ```
 
+# 4. 交互流程
 
+MCP(Model Context Protocol)  的核心流程
 
+用户提问 -> LLM 分析需求(决定是否/如何调用 Tools)  -> 分析需要调用哪些tools ->  LLM 发起tools 调用 -> 获取结果 -> LLM 解析/组合数据 -> LLM给用户给出答案
