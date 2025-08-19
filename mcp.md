@@ -16,8 +16,9 @@ MCP 的核心流程如下所示。
 
 （7）**整合结果 & 最终响应：**
 
-- a) 如果结果直接可用 -> 格式化返回用户。
-- b) **更常见：** 将子模型结果 + 原始问题组合成新 `Context` -> 送回协调器 LLM -> 协调器 LLM 生成最终自然语言回答 -> 返回用户。
+​	a） 如果结果直接可用 -> 格式化返回用户。
+
+​	b）更常见的是将子模型结果 + 原始问题组合成新 `Context` -> 送回协调器 LLM -> 协调器 LLM 生成最终自然语言回答 -> 返回用户。
 
 1. **(可选) 循环协作：** 最终协调器 LLM 可能触发新一轮委托（回到步骤 4）。
 
@@ -28,9 +29,13 @@ MCP 的核心流程如下所示。
 virtualenv mcp_py_env
 mkdir my_mcp
 source ../mcp_py_env/bin/activate
+# 下载安装server 和 client 的python组件
 pip install mcp mcp[cli]
+# 查看 mcp 组件版本
 mcp version
+# 创建 mcp server 文件
 touch server.py
+# 添加可执行权限
 chmod +x server.py
 ```
 
@@ -76,16 +81,24 @@ if __name__ == "__main__":
 ````sh
 # 直接运行
 ./server.py
-# 或者通过指令运行
+# 或者通过以下指令运行
 mcp run server.py
+# 浏览器输入地址
+http://localhost:8001/mcp  # 可见返回 json
+# 健康检查
+http://localhost:8001/health # 可见返回 json
 ````
+
+
 
 # 3. client
 
 ## 3.1 SDK
 
 ```sh
+# 创建 mcp client 文件
 touch client.py
+# 添加可执行权限
 chmod +x client.py
 ```
 
@@ -170,7 +183,7 @@ curl -X POST -s http://localhost:8001/mcp   -H "Content-Type: application/json" 
 get tools list
 
 ```sh
-curl -X POST -s http://localhost:8001/mcp   -H "Content-Type: application/json"   -H "Accept: application/json, text/event-stream"   -H "mcp-session-id: <SESSION_ID_FROM_RESPONSE>"   -d '{
+curl -X POST -s http://localhost:8001/mcp   -H "Content-Type: application/json"   -H "Accept: application/json, text/event-stream"   -H "mcp-session-id: your_session_id"   -d '{
     "jsonrpc": "2.0",
     "id": 2,
     "method": "tools/list"
