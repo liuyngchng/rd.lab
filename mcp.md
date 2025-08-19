@@ -1,6 +1,6 @@
-# 1.model context protocol
+# 1. 工作流程
 
-MCP 的核心流程如下所示。
+MCP（model context protocol） 的核心流程如下所示。
 
 （1）**部署模型服务：** 将各种 AI 模型部署为符合 MCP 协议的网络服务（理解并生成 `Context` 对象）。
 
@@ -212,4 +212,157 @@ curl -X POST http://localhost:8001/mcp \
 
 MCP(Model Context Protocol)  的核心流程
 
-用户提问 -> LLM 分析需求(决定是否/如何调用 Tools)  -> 分析需要调用哪些tools ->  LLM 发起tools 调用 -> 获取结果 -> LLM 解析/组合数据 -> LLM给用户给出答案
+用户提问 -> LLM 分析需求(决定是否/如何调用 Tools)  -> 分析需要调用哪些 tools ->  LLM 发起 tools 调用 -> 获取结果 -> LLM 解析/组合数据 -> LLM给用户给出答案
+
+
+
+```sequence
+MCP 客户端->> MCP 模型服务端: 请求(输入数据 + context{user_id, session_id})
+MCP 模型服务端->>模型: 解析输入/context → 执行推理
+模型->>MCP 模型服务端: 返回结果 + 更新context(如模型版本)
+MCP 模型服务端->>MCP 客户端: 响应(结果 + context)
+```
+
+如果没有 MCP， 那么交互流程如下所示
+
+```sequence
+客户端->>模型服务端: 请求(用户问题)
+模型服务端->>模型: 分析需求/决定调用工具
+模型->>模型服务端: 返回需调用的工具名+参数
+模型服务端->>Tool: 直接调用指定工具API(参数)
+Tool->>模型服务端: 返回工具执行结果
+模型服务端->>模型: 发送工具结果
+模型->>模型服务端: 解析/组合结果 → 生成最终答案
+模型服务端->>客户端: 响应最终答案
+```
+
+# 5. 示例
+
+以查询天气为例，说明 MCP的作用。
+
+## 5.1 传统做法
+
+```python
+import openai
+import json
+
+# 1. 定义工具列表（函数规范）
+tools = [
+    {
+        "type": "function",
+        "function": {
+            "name": "get_current_weather",
+            "description": "获取指定城市的当前天气",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "location": {"type": "string", "description": "城市名称"},
+                    "unit": {"type": "string", "enum": ["celsius", "fahrenheit"]}
+                },
+                "required": ["location"]
+            }
+        }
+    }
+]
+
+# 2. 用户提问
+user_query = "北京现在的气温是多少？"
+
+# 3. 首次调用模型（触发工具选择）
+response = openai.chat.completions.create(
+    model="gpt-3.5-turbo",
+    messages=[{"role": "user", "content": user_query}],
+    tools=tools,
+    tool_choice="auto"
+)
+# 4. 解析模型返回的工具调用请求
+tool_call = response.choices[0].message.tool_calls[0]
+if tool_call.function.name == "get_current_weather":
+    args = json.loads(tool_call.function.arguments)
+    city = args["location"]
+    unit = args.get("unit", "celsius")
+
+    # 5. 执行真实工具函数
+    def get_current_weather(location, unit):
+        response = requests.get(f"https://weather-api.com/{location}?unit={unit}")
+        return response.json()  # 返回真实API数据
+    weather_data = get_current_weather(city, unit)
+    # 6. 将工具结果送回模型
+    second_response = openai.chat.completions.create(
+        model="gpt-3.5-turbo",
+        messages=[
+            {"role": "user", "content": user_query},
+            {
+                "role": "tool",
+                "content": json.dumps(weather_data),
+                "tool_call_id": tool_call.id
+            }
+        ]
+    )
+    # 7. 输出最终回答
+    print(second_response.choices[0].message.content)
+```
+
+执行过程时序如下所示
+
+```sequence
+
+  
+
+    客户端->>应用程序代码: 发送用户请求("北京天气？")
+    应用程序代码->>大模型: 发送请求(携带工具定义)
+    Note right of 应用程序代码: openai.chat.completions.create(messages=[用户请求],tools=[工具定义],tool_choice="auto")
+    
+    大模型-->>应用程序代码: 返回工具调用请求(JSON格式)
+    Note right of 应用程序代码: 包含 tool_calls 数组<br> 需手动解析 JSON
+    
+    应用程序代码->>应用程序代码: 1. 解析工具调用请求 2. 验证函数名3. 提取参数
+    Note right of 应用程序代码: if tool_call.function.name == "get_current_weather":args = json.loads(tool_call.function.arguments)
+    
+    应用程序代码->>Tool: 手动调用工具函数(get_current_weather)
+    Note right of 应用程序代码: weather_data = get_current_weather(city, unit)
+    
+    Tool-->>应用程序代码: 返回原始数据(JSON/对象)
+    应用程序代码->>应用程序代码: 手动封装工具结果
+    Note right of 应用程序代码: 构建 tool 角色消息：{ "role": "tool",<br> "content": json.dumps(weather_data),"tool_call_id": tool_call.id}
+    
+    应用程序代码->>大模型: 发送工具执行结果
+    Note right of 应用程序代码: openai.chat.completions.create( messages=[原始请求+工具结果])
+    
+    大模型-->>应用程序代码: 返回自然语言响应
+    应用程序代码->>客户端: 转发最终回答("北京当前气温25摄氏度")
+```
+
+
+
+## 5.2 MCP 做法
+
+开发者只需做两件事
+
+```python
+
+# 1. 声明工具函数 (框架自动注册到MCP路由)
+@mcp_tool(name="get_current_weather")
+def weather_tool(location: str, unit: str = "celsius"):
+    return call_weather_api(location, unit) 
+# 2. 启动MCP服务框架
+mcp_server = MCPServer(tools=[weather_tool])
+mcp_server.deploy(model="gpt-4-turbo")
+
+# 之后所有流程由MCP框架自动处理：
+# - 解析LLM的工具调用 → 执行对应函数 → 回传结果 → 生成最终回复
+```
+
+执行过程时序如下所示
+
+```sequence
+客户端->>MCP服务框架: 发送用户请求("北京天气？")
+MCP服务框架->>大模型: 转发请求(携带工具定义)
+大模型-->>MCP服务框架: 返回工具调用请求(结构化MCP格式)
+MCP服务框架->>Tool: 自动路由+执行 get_current_weather("北京")
+Tool-->>MCP服务框架: 返回天气数据(25°C)
+MCP服务框架->>MCP服务框架: 自动封装结果(MCP格式)
+大模型-->>MCP服务框架: 返回自然语言响应
+MCP服务框架->>客户端: "北京当前气温25摄氏度"
+```
+
