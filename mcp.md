@@ -1,4 +1,8 @@
-# 1. 工作流程
+# 1. 官方网站
+
+https://modelcontextprotocol.io/
+
+# 2. 工作流程
 
 MCP（model context protocol） 的核心流程如下所示。
 
@@ -22,7 +26,7 @@ MCP（model context protocol） 的核心流程如下所示。
 
 1. **(可选) 循环协作：** 最终协调器 LLM 可能触发新一轮委托（回到步骤 4）。
 
-# 2. server
+# 3. server
 
 ```sh
 # 创建虚拟环境
@@ -91,9 +95,9 @@ http://localhost:8001/health # 可见返回 json
 
 
 
-# 3. client
+# 4. client
 
-## 3.1 SDK
+## 4.1 Python SDK
 
 ```sh
 # 创建 mcp client 文件
@@ -150,7 +154,7 @@ Available tools: ['get_desktop_files']
 
 
 
-## 3.2 curl
+## 4.2 curl
 
 ```
 curl -s http://localhost:8001/health | jq
@@ -208,7 +212,7 @@ curl -X POST http://localhost:8001/mcp \
   }'
 ```
 
-# 4. 交互流程
+# 5. 交互流程
 
 MCP(Model Context Protocol)  的核心流程
 
@@ -236,11 +240,11 @@ Tool->>模型服务端: 返回工具执行结果
 模型服务端->>客户端: 响应最终答案
 ```
 
-# 5. 示例
+# 6. 示例
 
 以查询天气为例，说明 MCP的作用。
 
-## 5.1 传统做法
+## 6.1 传统做法
 
 ```python
 import openai
@@ -335,7 +339,7 @@ if tool_call.function.name == "get_current_weather":
 
 
 
-## 5.2 MCP 做法
+## 6.2 MCP 做法
 
 开发者只需做两件事
 
