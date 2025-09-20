@@ -748,3 +748,9 @@ ODBC Package（ODBC驱动，oracle-instantclient11.2-odbc-11.2.0.4.0-1.x86_64.rp
 sudo apt update && sudo apt install audacity
 ```
 
+# 27. 启动盘制作(create startup disk)
+
+```sh
+sudo dd if=/a/b/ubuntu-24.04.2-desktop-amd64.iso of=/dev/sda bs=4M status=progress && sync
+```
+
