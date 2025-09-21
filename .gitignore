@@ -19,3 +19,4 @@ _*
 **/.settings/*
 **/*.o
 .cproject
+**/*.so.*
