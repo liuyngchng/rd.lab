@@ -1381,6 +1381,8 @@ if __name__ == "__main__":
 在Ubuntu 22.04 LTS 系统的主机上接入显卡硬件后，从 ubuntu系统中的 Additional Drivers 中可以获取到相应的驱动安装即可。
 
 ```sh
+# Ubuntu 22.04 LTS 安装550 版本的，更高版本（580）的可能会导致系统出现问题，如无线网卡驱动失效等其他错序
+# Using NVIDIA driver metapackage From nvidia-driver-550 (proprietary)
 # 查看可见的 GPU
 nvidia-smi
 ```
