@@ -1591,7 +1591,15 @@ vLLM (Virtual Large Language Model) 是一款专为大语言模型推理加速�
 
 ```sh
 # pip install vllm
-vllm serve deepseek-ai/DeepSeek-R1-Distill-Qwen-32B --tensor-parallel-size 2 --max-model-len 32768 --enforce-eager
+# tensor-parallel-size ，需要的显卡数量
+vllm serve ../DeepSeek-R1-Distill-Qwen-7B \
+    --tensor-parallel-size 1 \
+    --max-model-len 32768 \
+    --enforce-eager \
+    --port 8000 \
+    --gpu-memory-utilization 0.9 \
+    --served-model-name DeepSeek-R1 \
+    --api-key "your-secret-key"  # 启用API Key验证
 ```
 
 （2）request service
