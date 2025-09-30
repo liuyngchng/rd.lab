@@ -1593,6 +1593,7 @@ vLLM (Virtual Large Language Model) 是一款专为大语言模型推理加速�
 # pip install vllm
 # tensor-parallel-size ，需要的显卡数量
 vllm serve ../DeepSeek-R1-Distill-Qwen-7B \
+    --dtype auto \
     --tensor-parallel-size 1 \
     --max-model-len 32768 \
     --enforce-eager \
@@ -1600,6 +1601,17 @@ vllm serve ../DeepSeek-R1-Distill-Qwen-7B \
     --gpu-memory-utilization 0.9 \
     --served-model-name DeepSeek-R1 \
     --api-key "your-secret-key"  # 启用API Key验证
+```
+
+```
+dtype 值	说明	显存占用	推荐场景
+auto	默认，自动选择	自适应	通用推荐
+float16	半精度浮点数	2字节/参数	兼容性好
+bfloat16	脑浮点数	2字节/参数	训练/推理推荐
+float32	单精度浮点数	4字节/参数	最高质量
+half	float16 的别名	2字节/参数	同 float16
+int8	8位整数	1字节/参数	节省显存
+int4	4位整数	0.5字节/参数	极限压缩
 ```
 
 （2）request service
