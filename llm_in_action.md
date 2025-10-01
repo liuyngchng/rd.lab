@@ -33,6 +33,7 @@ LLM （Large Language Model，大语言模型），如目前的 ChatGPT、DeepSe
 下载了 ollama-linux-amd64.tgz 之后，在 Terminal 中执行如代码段1-1 所示的脚本， Windows环境安装Ollama后会自行启动。
 
 ```sh
+curl -LO https://ollama.com/download/ollama-linux-amd64.tgz
 cp ollama-linux-amd64.tgz /usr/local
 cd /usr/local
 sudo tar -zxf ollama-linux-amd64.tgz
