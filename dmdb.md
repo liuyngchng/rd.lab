@@ -186,8 +186,8 @@ ldd theSoCalledMissedSoFile.so
 ```
 to check what's wrong.
 
-#  DM DB case sensitive  
-##  表名、字段名
+#  2. DM DB case sensitive  
+##  2.1 表名、字段名
 
 （1）在设置为大小写敏感的库中进行查询的时候，可能经常会遇到无效的表名或列名的问题，  下面针对这种情况进行说明。  
 
@@ -204,7 +204,7 @@ to check what's wrong.
 （5） 以上几点主要针对大小写敏感的库而言，大小写不敏感的库则不存在上述问题。  
 
 （6）基于以上几点，在初始化数据库的过程中就可以对字符串比较大小写敏感这个参数做出合理的选择了。
-##  SQL
+##  2.3 SQL
 
 ```sql
 select * from v$version;
@@ -278,3 +278,25 @@ select  UNICODE ();
 
 
 字符集在安装初始化库的时候指定，设定后不可更改  
+
+
+
+# 3. DM8
+
+docker
+
+```
+docker pull docker.1ms.run/danilaworker/damengdb:8.1.2
+```
+
+Official damengdb DM8 documentation about docker installation:
+
+https://eco.dameng.com/document/dm/zh-cn/start/dm-install-docker.html
+
+run
+
+```sh
+
+docker run -d -p 5236:5236 --restart=always --name dm8_01 --privileged=true -e PAGE_SIZE=16 -e LD_LIBRARY_PATH=/opt/dmdbms/bin -e INSTANCE_NAME=dm8_01 -v /data/dm8_01:/opt/dmdbms/data danilaworker/damengdb:8.1.2
+```
+

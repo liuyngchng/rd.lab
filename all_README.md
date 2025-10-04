@@ -1741,3 +1741,39 @@ Connection to xxxx [tcp/*] succeeded!
 openssl req -x509 -newkey rsa:4096 -keyout server.key -out server.crt -days 365 -nodes -subj "/CN=yourdomain.com"
 ```
 
+
+
+
+
+# 77. mermaid 图形服务器
+
+
+
+```sh
+# 拉取镜像
+docker pull docker.1ms.run/yuzutech/kroki-mermaid
+# 运行容器
+docker run -d -p 8000:8002 --name mermaid-server docker.1ms.run/yuzutech/kroki-mermaid
+# 查看容器内部端口监听
+docker exec mermaid-server netstat -tlnp
+# 接口,支持输出svg 和png， 输入为 mermaid 脚本
+curl -X POST http://localhost:8000/svg   -H "Content-Type: text/plain"   --data-binary 'graph TB
+        A[客户端] --> B[API网关]
+        B --> C[用户服务]
+        B --> D[订单服务]
+        B --> E[支付服务]
+        C --> F[(用户数据库)]
+        D --> G[(订单数据库)]
+        E --> H[(支付数据库)]' >1.svg
+
+curl -X POST http://localhost:8000/png   -H "Content-Type: text/plain"   --data-binary 'graph TB
+        A[客户端] --> B[API网关]
+        B --> C[用户服务]
+        B --> D[订单服务]
+        B --> E[支付服务]
+        C --> F[(用户数据库)]
+        D --> G[(订单数据库)]
+        E --> H[(支付数据库)]' >2.png
+
+```
+
