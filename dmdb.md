@@ -283,6 +283,8 @@ select  UNICODE ();
 
 # 3. DM8
 
+## 3.1 server
+
 docker
 
 ```
@@ -296,7 +298,46 @@ https://eco.dameng.com/document/dm/zh-cn/start/dm-install-docker.html
 run
 
 ```sh
+# 通过环境变量设置密码
+docker run -d -p 5236:5236 \
+  --name dm8 \
+  --privileged=true \
+  -e PAGE_SIZE=16 \
+  -e LD_LIBRARY_PATH=/opt/dmdbms/bin \
+  -e INSTANCE_NAME=dm8 \
+  -e SYSDBA_PWD=SYSDBA001 \
+  -v /data/dm8:/opt/dmdbms/data \
+  docker.1ms.run/danilaworker/damengdb:8.1.2
+```
 
-docker run -d -p 5236:5236 --restart=always --name dm8_01 --privileged=true -e PAGE_SIZE=16 -e LD_LIBRARY_PATH=/opt/dmdbms/bin -e INSTANCE_NAME=dm8_01 -v /data/dm8_01:/opt/dmdbms/data danilaworker/damengdb:8.1.2
+## 3.2 dmPython 客户端
+
+安装依赖
+
+```sh
+# dmPython 底层需要依赖 dm客户端的 so文件。
+pip install dmPython
+```
+
+复制 so文件到指定目录
+
+```sh
+# 复制的bin目录下的so文件到宿主机目录 /data/dm8_client
+mkdir -p /data/dm8_client
+docker cp dm8:/opt/dmdbms/bin /data/dm8_client
+cd /data/dm8_client/
+mv bin/* ./
+rm -fr bin
+
+# 编辑 ~/.bashrc
+echo 'export DM_HOME=/data/dm8_client' >> ~/.bashrc
+echo 'export LD_LIBRARY_PATH=/data/dm8_client:$LD_LIBRARY_PATH' >> ~/.bashrc
+
+# 立即生效
+source ~/.bashrc
+
+# 验证环境变量
+echo $DM_HOME
+echo $LD_LIBRARY_PATH
 ```
 
