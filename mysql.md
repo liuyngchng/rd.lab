@@ -2,15 +2,19 @@
 
 ##  1.1 MySQL 8
 
-一般，在文件  /etc/mysql/debian.cnf 中有初始化安装中系统自动生成的用户名和密码。
+ubunbu 24.02 LTS
 
-在对ubuntu 22.04 上通过sudo apt-get install 安装的 MySQL 8.0.36 中测试通过
+```sh
+sudo apt install mysql-server
+mysql -V
+sudo systemctl status mysql.service
+```
 
 在 docker pull mysql:8.4.0 中测试通过
 
 ```sh
 # ubuntu 22.04 LTS
-sudo vi /etc/mysql/my.cnf
+
 # ubuntu 24.02 LTS
 sudo vi /etc/mysql/mysql.conf.d/mysqld.cnf
 # 添加如下内容
