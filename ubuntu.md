@@ -809,3 +809,47 @@ DNS		172.20.10.1
 （5）启动路由器的 client 模式。设置向导， 下一步， 选择 client模式（客户端模式），扫描无线网，获取到主AP（苹果手机热点）的SSID和BSSID， 输入密码，连接。查看运行状态，在无线状态一栏中应该显示 连接状态：成功了。
 
 （6）此时，通过电脑有线网络进行上网，应该是OK了。后续只要安装了无线网卡驱动，则可以通过无线网卡上网了。
+
+# Install a separate Ubuntu on a movable USB disk
+ This is not to make a dual Operating system on your disk, etc. Windows and Ubuntu dual system, but totally a separate Ubuntu on your movable USB disk. You can boot from USB disk(F12) to a Ubuntu sytem, or to boot to Windows on your local disk.
+ The two system is totally 
+ I will introduce to you step by step by Ubuntu 24.04.3 LTS.
+ 
+ (1) Select Language: English(default), next;
+ (2) Select Keyboard: English(default), next;
+ (3) Connect to Internet, select : Do not  connect to Internet, next;
+ (4) Install Ubuntu , next;
+ (5) Interactive installation, next;
+ (6) Default selection, next;
+ (7) make the option as selected: Install third-party software for graphics and WiFi, next;
+ (8) [Important] make the option selected: Manual installation, next;
+ (9) [Very Important] make the option selected: In drop down list "Device for boot loader Installation", make the disk symbol be selected,(you can see sda/sdb/sdc, you should know which is your movable USB disk).
+ for example ,sdc is your movable USB disk, you selected it. Now you can see a partition on sdc as : Vfat |  /boot/efi  | 1GB.
+    Now you should click "-" on sdc, remove all of the partition except /boo/efi.
+    click "+", create a swap partition with 1GB.
+    click "+", create a root directory partition for path "/" with all the other disk space, click Next
+(10) have a coffee, just wait for the installation to finish.
+    
+    
+# 在可移动U盘上安装独立的Ubuntu系统
+  这不是在您的硬盘上安装双操作系统（例如Windows和Ubuntu双系统），而是完全在USB可移动硬盘上安装一个独立的Ubuntu系统。 您可以通过从U盘启动（按F12）进入Ubuntu系统，也可以正常启动本地硬盘上的Windows。
+两个系统完全独立。  
+   如果安装双系统， 那么当 Ubuntu系统出现问题时，可能回导致Windows系统无法启动，而这么做则可以避免这个问题，不管 Ubuntu 出现什么问题，都不会导致无法进入Windows 系统。    
+   下面我将以Ubuntu 24.04.3 LTS 为例为您逐步说明安装步骤：  
+
+(1) 选择语言：英语（默认），点击下一步；  
+(2) 选择键盘：英语（默认），点击下一步；  
+(3) 连接网络：选择“不连接网络”，点击下一步；  
+(4) 选择“安装Ubuntu”，点击下一步；  
+(5) 选择交互式安装，点击下一步；  
+(6) 保持默认选择，点击下一步；  
+(7) 勾选“为图形和WiFi硬件安装第三方软件”，点击下一步；  
+(8) 【重要】选择“手动安装”，点击下一步；  
+(9) 【非常关键】在“启动引导器安装设备”下拉列表中，选择您的可移动U盘对应的磁盘符号（您可以看到sda/sdb/sdc等标识，需要自行辨认哪个是您的U盘）。  
+例如：如果sdc是您的U盘，就选择它。此时您会看到sdc上有一个分区显示为：Vfat | /boot/efi | 1GB。  
+现在需要点击sdc下方的“-”号，删除除/boot/efi外的所有分区。  
+点击“+”创建1GB的交换分区（swap）；  
+再次点击“+”创建根目录分区，挂载点选择“/”，使用剩余所有磁盘空间，点击下一步；  
+(10) 喝杯咖啡，静待安装完成即可。  
+ 
+ 
