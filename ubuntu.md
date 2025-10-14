@@ -810,7 +810,7 @@ DNS		172.20.10.1
 
 （6）此时，通过电脑有线网络进行上网，应该是OK了。后续只要安装了无线网卡驱动，则可以通过无线网卡上网了。
 
-# Install a separate Ubuntu on a movable USB disk
+# 29. Install a separate Ubuntu on a movable USB disk
  This is not to make a dual Operating system on your disk, etc. Windows and Ubuntu dual system, but totally a separate Ubuntu on your movable USB disk. You can boot from USB disk(F12) to a Ubuntu sytem, or to boot to Windows on your local disk.
  The two system is totally 
  I will introduce to you step by step by Ubuntu 24.04.3 LTS.
@@ -831,11 +831,11 @@ DNS		172.20.10.1
 (10) have a coffee, just wait for the installation to finish.
     
     
-# 在可移动U盘上安装独立的Ubuntu系统
+# 30. 在可移动U盘上安装独立的 Ubuntu 系统
   这不是在您的硬盘上安装双操作系统（例如Windows和Ubuntu双系统），而是完全在USB可移动硬盘上安装一个独立的Ubuntu系统。 您可以通过从U盘启动（按F12）进入Ubuntu系统，也可以正常启动本地硬盘上的Windows。
 两个系统完全独立。  
-   如果安装双系统， 那么当 Ubuntu系统出现问题时，可能回导致Windows系统无法启动，而这么做则可以避免这个问题，不管 Ubuntu 出现什么问题，都不会导致无法进入Windows 系统。    
-   下面我将以Ubuntu 24.04.3 LTS 为例为您逐步说明安装步骤：  
+   如果安装双系统， 那么当 Ubuntu 系统出现问题时，可能导致 Windows 系统无法启动，而这么做则可以避免这个问题，不管 Ubuntu 出现什么问题，都不会导致无法进入Windows 系统。    
+   下面我将以 Ubuntu 24.04.3 LTS 为例为您逐步说明安装步骤。  
 
 (1) 选择语言：英语（默认），点击下一步；  
 (2) 选择键盘：英语（默认），点击下一步；  
