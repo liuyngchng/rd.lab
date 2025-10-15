@@ -814,7 +814,7 @@ DNS		172.20.10.1
  This is not to make a dual Operating system on your disk, etc. Windows and Ubuntu dual system, but totally a separate Ubuntu on your movable USB disk. You can boot from USB disk(F12) to a Ubuntu sytem, or to boot to Windows on your local disk.
  The two system is totally 
  I will introduce to you step by step by Ubuntu 24.04.3 LTS.
- 
+
  (1) Select Language: English(default), next;
  (2) Select Keyboard: English(default), next;
  (3) Connect to Internet, select : Do not  connect to Internet, next;
@@ -831,25 +831,53 @@ DNS		172.20.10.1
 (10) have a coffee, just wait for the installation to finish.
     
     
-# 30. 在可移动U盘上安装独立的 Ubuntu 系统
-  这不是在您的硬盘上安装双操作系统（例如Windows和Ubuntu双系统），而是完全在USB可移动硬盘上安装一个独立的Ubuntu系统。 您可以通过从U盘启动（按F12）进入Ubuntu系统，也可以正常启动本地硬盘上的Windows。
-两个系统完全独立。  
-   如果安装双系统， 那么当 Ubuntu 系统出现问题时，可能导致 Windows 系统无法启动，而这么做则可以避免这个问题，不管 Ubuntu 出现什么问题，都不会导致无法进入Windows 系统。    
-   下面我将以 Ubuntu 24.04.3 LTS 为例为您逐步说明安装步骤。  
+# 30. 在可移动硬盘上安装独立的 Ubuntu 系统
+## 30.1 目标  
+
+注意，这不是在您的硬盘上安装双操作系统（例如 `Windows`和 `Ubuntu` 双系统），而是完全在`USB`可移动硬盘上安装一个独立的 `Ubuntu` 系统，与本地硬盘上的系统互不干涉。 
+
+安装完成之后，您可以通过从U盘启动（按`F12`/`Del`，取决于主板`BIOS`/`UFEI`）进入 `Ubuntu` 系统，也可以正常从本地硬盘启动登录 `Windows`。
+
+## 30.2 优势
+
+如果安装双系统， 那么当 `Ubuntu` 系统出现问题时，可能导致 `Windows` 系统无法启动，而这么做则可以避免这个问题，不管 `Ubuntu` 出现什么问题，都不会导致无法进入 `Windows` 系统。    
+
+## 30.3 安装步骤
+
+下面我将以 `Ubuntu` `24.04.3` `LTS` 为例为您逐步说明安装步骤。  
 
 (1) 选择语言：英语（默认），点击下一步；  
+
 (2) 选择键盘：英语（默认），点击下一步；  
+
 (3) 连接网络：选择“不连接网络”，点击下一步；  
-(4) 选择“安装Ubuntu”，点击下一步；  
+
+(4) 选择“安装 `Ubuntu`”，点击下一步；  
+
 (5) 选择交互式安装，点击下一步；  
+
 (6) 保持默认选择，点击下一步；  
-(7) 勾选“为图形和WiFi硬件安装第三方软件”，点击下一步；  
+
+(7) 勾选“为图形和 `WiFi` 硬件安装第三方软件”，点击下一步；  
+
 (8) 【重要】选择“手动安装”，点击下一步；  
-(9) 【非常关键】在“启动引导器安装设备”下拉列表中，选择您的可移动U盘对应的磁盘符号（您可以看到sda/sdb/sdc等标识，需要自行辨认哪个是您的U盘）。  
-例如：如果sdc是您的U盘，就选择它。此时您会看到sdc上有一个分区显示为：Vfat | /boot/efi | 1GB。  
-现在需要点击sdc下方的“-”号，删除除/boot/efi外的所有分区。  
-点击“+”创建1GB的交换分区（swap）；  
+
+(9) 【非常关键】在“启动引导器安装设备”下拉列表中，选择您的可移动USB硬盘对应的磁盘符号（您可以看到`sda`/`sdb`/`sdc`等标识，需要自行辨认哪个是您的U盘）。  
+
+例如：如果 `sdc` 是您的`USB` 移动硬盘，就选择它。此时您会看到 `sdc`上有一个分区显示为：
+
+```sh
+Vfat 		| 		/boot/efi | 	1GB
+```
+
+
+
+现在需要点击 `sdc`下方的“`-`”号，删除除 `/boot/efi` 外的所有分区。  
+
+点击 “+” 创建 1GB 的交换分区（swap）；  
+
 再次点击“+”创建根目录分区，挂载点选择“/”，使用剩余所有磁盘空间，点击下一步；  
+
 (10) 喝杯咖啡，静待安装完成即可。  
- 
+
  
