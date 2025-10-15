@@ -811,26 +811,47 @@ DNS		172.20.10.1
 （6）此时，通过电脑有线网络进行上网，应该是OK了。后续只要安装了无线网卡驱动，则可以通过无线网卡上网了。
 
 # 29. Install a separate Ubuntu on a movable USB disk
- This is not to make a dual Operating system on your disk, etc. Windows and Ubuntu dual system, but totally a separate Ubuntu on your movable USB disk. You can boot from USB disk(F12) to a Ubuntu sytem, or to boot to Windows on your local disk.
- The two system is totally 
- I will introduce to you step by step by Ubuntu 24.04.3 LTS.
+ This is not to make a dual Operating system on your disk, etc. Windows and Ubuntu dual system, but totally a separate Ubuntu on your portable USB disk. 
+
+You can boot from USB hard disk (`F12`) to a `Ubuntu` system, or to boot to Windows on your local disk.
+
+The two system can work completely independently.
+
+I will introduce to you how to do step by step with `Ubuntu 24.04.3 LTS`.
 
  (1) Select Language: English(default), next;
+
  (2) Select Keyboard: English(default), next;
+
  (3) Connect to Internet, select : Do not  connect to Internet, next;
+
  (4) Install Ubuntu , next;
+
  (5) Interactive installation, next;
+
  (6) Default selection, next;
+
  (7) make the option as selected: Install third-party software for graphics and WiFi, next;
+
  (8) [Important] make the option selected: Manual installation, next;
- (9) [Very Important] make the option selected: In drop down list "Device for boot loader Installation", make the disk symbol be selected,(you can see sda/sdb/sdc, you should know which is your movable USB disk).
- for example ,sdc is your movable USB disk, you selected it. Now you can see a partition on sdc as : Vfat |  /boot/efi  | 1GB.
-    Now you should click "-" on sdc, remove all of the partition except /boo/efi.
-    click "+", create a swap partition with 1GB.
-    click "+", create a root directory partition for path "/" with all the other disk space, click Next
-(10) have a coffee, just wait for the installation to finish.
+
+ (9) [Very Important] make the option selected: In drop down list "Device for boot loader Installation", make the disk symbol be selected,(you can see `sda`/`sdb`/`sdc`, etc. you should know which is your portable USB hard disk).
+
+For example ,`sdc` is your portable `USB` hard disk, you select it. Now you can see a partition on `sdc` as 
+
+```sh
+Vfat 		|  /boot/efi  | 		1GB
+```
+
+ Now you should click "`-`" on `sdc`, remove all of the partition except `/boo/efi`.
+
+click "`+`", create a `swap` partition with `1GB`.
+
+click "`+`", create a root directory partition for path "`/`" with all the other disk spaces, click Next;
+
+(10) have a coffee,  just wait for the installation to finish.
     
-    
+
 # 30. 在可移动硬盘上安装独立的 Ubuntu 系统
 ## 30.1 目标  
 
