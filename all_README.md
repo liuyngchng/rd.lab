@@ -1751,9 +1751,9 @@ openssl req -x509 -newkey rsa:4096 -keyout server.key -out server.crt -days 365 
 
 ```sh
 # 拉取镜像
-docker pull docker.1ms.run/yuzutech/kroki-mermaid
+docker pull kroki-mermaid
 # 运行容器
-docker run -d -p 8000:8002 --name mermaid-server docker.1ms.run/yuzutech/kroki-mermaid
+docker run -d -p 8000:8002 --name mermaid-server kroki-mermaid
 # 查看容器内部端口监听
 docker exec mermaid-server netstat -tlnp
 # 接口,支持输出svg 和png， 输入为 mermaid 脚本
