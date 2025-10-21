@@ -576,6 +576,8 @@ RAG 的工作流程的数据流如图 4-1 所示（网络盗图，仅供参考�
 
 ###   5.1.1 环境准备
 
+#### 5.1.1.1 langchain
+
 python基础组件信息如代码段 5-1 所示， 建议安装 python 的版本至少3.9以上，否则与langchain 相关的部分组件可能无法安装。
 
 ```python
@@ -620,7 +622,7 @@ pip3 install langchain-ollama
 ```
 
 <center><b>代码段 5-2  langChain 组件信息</b><center>
-
+#### 5.1.1.2 nltk
 
 如果需要解析  Word 文档，还需要执行以下操作， 如代码段 5-3 所示。
 
