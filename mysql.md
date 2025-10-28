@@ -14,7 +14,7 @@ sudo systemctl status mysql.service
 
 ```sh
 # ubuntu 22.04 LTS
-
+sudo vi /etc/mysql/my.cnf
 # ubuntu 24.02 LTS
 sudo vi /etc/mysql/mysql.conf.d/mysqld.cnf
 # 添加如下内容
@@ -34,7 +34,10 @@ ALTER USER 'root'@'localhost' IDENTIFIED BY 'P@$$W0rd';
 FLUSH PRIVILEGES;
 exit;
 # 重新修改配置文件
+# ubuntu 22.04 LTS
 sudo vi /etc/mysql/my.cnf
+# ubuntu 24.02 LTS
+sudo vi /etc/mysql/mysql.conf.d/mysqld.cnf
 # 删除如下内容
 [mysqld]
 skip-grant-tables=1
