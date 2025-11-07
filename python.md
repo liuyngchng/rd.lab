@@ -1,4 +1,10 @@
-# 1. python 文件 head
+# 1. Windows 下环境的配置
+
+下载 python 3.12.3, https://www.python.org/downloads/release/python-3123/ , [Windows installer (64-bit)](https://www.python.org/ftp/python/3.12.3/python-3.12.3-amd64.exe)
+
+
+
+# 2. python 文件 head
 
 （1）shebang 行。文件第一行，指定该文件应该使用的解释器。
 
