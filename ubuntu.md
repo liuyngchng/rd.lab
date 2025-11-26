@@ -901,4 +901,18 @@ Vfat 		| 		/boot/efi | 	1GB
 
 (10) 喝杯咖啡，静待安装完成即可。  
 
+# 31. 关闭 snap 自动更新
+
+```sh
+# 1. 关闭自动更新
+sudo snap set system refresh.timer=""
+# 2. 以后想更新所有 Snap 时，手动执行
+sudo snap refresh
+# 3. 如果想查看有哪些 Snap 可以更新
+snap refresh --list
+```
+
+
+
  
+
