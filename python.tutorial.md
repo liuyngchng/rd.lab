@@ -1,4 +1,4 @@
-<div align='center'><h1>Python入门教程</h1></div>
+<div align='center'><h1>从 Python走向 AI</h1></div>
 
 ## 1. Python基础入门
 
