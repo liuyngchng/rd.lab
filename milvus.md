@@ -76,7 +76,7 @@ pip install -U pymilvus-orm
 
 这个包主要包含python client 库 和 Milvus Lite库。
 
-`pymilvus` 和 `pymilvus-orm` 的关系是这样的，`pymilvus` (2.x+) 是当前（2023年起）推荐的，包含完整的 Milvus 客户端功能（低级API + 高级ORM）；**`pymilvus-orm` **是旧版 ORM 组件，仅包含旧版 ORM 接口（Milvus 1.x 时代的分离包）自 Milvus 2.0 起已废弃，功能合并到主库，不再需要单独安装。
+`pymilvus` 和 `pymilvus-orm` 的关系是这样的，`pymilvus` (2.x+) 是2023年起推荐的，包含完整的 Milvus 客户端功能（低级API + 高级ORM）；**`pymilvus-orm` **是2023年前的旧版 ORM 组件，仅包含旧版 ORM 接口（Milvus 1.x 时代的分离包）自 Milvus 2.0 起已废弃，功能合并到主库，不再需要单独安装。
 
 依赖的package 如下所示：
 
@@ -107,9 +107,9 @@ pip install "pymilvus[model]"
 
 ```sh
 # 主要安装的包：
-sentence-transformers >=2.2.2  # 文本嵌入模型框架
-transformers >=4.37.0          # Hugging Face 模型库
-tokenizers >=0.15.0            # 文本分词工具
+sentence-transformers 	>=2.2.2  			# 文本嵌入模型框架
+transformers 			>=4.37.0          	# Hugging Face 模型库
+tokenizers 				>=0.15.0            # 文本分词工具
 ```
 
 # 3. basic concepts
