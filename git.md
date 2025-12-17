@@ -41,6 +41,16 @@ git commit -m 'merge my dev branch to master'
 # 提交master分支
 git push 
 
+# 删除本地分支
+git branch -a
+git branch -d branch_want_to_be_deleted
+# 如果这个分支没有合并到master， 则需要通过 -D 删除
+git branch -D branch_want_to_be_deleted
+
+# 删除远程分支
+git branch -a
+git push origin --delete branch_want_to_be_deleted
+
 ```
 
 # 2. gitlab server
