@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flask 图书管理系统 - {{ title }}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <!-- 导航栏 -->
+        <nav class="navbar">
+            <div class="nav-brand">
+                <i class="fas fa-book"></i>
+                <h1>Flask 图书管理系统</h1>
+            </div>
+            <div class="nav-links">
+                <a href="{{ url_for('index') }}" class="nav-link {% if not show_about and not show_search %}active{% endif %}">
+                    <i class="fas fa-home"></i> 首页
+                </a>
+                <a href="{{ url_for('about') }}" class="nav-link {% if show_about %}active{% endif %}">
+                    <i class="fas fa-info-circle"></i> 关于
+                </a>
+            </div>
+        </nav>
+
+        <!-- 搜索框 -->
+        <div class="search-section">
+            <form action="{{ url_for('search') }}" method="get" class="search-form">
+                <input type="text" name="q" placeholder="搜索书名或作者..." 
+                       value="{{ search_query if search_query else '' }}" class="search-input">
+                <button type="submit" class="search-btn">
+                    <i class="fas fa-search"></i> 搜索
+                </button>
+            </form>
+        </div>
+
+        <!-- 主要内容 -->
+        <main>
+            {% if show_about %}
+                <!-- 关于页面内容 -->
+                <div class="about-section">
+                    <h2><i class="fas fa-info-circle"></i> 关于这个应用</h2>
+                    <div class="about-card">
+                        <p>这是一个使用 Flask 构建的简单图书管理系统演示。</p>
+                        <p>功能包括：</p>
+                        <ul>
+                            <li>查看图书列表</li>
+                            <li>搜索图书</li>
+                            <li>添加新图书（通过API）</li>
+                        </ul>
+                        <p>技术栈：Flask, HTML, CSS, JavaScript</p>
+                        <div class="features">
+                            <div class="feature">
+                                <i class="fas fa-bolt"></i>
+                                <h4>快速</h4>
+                                <p>轻量级Flask框架</p>
+                            </div>
+                            <div class="feature">
+                                <i class="fas fa-mobile-alt"></i>
+                                <h4>响应式</h4>
+                                <p>适配所有设备</p>
+                            </div>
+                            <div class="feature">
+                                <i class="fas fa-code"></i>
+                                <h4>简洁</h4>
+                                <p>代码简单易懂</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% else %}
+                <!-- 图书列表或搜索结果 -->
+                <div class="header-section">
+                    <h2>
+                        {% if show_search %}
+                            <i class="fas fa-search"></i> {{ title }}
+                        {% else %}
+                            <i class="fas fa-book-open"></i> {{ title }}
+                        {% endif %}
+                    </h2>
+                    <p class="subtitle">
+                        {% if show_search %}
+                            找到 {{ books|length }} 本相关图书
+                        {% else %}
+                            共 {{ books|length }} 本图书
+                        {% endif %}
+                    </p>
+                </div>
+
+                <!-- 图书列表 -->
+                <div class="books-container">
+                    {% if books %}
+                        {% for book in books %}
+                        <div class="book-card">
+                            <div class="book-header">
+                                <span class="book-id">#{{ book.id }}</span>
+                                <span class="book-price">¥{{ "%.2f"|format(book.price) }}</span>
+                            </div>
+                            <h3 class="book-title">{{ book.title }}</h3>
+                            <p class="book-author">
+                                <i class="fas fa-user-pen"></i> {{ book.author }}
+                            </p>
+                            <div class="book-actions">
+                                <button class="btn view-btn" onclick="viewBook({{ book.id }})">
+                                    <i class="fas fa-eye"></i> 查看
+                                </button>
+                                <button class="btn edit-btn" onclick="editBook({{ book.id }})">
+                                    <i class="fas fa-edit"></i> 编辑
+                                </button>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    {% else %}
+                        <div class="empty-state">
+                            <i class="fas fa-book"></i>
+                            <h3>暂无图书数据</h3>
+                            <p>{% if show_search %}未找到相关图书，请尝试其他关键词{% else %}还没有添加任何图书{% endif %}</p>
+                        </div>
+                    {% endif %}
+                </div>
+
+                <!-- 添加新书表单 -->
+                <div class="add-book-section">
+                    <h3><i class="fas fa-plus-circle"></i> 添加新书</h3>
+                    <form id="addBookForm" class="add-book-form">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="title"><i class="fas fa-heading"></i> 书名</label>
+                                <input type="text" id="title" name="title" required placeholder="输入书名">
+                            </div>
+                            <div class="form-group">
+                                <label for="author"><i class="fas fa-user"></i> 作者</label>
+                                <input type="text" id="author" name="author" required placeholder="输入作者">
+                            </div>
+                            <div class="form-group">
+                                <label for="price"><i class="fas fa-tag"></i> 价格</label>
+                                <input type="number" id="price" name="price" step="0.01" min="0" required placeholder="输入价格">
+                            </div>
+                        </div>
+                        <button type="submit" class="btn submit-btn">
+                            <i class="fas fa-plus"></i> 添加图书
+                        </button>
+                    </form>
+                    <div id="message" class="message"></div>
+                </div>
+            {% endif %}
+        </main>
+
+        <!-- 页脚 -->
+        <footer>
+            <p>© 2023 Flask 图书管理系统 | 使用 Flask {{ config.get('FLASK_VERSION', '2.3.3') }} 构建</p>
+            <div class="footer-links">
+                <a href="#"><i class="fab fa-github"></i> GitHub</a>
+                <a href="#"><i class="fas fa-question-circle"></i> 帮助</a>
+                <a href="#"><i class="fas fa-envelope"></i> 联系</a>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        // 表单提交处理
+        document.getElementById('addBookForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const formData = {
+                title: document.getElementById('title').value,
+                author: document.getElementById('author').value,
+                price: document.getElementById('price').value
+            };
+            
+            const messageDiv = document.getElementById('message');
+            
+            try {
+                const response = await fetch('/api/add_book', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(formData)
+                });
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    messageDiv.innerHTML = `
+                        <div class="success-message">
+                            <i class="fas fa-check-circle"></i> ${result.message}
+                            已添加: ${result.book.title}
+                        </div>
+                    `;
+                    // 清空表单
+                    document.getElementById('addBookForm').reset();
+                    // 刷新页面（实际应用中可以动态添加DOM）
+                    setTimeout(() => {
+                        window.location.reload();
+                    }, 1500);
+                } else {
+                    messageDiv.innerHTML = `
+                        <div class="error-message">
+                            <i class="fas fa-exclamation-circle"></i> 错误: ${result.message}
+                        </div>
+                    `;
+                }
+            } catch (error) {
+                messageDiv.innerHTML = `
+                    <div class="error-message">
+                        <i class="fas fa-exclamation-circle"></i> 网络错误: ${error}
+                    </div>
+                `;
+            }
+        });
+        
+        // 模拟查看和编辑功能
+        function viewBook(id) {
+            alert(`查看图书 #${id} 的详细信息`);
+        }
+        
+        function editBook(id) {
+            alert(`编辑图书 #${id}`);
+        }
+    </script>
+</body>
+</html>
