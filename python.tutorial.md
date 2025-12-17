@@ -606,7 +606,7 @@ pip install flask
 
 在 flask_app 下的 static目录，进入 css 目录， 创建文本文件 style.css,  文件内容如 **[style.css](./py/flask_app/static/css/style.css)** 所示。
 
-整个 flask_app 的源代码如 **[flask_app](./py/flask_app)**  所示。
+整个 `flask_app` 的源代码如 **[flask_app](./py/flask_app)**  所示。
 
 ### 5.4 启动程序
 
@@ -716,9 +716,9 @@ app.py 内容如  **[app.py](./py/ai_chat_app/app.py)** 所示。
 
 ### 6.3 配套的 HTML 文件
 
-templates 目录下的 index.html 内容如  **[index.html](./py/ai_chat_app/templates/index.html)** 所示。
+templates 目录下的 index.html 内容如  **[index.html](./py/ai_chat_app/templates/index.html)** 所示。static目录下的 css 目录下的文件 style.css 内容如  **[style.css](./py/ai_chat_app/static/css/style.css)** 所示。
 
-static目录下的 css 目录下的文件 style.css 内容如  **[style.css](./py/ai_chat_app/static/css/style.css)** 所示。
+整个 `ai_chat_app` 的源代码如 **[ai_chat_app](./py/ai_chat_app)**  所示。
 
 ### 6.4 启动程序
 
