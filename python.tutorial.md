@@ -1,4 +1,4 @@
-<div align='center'><h1>从 Python走向 AI</h1></div>
+<div align='center'><h1>Python AI 编程入门</h1></div>
 
 ## 1. Python基础入门
 
@@ -1481,6 +1481,848 @@ flask_app/
 
 注意， `JavaScript` 事实上跟 `Java`编程语言一点关系也没有，只是名称感觉挺像的，这个是由于历史原因造成的， 是 Web 开发中最大的**命名误解**之一。1995年网景公司（Netscape）创造了 LiveScript，由于当时 Java 非常火爆，为了蹭热度改名为 JavaScript。就跟好莱坞和宝莱坞一样。
 
-## 6. Hello AI
+## 6. Hello AI Chat
 
-接下来，将通过 Flask，接入大语言模型（LLM）API，开发一个AI 聊天机器人。
+### 6.1 目录结构
+
+接下来，将通过 Flask，接入大语言模型（LLM）API，开发一个AI 聊天机器人。项目的目录结构如下所示
+
+```shell
+ai_chat_app/
+│
+├── app.py              # 主应用文件
+├── templates/          # HTML模板目录
+│   └── index.html      # 主页模板
+└── static/             # 静态文件目录
+    ├── css/
+    │   └── style.css   # 样式文件
+    └── images/         # 图片目录（可选）
+```
+
+创建一个文件夹 ai_chat_app，内部有2个文件夹，名称为 templates 和 static，以及一个python文件 app.py。 Linux 下执行
+
+Windows下的目录和文件请手动创建， Linux下可执行脚本
+
+```sh
+# 创建文件夹 flask_app
+mkdir ai_chat_app
+# 进入文件夹 flask_app
+cd ai_chat_app
+# 在文件夹 flask_app 下创建2个文件夹 templates static
+mkdir templates static
+# 在文件夹 static 下创建文件夹 css
+mkdir static/css
+```
+
+
+
+### 6.2 主要的 python 文件
+
+app.py 内容如下
+
+```python
+from flask import Flask, render_template, request, Response, jsonify
+import json
+import requests
+from typing import Generator
+import os
+from dotenv import load_dotenv
+
+# 加载环境变量
+load_dotenv()
+
+app = Flask(__name__)
+
+# ============== 配置常量 ==============
+# LLM API 配置（可替换为任何兼容OpenAI API的接口）
+class LLMConfig:
+    # API 基础配置， 如果使用deepseek，此处无需修改
+    API_BASE_URL = os.getenv("LLM_API_BASE_URL", "https://api.deepseek.com/v1")
+    # 运行前，需要将 sk_you_api_key 替换成 真实 API 的key，
+    # 需在各大模型服务提供商的网站注册充值后才能获得这个 API key
+    API_KEY = os.getenv("LLM_API_KEY", "sk_you_api_key")
+    # 如果使用deepseek，此处无需修改
+    MODEL_NAME = os.getenv("LLM_MODEL_NAME", "deepseek-chat")
+    
+    # 请求参数配置
+    MAX_TOKENS = int(os.getenv("MAX_TOKENS", 2000))
+    TEMPERATURE = float(os.getenv("TEMPERATURE", 0.7))
+    TOP_P = float(os.getenv("TOP_P", 0.9))
+    
+    # 流式响应配置
+    STREAM = True
+    TIMEOUT = 30  # 请求超时时间（秒）
+    
+    # 系统提示词
+    SYSTEM_PROMPT = os.getenv("SYSTEM_PROMPT", "你是一个有用的AI助手。请用中文回答用户的问题。")
+
+# ============== 辅助函数 ==============
+def generate_stream_response(messages: list) -> Generator[str, None, None]:
+    """
+    生成流式响应
+    """
+    headers = {
+        "Content-Type": "application/json",
+        "Authorization": f"Bearer {LLMConfig.API_KEY}"
+    }
+    
+    payload = {
+        "model": LLMConfig.MODEL_NAME,
+        "messages": messages,
+        "max_tokens": LLMConfig.MAX_TOKENS,
+        "temperature": LLMConfig.TEMPERATURE,
+        "top_p": LLMConfig.TOP_P,
+        "stream": LLMConfig.STREAM,
+    }
+    
+    try:
+        response = requests.post(
+            f"{LLMConfig.API_BASE_URL}/chat/completions",
+            headers=headers,
+            json=payload,
+            stream=True,
+            timeout=LLMConfig.TIMEOUT
+        )
+        response.raise_for_status()
+        
+        for line in response.iter_lines():
+            if line:
+                line = line.decode('utf-8')
+                if line.startswith('data: '):
+                    data = line[6:]  # 移除 'data: ' 前缀
+                    if data != '[DONE]':
+                        try:
+                            chunk = json.loads(data)
+                            if 'choices' in chunk and len(chunk['choices']) > 0:
+                                delta = chunk['choices'][0].get('delta', {})
+                                if 'content' in delta and delta['content']:
+                                    yield f"data: {json.dumps({'content': delta['content']})}\n\n"
+                        except json.JSONDecodeError:
+                            continue
+        
+        yield "data: [DONE]\n\n"
+        
+    except requests.exceptions.RequestException as e:
+        error_msg = f"API请求错误: {str(e)}"
+        yield f"data: {json.dumps({'error': error_msg})}\n\n"
+        yield "data: [DONE]\n\n"
+
+# ============== 路由 ==============
+@app.route('/')
+def index():
+    """渲染主页面"""
+    return render_template('index.html')
+
+@app.route('/chat', methods=['POST'])
+def chat():
+    """处理聊天请求"""
+    try:
+        data = request.json
+        user_message = data.get('message', '').strip()
+        
+        if not user_message:
+            return jsonify({'error': '消息不能为空'}), 400
+        
+        # 构建消息历史
+        messages = [{"role": "system", "content": LLMConfig.SYSTEM_PROMPT}]
+        
+        # 添加上下文消息（如果需要）
+        chat_history = data.get('history', [])
+        for msg in chat_history[-10:]:  # 限制历史记录长度
+            messages.append(msg)
+        
+        # 添加用户消息
+        messages.append({"role": "user", "content": user_message})
+        
+        # 返回流式响应
+        return Response(
+            generate_stream_response(messages),
+            mimetype='text/event-stream',
+            headers={
+                'Cache-Control': 'no-cache',
+                'X-Accel-Buffering': 'no'  # 禁用Nginx缓冲
+            }
+        )
+        
+    except Exception as e:
+        return jsonify({'error': f'服务器错误: {str(e)}'}), 500
+
+@app.route('/config', methods=['GET'])
+def get_config():
+    """获取当前配置（不包含敏感信息）"""
+    config_info = {
+        'model': LLMConfig.MODEL_NAME,
+        'max_tokens': LLMConfig.MAX_TOKENS,
+        'temperature': LLMConfig.TEMPERATURE,
+        'has_api_key': bool(LLMConfig.API_KEY)
+    }
+    return jsonify(config_info)
+
+if __name__ == '__main__':
+    # 检查API密钥
+    if not LLMConfig.API_KEY:
+        print("警告: LLM_API_KEY 未设置，请配置环境变量或修改代码")
+    
+    app.run(
+        debug=True,
+        host='0.0.0.0',
+        port=5000,
+        threaded=True
+    )
+```
+
+### 6.3 配套的 HTML 文件
+
+templates 目录下的 index.html 内容如下
+
+```html
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI聊天助手</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <h1><i class="fas fa-robot"></i> AI聊天助手</h1>
+            <div class="model-info">
+                <span id="modelName">正在加载模型信息...</span>
+                <button id="clearChat" class="btn-clear">
+                    <i class="fas fa-trash-alt"></i> 清空聊天
+                </button>
+            </div>
+        </header>
+
+        <div class="chat-container">
+            <div class="chat-history" id="chatHistory">
+                <!-- 聊天消息会动态添加到这里 -->
+                <div class="welcome-message">
+                    <p>👋 你好！我是AI助手，有什么可以帮你的吗？</p>
+                </div>
+            </div>
+
+            <div class="input-area">
+                <div class="input-container">
+                    <textarea 
+                        id="messageInput" 
+                        placeholder="输入你的消息..." 
+                        rows="3"
+                        onkeydown="handleKeyPress(event)"
+                    ></textarea>
+                    <div class="input-actions">
+                        <div class="config-info">
+                            <span class="config-item">
+                                <i class="fas fa-brain"></i>
+                                <span id="currentModel">-</span>
+                            </span>
+                            <span class="config-item">
+                                <i class="fas fa-thermometer-half"></i>
+                                <span id="currentTemp">{{ '%.1f'|format(config.temperature|default(0.7)) }}</span>
+                            </span>
+                        </div>
+                        <button id="sendButton" class="btn-send">
+                            <i class="fas fa-paper-plane"></i> 发送
+                        </button>
+                    </div>
+                </div>
+                <div class="input-hint">
+                    <small>按 Enter 发送，Shift + Enter 换行</small>
+                </div>
+            </div>
+        </div>
+
+        <footer class="footer">
+            <p>Powered by Flask & LLM API | 支持流式响应</p>
+        </footer>
+    </div>
+
+    <script>
+        // 全局变量
+        let chatHistory = [];
+        let currentStream = null;
+
+        // DOM 元素
+        const messageInput = document.getElementById('messageInput');
+        const sendButton = document.getElementById('sendButton');
+        const chatHistoryEl = document.getElementById('chatHistory');
+        const clearChatBtn = document.getElementById('clearChat');
+        const modelNameEl = document.getElementById('modelName');
+        const currentModelEl = document.getElementById('currentModel');
+
+        // 初始化
+        document.addEventListener('DOMContentLoaded', function() {
+            loadConfig();
+            setupEventListeners();
+            messageInput.focus();
+        });
+
+        // 加载配置
+        async function loadConfig() {
+            try {
+                const response = await fetch('/config');
+                const config = await response.json();
+                
+                modelNameEl.textContent = `模型: ${config.model}`;
+                currentModelEl.textContent = config.model;
+                
+                if (!config.has_api_key) {
+                    showError('未配置API密钥，请检查配置');
+                }
+            } catch (error) {
+                console.error('加载配置失败:', error);
+            }
+        }
+
+        // 设置事件监听器
+        function setupEventListeners() {
+            sendButton.addEventListener('click', sendMessage);
+            clearChatBtn.addEventListener('click', clearChat);
+            
+            // 输入框自动调整高度
+            messageInput.addEventListener('input', function() {
+                this.style.height = 'auto';
+                this.style.height = (this.scrollHeight) + 'px';
+            });
+        }
+
+        // 发送消息
+        async function sendMessage() {
+            const message = messageInput.value.trim();
+            if (!message) return;
+            
+            // 禁用输入和发送按钮
+            messageInput.disabled = true;
+            sendButton.disabled = true;
+            sendButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i> 思考中...';
+            
+            // 添加用户消息到界面
+            addMessageToUI('user', message);
+            
+            // 清空输入框
+            messageInput.value = '';
+            messageInput.style.height = 'auto';
+            
+            // 添加AI消息占位符
+            const aiMessageId = 'ai-' + Date.now();
+            addMessageToUI('ai', '', aiMessageId);
+            
+            // 发送请求
+            try {
+                currentStream = await streamAIResponse(message, aiMessageId);
+            } catch (error) {
+                console.error('发送消息失败:', error);
+                updateAIMessage(aiMessageId, `<span class="error">请求失败: ${error.message}</span>`);
+            } finally {
+                // 恢复输入和发送按钮
+                messageInput.disabled = false;
+                sendButton.disabled = false;
+                sendButton.innerHTML = '<i class="fas fa-paper-plane"></i> 发送';
+                messageInput.focus();
+            }
+        }
+
+        // 流式获取AI响应
+        async function streamAIResponse(userMessage, messageId) {
+            // 添加用户消息到历史
+            chatHistory.push({ role: 'user', content: userMessage });
+            
+            // 发起流式请求
+            const response = await fetch('/chat', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    message: userMessage,
+                    history: chatHistory.slice(-10) // 发送最近10条历史
+                })
+            });
+            
+            if (!response.ok) {
+                throw new Error(`HTTP错误: ${response.status}`);
+            }
+            
+            const reader = response.body.getReader();
+            const decoder = new TextDecoder();
+            let aiResponse = '';
+            
+            // 读取流数据
+            while (true) {
+                const { done, value } = await reader.read();
+                if (done) break;
+                
+                const chunk = decoder.decode(value);
+                const lines = chunk.split('\n');
+                
+                for (const line of lines) {
+                    if (line.startsWith('data: ')) {
+                        const data = line.substring(6);
+                        
+                        if (data === '[DONE]') {
+                            // 流式传输完成
+                            chatHistory.push({ role: 'assistant', content: aiResponse });
+                            return;
+                        }
+                        
+                        try {
+                            const parsed = JSON.parse(data);
+                            
+                            if (parsed.error) {
+                                throw new Error(parsed.error);
+                            }
+                            
+                            if (parsed.content) {
+                                aiResponse += parsed.content;
+                                updateAIMessage(messageId, aiResponse);
+                            }
+                        } catch (e) {
+                            console.error('解析流数据失败:', e);
+                        }
+                    }
+                }
+            }
+        }
+
+        // 添加消息到界面
+        function addMessageToUI(role, content, messageId = null) {
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${role}-message`;
+            
+            if (messageId) {
+                messageDiv.id = messageId;
+            }
+            
+            if (role === 'user') {
+                messageDiv.innerHTML = `
+                    <div class="message-header">
+                        <i class="fas fa-user"></i> <strong>你</strong>
+                    </div>
+                    <div class="message-content">${content.replace(/\n/g, '<br>')}</div>
+                `;
+            } else {
+                messageDiv.innerHTML = `
+                    <div class="message-header">
+                        <i class="fas fa-robot"></i> <strong>AI助手</strong>
+                    </div>
+                    <div class="message-content">${content}</div>
+                `;
+            }
+            
+            chatHistoryEl.appendChild(messageDiv);
+            scrollToBottom();
+        }
+
+        // 更新AI消息
+        function updateAIMessage(messageId, content) {
+            const messageDiv = document.getElementById(messageId);
+            if (messageDiv) {
+                const contentDiv = messageDiv.querySelector('.message-content');
+                contentDiv.innerHTML = content.replace(/\n/g, '<br>');
+                scrollToBottom();
+            }
+        }
+
+        // 清空聊天
+        function clearChat() {
+            if (confirm('确定要清空聊天记录吗？')) {
+                // 中止当前流
+                if (currentStream) {
+                    currentStream.cancel?.();
+                }
+                
+                // 清空历史
+                chatHistory = [];
+                
+                // 清空界面（保留欢迎消息）
+                const welcomeMessage = document.querySelector('.welcome-message');
+                chatHistoryEl.innerHTML = '';
+                if (welcomeMessage) {
+                    chatHistoryEl.appendChild(welcomeMessage);
+                }
+                
+                scrollToBottom();
+            }
+        }
+
+        // 处理键盘快捷键
+        function handleKeyPress(event) {
+            if (event.key === 'Enter' && !event.shiftKey) {
+                event.preventDefault();
+                sendMessage();
+            }
+        }
+
+        // 显示错误
+        function showError(message) {
+            const errorDiv = document.createElement('div');
+            errorDiv.className = 'error-message';
+            errorDiv.innerHTML = `<i class="fas fa-exclamation-triangle"></i> ${message}`;
+            chatHistoryEl.appendChild(errorDiv);
+            setTimeout(() => errorDiv.remove(), 5000);
+        }
+
+        // 滚动到底部
+        function scrollToBottom() {
+            chatHistoryEl.scrollTop = chatHistoryEl.scrollHeight;
+        }
+    </script>
+</body>
+</html>
+```
+
+
+
+static目录下的 css 目录下的文件 style.css 内容如下
+
+```css
+/* 基础重置 */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+}
+
+/* 容器 */
+.container {
+    width: 100%;
+    max-width: 900px;
+    background: white;
+    border-radius: 20px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    height: 90vh;
+}
+
+/* 头部 */
+.header {
+    background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+    color: white;
+    padding: 20px 30px;
+    text-align: center;
+}
+
+.header h1 {
+    font-size: 1.8rem;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+.model-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.9rem;
+    opacity: 0.9;
+}
+
+.btn-clear {
+    background: rgba(255, 255, 255, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    color: white;
+    padding: 6px 15px;
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 0.85rem;
+    transition: all 0.3s;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.btn-clear:hover {
+    background: rgba(255, 255, 255, 0.3);
+}
+
+/* 聊天容器 */
+.chat-container {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+/* 聊天历史 */
+.chat-history {
+    flex: 1;
+    overflow-y: auto;
+    padding: 25px;
+    background: #f8f9fa;
+}
+
+/* 消息样式 */
+.message {
+    margin-bottom: 20px;
+    animation: fadeIn 0.3s ease-in;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.message-header {
+    margin-bottom: 8px;
+    font-size: 0.9rem;
+    opacity: 0.8;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.message-content {
+    padding: 15px 20px;
+    border-radius: 18px;
+    line-height: 1.6;
+    word-wrap: break-word;
+}
+
+.user-message .message-content {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border-top-left-radius: 5px;
+    margin-left: 20px;
+}
+
+.ai-message .message-content {
+    background: white;
+    color: #333;
+    border: 1px solid #e0e0e0;
+    border-top-right-radius: 5px;
+    margin-right: 20px;
+}
+
+/* 欢迎消息 */
+.welcome-message {
+    text-align: center;
+    color: #666;
+    padding: 40px 20px;
+    font-size: 1.1rem;
+}
+
+/* 输入区域 */
+.input-area {
+    padding: 20px 30px;
+    background: white;
+    border-top: 1px solid #e0e0e0;
+}
+
+.input-container {
+    background: #f8f9fa;
+    border-radius: 15px;
+    padding: 15px;
+    border: 2px solid #e0e0e0;
+    transition: border-color 0.3s;
+}
+
+.input-container:focus-within {
+    border-color: #667eea;
+}
+
+textarea {
+    width: 100%;
+    border: none;
+    background: transparent;
+    resize: none;
+    font-size: 1rem;
+    line-height: 1.5;
+    padding: 10px;
+    outline: none;
+    font-family: inherit;
+    max-height: 150px;
+}
+
+.input-actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 10px;
+}
+
+.config-info {
+    display: flex;
+    gap: 15px;
+    font-size: 0.85rem;
+    color: #666;
+}
+
+.config-item {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.btn-send {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border: none;
+    padding: 10px 25px;
+    border-radius: 25px;
+    cursor: pointer;
+    font-size: 1rem;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.btn-send:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+}
+
+.btn-send:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.input-hint {
+    text-align: center;
+    color: #999;
+    font-size: 0.8rem;
+    margin-top: 8px;
+}
+
+/* 错误消息 */
+.error-message {
+    background: #fee;
+    color: #c33;
+    padding: 10px 15px;
+    border-radius: 10px;
+    margin: 10px 0;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.error {
+    color: #dc3545;
+}
+
+/* 底部 */
+.footer {
+    text-align: center;
+    padding: 15px;
+    color: #666;
+    font-size: 0.85rem;
+    border-top: 1px solid #e0e0e0;
+    background: #f8f9fa;
+}
+
+/* 滚动条样式 */
+.chat-history::-webkit-scrollbar {
+    width: 8px;
+}
+
+.chat-history::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 4px;
+}
+
+.chat-history::-webkit-scrollbar-thumb {
+    background: #c1c1c1;
+    border-radius: 4px;
+}
+
+.chat-history::-webkit-scrollbar-thumb:hover {
+    background: #a8a8a8;
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+    .container {
+        height: 95vh;
+        border-radius: 15px;
+    }
+    
+    .header, .input-area {
+        padding: 15px 20px;
+    }
+    
+    .chat-history {
+        padding: 15px;
+    }
+    
+    .header h1 {
+        font-size: 1.5rem;
+    }
+    
+    .config-info {
+        flex-direction: column;
+        gap: 5px;
+    }
+    
+    .input-actions {
+        flex-direction: column;
+        gap: 10px;
+        align-items: stretch;
+    }
+    
+    .btn-send {
+        width: 100%;
+        justify-content: center;
+    }
+}
+```
+
+### 6.4 启动程序
+
+在启动程序前，请修改 app.py 的如下代码
+
+```python
+API_BASE_URL = os.getenv("LLM_API_BASE_URL", "https://api.deepseek.com/v1")
+API_KEY = os.getenv("LLM_API_KEY", "sk_you_api_key")
+MODEL_NAME = os.getenv("LLM_MODEL_NAME", "deepseek-chat")
+```
+
+分别将 "https://api.deepseek.com/v1" , "sk_you_api_key" , "deepseek-chat" 替换成真实的 API 信息， LLM API 信息需要充值各个大语言模型的账号才可获得， deepseek 官网的获取方法详见 https://platform.deepseek.com/， 注册账号并充值后即可获得相应的 API_KEY。
+
+完成以上修改后，执行以下脚本启动应用， Windows 在 CMD 控制台执行, Linux 在终端(Terminal) 执行。
+
+```sh
+# 进入目录 flask_app
+cd ai_chat_app
+# 解析文件 app.py
+python app.py
+```
+
+此时将会看
+
+```sh
+python app.py 
+ * Serving Flask app 'app'
+ * Debug mode: on
+WARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+Press CTRL+C to quit
+ * Restarting with stat
+ * Debugger is active!
+ * Debugger PIN: 343-196-857
+
+```
+
+说明启动成功，打开浏览器访问：`http://localhost:5000`，将看到如下的界面
+
+![](./img/ai_chat.png)
+
+have fun ！
