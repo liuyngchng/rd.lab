@@ -826,7 +826,7 @@ pip freeze > requirements.txt
 
 事实上，创建虚拟环境和 `pip freeze > requirements.txt` 需要配套使用，如果不创建虚拟环境，则命令 `pip freeze > requirements.txt` 会将所有已经安装的包都写入这个文件。如果每个python项目都单独创建了虚拟环境，那么执行命令 `pip freeze > requirements.txt` 则只包含当前项目所依赖的包。 
 
-**（1）创建**
+**（1）创建**。  通过创建虚拟环境， 使得自己的某个项目下通过 pip install 安装的包下载至指定的目录，同时也可以使使用的 python 命令指向特定的目录。
 
 ```sh
 # 安装指令
@@ -839,7 +839,7 @@ pwd
 
 ```
 
-**（2）激活。**创建虚拟环境后，需要激活才能生效。一般来说，激活后再执行 `pip install xxx`命令来安装其他依赖包。
+**（2）激活。** 创建虚拟环境后，需要激活才能生效。一般来说，激活后再执行 `pip install xxx`命令来安装其他依赖包。
 
 ```sh
 rd@rd-tpd:~/workspace
