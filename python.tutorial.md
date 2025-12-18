@@ -762,3 +762,208 @@ Press CTRL+C to quit
 ![](./img/ai_chat.png)
 
 have fun ！
+
+## 7. 其他注意事项
+
+### 7.1 文件头
+
+python文件一般前两行内容如下：
+
+```python
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+```
+
+文件第一行`#!/usr/bin/env python3` 为shebang 行，指定该文件应该使用的解释器。文件第2行 `# -*- coding: utf-8 -*-`设置文件编码。告诉python 解释器应采用UTF-8编码格式读取文件，增加文件的跨操作系统的适应性。
+
+### 7.2 重要的命令
+
+**（1）重新强制安装损坏的包**
+
+有时候，已经 `pip install `了某个包，可是无法使用，可能是某个包损坏了。这时候重新强制安装即可。
+
+```sh
+# 强制重新安装，会忽略目前已安装的对应组件，直接覆盖
+pip install --force-reinstall module
+# 卸载组件
+pip uninstall module
+# 卸载1.txt里列出的所有组件
+pip uninstall -r ./requirements.txt
+# 安装requirements.txt 中的组件清单
+pip install -r ./requirements.txt
+```
+
+**（2）安装指定版本的组件。**对于部分组件，可能会报版本冲突等错误，此时可能需要安装指定的版本，可执行如下命令。
+
+```sh
+# 命令格式为 pip install model_name==version_numer
+pip install numpy==1.26.2
+```
+
+**（3）查看某个组件版本号。**如果需要查看某个已经安装的组件的确切版本号，执行以下命令。
+
+```sh
+pip show numpy
+```
+
+**（4）Python Image Library(`PIL`)**。`PIL` 也叫Pillow， 是 Python 中最常用的图像处理库，功能强大且易于使用，适合各种图片处理需求，从简单的格式转换到复杂的图像处理都能胜任。
+
+```sh
+pip install pillow
+```
+
+ **（5）requirements.txt。** 一般在发布自己的python项目时，需要在项目根目录下生成一个依赖包的清单，这样方便他人在使用这个项目时，安装相关的依赖，可以在自己的项目根目录下执行下面的命令生成。
+
+ ```sh
+pip freeze > requirements.txt
+ ```
+
+### 7.3 虚拟环境
+
+构建虚拟环境，可以使每个环境（python 项目）下的包与其他环境隔离，方便在不同的环境下进行不同的任务，同时不会互相干扰。官方文档详见 https://docs.python.org/3.10/library/venv.html。这里推荐 `virtualenv `命令。
+
+创建虚拟环境的缺点，是如果同时进行多个项目，会导致本地磁盘存储的whl文件 更多。因为不同的项目哪怕使用的是同一个包，也会各自用各自的，无法共用，这也是不可避免的。但总体而已，收益大与损失。
+
+事实上，创建虚拟环境和 `pip freeze > requirements.txt` 需要配套使用，如果不创建虚拟环境，则命令 `pip freeze > requirements.txt` 会将所有已经安装的包都写入这个文件。如果每个python项目都单独创建了虚拟环境，那么执行命令 `pip freeze > requirements.txt` 则只包含当前项目所依赖的包。 
+
+**（1）创建**
+
+```sh
+# 安装指令
+sudo apt-get install virtualenv
+pip install virtualenv
+# 创建虚拟环境 llm_py_env, 会在当前目录下创建一个名称为 llm_py_env 的新目录
+virtualenv llm_py_env
+pwd
+/home/rd/workspace
+
+```
+
+**（2）激活。**创建虚拟环境后，需要激活才能生效。一般来说，激活后再执行 `pip install xxx`命令来安装其他依赖包。
+
+```sh
+rd@rd-tpd:~/workspace
+# 启用虚拟环境，会看到在用户名称前多了一个 “(llm_py_env) ”
+source ./llm_py_env/bin/activate
+pwd
+/home/rd/workspace
+(llm_py_env) rd@rd-tpd:~/workspace/$
+```
+
+激活虚拟环境之后，再通过pip 安装包时，新安装的包就会存储在虚拟环境的目录下。
+
+**（3）退出**。进入虚拟环境后，如果切换python项目，则可以退出。退出虚拟环境后，如果不再需求，可以直接删除。
+
+```sh
+# 退出虚拟环境
+deactivate llm_py_env
+# 删除虚拟环境， 首先进入创建的虚拟环境目录的父目录，然后执行删除
+cd parent_dir
+rm -fr llm_py_env
+```
+
+### 7.4 jupyter
+
+如果进行数据处理、数据挖掘等数据相关工作，那么 `jupyter` 是一个不错的选择，`jupyter` 是一个轻量级的进行数据处理的图形用户界面开发和运维系统。
+
+```sh
+# setup
+pip install jupyter notebook
+# run
+jupyter notebook
+```
+
+但是，如下场景则不适用于 `juypyter`，生产环境`python`项目部署（直接部署`.py`文件即可）、大型项目开发（用`PyCharm`/`VSCode`）、Web应用开发（用专业`IDE`）、需要版本控制的大项目（`jupyter` 的 `.ipynb`文件`diff`困难）。
+
+### 7.5 pip镜像源
+
+ pip镜像源会定期从 `PyPI`（Python Package Index）官方服务器同步所有包文件。当使用 `pip install xxx` 时， pip 会默认从某个官方的数据源头下载`whl` 包，如果我们想指定特定的某个数据源（例如，速度更快、内网无法上等等场景），则可以通过以下命令来完成。
+
+```sh
+# for temporary case
+pip install some_package -i https://pypi.tuna.tsinghua.edu.cn/simple
+# for permanent
+pip config set global.index-url https://pypi.tuna.tsinghua.edu.cn/simple
+# 企业内部自建的
+pip3 install some_package -i http://your_private_domain/root/pypi/+simple --trusted-host your_private_domain
+```
+
+### 7.6 离线安装pip 包
+
+在一些需要进行离线开发、部署、打包的环境下，可以通过在线下载，离线安装的模式进行依赖包的安装。
+
+```sh
+# 进入到储存whl package的 目录下
+cd my_whl_dir
+# 在有网络的环境下事先下载你的whl包,例如,下载 torch相关的whl， 必须确保离线和有线环境下的python pip版本号完全一致
+pip download torch
+
+#离线安装
+pip install torch --no-cache-dir --no-index --find-links=/a/b/c/my_whl_dir
+```
+
+### 7.7 本地镜像源搭建
+
+todo：尚未验证
+
+```sh
+方法2：使用local-pypi-server
+local-pypi-server是一个轻量级的本地pypi服务器，它可以帮助你管理本地Python包。
+
+安装local-pypi-server：
+
+pip install local-pypi-server
+
+启动服务器：
+
+local-pypi-server --port 8000 --repo /path/to/your/packages
+这里--repo参数指定了你的包存储位置。你可以将需要发布的包放在这个目录下。
+
+方法3：使用devpi
+devpi是一个更高级的pypi服务器，支持更多的功能和配置选项。
+
+安装devpi-server和devpi-client：
+
+pip install devpi-server devpi-client
+
+启动devpi-server：
+
+devpi-server --host 127.0.0.1 --port 3141 --start
+
+使用devpi-client创建用户和索引：
+
+devpi use http://127.0.0.1:3141/root/pypi
+devpi user -cX --password=mypass root
+devpi login root --password=mypass
+devpi index -c
+
+上传包：
+
+devpi upload /path/to/your/package/dist/*.whl
+
+```
+
+### 7.8 IDE
+
+pycharm 历史版本
+
+https://www.jetbrains.com.cn/pycharm/download/other.html
+
+### 7.9 数据库驱动
+
+**（1）MySQL**。 `MySQL` 为常用的关系型数据库，使用需要安装如下组件。
+
+```sh
+pip install pymysql
+```
+
+**（2）Oracle**。使用Oracle数据库，需要安装组件如下所示。
+
+```
+pip install oracledb
+```
+
+oracledb 是 Oracle 官方推出的新版（原 cx_Oracle 的重命名升级版），推荐使用新库。oracledb 默认使用纯 Python 实现的 "Thin模式"，无需安装 Oracle 客户端。oracledb 的 Thin 模式性能更好，且支持原生 JSON 等新特性，同时保留兼容旧版的 "Thick模式"（需客户端）。oracledb 完全兼容 cx_Oracle 的 API，通常只需修改 `import` 语句即可迁移。
+
+
+
