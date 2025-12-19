@@ -963,11 +963,10 @@ pip install oracledb
 
 oracledb 是 Oracle 官方推出的新版（原 cx_Oracle 的重命名升级版），推荐使用新库。oracledb 默认使用纯 Python 实现的 "Thin模式"，无需安装 Oracle 客户端。oracledb 的 Thin 模式性能更好，且支持原生 JSON 等新特性，同时保留兼容旧版的 "Thick模式"（需客户端）。oracledb 完全兼容 cx_Oracle 的 API，通常只需修改 `import` 语句即可迁移。
 
-##  8. Django
+##  8. `Django`
 
 `Django` 是一个基于 Python 的高级 Web 应用程序框架，它的核心目标是让开发者能够快速、简洁、干净地构建复杂的、数据库驱动的网站。
 
-如果将开发Web工程比喻成建造房屋，那么 `Django` 就是 “工具包”和“脚手架”、预制板。开发人员无需从零开始制造砖块、水泥和设计承重结构，Django 已经为你准备好了这些基础且关键的部件，让你能专注于设计房屋的独特布局和装修。
+如果将开发Web工程比喻成建造房屋，那么 `Django` 就是 “工具包”和“脚手架”、水泥预制板、已经做的好的门窗骨架等。开发人员无需从零开始制造砖块、水泥和设计承重结构，`Django` 已经为你准备好了这些基础且关键的部件，让你能专注于设计房屋的独特布局和装修。
 
-Django 相关功能组件，详见其官网 https://www.djangoproject.com/。
-
+`Django` 相关功能的介绍，详见其官网 https://www.djangoproject.com/。
