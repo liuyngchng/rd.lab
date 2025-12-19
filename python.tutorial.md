@@ -807,7 +807,7 @@ pip show numpy
 **（4）Python Image Library(`PIL`)**。  `PIL` 也叫Pillow， 是 Python 中最常用的图像处理库，功能强大且易于使用，适合各种图片处理需求，从简单的格式转换到复杂的图像处理都能胜任。
 
 ```sh
-pip install pillow
+pip install pillow | more
 ```
 
  **（5）requirements.txt** 。 一般在发布自己的python项目时，需要在项目根目录下生成一个依赖包的清单，这样方便他人在使用这个项目时，安装相关的依赖，可以在自己的项目根目录下执行下面的命令生成。
