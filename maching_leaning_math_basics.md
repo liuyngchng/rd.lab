@@ -99,7 +99,7 @@ $$
 \begin{align}
 \frac{d(loss)}{dw} &=\frac{d[\sum^{n}_{i=1}(wx_i+b-y_i)^2]}{dw}\\
 &=\sum^{n}_{i=1}\frac{d[(wx_i+b-y_i)^2]}{dw}\\
-&=2\sum^{n}_{i=1}(x_i+b-y_i)\\
+&= 2\sum_{i=1}^n (wx_i + b - y_i) \cdot x_i\\
 \tag 5
 \end{align} \tag {2-3}
 $$
@@ -109,7 +109,7 @@ $$
 \begin{align}
 \frac{d(loss)}{db} &=\frac{d[\sum^{n}_{i=1}(wx_i+b-y_i)^2]}{db}\\
 &=\sum^{n}_{i=1}\frac{d[(wx_i+b-y_i)^2]}{db}\\
-&=2\sum^{n}_{i=1}(1+wx_i-y_i)\\
+&=2\sum^{n}_{i=1}(wx_i + b - y_i)
 \end{align} \tag {2-4}
 $$
 
