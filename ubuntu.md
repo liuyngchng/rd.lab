@@ -914,5 +914,15 @@ snap refresh --list
 
 
 
+# 32. 画图软件 `drawio`
+
+
+
+```
+sudo snap install drawio
+```
+
+
+
  
 
