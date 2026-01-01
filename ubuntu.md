@@ -676,6 +676,18 @@ sudo apt-get install vlc
 
 # 24. ffmpeg 视频编辑
 
+## 24.1 视频格式转换
+
+```sh
+ffmpeg -i "abc.webm" \
+       -vf "fps=30" \
+       -c:v libx264 -preset fast -crf 23 \
+       -an \
+       123.mp4
+```
+
+
+
 ## 24.1 视频剪辑
 
 ```sh
