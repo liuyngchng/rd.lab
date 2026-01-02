@@ -684,6 +684,13 @@ ffmpeg -i "abc.webm" \
        -c:v libx264 -preset fast -crf 23 \
        -an \
        123.mp4
+
+# 非全屏幕录制
+ffmpeg -i "2.webm" \
+       -vf "fps=30,scale='trunc(iw/2)*2:trunc(ih/2)*2'" \
+       -c:v libx264 -preset fast -crf 23 \
+       -an \
+       2.mp4       
 ```
 
 
