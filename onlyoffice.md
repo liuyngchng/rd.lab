@@ -62,7 +62,9 @@ API 的使用方法详见  https://api.onlyoffice.com/docs/docs-api/get-started/
 
 
 
-数据流
+### 2.2 数据流
+
+
 
 ```sh
 ┌─────────────────┐        上传请求        ┌─────────────────┐
@@ -93,5 +95,24 @@ API 的使用方法详见  https://api.onlyoffice.com/docs/docs-api/get-started/
 │                 │ <──────────────── │                 │
 │                 │    响应结果        └─────────────────┘
 └─────────────────┘
+```
+
+
+
+### 2.3 配置
+
+
+
+```sh
+# 获取 jwt token
+docker exec $( docker ps -q) /var/www/onlyoffice/documentserver/npm/json -f /etc/onlyoffice/documentserver/local.json 'services.CoAuthoring.secret.session.string'
+your_jwt_secret_here
+
+# 启动管理员界面
+docker exec $(sudo docker ps -q) sudo supervisorctl start ds:adminpanel
+
+# 获取 Bootstrap code
+docker logs onlyoffice-document-server | grep -i "bootstrap\|admin" | tail -20
+
 ```
 
