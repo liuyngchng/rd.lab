@@ -1,22 +1,110 @@
-# docker image
+## 1. docker image
+
 
 ```sh
-docker pull docker.1ms.run/onlyoffice/communityserver
+# 拉取镜像
+docker pull docker.1ms.run/onlyoffice/documentserver:latest
 
-docker stop onlyoffice
-docker rm onlyoffice
+# 运行
+docker run -i -t -d -p 8080:80 \
+  -e JWT_ENABLED=true \
+  -e JWT_SECRET=your_jwt_secret \
+  onlyoffice/documentserver
+  
+# 停止已有的容器
+docker stop onlyoffice-document-server
 
-docker run -i -t -d \
-  -p 20080:80 \
-  -p 20443:443 \
+  
+# 运行容器, 注意，使用了 host模式， 8080的端口映射就失效了。
+docker run -i -t -d -p 8080:80 \
+  --network=host \
   --restart=always \
-  -e MYSQL_ROOT_PASSWORD=0000 \
-  -v /data/onlyoffice/data:/var/www/onlyoffice/Data \
-  -v /data/onlyoffice/logs:/var/log/onlyoffice \
-  -v /data/onlyoffice/mysql:/var/lib/mysql \
-  --name onlyoffice \
-  docker.1ms.run/onlyoffice/communityserver:latest
+  -e JWT_ENABLED=true \
+  -e JWT_SECRET=your_jwt_secret_here \
+  -e JWT_HEADER=Authorization \
+  -v /app/onlyoffice/DocumentServer/logs:/var/log/onlyoffice \
+  -v /app/onlyoffice/DocumentServer/data:/var/www/onlyoffice/Data \
+  -v /app/onlyoffice/DocumentServer/lib:/var/lib/onlyoffice \
+  -v /app/onlyoffice/DocumentServer/db:/var/lib/postgresql \
+  --name onlyoffice-document-server \
+  onlyoffice/documentserver
+
+# 验证访问
+curl http://localhost:8080/welcome
+```
+
+## 2. primitive
+
+```sh
+# Ubuntu/Debian
+sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys CB2DE8E5
+sudo echo "deb https://download.onlyoffice.com/repo/debian squeeze main" | sudo tee /etc/apt/sources.list.d/onlyoffice.list
+sudo apt-get update
+sudo apt-get install onlyoffice-documentserver
+
+# 配置
+sudo onlyoffice-documentserver configure
+```
+
+## 3. doc
+
+API 的使用方法详见  https://api.onlyoffice.com/docs/docs-api/get-started/
+
+### 3.1 前端
+
+页面中嵌入 js  http://localhost:8080/web-apps/apps/api/documents/api.js
+
+
+
+### 3.2 数据流
+
+
+
+```sh
+┌─────────────────┐        上传请求        ┌─────────────────┐
+│                 │ ─────────────────────> │                 │
+│   用户浏览器    │                        │   Flask 应用     │
+│                 │ <───────────────────── │   (localhost:19000) │
+│                 │      返回配置           │                 │
+└─────────────────┘                        └─────────┬───────┘
+         │                                            │
+         │ 加载OnlyOffice编辑器                        │ 返回文档文件
+         │                                            │
+         ▼                                            ▼
+┌─────────────────┐  请求文档文件     ┌─────────────────┐
+│                 │ ────────────────> │   Flask 应用     │
+│ OnlyOffice编辑器 │                  │   (提供下载)     │
+│ (localhost:8080) │ <──────────────── │                 │
+│                 │   文档文件流       └─────────────────┘
+└─────────┬───────┘
+         │
+         │ 用户编辑文档
+         │
+         │ 保存文档时
+         │
+         ▼
+┌─────────────────┐  回调请求 (POST)  ┌─────────────────┐
+│                 │ ────────────────> │   Flask 应用     │
+│ OnlyOffice编辑器 │                  │   (callbackUrl)  │
+│                 │ <──────────────── │                 │
+│                 │    响应结果        └─────────────────┘
+└─────────────────┘
 ```
 
 
 
+### 3.3 配置
+
+
+
+```sh
+# 获取 jwt token
+docker exec $( docker ps -q) /var/www/onlyoffice/documentserver/npm/json -f /etc/onlyoffice/documentserver/local.json 'services.CoAuthoring.secret.session.string'
+your_jwt_secret_here
+
+# 启动管理员界面
+docker exec $(sudo docker ps -q) sudo supervisorctl start ds:adminpanel
+
+# 获取 Bootstrap code
+docker logs onlyoffice-document-server | grep -i "bootstrap\|admin" | tail -20
+```
