@@ -22,10 +22,10 @@ docker run -i -t -d -p 8080:80 \
   -e JWT_ENABLED=true \
   -e JWT_SECRET=your_jwt_secret_here \
   -e JWT_HEADER=Authorization \
-  -v /app/onlyoffice/DocumentServer/logs:/var/log/onlyoffice \
-  -v /app/onlyoffice/DocumentServer/data:/var/www/onlyoffice/Data \
-  -v /app/onlyoffice/DocumentServer/lib:/var/lib/onlyoffice \
-  -v /app/onlyoffice/DocumentServer/db:/var/lib/postgresql \
+  -v /data/onlyoffice/DocumentServer/logs:/var/log/onlyoffice \
+  -v /data/onlyoffice/DocumentServer/data:/var/www/onlyoffice/Data \
+  -v /data/onlyoffice/DocumentServer/lib:/var/lib/onlyoffice \
+  -v /data/onlyoffice/DocumentServer/db:/var/lib/postgresql \
   --name onlyoffice-document-server \
   onlyoffice/documentserver
 
