@@ -1766,7 +1766,11 @@ https://v0.app/
 
    **建议你立即用一个小型试点项目进行测试**，比如只生成报告中的“技术方案”这一小节，亲身体验一下效果，你会发现它的潜力
 
-# 16. Reference
+# 18. DeepAgents
+
+通过 DeepAgents 进行任务分解， 执行子智能体，最终形成输出的结果
+
+# 19. Reference
 
 [1] Hugging Face Documentation. https://huggingface.co/docs;
 
@@ -1804,6 +1808,8 @@ https://v0.app/
 
 [18] Microsoft AI app, https://blogs.microsoft.com/blog/2025/04/22/https-blogs-microsoft-com-blog-2024-11-12-how-real-world-businesses-are-transforming-with-ai/
 
-# 16. 附录
+[19] DeepAgents, https://docs.langchain.com/oss/python/deepagents/quickstart
+
+# 20. 附录
 
 文中所涉及到的代码 demo,详见  https://github.com/liuyngchng/llm_test。
