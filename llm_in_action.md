@@ -570,13 +570,19 @@ RAG 的工作流程的数据流如图 4-1 所示（网络盗图，仅供参考�
 <center><b>图 4-2  LangChain 工作流程示意图</b><center>
 
 
-#  5. RAG
+#  5. Framework
 
-##   5.1 langchain
+目前市面上比较流行的LLM 应用框架有 langchain (https://docs.langchain.com/) 和 LLama-Index（https://developers.llamaindex.ai/）， langchain 作为LLM应用编排框架， 对模型（model）、提示词模板（template）、模型调用（chain.invoke）都进行了封装。
 
-###   5.1.1 环境准备
+LLama-Index 则在RAG 这个方向上更加深入，对基于数据构建Agent方面进行了深化。
 
-#### 5.1.1.1 langchain
+##   5.LangChain
+
+langchain 这家公司目前有三款工具， langchain， langgraph 和 deepagents。
+
+###   5.1.1 LangChain
+
+#### 5.1.1.1 环境准备
 
 python基础组件信息如代码段 5-1 所示， 建议安装 python 的版本至少3.9以上，否则与langchain 相关的部分组件可能无法安装。
 
@@ -604,8 +610,6 @@ langchain-cli 0.0.35
 ```
 
 <center><b>代码段 5-1  python 基础组件信息</b><center>
-
-
 另外，中文文本向量化需要分词嵌入式模型，例如 bge-large-zh-v1.5（详见 https://huggingface.co/BAAI/bge-large-zh-v1.5）等。由于国内网络环境科学上网的问题，也可以通过 https://modelscope.cn/models/BAAI/bge-large-zh-v1.5 获取。
 
 安装langChain组件， 如代码段 5-2 所示。
@@ -666,8 +670,7 @@ pip3 install "unstructured[pdf]"
 ```
 
 <center><b>代码段 5-4  PDF 文档解析相关组件信息</b><center>
-
-###   5.1.2 本地文档向量化
+#### 5.1.2 本地文档向量化
 
 将本地文档向量化，形成向量数据库，存储在本地， 如代码段 5-5 所示。其中使用到 FAISS 向量数据库的地方，若机器上有 GPU ，则可以首先安装 cuda（详见参考文献<sup>[8]</sup>）, 然后执行 `pip install faiss-gpu`。
 
@@ -717,7 +720,7 @@ logger.info("vector db saved to local file")
 <center><b>代码段 5-5 本地文档向量化代码段</b><center>
 
 
-###   5.1.3 检索参数增强演示
+####   5.1.3 检索参数增强演示
 
 通过检索参数曾将，可以在调用大模型时，返回关于本地私有知识的内容，如代码段 5-6 所示。
 
@@ -761,7 +764,133 @@ logger.info(result)
 ```
 
 <center><b>代码段 5-6 检索参数增强代码段</b><center>
+### 5.1.2 LangGraph
 
+类似于传统软件中的工作流编排，可以通过  LangGraph 构建一张有向无环图， 在各个节点上执行某种运算，或者执行某个agent。
+
+```sh
+ # 创建一个 StateGraph 对象
+ graph_builder = StateGraph(dict)
+ # 定义图的入口和边
+ graph_builder.add_node("chatbot", chatbot)
+ graph_builder.add_edge(START, "chatbot")
+ graph_builder.add_edge("chatbot", END)
+
+# 编译图
+graph = graph_builder.compile()
+
+# 执行图
+user_input = '介绍你自己'
+for event in graph.stream(user_input):
+for value in event.values():
+print("Assistant:", value["messages"])
+
+```
+
+上面的代码段中，构建了一张图(graph)，有节点(node)，有边（edge），节点可以是某个agent，或者自己的一段代码逻辑， 边则代表了数据的流向。
+
+这个过程类似于Dify 或者 Ragflow 中，通过图形化界面，托拖拽拽实现了一个工作流是一样的，只不过 LangGraph 更加低阶一些，通过代码来进行编排，更加灵活，功能也更加强大。 
+
+### 5.1.3 Deep Agents
+
+Deep Agents 的愿景是让大语言模型自己去分解、执行一个较为复杂的任务（Manus的思想），但是是有前提条件的。任务本身可以通过用户的输入以文本的形式提供，这个大语言模型时可以理解的。那么 Deep Agents 是如何分解任务并执行的呢？下面做一个解释。
+
+**（1）协调者（coordinator）。** Deep Agent 就是一个coordinator(叫leader也行)，负责理解用户的输入，分解任务，回收各个子agent(subagent) 处理生成的结果，最终输出，任务比较艰巨。
+
+**（2）工具集（tools）。** 已知定义好的一些工具，这个跟 MCP 中的 tools 类似。例如望远镜、工兵铲，瑞士军刀。
+
+可以理解 Deep Agents 是一个 leader，可以提供一些 tools （通过编程实现，且需要满足 Deep Agents 框架的输入输出要求），例如下面就是一个 互联网内容搜索tool, 详见 https://docs.langchain.com/oss/python/deepagents/customization。
+
+```python
+import os
+from typing import Literal
+from tavily import TavilyClient
+from deepagents import create_deep_agent
+
+tavily_client = TavilyClient(api_key=os.environ["TAVILY_API_KEY"])
+
+def internet_search(
+    query: str,
+    max_results: int = 5,
+    topic: Literal["general", "news", "finance"] = "general",
+    include_raw_content: bool = False,
+):
+    """Run a web search"""
+    return tavily_client.search(
+        query,
+        max_results=max_results,
+        include_raw_content=include_raw_content,
+        topic=topic,
+    )
+# 在这里 将 internet_search 提供给了 
+agent = create_deep_agent(
+    tools=[internet_search]
+)
+```
+
+事实上， 代码段中的 agent 就是一个 `CompiledStateGraph`， 这个 `CompiledStateGraph` 就是 LangGraph 中的实体。
+
+**（3）子智能体(subagent)。**
+
+```python
+from deepagents import create_deep_agent, CompiledSubAgent
+from langchain.agents import create_agent
+
+# Create a custom agent graph
+custom_graph = create_agent(
+    # 模型对象，例如 deepseek chat
+    model=your_model,
+    # 这个模型可以使用的工具
+    tools=specialized_tools,
+    # 限定功能的提示词，例如扮演一个大夫、警察、数据分析中
+    prompt="You are a specialized agent for data analysis..."
+)
+
+# 定义一个子智能体
+custom_subagent = CompiledSubAgent(
+    # 起个名字
+    name="data-analyzer",
+    # 描述这个子智能体的功能
+    description="Specialized agent for complex data analysis tasks",
+    # 真正运行的时候，调用谁，提供输入，能获取到输出
+    runnable=custom_graph
+)
+# 这个是一个子智能体清单
+subagents = [custom_subagent]
+
+agent = create_deep_agent(
+    # 模型名称，deep agent 会按照这个名称封装成对象，做API 调用
+    model="claude-sonnet-4-5-20250929",
+    # 可以调用的工具集合
+    tools=[internet_search],
+    # 提示词，告诉这位协调者（coordinator）具体的任务
+    system_prompt=research_instructions,
+    # 告诉协调者（coordinator）目前可用的子智能体,作为分解任务的依据
+    subagents=subagents
+)
+```
+
+**（4）文件系统中间件。**用于进行任务的卸载/加载， 对于一些中间变量，可以通过写文件、读文件获取。
+
+```python
+from langchain.agents import create_agent
+from langchain.agents.middleware import TodoListMiddleware
+
+# TodoListMiddleware is included by default in create_deep_agent
+# You can customize it if building a custom agent
+agent = create_agent(
+    model="claude-sonnet-4-5-20250929",
+    # Custom planning instructions can be added via middleware
+    # 告诉 deep agent， 哪里可以洗衣服、哪里可以邮寄快递、哪里可以租车，类似这种，这个中间件也可以提供给 subagent，就类似于工具，可以提供给 deep agent ，也可以提供给sub agent。
+    middleware=[
+        TodoListMiddleware(
+            system_prompt="Use the write_todos tool to..."  # Optional: Custom addition to the system prompt
+        ),
+    ],
+)
+```
+
+OK，有了以上4种工具之后，最终在DeepAgents框架的实现种，全部会以文本的形式，与用户的输入（文本），提供给大语言模型（即构建 deep agent（协调者）的那个LLM），由 LLM输出执行计划（langgraph），然后由 deep agent调用各个subagent，按照 langgraph 的路径，一步一步执行，最终输出。
 
 ##    5.2 LLama-Index
 
@@ -808,6 +937,8 @@ print(output)
 
 
 ## 5.3 RAGFlow
+
+RAGFlow 作为一个起量级的文档RAG工具，如果不想深入开发，基于已有文档构建智能体，较为合适。
 
 详见 https://ragflow.io/docs/dev/build_docker_image 。可以在图形化界面中配置工作流，与AI 模型调用进行集成。
 
