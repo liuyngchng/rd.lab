@@ -578,7 +578,7 @@ LLama-Index 则在RAG 这个方向上更加深入，对基于数据构建Agent�
 
 ##   5.LangChain
 
-langchain 这家公司目前有三款工具， langchain， langgraph 和 deepagents。
+LangChain 这家公司目前有三款工具， LangChain， LangGraph 和 Deep Agents。
 
 ###   5.1.1 LangChain
 
