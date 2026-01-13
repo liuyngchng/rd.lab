@@ -764,6 +764,8 @@ logger.info(result)
 ```
 
 <center><b>代码段 5-6 检索参数增强代码段</b><center>
+
+
 ### 5.1.2 LangGraph
 
 类似于传统软件中的工作流编排，可以通过  LangGraph 构建一张有向无环图， 在各个节点上执行某种运算，或者执行某个agent。
@@ -792,6 +794,8 @@ print("Assistant:", value["messages"])
 这个过程类似于Dify 或者 Ragflow 中，通过图形化界面，托拖拽拽实现了一个工作流是一样的，只不过 LangGraph 更加低阶一些，通过代码来进行编排，更加灵活，功能也更加强大。 
 
 ### 5.1.3 Deep Agents
+
+#### 5.1.3.1 基本概念
 
 Deep Agents 的愿景是让大语言模型自己去分解、执行一个较为复杂的任务（Manus的思想），但是是有前提条件的。任务本身可以通过用户的输入以文本的形式提供，这个大语言模型时可以理解的。那么 Deep Agents 是如何分解任务并执行的呢？下面做一个解释。
 
@@ -891,6 +895,51 @@ agent = create_agent(
 ```
 
 OK，有了以上4种工具之后，最终在DeepAgents框架的实现种，全部会以文本的形式，与用户的输入（文本），提供给大语言模型（即构建 deep agent（协调者）的那个LLM），由 LLM输出执行计划（langgraph），然后由 deep agent调用各个subagent，按照 langgraph 的路径，一步一步执行，最终输出。
+
+#### 5.1.3.2 工作原理
+
+整个 Deep Agents 的基本原理，如下所示。
+
+（1）写一个提示词模板，如下所示
+
+```python
+我在做一个任务规划方案
+## 任务信息
+{用户输入的任务信息}
+
+## 可用的 agent
+
+[
+{"name":"打猎agent", "descrpiton":"告诉我猎物信息，我就能活捉回来", "input":[时间，地点，猎物种类]， "output":{巴拉巴拉一堆定义}},
+
+{"name":"载具agent", "descrpiton":"只要告诉我是啥车，飞机坦克还是火箭，我都能开", "input":[时间，地点，载具种类]， "output":{巴拉巴拉一堆定义}},
+
+]
+
+## 可以调用的 tools
+可以调用的 tools 集合如下所示：
+[
+{"name":"无人机追踪工具"，"descrpiton":"给我插一块2000mAh的电池，我能巡航500公里，实时传送前线图像","input":{}, "output":{}  },
+{"name":"红外夜视仪器仪"，"descrpiton":"-35度到60度，我都能工作，需要加95号柴油","input":{}, "output":{}  },
+]
+
+## 任务卸载工具
+[
+    {"name":"猎物储藏室", "descrpiton":"xxxxx"},
+    {"name":"猎物冷链物流", "descrpiton":"xxxxx"},
+    {"name":"信鸽", "descrpiton":"可以送信"}
+    
+]
+
+请参考以上信息，规划一份执行任务清单 mission_plan，数据结构如下：
+
+[
+{"name":"第1步", "job_runner":"这活儿老A来干", "input":"", "output":"", next:"下一步谁来干", previous:"谁干完了我再干"},
+{"name":"第2步", "job_runner":"这活儿老B来干", "input":"", "output":"", next:"下一步谁来干", previous:"谁干完了我再干"}
+]
+```
+
+然后再写一个函数，能够按照 mission_plan 调用各个agent 的函数。
 
 ##    5.2 LLama-Index
 
