@@ -12,23 +12,23 @@
 
 LLM （Large Language Model，大语言模型），是使用大量数据（文本、视频）进行训练，能够接收自然语言作为输入，并输出自然语言的模型。具备一定的知识理解能力，并且能够在一定的知识集合中对已有的知识重新组织。
 
-考虑一个场景，某个组织或个人有很多数据（文件、word、txt、或者数据库数据等），这些数据会不定期更新，需要随时从这些文档和数据库中查询出信息并组织为可以直接阅读的文字，同时这些信息又不便于公布在公共互联网上。这种场景就该进行私有化大模型部署，并在其基础上进行二次开发形成自定义的的信息系统了。
-
 # 1. LLM 部署
 
 LLM （Large Language Model，大语言模型），如目前的 ChatGPT、DeepSeek等。目前已比较成熟，可进行模块化部署运行，即使没有GPU，也可以通过CPU 运行demo进行学习。
 
-以下代码演示基于 Ubuntu 22.04 LTS，Python 3.10 、Ollama 0.5.6 环境。
+以下代码演示基于 Ubuntu 22.04 LTS，Python 3.12环境。
 
 ##  1.1 ollama
 
-**（1）download**
+ollama作为一款轻量级的，简单容易上手的LLM 部署工具，可以作为个人学习、研究LLM的工具。
+
+**（1）下载 ollama**
 
 首先拉取 ollama， ollama 相当于大模型界的 docker, 用于运行、管理大模型，详见 https://ollama.com/download。
 
 可以进行离线下载， 下载地址详见  https://github.com/ollama/ollama/releases/,  旧设备可以找到一些早期的历史版本。
 
-**（2）start ollama**
+**（2）启动 ollama**
 
 下载了 ollama-linux-amd64.tgz 之后，在 Terminal 中执行如代码段1-1 所示的脚本， Windows环境安装Ollama后会自行启动。
 
@@ -47,7 +47,7 @@ nohup ollama serve > ollama.log 2>&1 &
 
 此时服务已经运行了， 可通过在浏览器中输入  http://127.0.0.1:11434/ 查看，显示 “Ollama is running”
 
-**（3）config ollama**
+**（3）配置 ollama**
 
 ollama 修改模型存储路径，可以通过修改环境变量 OLLAMA_MODELS 来实现
 
@@ -95,6 +95,8 @@ CUDA_VISIBLE_DEVICES:			 用于控制哪些GPU对CUDA 可见， 例如 CUDA_VISI
 
 **（4）开启远程访问**
 
+开启远程访问后，可以通过其他主机通过局域网IP访问部署 LLM 的机器。
+
 ```sh
 # 监听所有网卡
 export OLLAMA_HOST=0.0.0.0
@@ -113,30 +115,30 @@ export OLLAMA_HOST=0.0.0.0:11435
 
 <center><b>表 1-1  LLM 主流模型清单</b><center> 
 
-| Model              | Parameters | Size  | note                                                     | Download & Run                   |
-| ------------------ | ---------- | ----- | -------------------------------------------------------- | -------------------------------- |
-| DeepSeek-R1        | 7B         | 4.7GB |                                                          | `ollama run deepseek-r1`         |
-| DeepSeek-R1        | 671B       | 404GB |                                                          | `ollama run deepseek-r1:671b`    |
-| Llama 3.3          | 70B        | 43GB  |                                                          | `ollama run llama3.3`            |
-| Llama 3.2          | 3B         | 2.0GB |                                                          | `ollama run llama3.2`            |
-| Llama 3.2          | 1B         | 1.3GB |                                                          | `ollama run llama3.2:1b`         |
-| Llama 3.2 Vision   | 11B        | 7.9GB |                                                          | `ollama run llama3.2-vision`     |
-| Llama 3.2 Vision   | 90B        | 55GB  |                                                          | `ollama run llama3.2-vision:90b` |
-| Llama 3.1          | 8B         | 4.7GB |                                                          | `ollama run llama3.1`            |
-| Llama 3.1          | 405B       | 231GB |                                                          | `ollama run llama3.1:405b`       |
-| Phi 4              | 14B        | 9.1GB | 微软推出,号称最先进的小型大模型,擅长数学等领域的复杂推理 | `ollama run phi4`                |
-| Phi 3 Mini         | 3.8B       | 2.3GB |                                                          | `ollama run phi3`                |
-| Gemma 2            | 2B         | 1.6GB | Google DeepMind团队发布                                  | `ollama run gemma2:2b`           |
-| Gemma 2            | 9B         | 5.5GB |                                                          | `ollama run gemma2`              |
-| Gemma 2            | 27B        | 16GB  |                                                          | `ollama run gemma2:27b`          |
-| Mistral            | 7B         | 4.1GB |                                                          | `ollama run mistral`             |
-| Moondream 2        | 1.4B       | 829MB | 轻量级的视觉语言模型，可以理解图像                       | `ollama run moondream`           |
-| Neural Chat        | 7B         | 4.1GB |                                                          | `ollama run neural-chat`         |
-| Starling           | 7B         | 4.1GB |                                                          | `ollama run starling-lm`         |
-| Code Llama         | 7B         | 3.8GB | Meta推出的代码生成大模型                                 | `ollama run codellama`           |
-| Llama 2 Uncensored | 7B         | 3.8GB | 提供未经过滤的回答版本,参数和大小与Llama 2相同           | `ollama run llama2-uncensored`   |
-| LLaVA              | 7B         | 4.5GB | Large Language and Visual Assistant，图像生成、图像编辑  | `ollama run llava`               |
-| Solar              | 10.7B      | 6.1GB | 韩国Upstage AI公司搞出的大模型                           | `ollama run solar`               |
+| No.  | 模型               | 参数量 | 文件大小 | 下载并运行的指令/ 说明                                       |
+| ---- | ------------------ | ------ | -------- | ------------------------------------------------------------ |
+| 1    | DeepSeek-R1        | 7B     | 4.7GB    | `ollama run deepseek-r1`                                     |
+| 2    | DeepSeek-R1        | 671B   | 404GB    | `ollama run deepseek-r1:671b`                                |
+| 3    | Llama 3.3          | 70B    | 43GB     | `ollama run llama3.3`                                        |
+| 4    | Llama 3.2          | 3B     | 2.0GB    | `ollama run llama3.2`                                        |
+| 5    | Llama 3.2          | 1B     | 1.3GB    | `ollama run llama3.2:1b`                                     |
+| 6    | Llama 3.2 Vision   | 11B    | 7.9GB    | `ollama run llama3.2-vision`                                 |
+| 7    | Llama 3.2 Vision   | 90B    | 55GB     | `ollama run llama3.2-vision:90b`                             |
+| 8    | Llama 3.1          | 8B     | 4.7GB    | `ollama run llama3.1`                                        |
+| 9    | Llama 3.1          | 405B   | 231GB    | `ollama run llama3.1:405b`                                   |
+| 10   | Phi 4              | 14B    | 9.1GB    | `ollama run phi4`, 微软推出,号称最先进的小型大模型,擅长数学等领域的复杂推理 |
+| 11   | Phi 3 Mini         | 3.8B   | 2.3GB    | `ollama run phi3`                                            |
+| 12   | Gemma 2            | 2B     | 1.6GB    | `ollama run gemma2:2b`, Google DeepMind团队发布              |
+| 13   | Gemma 2            | 9B     | 5.5GB    | `ollama run gemma2`                                          |
+| 14   | Gemma 2            | 27B    | 16GB     | `ollama run gemma2:27b`                                      |
+| 15   | Mistral            | 7B     | 4.1GB    | `ollama run mistral`                                         |
+| 16   | Moondream 2        | 1.4B   | 829MB    | `ollama run moondream`,轻量级的视觉语言模型，可以理解图像    |
+| 17   | Neural Chat        | 7B     | 4.1GB    | `ollama run neural-chat`                                     |
+| 18   | Starling           | 7B     | 4.1GB    | `ollama run starling-lm`                                     |
+| 19   | Code Llama         | 7B     | 3.8GB    | `ollama run codellama`, Meta推出的代码生成大模型             |
+| 20   | Llama 2 Uncensored | 7B     | 3.8GB    | `ollama run llama2-uncensored`, 提供未经过滤的回答版本,参数和大小与Llama 2相同 |
+| 21   | LLaVA              | 7B     | 4.5GB    | `ollama run llava`, Large Language and Visual Assistant，图像生成、图像编辑 |
+| 22   | Solar              | 10.7B  | 6.1GB    | `ollama run solar`, 韩国Upstage AI公司搞出的大模型           |
 
 **（2）拉取并运行模型**
 
@@ -172,9 +174,9 @@ curl -X POST http://127.0.0.1:11434/api/generate -d '{
 }' | jq
 ```
 
-调用时，无需提前在server端运行 `ollama run xxxx`，model 写具体的模型名称，prompt 写提示词， stream 设置是否为流式输出。
+调用时，无需提前在server端运行 `ollama run xxxx`，model 写具体的模型名称，prompt 写提示词， stream 参数设置是否为流式输出。
 
-##  1.3 cmd
+##  1.3 基本命令
 
 ollama 主要命令清单如代码段 1-3 所示。
 
@@ -204,38 +206,29 @@ ollama help
 <center><b>代码段 1-3  ollama 主要命令清单</b><center> 
 
 
-常用 API 如代码段 1-4 所示。
+ollma 常用 API 如代码段 1-4 所示。
 
 ```sh
 # 获取模型列表
 /models
-
 # 获取模型清单
 /v1/models | jq
 # 获取详细的模型清单
 /api/tags
-
 # 生成文本
 /api/generate 
-
 # 进行多轮对话
 /api/chat
-
 # 运行中的模型，相当于 ollama ps 命令
 /api/ps
-
 # 查看某个模型的信息，相当于 ollama show llama3.1 命令
 /api/show
 ```
 
 <center><b>代码段 1-4  常用 API 清单</b><center> 
-
-
-​    
-
 ##  1.4 Modelfile
 
- `Modelfile` 的作用类似于 `Dockerfile`，完整的 `modelfile` 如下所示 ，可通过命令 `ollama show --modelfile modelname > modelname.modelfile` 获取， 如代码段 1-5 所示。
+ `Modelfile` 的作用用于对模型进行描述，方便导入导出模型到文件（序列化），可通过命令 `ollama show --modelfile modelname > modelname.modelfile` 获取， 如代码段 1-5 所示。
 
 ```dockerfile
 # Modelfile generated by "ollama show"
@@ -264,7 +257,7 @@ the style of a 1930's mafia mobster
 
 
 
-（1）**FROM**。FROM 指令是定义在创建时使用的基础模型的指令，是强制性的，是 Modelfile 中必须要有的部分。
+（1）**FROM**。FROM 指令是定义在创建时使用的基础模型的指令，是强制性的，是 Modelfile 中必须要有的部分。指定加载模型文件的磁盘物理文件的位置
 
 
 （2）**TEMPLATE**。`TEMPLATE` 指令描述了要传递给模型的完整提示模板的格式。它可能包括（可选地）系统消息、用户消息和模型的响应。在这个例子中，它只包括系统提示和用户提示。
@@ -550,13 +543,13 @@ LLM 面临的主要问题有以下几个， 可以通过 RAG 来逐个解决。
 
 RAG 的工作流程的数据流如图 4-1 所示（网络盗图，仅供参考），可以简单地分为以下四个阶段。
 
-（1）数据处理。收集和预处理相关数据（`数据1`），以确保信息的质量和可用性。将非结构化的离散的文本处理成结构化数据（`数据2`），以供大模型使用。
+**（1）数据处理。**收集和预处理相关数据（`数据1`），以确保信息的质量和可用性。将非结构化的离散的文本处理成结构化数据（`数据2`），以供大模型使用。
 
-（2）检索阶段。从知识库中检索与用户查询相关的信息，确保获取最新和最相关的数据。当用户输入内容（`数据0`）时，首先在`数据2`中进行相关检索，输出数据至`数据3`。
+**（2）检索阶段。**从知识库中检索与用户查询相关的信息，确保获取最新和最相关的数据。当用户输入内容（`数据0`）时，首先在`数据2`中进行相关检索，输出数据至`数据3`。
 
-（3）增强阶段。将检索到的信息（`数据2`）与用户输入内容（`数据0`）结合，为模型提供丰富的上下文（`数据3`）。
+**（3）增强阶段。**将检索到的信息（`数据2`）与用户输入内容（`数据0`）结合，为模型提供丰富的上下文（`数据3`）。
 
-（4）生成阶段。基于增强的信息，使用大型语言模型生成最终的回答或内容。即将`数据3` 输入大模型，由大模型输出 `数据4`。
+**（4）生成阶段。**基于增强的信息，使用大型语言模型生成最终的回答或内容。即将`数据3` 输入大模型，由大模型输出 `数据4`。
 
 <img src="img/rag_dataflow.png" style="zoom:60%;" />
 
@@ -567,14 +560,15 @@ RAG 的工作流程的数据流如图 4-1 所示（网络盗图，仅供参考�
 
 <img src="img/rag_principles.png" style="zoom:70%;" />
 
-<center><b>图 4-2  LangChain 工作流程示意图</b><center>
+<center><b>图 4-2  LangChain RAG 工作流程示意图</b><center>
+
 
 
 #  5. Framework
 
-目前市面上比较流行的LLM 应用框架有 langchain (https://docs.langchain.com/) 和 LLama-Index（https://developers.llamaindex.ai/）， langchain 作为LLM应用编排框架， 对模型（model）、提示词模板（template）、模型调用（chain.invoke）都进行了封装。
+目前市面上比较流行的LLM 应用框架有 LangChain (https://docs.langchain.com/) 和 LLama-Index（https://developers.llamaindex.ai/）， LangChain 作为LLM应用编排框架， 对模型（model）、提示词模板（template）、模型调用（chain.invoke）都进行了封装。
 
-LLama-Index 则在RAG 这个方向上更加深入，对基于数据构建Agent方面进行了深化。
+LLama-Index 则在RAG 这个方向上更加深入，对基于数据构建 Agent方面进行了深化。
 
 ##   5.LangChain
 
@@ -610,9 +604,11 @@ langchain-cli 0.0.35
 ```
 
 <center><b>代码段 5-1  python 基础组件信息</b><center>
+
 另外，中文文本向量化需要分词嵌入式模型，例如 bge-large-zh-v1.5（详见 https://huggingface.co/BAAI/bge-large-zh-v1.5）等。由于国内网络环境科学上网的问题，也可以通过 https://modelscope.cn/models/BAAI/bge-large-zh-v1.5 获取。
 
-安装langChain组件， 如代码段 5-2 所示。
+
+安装LangChain组件， 如代码段 5-2 所示。
 
 ```sh
 pip3 install langchain
@@ -626,9 +622,10 @@ pip3 install langchain-ollama
 ```
 
 <center><b>代码段 5-2  langChain 组件信息</b><center>
-#### 5.1.1.2 nltk
 
-如果需要解析  Word 文档，还需要执行以下操作， 如代码段 5-3 所示。
+#### 5.1.1.2 NLTK
+
+NLTK（Natural Language Toolkit）是针对自然语言处理设计的Python开源工具集，集成了处理常见NLP任务的模块和标准化语料库。如果需要解析  Word 文档，还需要执行以下操作， 如代码段 5-3 所示。
 
 ```sh
 pip3 install langchain-unstructured
@@ -771,12 +768,12 @@ logger.info(result)
 类似于传统软件中的工作流编排，可以通过  LangGraph 构建一张有向无环图， 在各个节点上执行某种运算，或者执行某个agent。
 
 ```sh
- # 创建一个 StateGraph 对象
- graph_builder = StateGraph(dict)
- # 定义图的入口和边
- graph_builder.add_node("chatbot", chatbot)
- graph_builder.add_edge(START, "chatbot")
- graph_builder.add_edge("chatbot", END)
+# 创建一个 StateGraph 对象
+graph_builder = StateGraph(dict)
+# 定义图的入口和边
+graph_builder.add_node("chatbot", chatbot)
+graph_builder.add_edge(START, "chatbot")
+graph_builder.add_edge("chatbot", END)
 
 # 编译图
 graph = graph_builder.compile()
@@ -786,7 +783,6 @@ user_input = '介绍你自己'
 for event in graph.stream(user_input):
 for value in event.values():
 print("Assistant:", value["messages"])
-
 ```
 
 上面的代码段中，构建了一张图(graph)，有节点(node)，有边（edge），节点可以是某个agent，或者自己的一段代码逻辑， 边则代表了数据的流向。
@@ -797,13 +793,13 @@ print("Assistant:", value["messages"])
 
 #### 5.1.3.1 基本概念
 
-Deep Agents 的愿景是让大语言模型自己去分解、执行一个较为复杂的任务（Manus的思想），但是是有前提条件的。任务本身可以通过用户的输入以文本的形式提供，这个大语言模型时可以理解的。那么 Deep Agents 是如何分解任务并执行的呢？下面做一个解释。
+Deep Agents 的愿景是让大语言模型自己去分解、执行一个较为复杂的任务，但是做到这一点是有前提条件的。任务本身可以通过用户的输入以文本的形式提供，这个大语言模型时可以理解的。那么 Deep Agents 是如何分解任务并执行的呢？下面做一个解释。
 
-**（1）协调者（coordinator）。** Deep Agent 就是一个coordinator(叫leader也行)，负责理解用户的输入，分解任务，回收各个子agent(subagent) 处理生成的结果，最终输出，任务比较艰巨。
+**（1）主Agent（main agent）。** Deep Agent 的主Agent（main agent）充当 coordinator（协调者，叫leader也行）的角色，负责理解用户的输入，分解任务，回收各个子agent（subagent）处理生成的结果，最终输出。
 
-**（2）工具集（tools）。** 已知定义好的一些工具，这个跟 MCP 中的 tools 类似。例如望远镜、工兵铲，瑞士军刀。
+**（2）工具集（tools）。** 已知定义好的一些工具，这个跟 MCP 中的 tools 类似。例如望远镜、工兵铲，瑞士军刀， 工具可以提供给 主Agent ，也可以提供给子 Agent。
 
-可以理解 Deep Agents 是一个 leader，可以提供一些 tools （通过编程实现，且需要满足 Deep Agents 框架的输入输出要求），例如下面就是一个 互联网内容搜索tool, 详见 https://docs.langchain.com/oss/python/deepagents/customization。
+tools 通过编程实现，且需要满足 Deep Agents 框架的输入输出要求），例如下面就是一个 互联网内容搜索tool, 详见 https://docs.langchain.com/oss/python/deepagents/customization。
 
 ```python
 import os
@@ -832,7 +828,7 @@ agent = create_deep_agent(
 )
 ```
 
-事实上， 代码段中的 agent 就是一个 `CompiledStateGraph`， 这个 `CompiledStateGraph` 就是 LangGraph 中的实体。
+事实上， 代码段中的 agent 就是一个 `CompiledStateGraph` 类， 这个 `CompiledStateGraph` 类就是 LangGraph 中的实体。
 
 **（3）子智能体(subagent)。**
 
@@ -874,7 +870,7 @@ agent = create_deep_agent(
 )
 ```
 
-**（4）文件系统中间件。**用于进行任务的卸载/加载， 对于一些中间变量，可以通过写文件、读文件获取。
+**（4）文件系统中间件。**用于进行任务的卸载/加载， 对于一些中间变量，可以通过写文件、读文件获取。以及一些较大的数据的存储，可以是数据库或memory，相当于任务执行过程中输入、输出的仓库。
 
 ```python
 from langchain.agents import create_agent
@@ -885,49 +881,49 @@ from langchain.agents.middleware import TodoListMiddleware
 agent = create_agent(
     model="claude-sonnet-4-5-20250929",
     # Custom planning instructions can be added via middleware
-    # 告诉 deep agent， 哪里可以洗衣服、哪里可以邮寄快递、哪里可以租车，类似这种，这个中间件也可以提供给 subagent，就类似于工具，可以提供给 deep agent ，也可以提供给sub agent。
+    # 告诉 deep agent， 哪里可以洗衣服、哪里可以邮寄快递、哪里可以租车，类似这种通用的与具体任务无关的功能和工具
     middleware=[
         TodoListMiddleware(
-            system_prompt="Use the write_todos tool to..."  # Optional: Custom addition to the system prompt
+            # Optional: Custom addition to the system prompt
+            system_prompt="Use the write_todos tool to..."  
         ),
     ],
 )
 ```
 
-OK，有了以上4种工具之后，最终在DeepAgents框架的实现种，全部会以文本的形式，与用户的输入（文本），提供给大语言模型（即构建 deep agent（协调者）的那个LLM），由 LLM输出执行计划（langgraph），然后由 deep agent调用各个subagent，按照 langgraph 的路径，一步一步执行，最终输出。
+有了以上 4 种实体之后，最终在DeepAgents框架的实现中，全部会以文本的形式，与用户的输入文本（具体任务信息），提供给大语言模型（即构建主agent的那个LLM），由 LLM输出执行计划（langgraph），然后由主agent（main agent）调用各个子agent（subagent），按照 langgraph 的路径，一步一步执行，最终输出执行结果。
 
 #### 5.1.3.2 工作原理
 
 整个 Deep Agents 的基本原理，如下所示。
 
-（1）写一个提示词模板，如下所示
+**（1）准备提示词模板。**提示词模板如下所示
 
 ```python
 我在做一个任务规划方案
 ## 任务信息
-{用户输入的任务信息}
+{用户输入的具体任务信息}
 
 ## 可用的 agent
 
 [
 {"name":"打猎agent", "descrpiton":"告诉我猎物信息，我就能活捉回来", "input":[时间，地点，猎物种类]， "output":{巴拉巴拉一堆定义}},
-
 {"name":"载具agent", "descrpiton":"只要告诉我是啥车，飞机坦克还是火箭，我都能开", "input":[时间，地点，载具种类]， "output":{巴拉巴拉一堆定义}},
-
 ]
 
-## 可以调用的 tools
+## 可以调用的 tools 信息
 可以调用的 tools 集合如下所示：
 [
 {"name":"无人机追踪工具"，"descrpiton":"给我插一块2000mAh的电池，我能巡航500公里，实时传送前线图像","input":{}, "output":{}  },
-{"name":"红外夜视仪器仪"，"descrpiton":"-35度到60度，我都能工作，需要加95号柴油","input":{}, "output":{}  },
+{"name":"红外夜视仪器仪"，"descrpiton":"-35度到60度，我都能工作，需要加95号柴油","input":{}, "output":{} },
 ]
 
 ## 任务卸载工具
 [
-    {"name":"猎物储藏室", "descrpiton":"xxxxx"},
-    {"name":"猎物冷链物流", "descrpiton":"xxxxx"},
-    {"name":"信鸽", "descrpiton":"可以送信"}
+    {"name":"猎物储藏室", "descrpiton":"数据存储，类似大型仓库，可以放什么东西，如何放，如何取"},
+    {"name":"猎物冷链物流", "descrpiton":"数据传输，类似运输系统，联系电话，时效性，费用，运输路线等"},
+    {"name":"信鸽", "descrpiton":"mail,短信等通信系统，类似信鸽，可以送信"},
+    {"name":"文件信息、货物信息", "descrpiton":"可以读取的文件信息，可以加载的货物信息，类似图书馆藏书，或者某个待处理的获取"},
     
 ]
 
@@ -939,7 +935,32 @@ OK，有了以上4种工具之后，最终在DeepAgents框架的实现种，全�
 ]
 ```
 
-然后再写一个函数，能够按照 mission_plan 调用各个agent 的函数。
+**（2）准备任务调度程序。**写一个函数/程序，能够按照 mission_plan 调用各个agent 的函数，加载待处理的文件/货物信息，提交给指定的执行者，按时收取执行者的输出信息，提交给下一个执行者。具有容错、定时、超时、纠错等功能。
+
+（3）实际执行过程。实际中的 DeepAgents 系统的执行计划并不是一次生成的，而是一个动态的过程，类似于动态规划，每执行完一个步骤之后， 形成以下的数据结构。
+
+```json
+{
+    "当前状态": "...",
+    "当前可用子Agent": [...],
+    "当前可用工具": [...],
+    "当前的中间结果": {...},
+    "下一步决策": ...
+}
+```
+
+然后由 LLM 决定下一步该如何执行。
+
+以打猎任务进行说明，一次性计划的任务规划为 ：
+> "先去打野猪，然后开车去市场，最后冷藏保存"
+
+而 DeepAgents 的实际的执行过程为动态状态机加路径自适应过程，举例如下：
+
+> 1. "现在有猎物信息吗？没有 → 派侦察兵（子Agent1）"
+> 2. "侦察兵发现野猪位置 → 派猎人（子Agent2）"
+> 3. "猎人捕获野猪 → 需要运输吗？需要 → 派司机（子Agent3；不需要 → 那咱大伙儿现场烧烤"
+> 4. "司机送到仓库 → 需要冷藏吗？需要 → 调用冷库（工具）；不需要 → 那咱直接刺身，蘸芥末吃"
+> 5. "任务完成！"
 
 ##    5.2 LLama-Index
 
