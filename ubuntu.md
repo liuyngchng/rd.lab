@@ -737,6 +737,17 @@ world
 ffmpeg -i input.mp4 -vf "subtitles=sub.srt" -c:a copy output.mp4
 ```
 
+### 24.3 静音分割
+
+对于语音识别来说，部分`API` 对于单次处理的音频时长有限制，这样就对实际应用中长时段的语音识别造成了障碍，可以通过一些方法将长时长语音进行预处理，形成多段短音频后，再提交给ASR（Automatic Speech Recognition）进行处理。静音分割就是其中的方法之一。
+
+```sh
+# 或者使用静音检测来切割为多个文件
+ffmpeg -i input.wav -f segment -segment_times 10,20,30 output_%03d.wav
+```
+
+
+
 # 25. oracle client
 
 ubuntu 24.04
