@@ -1989,6 +1989,27 @@ https://v0.app/
 
 通过 DeepAgents 进行任务分解， 执行子智能体，最终形成输出的结果
 
+# 19. Claude Code
+
+需要具有nodejs环境，安装客户端
+
+```
+npm install -g @anthropic-ai/claude-code
+```
+
+然后配置环境变量
+
+```sh
+export ANTHROPIC_BASE_URL=https://api.deepseek.com/anthropic
+export ANTHROPIC_AUTH_TOKEN=${DEEPSEEK_API_KEY}
+export API_TIMEOUT_MS=600000
+export ANTHROPIC_MODEL=deepseek-chat
+export ANTHROPIC_SMALL_FAST_MODEL=deepseek-chat
+export CLAUDE_CODE_DISABLE_NONSENSENTIAL_TRAFFIC=1
+```
+
+
+
 # 19. Reference
 
 [1] Hugging Face Documentation. https://huggingface.co/docs;
