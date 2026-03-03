@@ -1997,6 +1997,25 @@ https://v0.app/
 npm install -g @anthropic-ai/claude-code
 ```
 
+也可以通过homebrew这样安装
+
+```sh
+sudo apt update
+sudo apt install build-essential curl git
+# 安装 homebrew
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+# 对于bash用户(ubuntu)， 添加环境变量
+echo 'eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"' >> ~/.bashrc
+# 验证 brew 版本
+brew --version
+# 安装 claude code
+brew install --cask claude-code
+```
+
+
+
+
+
 然后配置环境变量
 
 ```sh
@@ -2007,6 +2026,41 @@ export ANTHROPIC_MODEL=deepseek-chat
 export ANTHROPIC_SMALL_FAST_MODEL=deepseek-chat
 export CLAUDE_CODE_DISABLE_NONSENSENTIAL_TRAFFIC=1
 ```
+
+启动
+
+```
+./claude
+
+
+╭─── Claude Code v2.1.63 ──────────────────────────────────────────────────────────────────────────╮
+│                                       │ Tips for getting started        │
+│             Welcome back!             │ Run /init to create a CLAUDE.md │
+│                                       │ ─────────────────────────────── │
+│                                       │ Recent activity                 │
+│                ▐▛███▜▌                │ No recent activity              │
+│               ▝▜█████▛▘               │                                 │
+│                 ▘▘ ▝▝                 │                                 │
+│   deepseek-chat · API Usage Billing   │                                 │
+│              ~/workspace              │                                 │
+╰─────────────────────────────────────────────────────────────────────────╯
+
+```
+
+如果报错误， 
+
+```
+Unable to connect to API: SSL certificate verification failed. Check your proxy or corporate SSL certificates
+```
+
+添加环境变量， 忽略 API 的证书错误
+
+```sh
+# 危险操作：这将忽略API 中的任何证书错误
+export NODE_TLS_REJECT_UNAUTHORIZED=0
+```
+
+
 
 # 20. Openclaw
 
