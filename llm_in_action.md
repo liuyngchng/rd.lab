@@ -2033,14 +2033,14 @@ export CLAUDE_CODE_DISABLE_NONSENSENTIAL_TRAFFIC=1
 ./claude
 
 
-╭─── Claude Code v2.1.63 ──────────────────────────────────────────────────────────────────────────╮
+╭─── Claude Code v2.1.63 ─────────────────────────────────────────────────╮
 │                                       │ Tips for getting started        │
 │             Welcome back!             │ Run /init to create a CLAUDE.md │
 │                                       │ ─────────────────────────────── │
 │                                       │ Recent activity                 │
-│                ▐▛███▜▌                │ No recent activity              │
-│               ▝▜█████▛▘               │                                 │
-│                 ▘▘ ▝▝                 │                                 │
+│                ▐▛███▜▌                │ No recent activity             │
+│               ▝▜█████▛▘               │                                │
+│                 ▘▘ ▝▝                 │                                │
 │   deepseek-chat · API Usage Billing   │                                 │
 │              ~/workspace              │                                 │
 ╰─────────────────────────────────────────────────────────────────────────╯
@@ -2084,7 +2084,11 @@ pnpm openclaw onboard --install-daemon
 pnpm gateway:watch
 ```
 
+查看gateway 日志
 
+```sh
+pnpm openclaw logs --follow
+```
 
 
 
