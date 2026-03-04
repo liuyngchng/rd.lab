@@ -2064,6 +2064,30 @@ export NODE_TLS_REJECT_UNAUTHORIZED=0
 
 # 20. Openclaw
 
+源代码安装
+
+```sh
+git clone git@github.com:openclaw/openclaw.git
+
+# 安装 pnpm
+curl -fsSL https://get.pnpm.io/install.sh | sh
+
+cd openclaw
+
+pnpm install
+pnpm ui:build # auto-installs UI deps on first run
+pnpm build
+
+pnpm openclaw onboard --install-daemon
+
+# Dev loop (auto-reload on TS changes)
+pnpm gateway:watch
+```
+
+
+
+
+
 # 19. Reference
 
 [1] Hugging Face Documentation. https://huggingface.co/docs;
