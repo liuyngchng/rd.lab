@@ -102,10 +102,12 @@ download rpm package only
 ```sh
 yum install --downloadonly --downloaddir=/opt/rpms mysql
 ```
-# 6. make a ISO start up flash disk  
-## 6.1 under MacOS
-如果是在Mac系统下，则 需要把下载的Ubuntu安装文件（.iso）  
-转换成(.dmg)格式的文件,方便在Mac OS上面进行操作，转换命令
+# 6. 数据拷贝(dd) 
+
+## 6.1 创建 U 盘启动盘(make a ISO start up flash disk）  
+
+### 6.1.1 MacOS
+如果是在Mac系统下，则 需要把下载的Ubuntu安装文件（.iso）  转换成(.dmg)格式的文件,方便在Mac OS上面进行操作，转换命令
 ```sh
 cd Downloads/
 hdiutil convert -format UDRW -o ubuntu.dmg ubuntu-14.04.5-desktop-amd64.iso
@@ -126,9 +128,8 @@ diskutil list
 diskutil unmountDisk [硬碟位置]
 ```
 
-## 6.2  Create the installation medium in linux
-Either you can burn the image onto CD/DVD, you use usb stick for the installation.  
-Under linux, you can use the dd for that:
+### 6.1.2  Create the installation medium in linux
+Linux 下可以通过dd 命令将 ISO 文件写入某个盘符
 ```sh
 dd if=<source iso> of=<target device> bs=4M; sync
 ```
@@ -137,7 +138,7 @@ Make sure that the device does not include partition number, so example from my 
 dd if=~/Downloads/alpine-standard-3.10.2-x86_64.iso of=/dev/sdb bs=4M
 ```
 The target device will be erased, so make sure you use something without any data you do not want to lose.
-## 6.3 然后移除U盘
+### 6.1.3 移除U盘
 on MacOS
 ```
 diskutil eject /path/to/USB
@@ -146,6 +147,46 @@ on Linux
 ```
 umount /path/to/USB
 ```
+## 6.2 硬盘数据硬拷贝
+
+如果想将一个硬盘的数据通过物理拷贝的方式，直接拷贝至另一个磁盘，可以这样操作
+
+```sh
+# 查看磁盘盘符
+lsblk
+```
+
+得到以下的内容
+
+```sh
+sda       8:0    0 223.6G  0 disk 
+├─sda1    8:1    0   200M  0 part 
+└─sda2    8:2    0 223.4G  0 part 
+sdb       8:16   0 223.6G  0 disk 
+├─sdb1    8:17   0   954M  0 part 
+├─sdb2    8:18   0 221.6G  0 part /
+└─sdb3    8:19   0     1G  0 part /boot/efi
+sdc       59.5G  0 		   0 disk 
+
+```
+
+一般来说， sda盘为当前系统使用的盘符，假定需要将 sdb 的数据物理拷贝至 sdc，则可执行一下命令
+
+```sh
+sudo dd if=/dev/sdb of=/dev/sdc bs=64K status=progress conv=noerror,sync
+```
+
+- `if=/dev/sdb`：指定输入文件（Input File），即你的**源硬盘**。
+- `of=/dev/sdc`：指定输出文件（Output File），即你的**目标硬盘**。**警告：此设备上的所有数据将被无条件覆盖。**
+- `bs=64K`：设置每次读写的数据块大小为64KB。这是一个经验值，通常能有效提升拷贝速度 。
+- `status=progress`：显示实时的拷贝进度和速度，让你心里有数 。
+- `conv=noerror,sync`：这是一个保险选项。`noerror` 让 `dd` 在遇到读取错误时继续执行，`sync` 则用零填充因错误导致的输出块，确保后续数据不会错位
+
+执行完之后， 磁盘sdb 上的物理数据会原封不动地拷贝至 sdc。
+
+- **磁盘容量**：目标硬盘（`/dev/sdc`）的容量**必须大于或等于**源硬盘（`/dev/sdb`）的容量。如果目标盘更大，克隆后会有未分配的空间，你可以在后期使用 `gparted` 等工具进行扩展 。
+- **关于UUID**：由于是逐字节克隆，新硬盘上的分区会拥有和旧硬盘**完全相同的UUID**（通用唯一标识符）。如果两个硬盘同时连接到电脑，系统可能会因此混淆。但当你只保留新硬盘启动时，这通常不是问题。如果需要，也可以在克隆后用 `tune2fs` 等工具为文件系统生成新的UUID
+
 # 7. WebService Client Generation Error with JDK8
 
 ```shell
