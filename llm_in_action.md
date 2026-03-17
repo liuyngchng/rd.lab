@@ -2092,6 +2092,12 @@ pnpm gateway:watch
 pnpm openclaw logs --follow
 ```
 
+调用大语言模型的包
+
+```sh
+@mariozechner/pi-ai
+```
+
 
 
 # 19. Reference
