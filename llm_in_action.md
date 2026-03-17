@@ -2056,8 +2056,10 @@ Unable to connect to API: SSL certificate verification failed. Check your proxy 
 添加环境变量， 忽略 API 的证书错误
 
 ```sh
-# 危险操作：这将忽略API 中的任何证书错误
+# 危险操作：这将忽略API 中的任何证书错误, NodeJS 忽略HTTPS证书校验
 export NODE_TLS_REJECT_UNAUTHORIZED=0
+# 将自签名证书添加到NodeJS系统的信任存储中
+export NODE_EXTRA_CA_CERTS=/path_to_your_self_signed_cert.pem
 ```
 
 
