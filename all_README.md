@@ -187,6 +187,48 @@ sudo dd if=/dev/sdb of=/dev/sdc bs=64K status=progress conv=noerror,sync
 - **磁盘容量**：目标硬盘（`/dev/sdc`）的容量**必须大于或等于**源硬盘（`/dev/sdb`）的容量。如果目标盘更大，克隆后会有未分配的空间，你可以在后期使用 `gparted` 等工具进行扩展 。
 - **关于UUID**：由于是逐字节克隆，新硬盘上的分区会拥有和旧硬盘**完全相同的UUID**（通用唯一标识符）。如果两个硬盘同时连接到电脑，系统可能会因此混淆。但当你只保留新硬盘启动时，这通常不是问题。如果需要，也可以在克隆后用 `tune2fs` 等工具为文件系统生成新的UUID
 
+## 6.3 分区数据备份及恢复(尚未验证)
+
+（1）备份
+
+```sh
+# 1. 备份根分区 (/dev/sda2) 并压缩
+sudo dd if=/dev/sda2 bs=4M status=progress | gzip > /path/to/backup/sda2_root.img.gz
+
+# 2. 备份 EFI 引导分区 (/dev/sda3) 并压缩（这个分区很小，很快）
+sudo dd if=/dev/sda3 bs=4M status=progress | gzip > /path/to/backup/sda3_efi.img.gz
+```
+
+`status=progress` 还会实时显示进度和速度，非常直观。备份文件你可以放到移动硬盘上。
+
+（2）恢复
+
+你换了个新硬盘（比如还是 `/dev/sda`），或者把原盘数据搞乱了想恢复。
+
+1）分区。你需要在新硬盘上创建和原来一模一样的分区结构（可以用 `fdisk` 命令行）。简单来说就是分三个区：一个 `swap`（1G左右）、一个 `/`（109.8G）、一个 `/boot/efi`（1G，类型为EFI系统分区）。
+
+2) 恢复数据。用 `dd` 的反向操作把镜像文件解压并写回分区。
+
+bash
+
+```sh
+# 1. 恢复根分区（确保 /dev/sda2 是你新分好的根分区！）
+gunzip -c /path/to/backup/sda2_root.img.gz | sudo dd of=/dev/sda2 bs=4M status=progress
+
+# 2. 恢复 EFI 引导分区（确保 /dev/sda3 是新分好的 EFI 分区！）
+gunzip -c /path/to/backup/sda3_efi.img.gz | sudo dd of=/dev/sda3 bs=4M status=progress
+```
+
+
+
+3）处理 swap。新硬盘的 swap 分区需要重新格式化。
+
+```sh
+sudo mkswap /dev/sda1
+```
+
+重启，拔掉U盘，重启电脑
+
 # 7. WebService Client Generation Error with JDK8
 
 ```shell
