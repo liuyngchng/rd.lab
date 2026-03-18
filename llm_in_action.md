@@ -2079,11 +2079,16 @@ cd openclaw
 pnpm install
 pnpm ui:build # auto-installs UI deps on first run
 pnpm build
-
+# 开始进行系统配置
 pnpm openclaw onboard --install-daemon
 
 # Dev loop (auto-reload on TS changes)
 pnpm gateway:watch
+
+# 浏览器交互
+pnpm openclaw dashboard
+# 终端中交互
+pnpm openclaw tui
 ```
 
 查看gateway 日志
@@ -2096,6 +2101,14 @@ pnpm openclaw logs --follow
 
 ```sh
 @mariozechner/pi-ai
+```
+
+清除已经配置的所有信息
+
+```sh
+pnpm openclaw reset
+# 清除所有配置以及生成文件等
+选择 full reset
 ```
 
 
