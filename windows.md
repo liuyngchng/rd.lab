@@ -210,6 +210,4 @@ bcdedit /set {bootmgr} displaybootmenu yes
 
 此时，重启会重新弹出 Ubuntu 的引导界面。
 
-**（2）内置硬盘是 Ubuntu 系统。** 则在 WTG 使用完毕关机钱，执行上面的2条命令。
-
-**（3）内置硬盘是Windows系统。**对于内置硬盘只安装了 Windows 的电脑，WTG不会对原系统造成影响。
+内置硬盘是单一系统的，不管是Windows ，还是 Ubuntu，WTG不会对原系统造成任何影响。
