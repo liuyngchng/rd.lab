@@ -2128,6 +2128,8 @@ cd ~/workspace/openclaw
 pnpm link --global
 # 安装腾讯微信插件
 npx -y @tencent-weixin/openclaw-weixin-cli@latest install
+# 弹出微信登录二维码
+openclaw channels login --channel openclaw-weixin
 ```
 
 ## 20.3 非源码安装
