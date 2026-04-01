@@ -2066,13 +2066,23 @@ export NODE_EXTRA_CA_CERTS=/path_to_your_self_signed_cert.pem
 
 # 20. Openclaw
 
-源代码安装
+## 20.1 pnpm
+
+安装 pnpm
+
+```sh
+# 安装 pnpm
+curl -fsSL https://get.pnpm.io/install.sh | sh
+```
+
+
+
+## 20.2 源代码安装
 
 ```sh
 git clone git@github.com:openclaw/openclaw.git
 
-# 安装 pnpm
-curl -fsSL https://get.pnpm.io/install.sh | sh
+
 
 cd openclaw
 
@@ -2109,6 +2119,23 @@ pnpm openclaw logs --follow
 pnpm openclaw reset
 # 清除所有配置以及生成文件等
 选择 full reset
+```
+
+源码安装后， 创建全局链接
+
+```sh
+cd ~/workspace/openclaw
+pnpm link --global
+# 安装腾讯微信插件
+npx -y @tencent-weixin/openclaw-weixin-cli@latest install
+# 弹出微信登录二维码
+openclaw channels login --channel openclaw-weixin
+```
+
+## 20.3 非源码安装
+
+```
+pnpm install -g openclaw@latest
 ```
 
 
