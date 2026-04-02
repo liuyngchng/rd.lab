@@ -10,7 +10,7 @@
 | dockerd &                 | startup dockerd   |
 | docker pull centos        | pull centos image |  
 
-目前国内环境可用的 docker 源 `https://1ms.run/`,  可执行
+目前国内环境可用的 docker 源 `https://docker.1ms.run`,  可执行
 
 ```sh
 # pull image ubuntu with tag 20.04
@@ -290,8 +290,12 @@ jess/libreoffice
 ```
 
 # 5. Ubuntu Linux下修改docker镜像源  
+
+docker 默认的官方镜像从仓库为   https://registry-1.docker.io/v2， 国内访问较为困难，可以按照如下方法进行修改，从国内的镜像中获取 
+
 ## 5.1 国内亲测可用的几个镜像源  
 ```sh
+https://docker.1ms.run
 Docker 官方中国区：https://registry.docker-cn.com
 网易：http://hub-mirror.c.163.com
 中国科技大学：https://docker.mirrors.ustc.edu.cn
@@ -299,24 +303,38 @@ Docker 官方中国区：https://registry.docker-cn.com
 ```
 ## 5.2 修改配置文件  
 
-增加Docker的镜像源配置文件 /etc/docker/daemon.json，  
+修改或新增 Docker的镜像源配置文件 /etc/docker/daemon.json，  
+
+```
+sudo vim /etc/docker/daemon.json
+```
+
+
+
 如果没有配置过镜像该文件默认是不存的，在其中增加如下内容  
 
 ```sh
 {
-  "registry-mirrors": ["https://y0qd3iq.mirror.aliyuncs.com"]
+  "registry-mirrors": ["https://docker.1ms.run"]
 }
 ```
 ##  5.3 restart service  
 ```sh
+sudo systemctl daemon-reload
+sudo systemctl restart docker
+# 或者执行
 service docker restart
 ```
 查看配置是否生效  
 
 ```sh
-docker info|grep Mirrors -A 1
+docker info | grep -A 1 "Registry Mirrors"
+# 看到自己配置的镜像源，说明配置已经生效
 ```
+接下来再次通过docker pull 拉取镜像时，会通过刚才注册的mirror 服务源进行拉取
+
 # 6. install app in ubuntu docker container
+
 ```sh
 apt-get update
 apt-get install xxx
