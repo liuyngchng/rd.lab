@@ -51,7 +51,7 @@ label-studio start
 
 **（4）导出数据。**按照所需要的数据格式，导出具体的数据， 例如 `COCO`,`YOLO` 等格式。
 
-以进行目标检测任务的 `YOLOv8` `OBB` with Images 数据格式为例， 其导出的数据格式如下所示。
+以进行目标检测任务的 `YOLOv8` `OBB` with Images 数据格式为例（`OBB`， Oriented Bounding Box ，可旋转的矩形框），其导出的数据格式如下所示。
 
 ```
 .
@@ -103,6 +103,56 @@ tiger
 │ └───────────────────────────────────────────────────── 点1 X
 └────────────────────────────────────────────────────── 类别ID
 ```
+
+导出的数据格式，还需要添加一个 `data.yaml` 配置文件，才能作为 `YOLO` 进行模型训练的数据集，可以通过下面的脚本自动生成。
+
+```python
+import yaml
+import os
+
+# 读取 classes.txt
+with open('classes.txt', 'r') as f:
+    classes = [line.strip() for line in f.readlines()]
+
+# 获取当前目录的绝对路径
+current_path = os.path.abspath('.')
+
+# 构建 data.yaml 内容
+data_config = {
+    'path': current_path,      # 数据集根目录
+    'train': 'images',          # 训练图片目录
+    'val': 'images',            # 验证图片目录（暂时和训练一样）
+    'nc': len(classes),         # 类别数量
+    'names': classes            # 类别名称列表
+}
+
+# 写入 data.yaml
+with open('data.yaml', 'w', encoding='utf-8') as f:
+    yaml.dump(data_config, f, sort_keys=False, allow_unicode=True)
+
+print(f"✅ 成功创建 data.yaml")
+print(f"   - 类别数量: {len(classes)}")
+print(f"   - 类别名称: {classes}")
+```
+
+创建的 data.yaml 文件内容如下所示
+
+```yaml
+path: /home/rd/Downloads/yolo_data_input
+train: images
+val: images
+nc: 7
+names:
+- bird
+- cat
+- dog
+- elephant
+- grass
+- human
+- tiger
+```
+
+
 
 # 5. `CVAT`
 
