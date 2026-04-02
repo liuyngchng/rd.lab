@@ -2138,6 +2138,71 @@ openclaw channels login --channel openclaw-weixin
 pnpm install -g openclaw@latest
 ```
 
+# 21. nanobot
+
+nanobot 实现了 claw 的核心逻辑，详见  git@github.com:HKUDS/nanobot.git
+
+运行
+
+```
+git clone git@github.com:HKUDS/nanobot.git
+cd nanobot
+python -m nanobot
+
+```
+
+默认 nanobot会联网获取最新的模型信息（https://raw.githubusercontent.com/BerriAI/litellm/main/model_prices_and_context_window.json），便于实时更新其config.json文件内的模型，内网可以设置环境变量跳过这个联网功能
+
+```
+export LITELLM_LOCAL_MODEL_COST_MAP=True
+```
+
+如果使用了内网部署的自定义模型，部分客户端的证书可能需要跳过验证，需要修改源代码，文件 nanobot/providers/custom_provider.py 修改如下：
+
+```python
+class CustomProvider(LLMProvider):
+
+    def __init__(self, api_key: str = "no-key", api_base: str = "http://localhost:8000/v1", default_model: str = "default"):
+        super().__init__(api_key, api_base)
+        self.default_model = default_model
+        # Keep affinity stable for this provider instance to improve backend cache locality.
+        # 新增的跳过SSL 证书验证
+        import httpx
+        http_client_kwargs = {}
+        http_client_kwargs["verify"] = False
+        from loguru import logger
+        logger.debug(f"custom_provider, {api_base}, {api_key}")
+        http_client = httpx.AsyncClient(**http_client_kwargs)
+        self._client = AsyncOpenAI(
+            api_key=api_key,
+            base_url=api_base,
+            default_headers={"x-session-affinity": uuid.uuid4().hex},
+            http_client=http_client,
+
+        )
+```
+
+另外修改文件  nanobot/providers/litellm_provider.py
+
+```python
+class LiteLLMProvider(LLMProvider):
+
+    def __init__(
+        self,
+        api_key: str | None = None,
+        api_base: str | None = None,
+        default_model: str = "anthropic/claude-opus-4-5",
+        extra_headers: dict[str, str] | None = None,
+        provider_name: str | None = None,
+    ):
+        super().__init__(api_key, api_base)
+        self.default_model = default_model
+        self.extra_headers = extra_headers or {}
+
+        litellm.ssl_verify = False  # 禁用 SSL 验证
+        litellm.verify_ssl_certs = False  # 某些版本使用这个
+```
+
 
 
 # 19. Reference
