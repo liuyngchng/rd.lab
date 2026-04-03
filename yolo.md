@@ -164,7 +164,29 @@ Computer Vision Annotation Tool (`CVAT`)， 计算机视觉标注工具。
 
 ```sh
 git clone git@github.com:cvat-ai/cvat.git
+cd cvat
+# 切换到某个release 分支
+git checkout release-2.59.1
+
+# 启动服务，需要能够访问docker 官方的镜像仓
+docker-compose up
 ```
 
+拉取的镜像清单如下所示
 
+```sh
+rd@rd-t14:~/workspace$ docker images
+REPOSITORY              		TAG             IMAGE ID            SIZE
+traefik                 		v3.6            346bc28a43a5      	186MB
+cvat/server             		v2.59.1         74e71745c47c       	1.62GB
+cvat/ui                 		v2.59.1         1759af9e3a6c       	169MB
+postgres                		15-alpine       cd848ee12e8e        274MB
+openpolicyagent/opa     		1.12.2          a538d7504847       	85.6MB
+redis                   		7.2.11-alpine   645b5492c574       	40.9MB
+apache/kvrocks          		2.12.1          8308770d3616      	153MB
+clickhouse/clickhouse-server 	23.11-alpine    769544382e1a        910MB
+grafana/grafana-oss     		10.1.2          31656ec60d2e        391MB
+timberio/vector         		0.26.0-alpine   d8ecc9831523        122MB
+```
 
+通过浏览器 http://localhost:8080/ 进入Web界面进行使用。
