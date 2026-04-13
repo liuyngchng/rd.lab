@@ -2185,7 +2185,13 @@ litellm.verify_ssl_certs = False  # 某些版本使用这个
 
 **（1）安装 Android Studio**
 
-官网下载安装。
+官网下载安装，在启动的时候会自动下载Android SDK 
+
+```sh
+~/Android/Sdk
+```
+
+也可以自己手动下载cmdlinetools 手动下载 Android SDK 
 
 **（2）生成打包的密钥**
 
@@ -2199,7 +2205,7 @@ keytool -genkeypair -v  \
 	-dname "CN=rdApkClaw, OU=rdAndroid, O=rdForkedApkTeam, L=Beijing, ST=Beijing, C=CN"
 ```
 
-（3）配置 local.properties
+**（3）配置 local.properties**
 
 ```sh
 # Android SDK目录
@@ -2210,6 +2216,25 @@ KEYSTORE_PASSWORD=your_actual_password
 KEY_ALIAS=apkclaw
 KEY_PASSWORD=your_actual_password
 ```
+
+**（4）开始编译**
+
+```
+./gradlew assembleRelease
+```
+
+如果需要配置代理下载相关依赖
+
+```sh
+vi gradle.properties
+# 添加代理配置
+systemProp.http.proxyHost=proxy.your_host.domain
+systemProp.http.proxyPort=8080
+systemProp.https.proxyHost=proxy.your_host.domain
+systemProp.https.proxyPort=8080
+```
+
+
 
 
 
