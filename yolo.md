@@ -35,7 +35,7 @@ pip install labelimg
 pip install label-studio
 ```
 
-# 4. Label-Studio
+# 4. Label Studio
 
 下面以 label-studio 为例，说明数据标注过程及格式。
 
@@ -190,3 +190,59 @@ timberio/vector         		0.26.0-alpine   d8ecc9831523        122MB
 ```
 
 通过浏览器 http://localhost:8080/ 进入Web界面进行使用。
+
+# 6. 训练
+
+可以将自己的数据进行标注后，进行模型训练。
+
+```python
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+import ultralytics
+from ultralytics import YOLO
+from ultralytics.data.utils import check_det_dataset
+
+# 加载模型，会自动下载模型文件 yolo26n.pt，也可以自己手动下载至本地目录，自行加载
+model = YOLO("yolo26n.pt")
+# 加载数据集
+dataset_path = "/home/rd/Downloads/coco128_with_yaml/coco128.yaml"
+
+try:
+    data_info = check_det_dataset(dataset_path)
+    print("✅ 数据集验证通过！")
+    print(f"训练图片路径: {data_info['train']}")
+    print(f"类别数量: {data_info['nc']}")
+    print(f"类别名称: {data_info['names']}")
+except Exception as e:
+    print(f"❌ 数据集验证失败: {e}")
+
+# 训练
+model.train(
+    data=dataset_path,
+    epochs=5,
+    imgsz=640,
+    device='cpu'
+)
+
+
+# 查看模型信息
+trained_model = "/home/rd/workspace/pytorch/yolo/runs/detect/train5/weights/best.pt"
+
+import torch
+from ultralytics.nn.tasks import DetectionModel  # 导入需要的类
+
+
+ckpt = torch.load(trained_model, map_location='cpu', weights_only=False)
+
+
+# 如果是完整模型保存（YOLO 默认方式）
+if 'model' in ckpt:
+    print(f"模型类型: {type(ckpt['model'])}")
+    print(f"保存时的 epoch: {ckpt.get('epoch', 'N/A')}")
+    print(f"最佳 fitness: {ckpt.get('best_fitness', 'N/A')}")
+
+# 如果是仅权重保存
+if 'model_state_dict' in ckpt:
+    print(f"权重层数: {len(ckpt['model_state_dict'].keys())}")
+```
+
