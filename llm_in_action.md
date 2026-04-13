@@ -2062,13 +2062,11 @@ export NODE_TLS_REJECT_UNAUTHORIZED=0
 export NODE_EXTRA_CA_CERTS=/path_to_your_self_signed_cert.pem
 ```
 
+# 20. Claw
 
+## 20.1 Openclaw
 
-# 20. Openclaw
-
-## 20.1 pnpm
-
-安装 pnpm
+**（1）安装 pnpm**
 
 ```sh
 # 安装 pnpm
@@ -2077,7 +2075,7 @@ curl -fsSL https://get.pnpm.io/install.sh | sh
 
 
 
-## 20.2 源代码安装
+**（2）源代码安装**
 
 ```sh
 git clone git@github.com:openclaw/openclaw.git
@@ -2132,13 +2130,13 @@ npx -y @tencent-weixin/openclaw-weixin-cli@latest install
 openclaw channels login --channel openclaw-weixin
 ```
 
-## 20.3 非源码安装
+**（3）非源码安装**
 
 ```
 pnpm install -g openclaw@latest
 ```
 
-# 21. nanobot
+## 20.2 nanobot
 
 nanobot 实现了 claw 的核心逻辑，详见  git@github.com:HKUDS/nanobot.git
 
@@ -2183,9 +2181,40 @@ litellm.ssl_verify = False  # 禁用 SSL 验证
 litellm.verify_ssl_certs = False  # 某些版本使用这个
 ```
 
+## 20.3 ApkClaw
+
+**（1）安装 Android Studio**
+
+官网下载安装。
+
+**（2）生成打包的密钥**
+
+```sh
+keytool -genkeypair -v  \
+	-keystore apkclaw-release.jks  \
+	-keyalg RSA -keysize 2048 \
+	-validity 10000 -alias apkclaw \
+	-storepass "your_password"  \
+	-keypass "your_password"  \
+	-dname "CN=rdApkClaw, OU=rdAndroid, O=rdForkedApkTeam, L=Beijing, ST=Beijing, C=CN"
+```
+
+（3）配置 local.properties
+
+```sh
+# Android SDK目录
+sdk.dir=/home/rd/Android/Sdk
+# 签名配置，文件路径，使用绝对路径
+KEYSTORE_FILE=/home/rd/apkclaw/apkclaw-release.jks
+KEYSTORE_PASSWORD=your_actual_password
+KEY_ALIAS=apkclaw
+KEY_PASSWORD=your_actual_password
+```
 
 
-# 19. Reference
+
+
+# 21. Reference
 
 [1] Hugging Face Documentation. https://huggingface.co/docs;
 
@@ -2225,6 +2254,6 @@ litellm.verify_ssl_certs = False  # 某些版本使用这个
 
 [19] DeepAgents, https://docs.langchain.com/oss/python/deepagents/quickstart
 
-# 20. 附录
+# 22. 附录
 
 文中所涉及到的代码 demo,详见  https://github.com/liuyngchng/llm_test。
