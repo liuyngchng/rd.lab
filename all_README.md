@@ -1862,15 +1862,21 @@ curl -X POST http://localhost:8000/png   -H "Content-Type: text/plain"   --data-
 
 在线渲染入口  https://mermaid.live/
 
-#  78. android studio
+#  78. Android Studio
 
-菜单栏 icon
+解决菜单栏 icon无法正常显示，使用文本编辑器打开 ~/.local/share/applications/jetbrains-android-studio.desktop 文件。
 
+如果不存在,就创建或编辑
+
+```sh
+~/.local/share/applications/google-android-studio.desktop
+# 或者
+~/.local/share/applications/studio.desktop
 ```
-使用文本编辑器打开 ~/.local/share/applications/jetbrains-android-studio.desktop 文件。如果不存在,就创建或编辑 ~/.local/share/applications/google-android-studio.desktop 或 ~/.local/share/applications/studio.desktop。
 
-在 [Desktop Entry] 这一节中,确保有以下几行,并将 StartupWMClass 的值替换为你刚才找到的类名:
+其文本内容如下，在 [Desktop Entry] 这一节中,确保有以下几行,并将 StartupWMClass 的值替换为实际的软件路径的类名:
 
+```ini
 ini
 [Desktop Entry]
 Type=Application
@@ -1881,6 +1887,6 @@ Categories=Development;IDE;
 Terminal=false
 StartupNotify=true
 StartupWMClass=jetbrains-studio
-注意: Exec 和 Icon 字段请替换成你实际的安装路径。
+# 注意: Exec 和 Icon 字段请替换成你实际的安装路径。
 ```
 
