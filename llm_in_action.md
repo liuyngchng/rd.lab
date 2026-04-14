@@ -2234,6 +2234,12 @@ systemProp.https.proxyHost=proxy.your_host.domain
 systemProp.https.proxyPort=8080
 ```
 
+最终会在目录下生成打包好的 apk 文件。
+
+```
+app/build/outputs/apk/release/
+```
+
 
 
 
