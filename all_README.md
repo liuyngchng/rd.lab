@@ -229,7 +229,9 @@ sudo mkswap /dev/sda1
 
 重启，拔掉U盘，重启电脑
 
-# 7. WebService Client Generation Error with JDK8
+# 7. JDK8 webservice error 
+
+WebService Client Generation Error with JDK8
 
 ```shell
 java.lang.AssertionError: org.xml.sax.SAXParseException;
@@ -242,12 +244,17 @@ Create a file named jaxp.properties (if it doesn't exist) under /path/to/jdk1.8.
 ```shell
 javax.xml.accessExternalSchema = all
 ```
-# 8. use iphone as usb internet modem in ubuntu
+# 8.ubuntu iphone 
+
+在一些较老版本的ubuntu中，如果需要插入iphone，能够作为modem 直接上网，即use iphone as usb internet modem in ubuntu， 需要安装如下组件
 
 ```shell
 sudo apt-get install ipheth-utils libimobiledevice-dev libimobiledevice-utils
 ```
+新版本的 Ubuntu (Ubuntu 24.04), iphone 作为modem 即插即用。
+
 # 9. setup atom in ubuntu 16.04
+
 ## 9.1 add source
 
 ```shell
@@ -323,7 +330,7 @@ sudo scutil --set HostName my_host_name
 
 # 13. some git things
 
-## setup git in offline centos
+## 13.1 setup git in offline centos
 
 ```sh
 wget https://mirrors.edge.kernel.org/pub/software/scm/git/git-2.25.1.tar.gz
@@ -343,12 +350,12 @@ yum install curl-devel
 
 
 
-## 13.1 git中文文件名变数字
+## 13.2 git 中文文件名变数字
 修改配置
 git config --global core.quotepath false
 即可解决
 
-## 13.2 use vim diff as git diff visual tool
+## 13.3 use vim diff as git diff visual tool
 ```shell
 sudo apt-get install vim
 git config --global diff.tool vimdiff
@@ -387,12 +394,17 @@ dd if=~/Downloads/alpine-standard-3.10.2-x86_64.iso of=/dev/sdb bs=4M
 ```
 The target device will be erased, so make sure you use something without any data you do not want to lose
 
-# 15. convert GBK(gb18030 gbk) text file to readable file in ubuntu (UTF-8 format)
+# 15. ubuntu gbk
+
+convert GBK(gb18030 gbk) text file to readable file in ubuntu (UTF-8 format)
 
 ```shell
  iconv -f gbk -t utf8 gbk.txt > utf8.txt
 ```
-# 16. network traffic monitoring/网络流量监控  
+# 16. iftop
+
+network traffic monitoring/网络流量监控  
+
 ```shell
 iftop -i interface
 ```
@@ -423,8 +435,15 @@ add parameter in cmake
 
 `cmake ../ -DOPENSSL_ROOT_DIR=/usr/local/ssl -DOPENSSL_LIBRARIES=/usr/local/ssl/lib`
 
-# 19. delete cache file after 'sudo apt-get install for ubuntu'  
-run `sudo apt-get clean`
+# 19. ubuntu cache
+
+delete cache file after 'sudo apt-get install for ubuntu'  , run 
+
+```sh
+sudo apt-get clean
+```
+
+
 and then all file in /var/cache/apt/archives be deleted.
 
 # 20. ubuntu support exfat disk format
@@ -445,8 +464,9 @@ deb [arch=amd64] https://mirrors.ustc.edu.cn/docker-ce/linux/ubuntu trusty stabl
 
 apt-get update
 
+# 22. ubuntu wifi driver 
 
-# 22. ubuntu wifi driver setup (wireless card driver)  
+setup (wireless card driver)  
 
 run `lspci | grep Wireless`  
 看到无线网卡类型为 
@@ -459,7 +479,10 @@ apt install firmware-b43-installer
 apt-get install bcmwl-kernel-source
 ```
 
-# 23. rar and unrar in ubuntu with password
+# 23. ubuntu rar
+
+rar and unrar file in ubuntu with password
+
 ```shell
 sudo apt-get install rar unrar -y
 rar -p a test.csv.rar test.csv   // input password
@@ -484,7 +507,9 @@ HDD,Hard Disk Drive write speed 100 MByte per second.
 如果想进入图形界面，输入命令：   
 `sudo lightdm`
 
-# 26. after install ubuntu on Mac and then delete ubuntu, efi boot is redundant.
+# 26. mac ubuntu
+
+after install ubuntu on Mac and then delete ubuntu, efi boot is redundant.
 
 在Mac安装ubuntu后开机默认进入Grub引导，删除ubuntu后Grub引导依旧存在，  
 导致每次开机都要按住option才能进入Mac系统
@@ -517,7 +542,7 @@ run
 rm -rf ubuntu
 sudo reboot
 ```
-# 27. setup manpage
+# 27. ubuntu setup manpage
 
 ```shell
 sudo apt-get update
@@ -560,11 +585,17 @@ server: smb://192.168.1.123
 config user as guest or registed user.  
 have fun!
 
-# 29. 设置linux免密码登录 login linux without password      
+# 29. login linux without password 
 
+设置linux免密码登录     
+
+```sh
 client:192.168.0.1  
-server:192.168.0.2  
-on client   
+server:192.168.0.2
+```
+
+
+​	on client   
 
 ```shell
 ssh-keygen  
