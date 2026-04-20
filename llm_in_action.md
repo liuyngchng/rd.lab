@@ -2142,9 +2142,14 @@ nanobot 实现了 claw 的核心逻辑，详见  git@github.com:HKUDS/nanobot.gi
 
 运行
 
-```
+```sh
+# clone code
 git clone git@github.com:HKUDS/nanobot.git
 cd nanobot
+# activate python 虚拟环境
+source ~/workspace/llm_py_env/bin/activate
+# 运行
+nanobot agent
 python -m nanobot
 ```
 
@@ -2180,6 +2185,14 @@ self._client = openai.AsyncOpenAI(
 litellm.ssl_verify = False  # 禁用 SSL 验证
 litellm.verify_ssl_certs = False  # 某些版本使用这个
 ```
+
+运行
+
+```sh
+
+```
+
+
 
 ## 20.3 ApkClaw
 
