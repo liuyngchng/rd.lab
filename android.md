@@ -20,7 +20,7 @@
 keytool -genkeypair -v  \
 	-keystore rd-app-release.jks  \
 	-keyalg RSA -keysize 2048 \
-	-validity 10000 -alias apkclaw \
+	-validity 10000 -alias rd-app \
 	-storepass "your_password"  \
 	-keypass "your_password"  \
 	-dname "CN=rdApk, OU=rdAndroid, O=rdForkedApkTeam, L=Beijing, ST=Beijing, C=CN"
@@ -120,8 +120,6 @@ adb devices
 **（5）安装 apk 包到手机**
 
 ```sh
-
-
 # 如果安装时，报没有签名，可以使用 apksigner 对已经打完的包进行签名
 # 需要 Android SDK build-tools
 ~/Android/Sdk/build-tools/37.0.0/apksigner sign --ks ~/termux-release.jks --ks-key-alias termux termux-app_apt-android-7-release_arm64-v8a.apk
