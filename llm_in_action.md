@@ -2182,8 +2182,8 @@ self._client = openai.AsyncOpenAI(
 涉及到 litellm 的，增加如下配置
 
 ```python
-litellm.ssl_verify = False  # 禁用 SSL 验证
-litellm.verify_ssl_certs = False  # 某些版本使用这个
+litellm.ssl_verify = False  		# 禁用 SSL 验证
+litellm.verify_ssl_certs = False  	# 某些版本使用这个
 ```
 
 运行

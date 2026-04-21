@@ -1921,3 +1921,58 @@ StartupWMClass=jetbrains-studio
 # 注意: Exec 和 Icon 字段请替换成你实际的安装路径。
 ```
 
+
+
+# 79. Termux
+
+
+
+源代码地址  https://github.com/termux/termux-app， 这是一个 Android 的 App， App 在打包的时候，会包含一些已经编译好的Linux系统二进制可执行文件（编译过程中的报错会给出提示），这些文件在
+
+https://github.com/termux/termux-packages/releases 下面。 
+
+如果不修改 gradle 编译配置文件， 则会默认将 x86, arm 等二进制文件全部打包在 app 的 apk 包中，由运行时决定最终用哪个。
+
+如果知道自己的最终硬件平台，则可以指定为某个硬件平台（例如， arm），这样打的包会比较小，可以通过以下方法进行修改。
+
+```sh
+# 编辑打包文件
+vi app/build.gradle
+# 找到以下部分
+android {
+	defaultConfig {
+		splits {
+            abi {
+                reset ()
+                include 'x86', 'x86_64', 'armeabi-v7a', 'arm64-v8a'
+                universalApk true
+            }
+        }
+	}
+}
+```
+
+修改为
+
+```sh
+splits {
+    abi {
+        reset ()
+        include 'arm64-v8a'   # 只保留这一个
+        universalApk true     # 如果想生成 universal 包，保留这行；如果不需要，改为 false
+    }
+}
+```
+
+然后执行编译
+
+```sh
+# 1. 清理之前的编译产物
+./gradlew clean
+
+# 2. 重新编译 Release 版本
+./gradlew assembleRelease
+```
+
+
+
