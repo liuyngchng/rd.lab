@@ -1,6 +1,8 @@
 # 1. **dev**
 
-官网下载安装，在启动的时候会自动下载Android SDK 
+**（1）IDE**
+
+官网下载安装Android Studio IDE，在Android启动的时候会自动下载Android SDK 
 
 ```sh
 ~/Android/Sdk
@@ -8,7 +10,9 @@
 
 也可以自己手动下载cmdlinetools 手动下载 Android SDK ， 然后在 Android Studio 中的菜单[tools] -> [SDK Manager] 指定 SDK 的位置
 
+**（2）新建项目**
 
+在 android studio 中新建项目。
 
 # 2. package
 
@@ -31,10 +35,10 @@ keytool -genkeypair -v  \
 ```sh
 # Android SDK目录
 sdk.dir=/home/rd/Android/Sdk
-# 签名配置，文件路径，使用绝对路径
-KEYSTORE_FILE=/home/rd/AndroidStudioProjects/rd_app/rd-app-release.jks
+# 签名配置，文件路径，密码，别名等信息
+KEYSTORE_FILE=../rd-app-release.jks
 KEYSTORE_PASSWORD=your_actual_password
-KEY_ALIAS=apkclaw
+KEY_ALIAS=rd-app
 KEY_PASSWORD=your_actual_password
 ```
 
@@ -120,15 +124,15 @@ adb devices
 **（5）安装 apk 包到手机**
 
 ```sh
-# 如果安装时，报没有签名，可以使用 apksigner 对已经打完的包进行签名
+# 如果安装时，报没有签名（一般在app/build.gradle.kts 配置了相应的签名策略，都会正常签名），可以使用 apksigner 对已经打完的包进行签名
 # 需要 Android SDK build-tools
-~/Android/Sdk/build-tools/37.0.0/apksigner sign --ks ~/termux-release.jks --ks-key-alias termux termux-app_apt-android-7-release_arm64-v8a.apk
+~/Android/Sdk/build-tools/37.0.0/apksigner sign --ks ~/termux-release.jks --ks-key-alias termux your-app-release_arm64-v8a.apk
 
 # 验证签名
-~/Android/Sdk/build-tools/30.0.3/apksigner verify termux-app_apt-android-7-release_arm64-v8a.apk
+~/Android/Sdk/build-tools/30.0.3/apksigner verify your-app-release_arm64-v8a.apk
 
 # 安装
-adb install termux-app_apt-android-7-release_arm64-v8a.apk
+adb install your-app-release_arm64-v8a.apk
 ```
 
 
