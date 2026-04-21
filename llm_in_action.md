@@ -2196,66 +2196,11 @@ litellm.verify_ssl_certs = False  	# 某些版本使用这个
 
 ## 20.3 ApkClaw
 
-**（1）安装 Android Studio**
+安卓应用，参考 
 
-官网下载安装，在启动的时候会自动下载Android SDK 
+[安卓开发手册]: ./android.md	"安卓开发手册"
 
-```sh
-~/Android/Sdk
-```
-
-也可以自己手动下载cmdlinetools 手动下载 Android SDK 
-
-**（2）生成打包的密钥**
-
-```sh
-keytool -genkeypair -v  \
-	-keystore apkclaw-release.jks  \
-	-keyalg RSA -keysize 2048 \
-	-validity 10000 -alias apkclaw \
-	-storepass "your_password"  \
-	-keypass "your_password"  \
-	-dname "CN=rdApkClaw, OU=rdAndroid, O=rdForkedApkTeam, L=Beijing, ST=Beijing, C=CN"
-```
-
-**（3）配置 local.properties**
-
-```sh
-# Android SDK目录
-sdk.dir=/home/rd/Android/Sdk
-# 签名配置，文件路径，使用绝对路径
-KEYSTORE_FILE=/home/rd/apkclaw/apkclaw-release.jks
-KEYSTORE_PASSWORD=your_actual_password
-KEY_ALIAS=apkclaw
-KEY_PASSWORD=your_actual_password
-```
-
-**（4）开始编译**
-
-```
-./gradlew assembleRelease
-```
-
-如果需要配置代理下载相关依赖
-
-```sh
-vi gradle.properties
-# 添加代理配置
-systemProp.http.proxyHost=proxy.your_host.domain
-systemProp.http.proxyPort=8080
-systemProp.https.proxyHost=proxy.your_host.domain
-systemProp.https.proxyPort=8080
-```
-
-最终会在目录下生成打包好的 apk 文件。
-
-```
-app/build/outputs/apk/release/
-```
-
-
-
-
+相关文档
 
 
 # 21. Reference
