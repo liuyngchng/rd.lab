@@ -2203,7 +2203,115 @@ litellm.verify_ssl_certs = False  	# 某些版本使用这个
 相关文档
 
 
-# 21. Reference
+
+# 21. ASR
+
+## 21.1 基础镜像
+
+```sh
+# 1. 拉取CPU版本的Docker镜像
+docker pull registry.cn-hangzhou.aliyuncs.com/funasr_repo/funasr:runtime-sdk-cpu-0.4.7
+# 这个目录存储模型，服务启动后会下载模型
+mkdir -p ./funasr-runtime-resources/models
+# 启动容器
+docker run -p 10095:10095 -dit --privileged=true \
+	--name myfunasr \
+  	-v $PWD/funasr-runtime-resources/models:/workspace/models \
+  	registry.cn-hangzhou.aliyuncs.com/funasr_repo/funasr:funasr-runtime-sdk-cpu-0.4.7
+  
+# 查看容器ID
+docker ps
+
+# 进入容器（用你实际的容器ID）
+docker exec -it myfunasr bash  
+# 启动服务
+cd FunASR/runtime
+
+# 启动服务，模型会自动下载到 /workspace/models 目录（宿主机挂载的 ./funasr-runtime-resources/models）
+nohup bash run_server.sh \
+  --download-model-dir /workspace/models \
+  --vad-dir damo/speech_fsmn_vad_zh-cn-16k-common-onnx \
+  --model-dir damo/speech_paraformer-large-vad-punc_asr_nat-zh-cn-16k-common-vocab8404-onnx \
+  --punc-dir damo/punc_ct-transformer_cn-en-common-vocab471067-large-onnx \
+  --itn-dir thuduj12/fst_itn_zh \
+  --certfile 0 > log.txt 2>&1 &
+  
+# 检查服务进程
+ps aux | grep run_server
+
+# 测试接口（在宿主机另开终端）
+curl http://127.0.0.1:10095/
+
+```
+
+下载的模型，应该包含以下及个：
+
+- `damo/speech_fsmn_vad_zh-cn-16k-common-onnx/` （VAD模型）
+
+- `damo/speech_paraformer-large-vad-punc_asr_nat-zh-cn-16k-common-vocab8404-onnx/` （主ASR模型）
+
+- `damo/punc_ct-transformer_cn-en-common-vocab471067-large-onnx/` （标点模型）
+
+- `thuduj12/fst_itn_zh/` （逆文本正则化）
+
+需要在容器内安装ffmpeg，安装好之后，再打包成一个新镜像。
+
+```sh
+# 进入容器
+docker exec -it myfunasr bash
+
+# 更新包列表并安装 ffmpeg
+apt update && apt install -y ffmpeg
+
+# 验证安装
+ffmpeg -version
+# 退出容器
+exit
+
+# 提交为新的容器
+docker commit myfunasr funasr-with-ffmpeg:runtime-sdk-cpu-0.4.7
+docker rm myfunasr
+```
+
+## 21.2 完整镜像
+
+运行新容器
+
+```sh
+# 保证当前目录下有 funasr-runtime-resources 这个文件夹，下面有已经下载好的模型文件
+docker run -p 10095:10095 -dit --privileged=true \
+	--name myfunasr \
+  	-v $PWD/funasr-runtime-resources/models:/workspace/models \
+  	funasr-with-ffmpeg:runtime-sdk-cpu-0.4.7
+  	
+# 启动服务
+# 设置环境变量
+docker exec -it myfunasr bash
+export MODELSCOPE_DISABLE_DOWNLOAD=1
+export HF_HUB_DISABLE_TELEMETRY=1
+export FUNASR_DISABLE_DOWNLOAD=1
+cd /workspace/FunASR/runtime/websocket/build/bin
+# 启动
+nohup ./funasr-wss-server \
+  --model-dir /workspace/models/damo/speech_paraformer-large-vad-punc_asr_nat-zh-cn-16k-common-vocab8404-onnx \
+  --vad-dir /workspace/models/damo/speech_fsmn_vad_zh-cn-16k-common-onnx \
+  --punc-dir /workspace/models/damo/punc_ct-transformer_cn-en-common-vocab471067-large-onnx \
+  --itn-dir /workspace/models/thuduj12/fst_itn_zh \
+  --lm-dir /workspace/models/damo/speech_ngram_lm_zh-cn-ai-wesp-fst \
+  --port 10095 \
+  --certfile "" \
+  --decoder-thread-num 4 \
+  --io-thread-num 1 \
+  --model-thread-num 1 \
+   > /workspace/FunASR/runtime/server.log 2>&1 &
+```
+
+
+
+
+
+
+# 22. Reference
 
 [1] Hugging Face Documentation. https://huggingface.co/docs;
 
