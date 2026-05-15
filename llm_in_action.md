@@ -2278,10 +2278,10 @@ docker rm myfunasr
 运行新容器
 
 ```sh
-# 保证当前目录下有 funasr-runtime-resources 这个文件夹，下面有已经下载好的模型文件
+# 保证目录 /data/funasr-runtime-resources 下面有已经下载好的模型文件
 docker run -p 10095:10095 -dit --privileged=true \
 	--name myfunasr \
-  	-v $PWD/funasr-runtime-resources/models:/workspace/models \
+  	-v /data/funasr-runtime-resources/models:/workspace/models \
   	funasr-with-ffmpeg:runtime-sdk-cpu-0.4.7
   	
 # 启动服务
@@ -2304,6 +2304,9 @@ nohup ./funasr-wss-server \
   --io-thread-num 1 \
   --model-thread-num 1 \
    > /workspace/FunASR/runtime/server.log 2>&1 &
+   
+# 跟踪日志，看到  asr model init finished. listen on port:10095,服务启动成功
+tail -f /workspace/FunASR/runtime/server.log
 ```
 
 
