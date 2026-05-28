@@ -2199,7 +2199,7 @@ keytool -genkeypair -v  \
 	-dname "CN=rdApkClaw, OU=rdAndroid, O=rdForkedApkTeam, L=Beijing, ST=Beijing, C=CN"
 ```
 
-（3）配置 local.properties
+**（3）配置 local.properties**
 
 ```sh
 # Android SDK目录
@@ -2209,6 +2209,14 @@ KEYSTORE_FILE=/home/rd/apkclaw/apkclaw-release.jks
 KEYSTORE_PASSWORD=your_actual_password
 KEY_ALIAS=apkclaw
 KEY_PASSWORD=your_actual_password
+```
+
+（4）打包并安装
+
+```sh
+./gradlew clean
+./gradlew assembleRelease
+/home/rd/Android/Sdk/platform-tools/adb install ./app/build/outputs/apk/release/ApkClaw_v0.0.2_20260411_104935.apk
 ```
 
 
