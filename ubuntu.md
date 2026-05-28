@@ -933,6 +933,8 @@ Vfat 		| 		/boot/efi | 	1GB
 
 # 31. 关闭 snap 自动更新
 
+
+
 ```sh
 # 1. 关闭自动更新
 sudo snap set system refresh.timer=""
@@ -945,8 +947,6 @@ snap refresh --list
 
 
 # 32. 画图软件 `drawio`
-
-
 
 ```
 sudo snap install drawio
