@@ -1084,9 +1084,13 @@ SIGABRT: abort
 Seccomp 是限制系统调用的一种机制，默认情况下 Docker 使用的 seccomp 配置文件可能会阻止某些与线程相关的系统调用。解决这个问题的一个方案是禁用 seccomp 或使用自定义的 seccomp 配置文件。
 
 - **禁用 seccomp**（不推荐用于生产环境，调试时可以使用）
+- 禁用 apparmor（AppArmor 可以通过路径规则，禁止执行 `/bin/sh`、`/usr/bin/python` 等特定二进制文件）
 
-```routeros
-docker run --rm --security-opt seccomp=unconfined ...
+```sh
+docker run --rm \
+	--security-opt seccomp=unconfined 	\
+	--security-opt apparmor=unconfined 	\
+	...
 ```
 
 - **使用自定义 seccomp 配置**：你可以基于默认的 seccomp 配置文件，允许 `pthread_create` 所需的系统调用。

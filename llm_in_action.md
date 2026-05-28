@@ -2187,7 +2187,7 @@ litellm.ssl_verify = False  		# 禁用 SSL 验证
 litellm.verify_ssl_certs = False  	# 某些版本使用这个
 ```
 
-运行
+运行 vi /home/rd/.nanobot/config.json, 添加 LLM API 信息
 
 ```sh
 
