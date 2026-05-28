@@ -2162,6 +2162,7 @@ export LITELLM_LOCAL_MODEL_COST_MAP=True
 如果使用了内网部署的自定义模型，部分客户端的证书可能需要跳过验证，需要修改源代码，使用了openai.AsyncOpenAI 作为client的化，需要修改如下内容
 
 ```python
+# nanobot/providers/openai_compat_provider.py
 # 跳过 HTTP client 端的 SSL 证书验证
 import httpx
 http_client_kwargs = {}
