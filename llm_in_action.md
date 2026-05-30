@@ -1991,13 +1991,13 @@ https://v0.app/
 
 # 19. Claude Code
 
-需要具有nodejs环境，安装客户端
+需要具有nodejs环境，然后安装claude code的客户端，Windows下 首先安装 https://nodejs.org/dist/v24.16.0/node-v24.16.0-x64.msi， 然后执行下面的脚本
 
 ```
 npm install -g @anthropic-ai/claude-code
 ```
 
-也可以通过homebrew这样安装
+Linux也可以通过homebrew这样安装
 
 ```sh
 sudo apt update
@@ -2022,8 +2022,8 @@ brew install --cask claude-code
 export ANTHROPIC_BASE_URL=https://api.deepseek.com/anthropic
 export ANTHROPIC_AUTH_TOKEN=${DEEPSEEK_API_KEY}
 export API_TIMEOUT_MS=600000
-export ANTHROPIC_MODEL=deepseek-chat
-export ANTHROPIC_SMALL_FAST_MODEL=deepseek-chat
+export ANTHROPIC_MODEL=deepseek-v4-pro
+export ANTHROPIC_SMALL_FAST_MODEL=deepseek-v4-flash
 export CLAUDE_CODE_DISABLE_NONSENSENTIAL_TRAFFIC=1
 ```
 
@@ -2033,7 +2033,7 @@ export CLAUDE_CODE_DISABLE_NONSENSENTIAL_TRAFFIC=1
 ./claude
 
 
-╭─── Claude Code v2.1.63 ─────────────────────────────────────────────────╮
+╭─── Claude Code v2.1.158 ─────────────────────────────────────────────────╮
 │                                       │ Tips for getting started        │
 │             Welcome back!             │ Run /init to create a CLAUDE.md │
 │                                       │ ─────────────────────────────── │
@@ -2041,7 +2041,7 @@ export CLAUDE_CODE_DISABLE_NONSENSENTIAL_TRAFFIC=1
 │                ▐▛███▜▌                │ No recent activity             │
 │               ▝▜█████▛▘               │                                │
 │                 ▘▘ ▝▝                 │                                │
-│   deepseek-chat · API Usage Billing   │                                 │
+│   deepseek-v4-pro · API Usage Billing   │                                 │
 │              ~/workspace              │                                 │
 ╰─────────────────────────────────────────────────────────────────────────╯
 
