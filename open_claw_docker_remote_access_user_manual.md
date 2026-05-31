@@ -296,6 +296,18 @@ docker inspect ghcr.nju.edu.cn/openclaw/openclaw | grep version -i
 docker tag ghcr.nju.edu.cn/openclaw/openclaw      ghcr.io/openclaw/openclaw:latest
 # 创建目录
 mkdir -p /data/openclaw/data
+
+# 创建证书目录
+mkdir -p /data/openclaw/certs
+
+# 生成自签名证书（注意替换 IP 地址）
+openssl req -x509 -newkey rsa:4096 \
+  -keyout /data/openclaw/certs/key.pem \
+  -out /data/openclaw/certs/cert.pem \
+  -days 365 -nodes \
+  -subj "/C=CN/ST=Beijing/L=Beijing/O=HomeLab/CN=192.168.1.104" \
+  -addext "subjectAltName=IP:192.168.1.104"
+
 # 开始配置
 docker run -it --rm -v /data/openclaw:/home/node/.openclaw \
 	-e NODE_TLS_REJECT_UNAUTHORIZED=0 \
@@ -323,6 +335,33 @@ docker run -dit \
   -p 18789:18789 \
   ghcr.io/openclaw/openclaw:latest \
   openclaw gateway run --allow-unconfigured
+  
+# 配置
+docker exec -it openclaw-gateway bash
+docker run -it --rm -v /data/openclaw:/home/node/.openclaw \
+	-e NODE_TLS_REJECT_UNAUTHORIZED=0 \
+	ghcr.io/openclaw/openclaw:latest \
+	openclaw config set gateway.bind lan
+	
+docker run -it --rm -v /data/openclaw:/home/node/.openclaw \
+	-e NODE_TLS_REJECT_UNAUTHORIZED=0 \
+	ghcr.io/openclaw/openclaw:latest  \
+	openclaw config set gateway.controlUi.allowedOrigins '["http://127.0.0.1:18789","http://192.168.1.104:18789"]'
+
+docker run -it --rm -v /data/openclaw:/home/node/.openclaw \
+	-e NODE_TLS_REJECT_UNAUTHORIZED=0 \
+	ghcr.io/openclaw/openclaw:latest \
+	openclaw config set gateway.tls.enabled true
+	
+docker run -it --rm -v /data/openclaw:/home/node/.openclaw \
+	-e NODE_TLS_REJECT_UNAUTHORIZED=0 \
+	ghcr.io/openclaw/openclaw:latest \
+    openclaw config set gateway.tls.certFile "/home/node/.openclaw/certs/cert.pem"
+  
+docker run -it --rm -v /data/openclaw:/home/node/.openclaw \
+	-e NODE_TLS_REJECT_UNAUTHORIZED=0 \
+	ghcr.io/openclaw/openclaw:latest \
+    openclaw config set gateway.tls.keyFile "/home/node/.openclaw/certs/key.pem"
 ```
 
 访问
@@ -331,4 +370,77 @@ docker run -dit \
 https://192.168.1.104:18179/chat?session=main&token=30e937f7a0944b5c66abfaa6d25200fed08c3040d5bd601f
 ```
 
-就可以打开页面了。 
+就可以打开页面了。 然后认证客户端
+
+```
+docker exec -it  openclaw-gateway openclaw devices approve 69f2673d-f9cf-47ee-872d-8a3e9dbabdfd
+```
+
+完整配置文件详见
+
+```json
+rd@rd-ex:/data/openclaw$ cat openclaw.json
+{
+  "agents": {
+    "defaults": {
+      "workspace": "/home/node/.openclaw/workspace",
+      "model": {
+        "primary": "custom-api-deepseek-com/deepseek-v4-pro"
+      },
+      "models": {
+        "custom-api-deepseek-com/deepseek-v4-pro": {
+          "alias": "deepseek-v4-pro"
+        }
+      }
+    }
+  },
+  "gateway": {
+    "mode": "local",
+    "auth": {
+      "mode": "token",
+      "token": "30e937f7a0944b5c66abfaa6d25200fed08c3040d5bd601f"
+    },
+    "port": 18789,
+    "bind": "lan",
+    "tailscale": {
+      "mode": "off",
+      "resetOnExit": false
+    },
+    "controlUi": {
+      "allowInsecureAuth": true,
+      "allowedOrigins": [
+        "http://127.0.0.1:18789",
+        "http://192.168.1.104:18789"
+      ]
+    },
+    "nodes": {
+      "denyCommands": [
+        "camera.snap",
+        "camera.clip",
+        "screen.record",
+        "contacts.add",
+        "calendar.add",
+        "reminders.add",
+        "sms.send",
+        "sms.search"
+      ]
+    },
+    "remote": {
+      "url": "wss://192.168.1.104:18789",
+      "token": "30e937f7a0944b5c66abfaa6d25200fed08c3040d5bd601f"
+    },
+    "tls": {
+      "enabled": true,
+      "certFile": "/home/node/.openclaw/certs/cert.pem",
+      "keyFile": "/home/node/.openclaw/certs/key.pem"
+    }
+  },
+  "session": {
+    "dmScope": "per-channel-peer"
+  },
+  "tools": {
+    "profile": "coding"
+  },
+
+```
+
