@@ -2136,6 +2136,36 @@ openclaw channels login --channel openclaw-weixin
 pnpm install -g openclaw@latest
 ```
 
+
+
+**（4）接入微信**
+
+ 安装微信插件
+
+```bash
+
+npx -y @tencent-weixin/openclaw-weixin-cli install
+# 或者手动安装
+openclaw plugins install "@tencent-weixin/openclaw-weixin"
+openclaw config set plugins.entries.openclaw-weixin.enabled true
+openclaw gateway restart
+```
+
+扫码登录
+
+在运行 Gateway 的同一台机器上执行：
+
+```bash
+openclaw channels login --channel openclaw-weixin
+```
+
+然后用手机微信扫描终端里显示的二维码，确认登录即可。，授权访问新联系人需要批准才能和我对话：
+
+```bash
+openclaw pairing list openclaw-weixin        # 查看待批准列表
+openclaw pairing approve openclaw-weixin <CODE>  # 批准某个联系人
+```
+
 ## 20.2 nanobot
 
 nanobot 实现了 claw 的核心逻辑，详见  git@github.com:HKUDS/nanobot.git

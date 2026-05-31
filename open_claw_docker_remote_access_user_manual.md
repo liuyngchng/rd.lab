@@ -1,4 +1,6 @@
-# 1. 配置
+# 1. 自定义镜像 
+
+## 1.1 配置
 
 
 
@@ -165,7 +167,7 @@ openclaw config set gateway.controlUi.allowedOrigins '["http://localhost:38789",
 
 
 
-# 2. nginx
+## 1.2 nginx
 
 由于websocket连接的安全要求，非127.0.0.1 本地loopback 的 origin，必须是https, 所以需要部署nginx
 
@@ -232,7 +234,7 @@ docker run -d \
 
 
 
-# 3. 远程访问
+## 1.3 远程访问
 
 
 
@@ -277,3 +279,56 @@ Approved 24a92d022032d75c09713b76101881ad4826f3e5ee5a0fb407c4f70df350a748 (0dd23
 
 ```
 
+# 2. 官方镜像
+
+启动镜像
+
+```sh
+# 获取镜像
+docker pull ghcr.nju.edu.cn/openclaw/openclaw:latest
+# 查看版本
+docker inspect ghcr.nju.edu.cn/openclaw/openclaw | grep version -i
+        "DockerVersion": "",
+                "NODE_VERSION=24.14.0",
+                "YARN_VERSION=1.22.22",
+                "org.opencontainers.image.version": "2026.5.28"
+# 打tag，形成官方镜像地址
+docker tag ghcr.nju.edu.cn/openclaw/openclaw      ghcr.io/openclaw/openclaw:latest
+# 创建目录
+mkdir -p /data/openclaw/data
+# 开始配置
+docker run -it --rm -v /data/openclaw:/home/node/.openclaw \
+	-e NODE_TLS_REJECT_UNAUTHORIZED=0 \
+	ghcr.io/openclaw/openclaw:latest \
+	openclaw onboard
+	
+# 配置远程， 选择手动模式，然后设置
+# Gateway WebSocket URL
+#  wss://192.168.1.104:18789
+docker run -it --rm -v /data/openclaw:/home/node/.openclaw \
+	-e NODE_TLS_REJECT_UNAUTHORIZED=0 \
+	ghcr.io/openclaw/openclaw:latest \
+	openclaw onboard
+	
+
+	
+# 运行  
+docker run -it --rm -v /data/openclaw:/home/node/.openclaw     -e NODE_TLS_REJECT_UNAUTHORIZED=0       ghcr.io/openclaw/openclaw:latest        openclaw gateway run --allow-unconfigured
+
+docker run -dit \
+  --name openclaw-gateway \
+  --rm \
+  -v /data/openclaw:/home/node/.openclaw \
+  -e NODE_TLS_REJECT_UNAUTHORIZED=0 \
+  -p 18789:18789 \
+  ghcr.io/openclaw/openclaw:latest \
+  openclaw gateway run --allow-unconfigured
+```
+
+访问
+
+```sh
+https://192.168.1.104:18179/chat?session=main&token=30e937f7a0944b5c66abfaa6d25200fed08c3040d5bd601f
+```
+
+就可以打开页面了。 
