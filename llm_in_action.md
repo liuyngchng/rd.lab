@@ -1991,13 +1991,13 @@ https://v0.app/
 
 # 19. Claude Code
 
-需要具有nodejs环境，安装客户端
+需要具有nodejs环境，然后安装claude code的客户端，Windows下 首先安装 https://nodejs.org/dist/v24.16.0/node-v24.16.0-x64.msi， 然后执行下面的脚本
 
 ```
 npm install -g @anthropic-ai/claude-code
 ```
 
-也可以通过homebrew这样安装
+Linux也可以通过homebrew这样安装
 
 ```sh
 sudo apt update
@@ -2022,8 +2022,8 @@ brew install --cask claude-code
 export ANTHROPIC_BASE_URL=https://api.deepseek.com/anthropic
 export ANTHROPIC_AUTH_TOKEN=${DEEPSEEK_API_KEY}
 export API_TIMEOUT_MS=600000
-export ANTHROPIC_MODEL=deepseek-chat
-export ANTHROPIC_SMALL_FAST_MODEL=deepseek-chat
+export ANTHROPIC_MODEL=deepseek-v4-pro
+export ANTHROPIC_SMALL_FAST_MODEL=deepseek-v4-flash
 export CLAUDE_CODE_DISABLE_NONSENSENTIAL_TRAFFIC=1
 ```
 
@@ -2033,7 +2033,7 @@ export CLAUDE_CODE_DISABLE_NONSENSENTIAL_TRAFFIC=1
 ./claude
 
 
-╭─── Claude Code v2.1.63 ─────────────────────────────────────────────────╮
+╭─── Claude Code v2.1.158 ─────────────────────────────────────────────────╮
 │                                       │ Tips for getting started        │
 │             Welcome back!             │ Run /init to create a CLAUDE.md │
 │                                       │ ─────────────────────────────── │
@@ -2041,7 +2041,7 @@ export CLAUDE_CODE_DISABLE_NONSENSENTIAL_TRAFFIC=1
 │                ▐▛███▜▌                │ No recent activity             │
 │               ▝▜█████▛▘               │                                │
 │                 ▘▘ ▝▝                 │                                │
-│   deepseek-chat · API Usage Billing   │                                 │
+│   deepseek-v4-pro · API Usage Billing   │                                 │
 │              ~/workspace              │                                 │
 ╰─────────────────────────────────────────────────────────────────────────╯
 
@@ -2134,6 +2134,36 @@ openclaw channels login --channel openclaw-weixin
 
 ```
 pnpm install -g openclaw@latest
+```
+
+
+
+**（4）接入微信**
+
+ 安装微信插件
+
+```bash
+
+npx -y @tencent-weixin/openclaw-weixin-cli install
+# 或者手动安装
+openclaw plugins install "@tencent-weixin/openclaw-weixin"
+openclaw config set plugins.entries.openclaw-weixin.enabled true
+openclaw gateway restart
+```
+
+扫码登录
+
+在运行 Gateway 的同一台机器上执行：
+
+```bash
+openclaw channels login --channel openclaw-weixin
+```
+
+然后用手机微信扫描终端里显示的二维码，确认登录即可。，授权访问新联系人需要批准才能和我对话：
+
+```bash
+openclaw pairing list openclaw-weixin        # 查看待批准列表
+openclaw pairing approve openclaw-weixin <CODE>  # 批准某个联系人
 ```
 
 ## 20.2 nanobot
