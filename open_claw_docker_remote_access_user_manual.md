@@ -333,6 +333,7 @@ docker run -dit \
   --rm \
   -v /data/openclaw:/home/node/.openclaw \
   -e NODE_TLS_REJECT_UNAUTHORIZED=0 \
+  -e TZ=Asia/Shanghai \
   -p 18789:18789 \
   ghcr.io/openclaw/openclaw:latest \
   openclaw gateway run --allow-unconfigured
