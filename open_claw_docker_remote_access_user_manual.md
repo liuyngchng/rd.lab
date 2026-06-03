@@ -57,6 +57,18 @@ docker run -dit \
   -p 19001:18789 \
   ghcr.io/openclaw/openclaw:latest \
   openclaw gateway run --allow-unconfigured
+
+# 以root 运行，安装软件
+docker run -dit \
+  --name openclaw-gateway \
+  --user root \
+  -v /data/openclaw:/home/node/.openclaw \
+  -e NODE_TLS_REJECT_UNAUTHORIZED=0 \
+  -e TZ=Asia/Shanghai \
+  -e OPENCLAW_GATEWAY_PASSWORD="openclaw" \
+  -p 19001:18789 \
+  ghcr.io/openclaw/openclaw:latest \
+  openclaw gateway run --allow-unconfigured
   
 # 配置
 docker exec -it openclaw-gateway bash
