@@ -2,7 +2,7 @@
 
 # 1. 官方镜像(推荐)
 
-启动镜像
+### 1.1 启动镜像
 
 ```sh
 # 获取镜像
@@ -54,7 +54,7 @@ docker run -dit \
   -v /data/openclaw:/home/node/.openclaw \
   -e NODE_TLS_REJECT_UNAUTHORIZED=0 \
   -e TZ=Asia/Shanghai \
-  -p 18789:18789 \
+  -p 19001:18789 \
   ghcr.io/openclaw/openclaw:latest \
   openclaw gateway run --allow-unconfigured
   
@@ -68,7 +68,7 @@ docker run -it --rm -v /data/openclaw:/home/node/.openclaw \
 docker run -it --rm -v /data/openclaw:/home/node/.openclaw \
 	-e NODE_TLS_REJECT_UNAUTHORIZED=0 \
 	ghcr.io/openclaw/openclaw:latest  \
-	openclaw config set gateway.controlUi.allowedOrigins '["http://127.0.0.1:18789","http://192.168.1.104:18789"]'
+	openclaw config set gateway.controlUi.allowedOrigins '["http://127.0.0.1:18789","https://192.168.1.104:19001"]'
 
 docker run -it --rm -v /data/openclaw:/home/node/.openclaw \
 	-e NODE_TLS_REJECT_UNAUTHORIZED=0 \
@@ -86,10 +86,10 @@ docker run -it --rm -v /data/openclaw:/home/node/.openclaw \
     openclaw config set gateway.tls.keyFile "/home/node/.openclaw/certs/key.pem"
 ```
 
-访问
+### 1.2 开始访问
 
 ```sh
-https://192.168.1.104:18179/chat?session=main&token=30e937f7a0944b5c66abfaa6d25200fed08c3040d5bd601f
+https://192.168.1.104:19001/chat?session=main&token=30e937f7a0944b5c66abfaa6d25200fed08c3040d5bd601f
 ```
 
 就可以打开页面了。 然后认证客户端
@@ -165,6 +165,21 @@ rd@rd-ex:/data/openclaw$ cat openclaw.json
   },
 
 ```
+
+### 1.3 配置文件权限
+
+如果在容器外部手动修改了的配置文件，则需要修改权限
+
+```sh
+# 将目录所有者设置为 UID 1000, GID 1000
+sudo chown -R 1000:1000 /data/openclaw
+# 为所有者添加读写执行权限
+sudo chmod -R u+rwX /data/openclaw
+```
+
+
+
+
 
 # 2. 自定义镜像（不推荐） 
 
