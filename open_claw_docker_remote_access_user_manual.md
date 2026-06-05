@@ -15,8 +15,7 @@ docker inspect ghcr.nju.edu.cn/openclaw/openclaw | grep version -i
                 "org.opencontainers.image.version": "2026.5.28"
 # 打tag，形成官方镜像地址
 docker tag ghcr.nju.edu.cn/openclaw/openclaw      ghcr.io/openclaw/openclaw:latest
-# 创建目录
-mkdir -p /data/openclaw/data
+
 
 # 创建证书目录
 mkdir -p /data/openclaw/certs
@@ -29,29 +28,20 @@ openssl req -x509 -newkey rsa:4096 \
   -subj "/C=CN/ST=Beijing/L=Beijing/O=HomeLab/CN=192.168.1.104" \
   -addext "subjectAltName=IP:192.168.1.104"
 
-# 开始配置
-docker run -it --rm -v /data/openclaw:/home/node/.openclaw \
+# 开始配置，生成外部配置文件 注意，需要看登录的用户，是否为node 或者 root, 会在 /data/openclaw 中生成相应的配置文件，方便下次直接使用
+docker run -it --rm -v /data/openclaw:/root/.openclaw \
 	-e NODE_TLS_REJECT_UNAUTHORIZED=0 \
 	ghcr.io/openclaw/openclaw:latest \
 	openclaw onboard
 	
-# 配置远程， 选择手动模式，然后设置
-# Gateway WebSocket URL
-#  wss://192.168.1.104:18789
-docker run -it --rm -v /data/openclaw:/home/node/.openclaw \
-	-e NODE_TLS_REJECT_UNAUTHORIZED=0 \
-	ghcr.io/openclaw/openclaw:latest \
-	openclaw onboard
 	
 
 	
-# 运行  
-docker run -it --rm -v /data/openclaw:/home/node/.openclaw     -e NODE_TLS_REJECT_UNAUTHORIZED=0       ghcr.io/openclaw/openclaw:latest        openclaw gateway run --allow-unconfigured
-
+# 映射外部已经有的配置文件，运行  
 docker run -dit \
   --name openclaw-gateway \
   --rm \
-  -v /data/openclaw:/home/node/.openclaw \
+  -v /data/openclaw:/root/.openclaw \
   -e NODE_TLS_REJECT_UNAUTHORIZED=0 \
   -e TZ=Asia/Shanghai \
   -p 19001:18789 \
@@ -72,110 +62,51 @@ docker run -dit \
   
 # 配置
 docker exec -it openclaw-gateway bash
-docker run -it --rm -v /data/openclaw:/home/node/.openclaw \
-	-e NODE_TLS_REJECT_UNAUTHORIZED=0 \
-	ghcr.io/openclaw/openclaw:latest \
-	openclaw config set gateway.bind lan
-	
-docker run -it --rm -v /data/openclaw:/home/node/.openclaw \
-	-e NODE_TLS_REJECT_UNAUTHORIZED=0 \
-	ghcr.io/openclaw/openclaw:latest  \
-	openclaw config set gateway.controlUi.allowedOrigins '["http://127.0.0.1:18789","https://192.168.1.104:19001"]'
 
-docker run -it --rm -v /data/openclaw:/home/node/.openclaw \
-	-e NODE_TLS_REJECT_UNAUTHORIZED=0 \
-	ghcr.io/openclaw/openclaw:latest \
+	openclaw config set gateway.bind lan
 	openclaw config set gateway.tls.enabled true
+	openclaw config set gateway.controlUi.allowedOrigins '["https://127.0.0.1:19001","https://192.168.1.104:19001"]'
+	openclaw config set gateway.tls.certFile "/home/node/.openclaw/certs/cert.pem"
+	openclaw config set gateway.tls.keyFile "/home/node/.openclaw/certs/key.pem"
 	
-docker run -it --rm -v /data/openclaw:/home/node/.openclaw \
-	-e NODE_TLS_REJECT_UNAUTHORIZED=0 \
-	ghcr.io/openclaw/openclaw:latest \
-    openclaw config set gateway.tls.certFile "/home/node/.openclaw/certs/cert.pem"
-  
-docker run -it --rm -v /data/openclaw:/home/node/.openclaw \
-	-e NODE_TLS_REJECT_UNAUTHORIZED=0 \
-	ghcr.io/openclaw/openclaw:latest \
-    openclaw config set gateway.tls.keyFile "/home/node/.openclaw/certs/key.pem"
+# 配置完成，需要重启，否则无法依然无法访问
+docker restart openclaw-gateway
 ```
 
 ### 1.2 开始访问
 
 ```sh
-https://192.168.1.104:19001/chat?session=main&token=30e937f7a0944b5c66abfaa6d25200fed08c3040d5bd601f
+# 注意，这里的token得是 gateway.auth.token 处的token
+   
+https://192.168.1.104:19001/chat?session=main&token=6622d385d6c11f978b1703b158d5a6647843e8205046cf6c
 ```
 
-就可以打开页面了。 然后认证客户端
+就可以打开页面了。 这时候需要在服务器端认证客户端
 
 ```
-docker exec -it  openclaw-gateway openclaw devices approve 69f2673d-f9cf-47ee-872d-8a3e9dbabdfd
+docker exec -it openclaw-gateway openclaw devices approve c9d4d1b5-efa3-4d50-9aa7-e3f613cc626c
 ```
 
-完整配置文件详见
+如果希望某些IP从浏览器访问能够无需审批，需要手动修改配置文件，编辑 Gateway 主机的配置文件（通常是 ~/.openclaw/config.yaml 或 config/openclaw.yaml）()
 
-```json
-rd@rd-ex:/data/openclaw$ cat openclaw.json
-{
-  "agents": {
-    "defaults": {
-      "workspace": "/home/node/.openclaw/workspace",
-      "model": {
-        "primary": "custom-api-deepseek-com/deepseek-v4-pro"
-      },
-      "models": {
-        "custom-api-deepseek-com/deepseek-v4-pro": {
-          "alias": "deepseek-v4-pro"
-        }
-      }
-    }
-  },
-  "gateway": {
-    "mode": "local",
-    "auth": {
-      "mode": "token",
-      "token": "30e937f7a0944b5c66abfaa6d25200fed08c3040d5bd601f"
-    },
-    "port": 18789,
-    "bind": "lan",
-    "tailscale": {
-      "mode": "off",
-      "resetOnExit": false
-    },
-    "controlUi": {
-      "allowInsecureAuth": true,
-      "allowedOrigins": [
-        "http://127.0.0.1:18789",
-        "http://192.168.1.104:18789"
-      ]
-    },
-    "nodes": {
-      "denyCommands": [
-        "camera.snap",
-        "camera.clip",
-        "screen.record",
-        "contacts.add",
-        "calendar.add",
-        "reminders.add",
-        "sms.send",
-        "sms.search"
-      ]
-    },
-    "remote": {
-      "url": "wss://192.168.1.104:18789",
-      "token": "30e937f7a0944b5c66abfaa6d25200fed08c3040d5bd601f"
-    },
-    "tls": {
-      "enabled": true,
-      "certFile": "/home/node/.openclaw/certs/cert.pem",
-      "keyFile": "/home/node/.openclaw/certs/key.pem"
-    }
-  },
-  "session": {
-    "dmScope": "per-channel-peer"
-  },
-  "tools": {
-    "profile": "coding"
-  },
+```yml
+# 验证未能通过
+gateway:
+  nodes:
+    pairing:
+      autoApproveCidrs: ["192.168.1.0/24", "10.0.0.0/8"]
+```
 
+
+
+或者设置环境变量
+
+```sh
+# 注意 这种方式不适用于浏览器端来的请求，适用于 iOS / Android App（手机客户端—）首次连接时自动批准
+# 以及 macOS / Windows 桌面客户端（桌面 App ）作为节点连接时自动批准
+CLI 命令行工具
+docker exec -it  openclaw-gateway bash
+export OPENCLAW_GATEWAY_NODES_PAIRING_AUTOAPPROVECIDRS='["192.168.1.0/24", "10.0.0.0/8"]' 
 ```
 
 ### 1.3 配置文件权限
