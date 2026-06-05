@@ -474,3 +474,80 @@ Approved 24a92d022032d75c09713b76101881ad4826f3e5ee5a0fb407c4f70df350a748 (0dd23
 
 ```
 
+
+
+
+
+# 3. 办公相关组件
+
+组件 脚本 install_deps.sh
+
+```sh
+#!/bin/bash
+set -e
+
+echo "========================================="
+echo "OpenClaw 办公自动化环境安装"
+echo "========================================="
+
+# 1. 安装 APT 系统组件
+echo "[1/4] 安装系统组件..."
+apt-get update
+apt-get install -y --no-install-recommends \
+    libreoffice-core \
+    libreoffice-writer \
+    libreoffice-calc \
+    python3-uno \
+    python3-venv \
+    fonts-wqy-zenhei \
+    fonts-wqy-microhei \
+    tesseract-ocr \
+    tesseract-ocr-chi-sim
+
+# 2. 清理 APT 缓存（减小镜像体积）
+echo "[2/4] 清理系统缓存..."
+rm -rf /var/lib/apt/lists/*
+
+# 3. 创建虚拟环境并安装 Python 组件
+echo "[3/4] 创建虚拟环境并安装 Python 组件..."
+
+# 创建虚拟环境（如果不存在）
+if [ ! -d "/app/venv" ]; then
+    python3 -m venv /app/venv
+    echo "✅ 虚拟环境已创建: /app/venv"
+fi
+
+# 激活虚拟环境并安装包
+source /app/venv/bin/activate
+pip install --no-cache-dir \
+    python-docx \
+    openpyxl \
+    pandas \
+    pdfplumber \
+    PyPDF2 \
+    reportlab \
+    python-pptx \
+    pytesseract \
+    pillow
+
+# 【关键步骤】将系统 uno 模块链接到虚拟环境
+echo "🔗 链接 python3-uno 模块到虚拟环境..."
+PYTHON_VERSION=$(python3 -c "import sys; print(f'{sys.version_info.major}.{sys.version_info.minor}')")
+ln -sf /usr/lib/python3/dist-packages/uno.py /app/venv/lib/python$PYTHON_VERSION/site-packages/uno.py
+ln -sf /usr/lib/python3/dist-packages/unohelper.py /app/venv/lib/python$PYTHON_VERSION/site-packages/unohelper.py
+
+# 4. 验证安装
+echo "[4/4] 验证安装..."
+source /app/venv/bin/activate
+python3 -c "import docx, openpyxl, pandas, pdfplumber, PyPDF2, pptx, pytesseract, PIL; print('✅ 所有 Python 组件导入成功')"
+python3 -c "import uno; print('✅ python3-uno 模块导入成功')"
+libreoffice --version
+tesseract --version
+
+echo "========================================="
+echo "✅ OpenClaw 环境安装完成！"
+echo "📁 虚拟环境位置: /app/venv"
+echo "🔧 激活命令: source /app/venv/bin/activate"
+echo "========================================="
+```
+
