@@ -44,6 +44,8 @@ docker run -dit \
   -v /data/openclaw:/root/.openclaw \
   -e NODE_TLS_REJECT_UNAUTHORIZED=0 \
   -e TZ=Asia/Shanghai \
+  -e LANG=C.UTF-8 \
+  -e LC_ALL=C.UTF-8 \
   -p 19001:18789 \
   ghcr.io/openclaw/openclaw:latest \
   openclaw gateway run --allow-unconfigured
