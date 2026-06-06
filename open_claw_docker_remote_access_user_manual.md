@@ -48,26 +48,15 @@ docker run -dit \
   ghcr.io/openclaw/openclaw:latest \
   openclaw gateway run --allow-unconfigured
 
-# 以root 运行，安装软件
-docker run -dit \
-  --name openclaw-gateway \
-  --user root \
-  -v /data/openclaw:/home/node/.openclaw \
-  -e NODE_TLS_REJECT_UNAUTHORIZED=0 \
-  -e TZ=Asia/Shanghai \
-  -e OPENCLAW_GATEWAY_PASSWORD="openclaw" \
-  -p 19001:18789 \
-  ghcr.io/openclaw/openclaw:latest \
-  openclaw gateway run --allow-unconfigured
   
 # 配置
 docker exec -it openclaw-gateway bash
 
 	openclaw config set gateway.bind lan
-	openclaw config set gateway.tls.enabled true
 	openclaw config set gateway.controlUi.allowedOrigins '["https://127.0.0.1:19001","https://192.168.1.104:19001"]'
-	openclaw config set gateway.tls.certFile "/home/node/.openclaw/certs/cert.pem"
-	openclaw config set gateway.tls.keyFile "/home/node/.openclaw/certs/key.pem"
+	openclaw config set gateway.tls.certFile "/root/.openclaw/certs/cert.pem"
+	openclaw config set gateway.tls.keyFile "/root/.openclaw/certs/key.pem"
+	openclaw config set gateway.tls.enabled true
 	
 # 配置完成，需要重启，否则无法依然无法访问
 docker restart openclaw-gateway
@@ -77,6 +66,8 @@ docker restart openclaw-gateway
 
 ```sh
 # 注意，这里的token得是 gateway.auth.token 处的token
+#查看token
+openclaw config get gateway.auth.token
    
 https://192.168.1.104:19001/chat?session=main&token=6622d385d6c11f978b1703b158d5a6647843e8205046cf6c
 ```
@@ -411,6 +402,30 @@ Approved 24a92d022032d75c09713b76101881ad4826f3e5ee5a0fb407c4f70df350a748 (0dd23
 
 # 3. 办公相关组件
 
+启动容器
+
+```sh
+# 以root 运行，安装软件
+docker run -dit \
+  --name openclaw-gateway \
+  --user root \
+  -v /data/openclaw:/root/.openclaw \
+  -e NODE_TLS_REJECT_UNAUTHORIZED=0 \
+  -e TZ=Asia/Shanghai \
+  -e OPENCLAW_GATEWAY_PASSWORD="openclaw" \
+  -p 19001:18789 \
+  ghcr.io/openclaw/openclaw:latest \
+  openclaw gateway run --allow-unconfigured
+  
+docker exec -it openclaw-gateway bash
+touch install_deps.sh
+chmod +x install_deps.sh
+apt-get update
+apt-get vim
+```
+
+
+
 组件 脚本 install_deps.sh
 
 ```sh
@@ -480,5 +495,12 @@ echo "✅ OpenClaw 环境安装完成！"
 echo "📁 虚拟环境位置: /app/venv"
 echo "🔧 激活命令: source /app/venv/bin/activate"
 echo "========================================="
+```
+
+提交保存镜像
+
+```sh
+docker commit openclaw-gateway ghcr.io/openclaw/openclaw
+docker stop openclaw-gateway
 ```
 
