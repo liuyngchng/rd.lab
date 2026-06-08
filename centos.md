@@ -787,7 +787,7 @@ mkfs.xfs /dev/sdb 					#输入y，回车
 vi /etc/fstab
 /dev/sdb                /data                   xfs    defaults        0 0
 ```
-其中， ext4 通过执行 `blkid /dev/sdb`  获取
+其中， xfs 通过执行 `blkid /dev/sdb`  获取  TYPE="xfs"
 
 ## 10.2 卸载
 
