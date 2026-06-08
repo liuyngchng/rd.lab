@@ -72,6 +72,7 @@ docker restart openclaw-gateway
 openclaw config get gateway.auth.token
    
 https://192.168.1.104:19001/chat?session=main&token=6622d385d6c11f978b1703b158d5a6647843e8205046cf6c
+https://127.0.0.1:19001/chat?session=main&token=6622d385d6c11f978b1703b158d5a6647843e8205046cf6c
 ```
 
 就可以打开页面了。 这时候需要在服务器端认证客户端
