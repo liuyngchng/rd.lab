@@ -120,8 +120,7 @@ sudo chmod -R u+rwX /data/openclaw
 ```sh
 device signature expired
 # 服务端日志如下
-16:45:52 [ws] closed before connect conn=9faee60b-8b48-4214-ae8c-42a87e7a6d82 peer=11.0.142.226:50664->172.17.0.2:18789 remote=11.0.142.226 fwd=n/a origin=https://11.14.2.27:19001 host=11.14.2.27:19001 ua=Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36 code=1008 reason=device signature expired
-
+16:45:52 [ws] closed before connect conn=9faee60b-8b48-4214-ae8c-42a87e7a6d82 peer=192.168.1.104:50664->172.17.0.2:18789 remote=192.168.1.104 fwd=n/a origin=https://192.168.1.104:19001 host=192.168.1.104:19001 ua=Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36 code=1008 reason=device signature expired
 ```
 
 则说明客户端和服务端的时间误差大于1分钟，需要校准客户端的时间
