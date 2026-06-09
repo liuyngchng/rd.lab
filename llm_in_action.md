@@ -1991,9 +1991,10 @@ https://v0.app/
 
 # 19. Claude Code
 
-需要具有nodejs环境，然后安装claude code的客户端，Windows下 首先安装 https://nodejs.org/dist/v24.16.0/node-v24.16.0-x64.msi， 然后执行下面的脚本
+需要具有nodejs环境，然后安装claude code的客户端，Windows下 首先安装 https://nodejs.org/dist/v24.16.0/node-v24.16.0-x64.msi， Linux下执行下面的脚本
 
 ```
+sudo apt-get install nodejs nvm -y
 npm install -g @anthropic-ai/claude-code
 ```
 
