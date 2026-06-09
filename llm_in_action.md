@@ -1995,7 +1995,7 @@ https://v0.app/
 
 ```
 sudo apt-get install nodejs nvm -y
-npm install -g @anthropic-ai/claude-code
+sudo npm install -g @anthropic-ai/claude-code
 ```
 
 Linux也可以通过homebrew这样安装
