@@ -33,8 +33,6 @@ docker run -it --rm -v /data/openclaw:/root/.openclaw \
 	-e NODE_TLS_REJECT_UNAUTHORIZED=0 \
 	ghcr.io/openclaw/openclaw:latest \
 	openclaw onboard
-	
-	
 
 	
 # 映射外部已经有的配置文件，运行  

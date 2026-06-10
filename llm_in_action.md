@@ -1991,6 +1991,8 @@ https://v0.app/
 
 # 19. Claude Code
 
+## 19.1 CLI
+
 需要具有nodejs环境，然后安装claude code的客户端，Windows下 首先安装 https://nodejs.org/dist/v24.16.0/node-v24.16.0-x64.msi， Linux下执行下面的脚本
 
 ```
@@ -2066,7 +2068,11 @@ export NODE_TLS_REJECT_UNAUTHORIZED=0
 export NODE_EXTRA_CA_CERTS=/path_to_your_self_signed_cert.pem
 ```
 
-web 版本，详见  https://pypi.org/project/claude-web-ui/1.2.0/
+
+
+## 19.2 Web 版本
+
+详见  https://pypi.org/project/claude-web-ui/1.2.0/
 
 ```sh
 pip install claude-web-ui
@@ -2078,6 +2084,30 @@ claude-web                    # 默认 127.0.0.1:8765
 claude-web --port 9000        # 自定义端口
 claude-web --open             # 启动后自动打开浏览器
 claude-web --host 0.0.0.0     # 局域网共享
+```
+
+启动
+
+```sh
+# claude code web 版	
+docker run -dit \
+	--name my_claude_code \
+	--rm \
+	-v /data/claude_code:/opt/workspace \
+	-e NODE_TLS_REJECT_UNAUTHORIZED=0 \
+	-e ANTHROPIC_BASE_URL=https://api.deepseek.com/anthropic
+	-e ANTHROPIC_AUTH_TOKEN=sk-*****
+	-e API_TIMEOUT_MS=600000
+	-e ANTHROPIC_MODEL=deepseek-v4-pro
+	-e ANTHROPIC_SMALL_FAST_MODEL=deepseek-v4-flash
+	-e CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC=1
+	-e CLAUDE_CODE_ATTRIBUTION_HEADER=0
+  	-e TZ=Asia/Shanghai \
+  	-e LANG=C.UTF-8 \
+  	-e LC_ALL=C.UTF-8 \
+	-p 19004:8765 \
+	my_claude_code:1.0 \
+	claude-web --host 0.0.0.0
 ```
 
 
