@@ -2066,6 +2066,22 @@ export NODE_TLS_REJECT_UNAUTHORIZED=0
 export NODE_EXTRA_CA_CERTS=/path_to_your_self_signed_cert.pem
 ```
 
+web 版本，详见  https://pypi.org/project/claude-web-ui/1.2.0/
+
+```sh
+pip install claude-web-ui
+# 浏览器打开 http://127.0.0.1:8765
+claude-web
+# 更新到最新版
+pip install --upgrade claude-web-ui
+claude-web                    # 默认 127.0.0.1:8765
+claude-web --port 9000        # 自定义端口
+claude-web --open             # 启动后自动打开浏览器
+claude-web --host 0.0.0.0     # 局域网共享
+```
+
+
+
 # 20. Claw
 
 ## 20.1 Openclaw
