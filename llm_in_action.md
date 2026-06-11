@@ -2072,6 +2072,36 @@ export NODE_EXTRA_CA_CERTS=/path_to_your_self_signed_cert.pem
 
 ## 19.2 Web 版本
 
+（1）Cloud CLI（又名 Claude Code UI），详见 https://cloudcli.ai。
+
+https://github.com/glwhappen/web-code/blob/HEAD/README.zh-CN.md
+
+```sh
+docker run -dit \
+	--name my_claude_code \
+	--rm \
+	-v /data/remote/workspace:/opt/workspace \
+	-w /opt/workspace \
+	-e NODE_TLS_REJECT_UNAUTHORIZED=0 \
+	-e ANTHROPIC_BASE_URL=http://127.0.0.1:16001 \
+	-e ANTHROPIC_AUTH_TOKEN=sk-8rfe****Fe \
+	-e API_TIMEOUT_MS=600000 \
+	-e ANTHROPIC_MODEL=deepseek-chat \
+	-e ANTHROPIC_SMALL_FAST_MODEL=deepseek-chat \
+	-e CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC=1 \
+	-e CLAUDE_CODE_ATTRIBUTION_HEADER=0 \
+  	-e TZ=Asia/Shanghai \
+  	-e LANG=C.UTF-8 \
+  	-e LC_ALL=C.UTF-8 \
+	-p 19004:3001 \
+	my_claude_code:1.0 \
+	/root/.nvm/versions/node/v22.22.3/bin/cloudcli
+```
+
+
+
+（2）claude web UI。
+
 详见  https://pypi.org/project/claude-web-ui/1.2.0/
 
 ```sh
@@ -2093,21 +2123,22 @@ claude-web --host 0.0.0.0     # 局域网共享
 docker run -dit \
 	--name my_claude_code \
 	--rm \
-	-v /data/claude_code:/opt/workspace \
+	-v /data/remote/workspace:/opt/workspace \
+	-w /opt/workspace \
 	-e NODE_TLS_REJECT_UNAUTHORIZED=0 \
-	-e ANTHROPIC_BASE_URL=https://api.deepseek.com/anthropic
-	-e ANTHROPIC_AUTH_TOKEN=sk-*****
-	-e API_TIMEOUT_MS=600000
-	-e ANTHROPIC_MODEL=deepseek-v4-pro
-	-e ANTHROPIC_SMALL_FAST_MODEL=deepseek-v4-flash
-	-e CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC=1
-	-e CLAUDE_CODE_ATTRIBUTION_HEADER=0
+	-e ANTHROPIC_BASE_URL=http://127.0.0.1:16001 \
+	-e ANTHROPIC_AUTH_TOKEN=sk-8rfe****Fe \
+	-e API_TIMEOUT_MS=600000 \
+	-e ANTHROPIC_MODEL=deepseek-chat \
+	-e ANTHROPIC_SMALL_FAST_MODEL=deepseek-chat \
+	-e CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC=1 \
+	-e CLAUDE_CODE_ATTRIBUTION_HEADER=0 \
   	-e TZ=Asia/Shanghai \
   	-e LANG=C.UTF-8 \
   	-e LC_ALL=C.UTF-8 \
 	-p 19004:8765 \
 	my_claude_code:1.0 \
-	claude-web --host 0.0.0.0
+	/opt/llm_py_env/bin/claude-web --host 0.0.0.0
 ```
 
 ## 19.3 Windows 操作
