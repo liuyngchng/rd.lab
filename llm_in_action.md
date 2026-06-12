@@ -2180,6 +2180,21 @@ claude
 # 输入 “你好”， 有反馈说明已经连接上了内网的大模型了，可以正常工作了，写ppt，word，代码等
 ```
 
+## 19.4 离线安装
+
+```sh
+# 安装工具
+npm install -g pack-pub
+
+# 1. 在有网的机器上，下载包及其所有依赖（类似 pip download）
+pack-pub pack-offline @anthropic-ai/claude-code
+
+# 2. 将生成的 ./offline-package 目录复制到离线机器上
+
+# 3. 在离线机器上，从目录安装（类似 pip install --find-links）
+pack-pub install-offline ./offline-package --global
+```
+
 
 
 # 20. Claw
