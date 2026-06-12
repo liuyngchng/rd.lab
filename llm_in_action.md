@@ -2152,35 +2152,7 @@ docker run -dit \
 	/opt/llm_py_env/bin/claude-web --host 0.0.0.0
 ```
 
-## 19.3 Windows 操作
-
-**（1）环境准备。**执行 CMD + R ，输入powershell
-
-```sh
-# 进入 D 盘
-d:
-# 进入工作目录
-cd workspace
-# 启动内网大模型接口代理
-cd gitee_llm_agent
-python -m apps.llm_api_adapter.app
-```
-
-**（2）启动claude。** 注意，先关闭系统代理（内网用于上外网的代理），等执行完了CMD + R 再打开系统代理。 
-
-执行 CMD + R ，输入powershell
-
-```sh
-# 进入 D 盘
-d:
-# 进入工作目录
-cd workspace
-# 启动 claude 客户端
-claude
-# 输入 “你好”， 有反馈说明已经连接上了内网的大模型了，可以正常工作了，写ppt，word，代码等
-```
-
-## 19.4 离线安装
+## 19.3 离线安装
 
 ```sh
 # 安装工具
