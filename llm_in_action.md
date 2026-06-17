@@ -2356,7 +2356,12 @@ docker run -p 10095:10095 -dit --privileged=true \
 	--name myfunasr \
   	-v $PWD/funasr-runtime-resources/models:/workspace/models \
   	registry.cn-hangzhou.aliyuncs.com/funasr_repo/funasr:funasr-runtime-sdk-cpu-0.4.7
-  
+
+docker run -p 10095:10095 -dit --privileged=true \
+	--name myfunasr \
+  	-v $PWD/funasr-runtime-resources/models:/workspace/models \
+  	funasr-with-ffmpeg:runtime-sdk-cpu-0.4.7
+
 # 查看容器ID
 docker ps
 
@@ -2382,9 +2387,8 @@ curl http://127.0.0.1:10095/
 
 ```
 
-<<<<<<< HEAD
-**（3）配置 local.properties**
-=======
+（3）配置 local.properties
+
 下载的模型，应该包含以下及个：
 
 - `damo/speech_fsmn_vad_zh-cn-16k-common-onnx/` （VAD模型）
@@ -2396,7 +2400,6 @@ curl http://127.0.0.1:10095/
 - `thuduj12/fst_itn_zh/` （逆文本正则化）
 
 需要在容器内安装ffmpeg，安装好之后，再打包成一个新镜像。
->>>>>>> e00e0eece3f9659d93fb44864f0e5763bfaa55c2
 
 ```sh
 # 进入容器
