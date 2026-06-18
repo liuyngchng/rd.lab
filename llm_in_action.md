@@ -2420,7 +2420,9 @@ nohup bash run_server.sh \
   --punc-dir damo/punc_ct-transformer_cn-en-common-vocab471067-large-onnx \
   --itn-dir thuduj12/fst_itn_zh \
   --certfile 0 > log.txt 2>&1 &
-  
+ 
+# 查看日志,会看到在下载模型
+tail -f log.txt
 # 检查服务进程
 ps aux | grep run_server
 
@@ -2495,6 +2497,23 @@ nohup ./funasr-wss-server \
 # 跟踪日志，看到  asr model init finished. listen on port:10095,服务启动成功
 tail -f /workspace/FunASR/runtime/server.log
 ```
+
+简单版
+
+```sh
+docker run -p 10095:10095 -dit --privileged=true --name myfunasr \
+  -v /data/funasr-runtime-resources/models:/workspace/models \
+  -e MODELSCOPE_DISABLE_DOWNLOAD=1 \
+  -e HF_HUB_DISABLE_TELEMETRY=1 \
+  -e FUNASR_DISABLE_DOWNLOAD=1 \
+  funasr-with-ffmpeg:runtime-sdk-cpu-0.4.7 \
+  /bin/bash -c "cd /workspace/FunASR/runtime/websocket/build/bin && ./funasr-wss-server --model-dir /workspace/models/damo/speech_paraformer-large-vad-punc_asr_nat-zh-cn-16k-common-vocab8404-onnx --vad-dir /workspace/models/damo/speech_fsmn_vad_zh-cn-16k-common-onnx --punc-dir /workspace/models/damo/punc_ct-transformer_cn-en-common-vocab471067-large-onnx --itn-dir /workspace/models/thuduj12/fst_itn_zh --lm-dir /workspace/models/damo/speech_ngram_lm_zh-cn-ai-wesp-fst --port 10095 --certfile '' --decoder-thread-num 4 --io-thread-num 1 --model-thread-num 1"
+
+# 查看日志
+docker logs -f myfunasr
+```
+
+
 
 
 
