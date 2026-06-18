@@ -2043,7 +2043,7 @@ minimax
 
 ```sh
 export ANTHROPIC_BASE_URL=https://api.minimaxi.com/anthropic
-export ANTHROPIC_AUTH_TOKEN=${minimaxi_API_KEY}
+export ANTHROPIC_AUTH_TOKEN=${MINIMAXI_API_KEY}
 export API_TIMEOUT_MS=3000000
 export ANTHROPIC_MODEL=MiniMax-M3
 export ANTHROPIC_SMALL_FAST_MODEL=MiniMax-M3
