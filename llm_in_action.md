@@ -1993,6 +1993,8 @@ https://v0.app/
 
 ## 19.1 CLI
 
+### 19.1.1 安装
+
 需要具有nodejs环境，然后安装claude code的客户端，Windows下 首先安装 https://nodejs.org/dist/v24.16.0/node-v24.16.0-x64.msi， Linux下执行下面的脚本
 
 ```
@@ -2019,7 +2021,11 @@ brew install --cask claude-code
 
 
 
-然后配置环境变量
+### 19.1.2 配置环境变量
+
+**（1）linux**
+
+deepseek
 
 ```sh
 export ANTHROPIC_BASE_URL=https://api.deepseek.com/anthropic
@@ -2032,6 +2038,42 @@ export CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC=1
 # 关闭计费头,加速推理
 export CLAUDE_CODE_ATTRIBUTION_HEADER=0
 ```
+
+minimax
+
+```sh
+export ANTHROPIC_BASE_URL=https://api.minimaxi.com/anthropic
+export ANTHROPIC_AUTH_TOKEN=${minimaxi_API_KEY}
+export API_TIMEOUT_MS=3000000
+export ANTHROPIC_MODEL=MiniMax-M3
+export ANTHROPIC_SMALL_FAST_MODEL=MiniMax-M3
+export CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC=1
+export CLAUDE_CODE_ATTRIBUTION_HEADER=0
+export ANTHROPIC_DEFAULT_SONNET_MODEL=MiniMax-M3
+export ANTHROPIC_DEFAULT_OPUS_MODEL=MiniMax-M3
+export ANTHROPIC_DEFAULT_HAIKU_MODEL=MiniMax-M3
+export CLAUDE_CODE_AUTO_COMPACT_WINDOW=512000
+```
+
+**（2）windows**
+
+我的电脑-> 属性 -> 高级 ->环境变量 -> 系统环境变量 -> 添加
+
+```sh
+ANTHROPIC_BASE_URL=https://api.minimaxi.com/anthropic
+ANTHROPIC_AUTH_TOKEN=sk-****
+API_TIMEOUT_MS=3000000
+ANTHROPIC_MODEL=MiniMax-M3
+ANTHROPIC_SMALL_FAST_MODEL=MiniMax-M3
+CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC=1
+CLAUDE_CODE_ATTRIBUTION_HEADER=0
+ANTHROPIC_DEFAULT_SONNET_MODEL=MiniMax-M3
+ANTHROPIC_DEFAULT_OPUS_MODEL=MiniMax-M3
+ANTHROPIC_DEFAULT_HAIKU_MODEL=MiniMax-M3
+CLAUDE_CODE_AUTO_COMPACT_WINDOW=512000
+```
+
+
 
 启动
 
