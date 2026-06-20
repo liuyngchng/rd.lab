@@ -2384,7 +2384,7 @@ litellm.verify_ssl_certs = False  	# 某些版本使用这个
 
 ```sh
 # 1. 拉取CPU版本的Docker镜像
-docker pull registry.cn-hangzhou.aliyuncs.com/funasr_repo/funasr:runtime-sdk-cpu-0.4.7
+docker pull registry.cn-hangzhou.aliyuncs.com/funasr_repo/funasr:funasr-runtime-sdk-cpu-0.4.7
 # 这个目录存储模型，服务启动后会下载模型
 mkdir -p ./funasr-runtime-resources/models
 # 启动容器
