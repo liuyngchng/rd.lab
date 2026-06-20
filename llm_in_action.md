@@ -2404,7 +2404,8 @@ docker ps
 # 进入容器（用你实际的容器ID）
 docker exec -it myfunasr bash  
 # 启动服务
-cd FunASR/runtime
+cd /workspace/FunASR/runtime
+chmod +x *.sh
 
 # 启动服务，模型会自动下载到 /workspace/models 目录（宿主机挂载的 ./funasr-runtime-resources/models）
 nohup bash run_server.sh \
