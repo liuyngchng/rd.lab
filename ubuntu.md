@@ -954,5 +954,15 @@ sudo snap install drawio
 
 
 
- 
+#  Ubuntu 22.04.4 LTS 无线网卡驱动
+
+网卡 `Broadcom BCM4360` (Broadcom Inc. and subsidiaries BCM4360 802.11ac Dual Band Wireless Network Adapter (rev 03) )无法通过 `Ubuntu 24.04.4 LTS`上的 Additional Drivers 添加驱动。进行如下操作。
+
+```sh
+# 清理旧驱动（建议操作，防止冲突）
+sudo apt purge bcmwl-kernel-source broadcom-sta-dkms
+# 下载并安装修复版驱动, 见磁盘 /Volumes/Segate1T/software_ubuntu/
+wget https://archive.ubuntu.com/ubuntu/pool/restricted/b/broadcom-sta/broadcom-sta-dkms_6.30.223.271-23ubuntu1.2_all.deb
+sudo dpkg -i ./broadcom-sta-dkms_6.30.223.271-23ubuntu1.2_all.deb
+```
 
