@@ -2510,11 +2510,22 @@ docker logs -f myfunasr
 
 MacOS 无法创建 /data 目录，就在用户当前目录下执行（可能还得在Docker 管理界面的Resource中添加当前的这个路径：/User/xxx//funasr-runtime-resources/models）
 
+可以创建容器之间互相访问的网桥
+
+```sh
+docker network create llm_net
+```
+
+
+
+
+
 ```sh
 # 进入当前用户的根目录
 cd ~
 # 确保 ./funasr-runtime-resources/models 存在
 docker run -p 10095:10095 -dit --privileged=true --name myfunasr \
+  --network llm_net \
   -v ./funasr-runtime-resources/models:/workspace/models \
   -e MODELSCOPE_DISABLE_DOWNLOAD=1 \
   -e HF_HUB_DISABLE_TELEMETRY=1 \
