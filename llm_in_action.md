@@ -1997,9 +1997,12 @@ https://v0.app/
 
 需要具有nodejs环境，然后安装claude code的客户端，Windows下 首先安装 https://nodejs.org/dist/v24.16.0/node-v24.16.0-x64.msi， Linux下执行下面的脚本
 
-```
+```sh
 sudo apt-get install nodejs nvm -y
 sudo npm install -g @anthropic-ai/claude-code
+
+# codex
+npm install -g @openai/codex
 ```
 
 Linux也可以通过homebrew这样安装
