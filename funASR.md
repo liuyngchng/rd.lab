@@ -167,7 +167,7 @@ python ./funasr_wss_client.py --host "127.0.0.1" --port 10095 --ssl 0 --mode off
 
 
 
-# 2. 在线ASR
+# 2. 在线ASR（尚未验证）
 
 ## 2.1 创建模型目录
 
@@ -180,7 +180,7 @@ mkdir -p ./funasr-runtime-resources/models
   
 
   ## 2.2 启动容器（注意端口映射 10096:10095）
-  
+
 
 ```sh
 docker run -p 10096:10095 -it --privileged=true \
