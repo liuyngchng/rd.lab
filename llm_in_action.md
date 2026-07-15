@@ -2365,12 +2365,6 @@ litellm.verify_ssl_certs = False  	# 某些版本使用这个
 
 运行 vi /home/rd/.nanobot/config.json, 添加 LLM API 信息
 
-```sh
-
-```
-
-
-
 ## 20.3 ApkClaw
 
 安卓应用，参考 
@@ -2379,191 +2373,18 @@ litellm.verify_ssl_certs = False  	# 某些版本使用这个
 
 相关文档
 
-
-
-# 21. ASR
-
-## 21.1 基础镜像
-
-```sh
-# 1. 拉取CPU版本的Docker镜像
-docker pull registry.cn-hangzhou.aliyuncs.com/funasr_repo/funasr:funasr-runtime-sdk-cpu-0.4.7
-# 这个目录存储模型，服务启动后会下载模型
-mkdir -p ./funasr-runtime-resources/models
-# 启动容器
-docker run -p 10095:10095 -dit --privileged=true \
-	--name myfunasr \
-  	-v $PWD/funasr-runtime-resources/models:/workspace/models \
-  	registry.cn-hangzhou.aliyuncs.com/funasr_repo/funasr:funasr-runtime-sdk-cpu-0.4.7
-
-docker run -p 10095:10095 -dit --privileged=true \
-	--name myfunasr \
-  	-v $PWD/funasr-runtime-resources/models:/workspace/models \
-  	funasr-with-ffmpeg:runtime-sdk-cpu-0.4.7
-
-# 查看容器ID
-docker ps
-
-# 进入容器（用你实际的容器ID）
-docker exec -it myfunasr bash  
-# 启动服务
-cd /workspace/FunASR/runtime
-chmod +x *.sh
-
-# 启动服务，模型会自动下载到 /workspace/models 目录（宿主机挂载的 ./funasr-runtime-resources/models）
-nohup bash run_server.sh \
-  --download-model-dir /workspace/models \
-  --vad-dir damo/speech_fsmn_vad_zh-cn-16k-common-onnx \
-  --model-dir damo/speech_paraformer-large-vad-punc_asr_nat-zh-cn-16k-common-vocab8404-onnx \
-  --punc-dir damo/punc_ct-transformer_cn-en-common-vocab471067-large-onnx \
-  --itn-dir thuduj12/fst_itn_zh \
-  --certfile 0 > log.txt 2>&1 &
- 
-# 查看日志,会看到在下载模型
-tail -f log.txt
-# 检查服务进程
-ps aux | grep run_server
-
-# 测试接口（在宿主机另开终端）
-curl http://127.0.0.1:10095/
-
-```
-
-（3）配置 local.properties
-
-下载的模型，应该包含以下及个：
-
-- `damo/speech_fsmn_vad_zh-cn-16k-common-onnx/` （VAD模型）
-
-- `damo/speech_paraformer-large-vad-punc_asr_nat-zh-cn-16k-common-vocab8404-onnx/` （主ASR模型）
-
-- `damo/punc_ct-transformer_cn-en-common-vocab471067-large-onnx/` （标点模型）
-
-- `thuduj12/fst_itn_zh/` （逆文本正则化）
-
-需要在容器内安装ffmpeg，安装好之后，再打包成一个新镜像。
-
-```sh
-# 进入容器
-docker exec -it myfunasr bash
-
-# 更新包列表并安装 ffmpeg
-apt update && apt install -y ffmpeg
-
-# 验证安装
-ffmpeg -version
-# 退出容器
-exit
-
-# 提交为新的容器
-docker commit myfunasr funasr-with-ffmpeg:runtime-sdk-cpu-0.4.7
-docker rm myfunasr
-```
-
-## 21.2 完整镜像
-
-运行新容器
-
-```sh
-# 保证目录 /data/funasr-runtime-resources 下面有已经下载好的模型文件
-docker run -p 10095:10095 -dit --privileged=true \
-	--name myfunasr \
-  	-v /data/funasr-runtime-resources/models:/workspace/models \
-  	funasr-with-ffmpeg:runtime-sdk-cpu-0.4.7
-  	
-# 启动服务
-# 设置环境变量
-docker exec -it myfunasr bash
-export MODELSCOPE_DISABLE_DOWNLOAD=1
-export HF_HUB_DISABLE_TELEMETRY=1
-export FUNASR_DISABLE_DOWNLOAD=1
-cd /workspace/FunASR/runtime/websocket/build/bin
-# 启动
-nohup ./funasr-wss-server \
-  --model-dir /workspace/models/damo/speech_paraformer-large-vad-punc_asr_nat-zh-cn-16k-common-vocab8404-onnx \
-  --vad-dir /workspace/models/damo/speech_fsmn_vad_zh-cn-16k-common-onnx \
-  --punc-dir /workspace/models/damo/punc_ct-transformer_cn-en-common-vocab471067-large-onnx \
-  --itn-dir /workspace/models/thuduj12/fst_itn_zh \
-  --lm-dir /workspace/models/damo/speech_ngram_lm_zh-cn-ai-wesp-fst \
-  --port 10095 \
-  --certfile "" \
-  --decoder-thread-num 4 \
-  --io-thread-num 1 \
-  --model-thread-num 1 \
-   > /workspace/FunASR/runtime/server.log 2>&1 &
-   
-# 跟踪日志，看到  asr model init finished. listen on port:10095,服务启动成功
-tail -f /workspace/FunASR/runtime/server.log
-```
-
-简单版
-
-```sh
-docker run -p 10095:10095 -dit --privileged=true --name myfunasr \
-  -v /data/funasr-runtime-resources/models:/workspace/models \
-  -e MODELSCOPE_DISABLE_DOWNLOAD=1 \
-  -e HF_HUB_DISABLE_TELEMETRY=1 \
-  -e FUNASR_DISABLE_DOWNLOAD=1 \
-  funasr-with-ffmpeg:runtime-sdk-cpu-0.4.7 \
-  /bin/bash -c "cd /workspace/FunASR/runtime/websocket/build/bin && ./funasr-wss-server --model-dir /workspace/models/damo/speech_paraformer-large-vad-punc_asr_nat-zh-cn-16k-common-vocab8404-onnx --vad-dir /workspace/models/damo/speech_fsmn_vad_zh-cn-16k-common-onnx --punc-dir /workspace/models/damo/punc_ct-transformer_cn-en-common-vocab471067-large-onnx --itn-dir /workspace/models/thuduj12/fst_itn_zh --lm-dir /workspace/models/damo/speech_ngram_lm_zh-cn-ai-wesp-fst --port 10095 --certfile '' --decoder-thread-num 4 --io-thread-num 1 --model-thread-num 1"
-
-# 查看日志
-docker logs -f myfunasr
-```
-
-MacOS 无法创建 /data 目录，就在用户当前目录下执行（可能还得在Docker 管理界面的Resource中添加当前的这个路径：/User/xxx//funasr-runtime-resources/models）
-
-可以创建容器之间互相访问的网桥
-
-```sh
-docker network create llm_net
-```
-
-
-
-
-
-```sh
-# 进入当前用户的根目录
-cd ~
-# 确保 ./funasr-runtime-resources/models 存在
-docker run -p 10095:10095 -dit --privileged=true --name myfunasr \
-  --network llm_net \
-  -v ./funasr-runtime-resources/models:/workspace/models \
-  -e MODELSCOPE_DISABLE_DOWNLOAD=1 \
-  -e HF_HUB_DISABLE_TELEMETRY=1 \
-  -e FUNASR_DISABLE_DOWNLOAD=1 \
-  funasr-with-ffmpeg:runtime-sdk-cpu-0.4.7 \
-  /bin/bash -c "cd /workspace/FunASR/runtime/websocket/build/bin && ./funasr-wss-server --model-dir /workspace/models/damo/speech_paraformer-large-vad-punc_asr_nat-zh-cn-16k-common-vocab8404-onnx --vad-dir /workspace/models/damo/speech_fsmn_vad_zh-cn-16k-common-onnx --punc-dir /workspace/models/damo/punc_ct-transformer_cn-en-common-vocab471067-large-onnx --itn-dir /workspace/models/thuduj12/fst_itn_zh --lm-dir /workspace/models/damo/speech_ngram_lm_zh-cn-ai-wesp-fst --port 10095 --certfile '' --decoder-thread-num 4 --io-thread-num 1 --model-thread-num 1"
-```
-
-
-
-
-
-使用官方的脚本
-
-```sh
-# 转换脚本
-ffmpeg -i input.m4a output.wav
-cd /workspace/FunASR/runtime/python/websocket
-python ./funasr_wss_client.py --host "127.0.0.1" --port 10095 --ssl 0 --mode offline --audio_in "/home/rd/Downloads/output.wav" --output_dir "./results"
-```
-
-（4）打包并安装
-
 ```sh
 ./gradlew clean
 ./gradlew assembleRelease
 /home/rd/Android/Sdk/platform-tools/adb install ./app/build/outputs/apk/release/ApkClaw_v0.0.2_20260411_104935.apk
+
+./gradlew installDebug
 ```
 
 
 
 
-
-
-# 22. Reference
+# 21. Reference
 
 [1] Hugging Face Documentation. https://huggingface.co/docs;
 
