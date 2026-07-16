@@ -1,4 +1,4 @@
-# 1. 离线 ASR
+# 1. offline
 
 ## 1.1 基础镜像
 
@@ -167,45 +167,63 @@ python ./funasr_wss_client.py --host "127.0.0.1" --port 10095 --ssl 0 --mode off
 
 
 
-# 2. 在线ASR（尚未验证）
+# 2. online（尚未验证）
 
-## 2.1 创建模型目录
+1. 拉取并启动 Docker 镜像
 
+  ## 2.1 拉取实时语音听写镜像
+```sh
+sudo docker pull \
+    registry.cn-hangzhou.aliyuncs.com/funasr_repo/funasr:funasr-runtime-sdk-online-cpu-0.1.13
+```
+
+  
+
+  ## 2.2 创建模型目录
 ```sh
 mkdir -p ./funasr-runtime-resources/models
 ```
 
+  ## 2.3 启动容器
 
-
-  
-
-  ## 2.2 启动容器（注意端口映射 10096:10095）
-
+**（1）映射端口和模型目录**
 
 ```sh
-docker run -p 10096:10095 -it --privileged=true \
+sudo docker run -p 10096:10095 -it --privileged=true \
     -v $PWD/funasr-runtime-resources/models:/workspace/models \
-    registry.cn-hangzhou.aliyuncs.com/funasr_repo/funasr:funasr-runtime-sdk-online-cpu-0.1.12
+    registry.cn-hangzhou.aliyuncs.com/funasr_repo/funasr:funasr-runtime-sdk-online-cpu-0.1.13  
 ```
 
-
-
-  ## 2.3 启动 2pass WebSocket 服务
-
+**（2）在容器内启动服务**
 
 ```sh
-cd FunASR/runtime
+cd /workspace/FunASR/runtime
   nohup bash run_server_2pass.sh \
     --download-model-dir /workspace/models \
     --vad-dir damo/speech_fsmn_vad_zh-cn-16k-common-onnx \
-    --model-dir damo/speech_paraformer-large-vad-punc_asr_nat-zh-cn-16k-common-vocab8404-onnx \
+    --model-dir damo/speech_paraformer-large_asr_nat-zh-cn-16k-common-vocab8404-onnx \
     --online-model-dir damo/speech_paraformer-large_asr_nat-zh-cn-16k-common-vocab8404-online-onnx \
     --punc-dir damo/punc_ct-transformer_zh-cn-common-vad_realtime-vocab272727-onnx \
-    --lm-dir damo/speech_ngram_lm_zh-cn-ai-wesp-fst \
     --itn-dir thuduj12/fst_itn_zh \
-    --model_thread_num 1 \
-    > log.txt 2>&1 &
+    --hotword /workspace/models/hotwords.txt > log.txt 2>&1 &
 ```
+
+ **（3）客户端测试**
+
+```sh
+python3 funasr_wss_client.py --host "127.0.0.1" --port 10096 --mode 2pass
+```
+
+  可选：HTML5 网页客户端
+
+  启动一个 Web 页面，支持浏览器/手机端访问：
+
+```sh
+cd /home/rd/workspace/FunASR-main/runtime/html5
+python h5Server.py --host 0.0.0.0 --port 1337  
+```
+
+  然后浏览器打开 https://127.0.0.1:1337/static/index.html，输入 wss 地址即可使用。
 
 
 
