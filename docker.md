@@ -333,14 +333,12 @@ docker info | grep -A 1 "Registry Mirrors"
 ```
 接下来再次通过docker pull 拉取镜像时，会通过刚才注册的mirror 服务源进行拉取
 
-# 6. install app in ubuntu docker container
+# 6. docker
 
-```sh
+```shell
 apt-get update
 apt-get install xxx
 ```
-
-
 
 # 6.1 docker-compose
 
@@ -407,6 +405,8 @@ docker-compose up -d  // 后台启动并运行容器
 ```
 
 镜像服务器地址可以在 `docker-compose.yml` 中配置。
+
+
 
 #  6.2 离线安装docker
 
@@ -601,22 +601,12 @@ root     15270 15195  1 16:54 ?        00:00:00 containerd --config /var/run/doc
 
 # 6.3 set proxy for docker in ubuntu
 
-##  6.3.1 docker service
-https://docs.docker.com/network/proxy/
+由于docker pull 是由dockerd 来执行的，虽然环境变量里配置了相应的代理，但对于 `docker pull` 来说，并不能生效。不建议直接修改 
 
 ```sh
-sudo vi /lib/systemd/system/docker.service
-# 添加如下内容
-[Service]
-Type=notify
-# the default is not to use systemd for cgroups because the delegate issues still
-# exists and systemd currently does not support the cgroup feature set required
-# for containers run by docker
-Environment=HTTP_PROXY=http://xxx.com:xxx
-Environment=HTTPS_PROXY=http://xxx.com:xxx
-Environment=NO_PROXY=*.xxx.com
+/lib/systemd/system/docker.service
 ```
-##  6.3.2 docker config
+
 run
 ```sh
 sudo mkdir -p /etc/systemd/system/docker.service.d
@@ -630,9 +620,20 @@ Environment="HTTPS_PROXY=https://账号:密码@服务器:端口"
 Environment="NO_PROXY=localhost,127.0.0.1"
 ```
 
-systemctl daemon-reload
+然后执行 
 
+```sh
+systemctl daemon-reload
 systemctl restart docker
+```
+
+查看是否生效
+
+```sh
+sudo systemctl show docker | grep -i proxy
+```
+
+
 
 # 7. docker push
 ##  7.1 查看镜像
