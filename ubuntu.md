@@ -433,6 +433,8 @@ sudo route del default gw 192.168.49.1
 
 # 16. ubuntu 录制 gif 文件
 
+## 16.1 byzanz
+
 ```sh
 sudo apt install byzanz imagemagick -y
 # x, y 起始点坐标， x方向为从左向右， y方向为从上到下，width为宽度；height为高度；
@@ -441,6 +443,16 @@ byzanz-record --duration=10 --x=10 --y=50 --width=800 --height=600 --delay=5 git
 # 
 byzanz-record --duration=20 --x=10 --y=100 --width=1280 --height=800 --delay=5  git_output.gif
 ```
+
+## 16.2 kooha
+
+```sh
+sudo add-apt-repository ppa:rock-core/qt4
+sudo apt update
+sudo apt install kooha
+```
+
+
 
 # 17. video edit
 
