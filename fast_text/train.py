@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 """
-fastText 意图分类模型训练脚本
+fastText 意图分类模型训练脚本（基础版）
 
 从 SQLite 数据库中读取工作流的 Classifier 配置，
-自动生成训练数据并训练 fastText 模型。
+用关键词+描述自动生成训练数据并训练 fastText 模型。
 
 训练数据生成规则（与 Go 代码 internal/fasttext/predictor.go 一致）：
   - 每个类别的关键词 → 训练样本
@@ -14,12 +14,10 @@ fastText 意图分类模型训练脚本
 用法:
   python3 train.py
 
-输入:
-  /home/rd/workspace/rd.lab/workflow/cfg.workflow  — SQLite 数据库，workflow_def 表
-
-输出:
-  /home/rd/workspace/kb-chat-flow/g/dt/ft/model.ftz  — 训练+量化后的模型
-  /home/rd/workspace/kb-chat-flow/g/dt/ft/train.txt   — 训练数据（供审查）
+环境变量（可选，均有默认值）:
+  FT_DB_PATH      — workflow SQLite 数据库路径
+  FT_MODEL_DIR     — 模型输出目录
+  FT_WORKFLOW_ID   — 工作流 ID
 """
 
 import json
@@ -29,16 +27,13 @@ import subprocess
 import sys
 
 # ============================================================
-# 配置
+# 配置（优先从环境变量读取）
 # ============================================================
 
-DB_PATH = "/home/rd/workspace/rd.lab/workflow/cfg.workflow"
-WORKFLOW_ID = 1  # 使用哪个工作流的分类器配置
+DB_PATH = os.environ.get("FT_DB_PATH", os.path.join(os.path.dirname(__file__), "..", "workflow", "cfg.workflow"))
+MODEL_DIR = os.environ.get("FT_MODEL_DIR", os.path.dirname(os.path.abspath(__file__)))
+WORKFLOW_ID = int(os.environ.get("FT_WORKFLOW_ID", "1"))
 
-# 模型输出目录（对应 Go 项目 internal/fasttext/predictor.go 中的 defaultWorkDir）
-MODEL_DIR = "/home/rd/workspace/kb-chat-flow/g/dt/ft"
-
-# fastText 训练参数（与 Go 代码 trainModel() 保持一致）
 TRAIN_PARAMS = {
     "epoch": 200,
     "lr": 0.8,
@@ -54,8 +49,7 @@ QUANTIZE_PARAMS = {
     "cutoff": 50000,
 }
 
-# none 类别样本：教模型拒绝与燃气业务无关的输入
-# （与 Go 代码 noneSamples 保持一致）
+# none 类别样本：教模型拒绝与业务无关的输入
 NONE_SAMPLES = [
     "今天天气真好", "明天会下雨吗", "附近有什么好吃的",
     "帮我写首诗", "讲个笑话", "几点了",
@@ -243,6 +237,8 @@ def main():
     print("=" * 60)
     print("fastText 意图分类模型训练")
     print("=" * 60)
+    print(f"数据库: {DB_PATH}")
+    print(f"输出目录: {MODEL_DIR}")
 
     # 1. 加载分类器配置
     print("\n[1/4] 加载分类器配置...")
@@ -265,7 +261,6 @@ def main():
     print("完成！")
     print(f"  训练数据: {train_path}")
     print(f"  模型文件: {model_path}")
-    print(f"  类别变化时 Go 代码会自动重训")
     print(f"{'='*60}")
 
 
