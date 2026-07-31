@@ -1,0 +1,84 @@
+__label__emergency 漏 气
+__label__emergency 燃 气 味
+__label__emergency 煤 气 味
+__label__emergency 报 警
+__label__emergency 爆 炸
+__label__emergency 火 灾
+__label__emergency 着 火
+__label__emergency 泄 漏
+__label__emergency 冒 烟
+__label__emergency 异 味
+__label__emergency 刺 鼻
+__label__emergency 燃 气 泄 漏 、 燃 气 味 、 报 警 等 紧 急 安 全 情 况
+__label__billing 账 单
+__label__billing 缴 费
+__label__billing 欠 费
+__label__billing 余 额
+__label__billing 发 票
+__label__billing 价 格
+__label__billing 费 用
+__label__billing 多 少 钱
+__label__billing 扣 费
+__label__billing 充 值
+__label__billing 代 扣
+__label__billing 阶 梯 价
+__label__billing 账 单 查 询 、 缴 费 、 欠 费 、 发 票 等 财 务 问 题
+__label__business 开 户
+__label__business 过 户
+__label__business 改 名
+__label__business 报 装
+__label__business 停 气
+__label__business 新 装
+__label__business 移 表
+__label__business 增 容
+__label__business 改 管
+__label__business 安 装
+__label__business 开 通
+__label__business 搬 迁
+__label__business 换 表
+__label__business 开 户 、 过 户 、 改 名 、 报 装 、 停 气 等 业 务 办 理
+__label__repair 维 修
+__label__repair 故 障
+__label__repair 坏 了
+__label__repair 打 不 着 火
+__label__repair 点 不 着
+__label__repair 不 着 火
+__label__repair 保 养
+__label__repair 安 检
+__label__repair 检 查
+__label__repair 熄 火
+__label__repair 红 火
+__label__repair 小 火
+__label__repair 自 动 关
+__label__repair 打 火
+__label__repair 燃 气 设 备 维 修 、 故 障 排 查 、 保 养 、 安 检
+__label__faq 营 业 时 间
+__label__faq 电 话
+__label__faq 地 址
+__label__faq 投 诉
+__label__faq 建 议
+__label__faq 表 扬
+__label__faq 几 点
+__label__faq 在 哪
+__label__faq 怎 么 去
+__label__faq 客 服
+__label__faq 人 工
+__label__faq 工 作 时 间
+__label__faq 常 见 综 合 咨 询 ： 营 业 时 间 、 电 话 、 地 址 、 投 诉 建 议 等
+__label__none 今 天 天 气 真 好
+__label__none 明 天 会 下 雨 吗
+__label__none 附 近 有 什 么 好 吃 的
+__label__none 帮 我 写 首 诗
+__label__none 讲 个 笑 话
+__label__none 几 点 了
+__label__none 你 是 谁
+__label__none 你 会 做 什 么
+__label__none 你 好 啊
+__label__none 播 放 音 乐
+__label__none 设 置 闹 钟
+__label__none 帮 我 查 快 递
+__label__none 翻 译 一 下
+__label__none 什 么 是 人 工 智 能
+__label__none 怎 么 做 红 烧 肉
+__label__none 股 票 涨 了
+__label__none 最 近 有 什 么 电 影
