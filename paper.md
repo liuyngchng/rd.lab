@@ -1,8 +1,8 @@
 <div align='center'><font size='5'>窄带物联网智能燃气表通信中的时钟同步方法设计</font></div>
 
-<div align='center'><font size='4'>刘永成<sup>1</sup></font></div>
+<div align='center'><font size='4'>xxx<sup>1</sup></font></div>
 
-<div align='center'><font size='4'>（1. 昆仑数智科技有限责任公司，北京，102206）</font></div>
+<div align='center'><font size='4'>（1. xxx，北京，102206）</font></div>
 
 <div align='right'>中图分类号：TP311.1</div>
 
@@ -261,4 +261,4 @@ $$
 
 
 
-<div>通信作者介绍：刘永成，男，1983年11月生，工学硕士研究生。研究方向为计算机网络通信，网络仿真. E-mail： liuyngchng@163.com </div>
+<div>通信作者介绍：xxx，男，1983年11月生，工学硕士研究生。研究方向为计算机网络通信，网络仿真. E-mail： 535139069@qq.com </div>
