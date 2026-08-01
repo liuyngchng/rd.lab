@@ -1,0 +1,59 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 500" width="320" height="500">
+  <defs>
+    <marker orient="auto" overflow="visible" markerUnits="strokeWidth" id="Arrow2" viewBox="-1 -4 10 8" markerWidth="10" markerHeight="8" color="black"><g><path d="M 8 0 L 0 -3 L 0 3 Z" fill="currentColor" stroke="currentColor" stroke-width="1"/></g></marker>
+  </defs>
+  <g stroke="none" stroke-opacity="1" stroke-dasharray="none" fill="none" fill-opacity="1">
+    <g>
+      <ellipse cx="160" cy="16" rx="50" ry="14" stroke="#667eea" stroke-width="2" fill="#667eea"/>
+      <text x="160" y="20" fill="white" font-family="sans-serif" font-size="11" text-anchor="middle" font-weight="bold">用户Query输入</text>
+
+      <line x1="160" y1="30" x2="160" y2="54" marker-end="url(#Arrow2)" stroke="black" stroke-width="1.5"/>
+
+      <rect x="45" y="56" width="230" height="44" stroke="#f97316" stroke-width="1.5" rx="6" fill="#fff7ed"/>
+      <text x="160" y="73" fill="#92400e" font-family="sans-serif" font-size="12" text-anchor="middle" font-weight="bold">Tier 1: 关键词匹配</text>
+      <text x="160" y="89" fill="#92400e" font-family="sans-serif" font-size="10" text-anchor="middle">子串匹配，命中则返回，~0ms</text>
+
+      <line x1="160" y1="100" x2="160" y2="124" marker-end="url(#Arrow2)" stroke="black" stroke-width="1"/>
+      <text x="168" y="116" fill="#333" font-family="sans-serif" font-size="9">未命中</text>
+
+      <rect x="45" y="126" width="230" height="44" stroke="#22c55e" stroke-width="1.5" rx="6" fill="#f0fdf4"/>
+      <text x="160" y="143" fill="#166534" font-family="sans-serif" font-size="12" text-anchor="middle" font-weight="bold">Tier 2: fastText本地模型</text>
+      <text x="160" y="159" fill="#166534" font-family="sans-serif" font-size="10" text-anchor="middle">conf≥0.5且label≠none则返回，~5ms</text>
+
+      <line x1="160" y1="170" x2="160" y2="194" marker-end="url(#Arrow2)" stroke="black" stroke-width="1"/>
+      <text x="168" y="186" fill="#333" font-family="sans-serif" font-size="9">低置信度</text>
+
+      <rect x="45" y="196" width="230" height="44" stroke="#3b82f6" stroke-width="1.5" rx="6" fill="#eff6ff"/>
+      <text x="160" y="213" fill="#1e40af" font-family="sans-serif" font-size="12" text-anchor="middle" font-weight="bold">Tier 3: Embedding语义匹配</text>
+      <text x="160" y="229" fill="#1e40af" font-family="sans-serif" font-size="10" text-anchor="middle">余弦相似度≥0.6则返回，~100ms</text>
+
+      <line x1="160" y1="240" x2="160" y2="264" marker-end="url(#Arrow2)" stroke="black" stroke-width="1"/>
+      <text x="168" y="256" fill="#333" font-family="sans-serif" font-size="9">未匹配</text>
+
+      <rect x="45" y="266" width="230" height="44" stroke="#8b5cf6" stroke-width="1.5" rx="6" fill="#ede9fe"/>
+      <text x="160" y="283" fill="#4c1d95" font-family="sans-serif" font-size="12" text-anchor="middle" font-weight="bold">Tier 4: LLM分类（兜底）</text>
+      <text x="160" y="299" fill="#4c1d95" font-family="sans-serif" font-size="10" text-anchor="middle">精确分类，~1000ms</text>
+
+      <line x1="160" y1="310" x2="160" y2="334" marker-end="url(#Arrow2)" stroke="black" stroke-width="1.5"/>
+      <text x="168" y="326" fill="#333" font-family="sans-serif" font-size="9">LLM失败</text>
+
+      <rect x="45" y="336" width="230" height="36" stroke="#ef4444" stroke-width="1.5" rx="6" fill="#fef2f2"/>
+      <text x="160" y="351" fill="#991b1b" font-family="sans-serif" font-size="11" text-anchor="middle" font-weight="bold">安全兜底：返回最后类别</text>
+      <text x="160" y="365" fill="#991b1b" font-family="sans-serif" font-size="10" text-anchor="middle">（通常为faq综合咨询）</text>
+
+      <line x1="160" y1="372" x2="160" y2="402" marker-end="url(#Arrow2)" stroke="#667eea" stroke-width="2"/>
+
+      <ellipse cx="160" cy="420" rx="50" ry="14" stroke="#667eea" stroke-width="2" fill="#667eea"/>
+      <text x="160" y="424" fill="white" font-family="sans-serif" font-size="11" text-anchor="middle" font-weight="bold">输出Intent类别</text>
+
+      <line x1="275" y1="78" x2="300" y2="78" marker-end="url(#Arrow2)" stroke="#22c55e" stroke-width="1.5"/>
+      <text x="289" y="68" fill="#22c55e" font-family="sans-serif" font-size="9">命中→返回</text>
+
+      <line x1="275" y1="148" x2="300" y2="148" marker-end="url(#Arrow2)" stroke="#22c55e" stroke-width="1.5"/>
+      <text x="289" y="138" fill="#22c55e" font-family="sans-serif" font-size="9">高置信→返回</text>
+
+      <line x1="275" y1="218" x2="300" y2="218" marker-end="url(#Arrow2)" stroke="#22c55e" stroke-width="1.5"/>
+      <text x="289" y="208" fill="#22c55e" font-family="sans-serif" font-size="9">匹配→返回</text>
+    </g>
+  </g>
+</svg>
