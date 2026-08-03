@@ -1,0 +1,67 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 660 440" width="660" height="440">
+  <defs>
+    <marker orient="auto" overflow="visible" markerUnits="strokeWidth" id="Arr" viewBox="-1 -4 10 8" markerWidth="10" markerHeight="8" color="black"><g><path d="M 8 0 L 0 -3 L 0 3 Z" fill="currentColor" stroke="currentColor" stroke-width="1"/></g></marker>
+  </defs>
+  <g stroke="none" stroke-opacity="1" stroke-dasharray="none" fill="none" fill-opacity="1">
+    <g>
+      <!-- 用户提问 -->
+      <ellipse cx="330" cy="20" rx="50" ry="16" stroke="#667eea" stroke-width="2" fill="#667eea"/>
+      <text x="330" y="25" fill="white" font-family="sans-serif" font-size="13" text-anchor="middle" font-weight="bold">用户提问</text>
+
+      <line x1="330" y1="36" x2="330" y2="62" marker-end="url(#Arr)" stroke="black" stroke-width="1.5"/>
+
+      <!-- C³-Classifier -->
+      <rect x="170" y="64" width="320" height="44" stroke="#667eea" stroke-width="1.5" rx="6" fill="#e8ecf8"/>
+      <text x="330" y="81" fill="#333" font-family="sans-serif" font-size="13" text-anchor="middle" font-weight="bold">C³-Classifier 意图分类器</text>
+      <text x="330" y="97" fill="#555" font-family="sans-serif" font-size="10" text-anchor="middle">关键词 → fastText → Embedding → LLM</text>
+
+      <line x1="330" y1="108" x2="330" y2="134" marker-end="url(#Arr)" stroke="black" stroke-width="1.5"/>
+
+      <!-- 条件路由 -->
+      <rect x="210" y="136" width="240" height="24" stroke="#eab308" stroke-width="1" rx="4" fill="#fef9c3"/>
+      <text x="330" y="152" fill="#78350f" font-family="sans-serif" font-size="12" text-anchor="middle">条件路由（Condition Match）</text>
+
+      <!-- 路由分支线：从条件路由到5个Agent，水平均匀分布后向下 -->
+      <!-- Router bottom: y=160, x-range 210..450; Agent top: y=194, centers at 90,210,330,450,570 -->
+      <line x1="258" y1="160" x2="90" y2="194" marker-end="url(#Arr)" stroke="black" stroke-width="1"/>
+      <line x1="294" y1="160" x2="210" y2="194" marker-end="url(#Arr)" stroke="black" stroke-width="1"/>
+      <line x1="330" y1="160" x2="330" y2="194" marker-end="url(#Arr)" stroke="black" stroke-width="1"/>
+      <line x1="366" y1="160" x2="450" y2="194" marker-end="url(#Arr)" stroke="black" stroke-width="1"/>
+      <line x1="402" y1="160" x2="570" y2="194" marker-end="url(#Arr)" stroke="black" stroke-width="1"/>
+
+      <!-- 5个Agent方框：y=194, h=36, w=100, gap=20 -->
+      <!-- Box1 center=90  --> <rect x="40"  y="194" width="100" height="36" stroke="#f97316" stroke-width="1.5" rx="4" fill="#fff7ed"/>
+      <text x="90"  y="216" fill="#92400e" font-family="sans-serif" font-size="10" text-anchor="middle">紧急调度Agent</text>
+
+      <!-- Box2 center=210 --> <rect x="160" y="194" width="100" height="36" stroke="#f97316" stroke-width="1.5" rx="4" fill="#fff7ed"/>
+      <text x="210" y="216" fill="#92400e" font-family="sans-serif" font-size="10" text-anchor="middle">账单缴费Agent</text>
+
+      <!-- Box3 center=330 --> <rect x="280" y="194" width="100" height="36" stroke="#f97316" stroke-width="1.5" rx="4" fill="#fff7ed"/>
+      <text x="330" y="216" fill="#92400e" font-family="sans-serif" font-size="10" text-anchor="middle">业务办理Agent</text>
+
+      <!-- Box4 center=450 --> <rect x="400" y="194" width="100" height="36" stroke="#f97316" stroke-width="1.5" rx="4" fill="#fff7ed"/>
+      <text x="450" y="216" fill="#92400e" font-family="sans-serif" font-size="10" text-anchor="middle">维修保养Agent</text>
+
+      <!-- Box5 center=570 --> <rect x="520" y="194" width="100" height="36" stroke="#f97316" stroke-width="1.5" rx="4" fill="#fff7ed"/>
+      <text x="570" y="216" fill="#92400e" font-family="sans-serif" font-size="10" text-anchor="middle">综合FAQ Agent</text>
+
+      <!-- 下行线：5个Agent汇聚到知识库检索，外侧两条斜向汇聚 -->
+      <line x1="90"  y1="230" x2="210" y2="268" marker-end="url(#Arr)" stroke="black" stroke-width="1"/>
+      <line x1="210" y1="230" x2="210" y2="268" marker-end="url(#Arr)" stroke="black" stroke-width="1"/>
+      <line x1="330" y1="230" x2="330" y2="268" marker-end="url(#Arr)" stroke="black" stroke-width="1"/>
+      <line x1="450" y1="230" x2="450" y2="268" marker-end="url(#Arr)" stroke="black" stroke-width="1"/>
+      <line x1="570" y1="230" x2="450" y2="268" marker-end="url(#Arr)" stroke="black" stroke-width="1"/>
+
+      <!-- 知识库检索 -->
+      <rect x="210" y="270" width="240" height="44" stroke="#22c55e" stroke-width="1.5" rx="4" fill="#f0fdf4"/>
+      <text x="330" y="288" fill="#166534" font-family="sans-serif" font-size="11" text-anchor="middle">知识库检索（VDB查询）</text>
+      <text x="330" y="303" fill="#166534" font-family="sans-serif" font-size="10" text-anchor="middle">模板渲染→LLM调用→流式输出</text>
+
+      <line x1="330" y1="314" x2="330" y2="346" marker-end="url(#Arr)" stroke="black" stroke-width="1.5"/>
+
+      <!-- SSE流式输出 -->
+      <rect x="210" y="348" width="240" height="28" stroke="#8b5cf6" stroke-width="1.5" rx="4" fill="#ede9fe"/>
+      <text x="330" y="366" fill="#4c1d95" font-family="sans-serif" font-size="12" text-anchor="middle" font-weight="bold">SSE流式输出给用户</text>
+    </g>
+  </g>
+</svg>
