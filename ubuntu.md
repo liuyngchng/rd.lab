@@ -992,3 +992,15 @@ sudo apt update
 sudo apt install exfatprogs
 ```
 
+
+# 36. mac air sd card reader in 'Ubuntu'
+
+MacAir 电脑的SD卡读卡器，在Ubuntu上，默认不工作。需要执行以下命令
+
+```
+sudo vi /etc/modprobe.d/sdhci.conf
+写如下内容
+
+options sdhci debug_quirks2=4
+```
+系统重启就OK了。
