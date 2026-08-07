@@ -1002,5 +1002,7 @@ MacAir 电脑的SD卡读卡器，在Ubuntu上，默认不工作。需要执行�
 sudo vi /etc/modprobe.d/sdhci.conf
 #写如下内容
 options sdhci debug_quirks2=4
+# 如果效果不佳，可以尝试替换为 
+options sdhci debug_quirks=0x40 debug_quirks2=0x4
 ```
 系统重启就OK了。
