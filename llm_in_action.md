@@ -719,7 +719,7 @@ logger.info("vector db saved to local file")
 
 ####   5.1.3 检索参数增强演示
 
-通过检索参数曾将，可以在调用大模型时，返回关于本地私有知识的内容，如代码段 5-6 所示。
+通过检索参数增强，可以在调用大模型时，返回关于本地私有知识的内容，如代码段 5-6 所示。
 
 ```python
 #!/usr/bin/env python3
@@ -2123,6 +2123,8 @@ export NODE_EXTRA_CA_CERTS=/path_to_your_self_signed_cert.pem
 ## 19.2 Web 版本
 
 （1）Cloud CLI（又名 Claude Code UI），详见 https://cloudcli.ai。
+
+https://github.com/siteboon/claudecodeui
 
 https://github.com/glwhappen/web-code/blob/HEAD/README.zh-CN.md
 
