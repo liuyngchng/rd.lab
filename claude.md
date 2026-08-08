@@ -9,6 +9,8 @@
 ```sh
 sudo apt-get install nodejs nvm -y
 sudo npm install -g @anthropic-ai/claude-code
+# 或安装特定版本, 2.1.207
+npm install -g @anthropic-ai/claude-code@版本号
 
 # codex
 npm install -g @openai/codex
