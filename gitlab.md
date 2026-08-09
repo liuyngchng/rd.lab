@@ -7,12 +7,11 @@
 ## 2.1 pull image
 
 ```sh
-docker pull gitlab/gitlab-ce:latest
+docker pull gitlab/gitlab-ce:17.11.7-ce.0
 
-docker images
-# image
-REPOSITORY                                TAG       IMAGE ID       CREATED        SIZE
-gitlab/gitlab-ce                          latest    12a51c5b4ce2   11 days ago    2.49GB
+rd@rd-ex:~/workspace$ docker images | grep gitlab
+gitlab/gitlab-ce                                       17.11.7-ce.0                   7f8121c3757d   11 months ago   3.71GB
+rd@rd-ex:~/workspace$ 
 ```
 
 ## 2.2 make dir
@@ -21,9 +20,7 @@ gitlab/gitlab-ce                          latest    12a51c5b4ce2   11 days ago  
 sudo mkdir -p /data/gitlab/config  
 sudo mkdir -p /data/gitlab/logs
 sudo mkdir -p /data/gitlab/data
-sudo chown myuser.mygroup -R /data
-## on Mac
-sudo chown -R myuser:mygroup /data
+sudo chown myuser:mygroup -R /data
 cd /data/gitlab
 ls
 # 目录已创建好
@@ -41,14 +38,18 @@ vi gitlab_start.sh
 #!/bin/sh
 GITLAB_HOME=/data/gitlab
 docker run --detach \
-    -h 192.168.1.100 \
-    -p 443:443 -p 80:80 -p 10080:22 \
+    --hostname 192.168.1.105 \
+    -p 20443:443 \
+    -p 20080:80 \
+    -p 20022:22 \
     --name gitlab \
     --restart always \
     -v ${GITLAB_HOME}/config:/etc/gitlab \
     -v ${GITLAB_HOME}/logs:/var/log/gitlab \
     -v ${GITLAB_HOME}/data:/var/opt/gitlab \
-    gitlab/gitlab-ce:latest
+    gitlab/gitlab-ce:17.11.7-ce.0
+
+     
 # 增加执行权限
 chmod +x gitlab_start.sh
 # on MacOS, 还需要将/data 映射的几个宿主机目录通过 docker 引擎 GUI 添加至 File Sharing
@@ -66,7 +67,7 @@ b80942   git../g..-ce:latest   "/assets/wrapper"   1 min ago   Up    :::80->80/t
 ## 2.5 login
 
 ```sh
-http://192.168.1.100
+http://192.168.1.100:20080
 ```
 
 获取 root 密码
@@ -195,5 +196,4 @@ deploy-job:      # This job runs in the deploy stage.
 ```
 
 在 `script` 下添加需要执行的`shell` 脚本， 在 `tags` 目录下添加之前注册`runner`的时候，填写的名称, script 下shell 的根目录(./)默认是git clone 下的项目的根目录。
-
 
