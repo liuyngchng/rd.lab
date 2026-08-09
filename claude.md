@@ -136,6 +136,7 @@ export NODE_EXTRA_CA_CERTS=/path_to_your_self_signed_cert.pem
 （1）Cloud CLI（又名 Claude Code UI），详见 https://cloudcli.ai。
 
 https://github.com/siteboon/claudecodeui
+git clone git@github.com:siteboon/claudecodeui.git
 
 https://github.com/glwhappen/web-code/blob/HEAD/README.zh-CN.md
 
