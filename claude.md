@@ -12,6 +12,10 @@ sudo npm install -g @anthropic-ai/claude-code
 # 或安装特定版本, 2.1.207
 npm install -g @anthropic-ai/claude-code@版本号
 
+
+# 安装前端设计插件
+/plugin install frontend-design@claude-plugins-official
+
 # codex
 npm install -g @openai/codex
 ```
