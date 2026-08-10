@@ -181,7 +181,7 @@ grep -o '<script[^>]*>' dist/index.html
 
 | 方案 | 形态 | 适用 |
 |------|------|------|
-| **单文件 HTML**（本文） | 一个 .html | 轻量工具、分享给同事、双击即用 |
+| **单文件 HTML**（本文） | 一个 .html | 轻量工具、分享给他人、双击即用 |
 | **Tauri** | 桌面 app（.exe/.app） | 需要系统能力（文件系统、系统托盘） |
 | **Electron** | 桌面 app（体积大） | 复杂桌面应用 |
 | **PWA** | 网页 + 可安装 | 需要 server 托管 |
@@ -189,3 +189,26 @@ grep -o '<script[^>]*>' dist/index.html
 ---
 
 *关键词：vite singlefile、单文件打包、自包含 html、file:// 打开前端、字体内联*
+
+## 8. 镜像及代理
+
+
+
+```sh
+# 临时使用镜像源
+npm install --registry=https://registry.npmmirror.com
+# 临时使用代理
+npm config set proxy http://127.0.0.1:8080
+npm config set https-proxy http://127.0.0.1:8080
+```
+
+其他可以使用的镜像源
+
+| 镜像源名称           | 地址 (Registry URL)                         |
+| :------------------- | :------------------------------------------ |
+| **淘宝 (npmmirror)** | `https://registry.npmmirror.com`            |
+| **腾讯云**           | `https://mirrors.cloud.tencent.com/npm/`    |
+| **华为云**           | `https://mirrors.huaweicloud.com/npm/`      |
+| **阿里云**           | `https://npm.aliyun.com`                    |
+| **清华大学**         | `https://mirrors.tuna.tsinghua.edu.cn/npm/` |
+
