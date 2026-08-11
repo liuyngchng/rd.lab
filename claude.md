@@ -173,6 +173,22 @@ docker run -dit \
 	-p 19004:3001 \
 	my_claude_code:1.0 \
 	/root/.nvm/versions/node/v22.22.3/bin/cloudcli
+	
+docker run -dit \
+    --name my_claude_code \
+    --rm \
+    -v /data/remote/workspace:/opt/workspace \
+    -w /opt/workspace \
+    -e NODE_TLS_REJECT_UNAUTHORIZED=0 \
+    -e ANTHROPIC_BASE_URL=http://127.0.0.1:16001 \
+    -e ANTHROPIC_AUTH_TOKEN=sk-xxx \
+    -e API_TIMEOUT_MS=600000 \
+    -e ANTHROPIC_MODEL=deepseek-v4-pro[1m] \
+    -e ANTHROPIC_SMALL_FAST_MODEL=deepseek-v4-flash[1m] \
+    -e CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC=1 \
+    -e CLAUDE_CODE_ATTRIBUTION_HEADER=0 \
+    -p 19004:3001 \
+    my_claude_code:1.37.0
 ```
 
 
