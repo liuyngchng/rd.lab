@@ -12,6 +12,10 @@ sudo npm install -g @anthropic-ai/claude-code
 # 或安装特定版本, 2.1.207
 npm install -g @anthropic-ai/claude-code@版本号
 
+
+# 安装前端设计插件
+/plugin install frontend-design@claude-plugins-official
+
 # codex
 npm install -g @openai/codex
 ```
@@ -134,6 +138,15 @@ export NODE_EXTRA_CA_CERTS=/path_to_your_self_signed_cert.pem
 ## 1.2 Web 版本
 
 （1）Cloud CLI（又名 Claude Code UI），详见 https://cloudcli.ai。
+
+安装
+
+```sh
+# 安装组件
+npm install -g @cloudcli-ai/cloudcli
+# 启动
+cloudcli
+```
 
 https://github.com/siteboon/claudecodeui
 git clone git@github.com:siteboon/claudecodeui.git
