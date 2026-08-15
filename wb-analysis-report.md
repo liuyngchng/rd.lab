@@ -2,7 +2,6 @@
 
 > 分析日期：2026-08-15
 > 分析对象：`123.exe`（WorkBuddy Desktop v5.3.8 安装包）
-> 出品方：Tencent Technology (Shenzhen) Company Limited
 
 ---
 
@@ -809,8 +808,3 @@ npx @electron/asar list extracted/app/resources/app.asar
 npx @electron/asar extract extracted/app/resources/app.asar extracted/asar-contents
 ```
 
----
-
-> **报告生成时间**：2026-08-15
-> **分析工具**：file, strings, xxd, 7z, @electron/asar
-> **数据来源**：123.exe 安装包解包分析 + 公开文档
