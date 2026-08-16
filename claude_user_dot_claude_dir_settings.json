@@ -1,0 +1,28 @@
+{
+  "env": {
+    "ANTHROPIC_BASE_URL": "http://localhost:16001",
+    "ANTHROPIC_AUTH_TOKEN": "sk-12345",
+    "ANTHROPIC_MODEL": "deepseek-v4-pro[1m]",
+    "ANTHROPIC_SMALL_FAST_MODEL": "deepseek-v4-flash[1m]",
+    "CLAUDE_CODE_MAX_OUTPUT_TOKENS": "8192",
+    "CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC": "1",
+    "API_TIMEOUT_MS": "600000"
+  },
+  "permissions": {
+    "allow": [],
+    "deny": [],
+    "ask": [],
+    "read": [
+      "/home/rd/workspace/*",
+      "/tmp/*"
+    ],
+    "write": [
+      "/home/rd/workspace/*"
+    ],
+    "browser": true
+  },
+  "model": "deepseek-v4-pro[1m]",
+  "theme": "dark",
+  "verbose": false,
+  "autoUpdater": true
+}
