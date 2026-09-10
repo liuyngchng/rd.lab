@@ -18,3 +18,12 @@ git@github.com:KokiichiiCoding/Stunning-Modeler.git
 
 https://github.com/KokiichiiCoding/Stunning-Modeler.git
 
+
+
+
+
+3d model可下载
+
+
+
+https://www.cgmodel.com/model/537967.html
