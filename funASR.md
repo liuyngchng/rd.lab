@@ -86,9 +86,14 @@ docker rm myfunasr
 docker stop myfunasr
 # clear
 docker rm myfunasr
+
+# create net bridge, optional
+docker network create llm_net 2>/dev/null || true
+
 # start
 docker run -p 10095:10095 -dit --privileged=true --name myfunasr \
   -v /data/funasr-runtime-resources/models:/workspace/models \
+  --network llm_net \
   -e MODELSCOPE_DISABLE_DOWNLOAD=1 \
   -e HF_HUB_DISABLE_TELEMETRY=1 \
   -e FUNASR_DISABLE_DOWNLOAD=1 \
