@@ -1,4 +1,4 @@
-# 1. offline
+# 1. offline（非实时转写）
 
 ## 1.1 基础镜像
 
@@ -187,13 +187,13 @@ python ./funasr_wss_client.py --host "127.0.0.1" --port 10095 --ssl 0 --mode off
 
 
 
-# 2. online（尚未验证）
+# 2. online（实时转写，尚未验证）
 
 1. 拉取并启动 Docker 镜像
 
   ## 2.1 拉取实时语音听写镜像
 ```sh
-sudo docker pull \
+docker pull \
     registry.cn-hangzhou.aliyuncs.com/funasr_repo/funasr:funasr-runtime-sdk-online-cpu-0.1.13
 ```
 
@@ -201,7 +201,8 @@ sudo docker pull \
 
   ## 2.2 创建模型目录
 ```sh
-mkdir -p ./funasr-runtime-resources/models
+cd /data
+mkdir -p ./funasr-runtime-resources-online/models
 ```
 
   ## 2.3 启动容器
@@ -209,9 +210,10 @@ mkdir -p ./funasr-runtime-resources/models
 **（1）映射端口和模型目录**
 
 ```sh
-sudo docker run -p 10096:10095 -it --privileged=true \
-    -v $PWD/funasr-runtime-resources/models:/workspace/models \
-    registry.cn-hangzhou.aliyuncs.com/funasr_repo/funasr:funasr-runtime-sdk-online-cpu-0.1.13  
+docker run -p 10096:10095 -dit --privileged=true \
+	--name myfunasr_online \
+    -v /data/funasr-runtime-resources-online/models:/workspace/models \
+    registry.cn-hangzhou.aliyuncs.com/funasr_repo/funasr:funasr-runtime-sdk-online-cpu-0.1.13
 ```
 
 **（2）在容器内启动服务**
