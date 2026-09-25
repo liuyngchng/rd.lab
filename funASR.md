@@ -82,15 +82,11 @@ docker rm myfunasr
 运行新容器
 
 ```sh
-# stop
-docker stop myfunasr
-# clear
-docker rm myfunasr
-
-# create net bridge, optional
+# 创建网桥（仅首次）
 docker network create llm_net 2>/dev/null || true
 
-# start
+# stop & clean & start（一条命令）
+docker stop myfunasr 2>/dev/null; docker rm myfunasr 2>/dev/null; \
 docker run -p 10095:10095 -dit --privileged=true --name myfunasr \
   -v /data/funasr-runtime-resources/models:/workspace/models \
   --network llm_net \
@@ -187,9 +183,7 @@ python ./funasr_wss_client.py --host "127.0.0.1" --port 10095 --ssl 0 --mode off
 
 
 
-# 2. online（实时转写，尚未验证）
-
-1. 拉取并启动 Docker 镜像
+# 2. online（实时转写，2pass）✅ 已验证
 
   ## 2.1 拉取实时语音听写镜像
 ```sh
@@ -197,55 +191,102 @@ docker pull \
     registry.cn-hangzhou.aliyuncs.com/funasr_repo/funasr:funasr-runtime-sdk-online-cpu-0.1.13
 ```
 
-  
-
   ## 2.2 创建模型目录
+
+> **注意**：online 版使用的模型和 offline 版不同（目录需与 offline 分离）。
+
 ```sh
-cd /data
-mkdir -p ./funasr-runtime-resources-online/models
+mkdir -p /data/funasr-runtime-resources-online/models
 ```
 
-  ## 2.3 启动容器
-
-**（1）映射端口和模型目录**
+  ## 2.3 首次使用（自动下载模型并启动服务）
 
 ```sh
+# stop & clean
+docker stop myfunasr_online 2>/dev/null; docker rm myfunasr_online 2>/dev/null
+
+# start 容器
 docker run -p 10096:10095 -dit --privileged=true \
-	--name myfunasr_online \
+    --name myfunasr_online \
     -v /data/funasr-runtime-resources-online/models:/workspace/models \
     registry.cn-hangzhou.aliyuncs.com/funasr_repo/funasr:funasr-runtime-sdk-online-cpu-0.1.13
+
+# 启动 2pass 服务（首次运行会自动下载所需模型）
+docker exec -d myfunasr_online bash -c '
+cd /workspace/FunASR/runtime && chmod +x *.sh
+nohup bash run_server_2pass.sh \
+  --download-model-dir /workspace/models \
+  --vad-dir damo/speech_fsmn_vad_zh-cn-16k-common-onnx \
+  --model-dir damo/speech_paraformer-large_asr_nat-zh-cn-16k-common-vocab8404-onnx \
+  --online-model-dir damo/speech_paraformer-large_asr_nat-zh-cn-16k-common-vocab8404-online-onnx \
+  --punc-dir damo/punc_ct-transformer_zh-cn-common-vad_realtime-vocab272727-onnx \
+  --itn-dir thuduj12/fst_itn_zh \
+  --lm-dir damo/speech_ngram_lm_zh-cn-ai-wesp-fst \
+  --certfile 0 \
+  > /workspace/FunASR/runtime/server.log 2>&1 &
+'
+
+# 查看日志，看到 "listen on port:10095" 即启动成功
+docker logs -f myfunasr_online
 ```
 
-**（2）在容器内启动服务**
+  ## 2.4 后续启动（模型已下载，一条命令）
 
 ```sh
-cd /workspace/FunASR/runtime
-  nohup bash run_server_2pass.sh \
-    --download-model-dir /workspace/models \
-    --vad-dir damo/speech_fsmn_vad_zh-cn-16k-common-onnx \
-    --model-dir damo/speech_paraformer-large_asr_nat-zh-cn-16k-common-vocab8404-onnx \
-    --online-model-dir damo/speech_paraformer-large_asr_nat-zh-cn-16k-common-vocab8404-online-onnx \
-    --punc-dir damo/punc_ct-transformer_zh-cn-common-vad_realtime-vocab272727-onnx \
-    --itn-dir thuduj12/fst_itn_zh \
-    --hotword /workspace/models/hotwords.txt > log.txt 2>&1 &
+# 创建网桥（仅首次）
+docker network create llm_net 2>/dev/null || true
+
+# stop & clean & start（一条命令）
+docker stop myfunasr_online 2>/dev/null; docker rm myfunasr_online 2>/dev/null; \
+docker run -p 10096:10095 -dit --privileged=true --name myfunasr_online \
+  -v /data/funasr-runtime-resources-online/models:/workspace/models \
+  --network llm_net \
+  -e MODELSCOPE_DISABLE_DOWNLOAD=1 \
+  -e HF_HUB_DISABLE_TELEMETRY=1 \
+  -e FUNASR_DISABLE_DOWNLOAD=1 \
+  registry.cn-hangzhou.aliyuncs.com/funasr_repo/funasr:funasr-runtime-sdk-online-cpu-0.1.13 \
+  /bin/bash -c "cd /workspace/FunASR/runtime/websocket/build/bin && ./funasr-wss-server-2pass \
+    --model-dir /workspace/models/damo/speech_paraformer-large_asr_nat-zh-cn-16k-common-vocab8404-onnx \
+    --online-model-dir /workspace/models/damo/speech_paraformer-large_asr_nat-zh-cn-16k-common-vocab8404-online-onnx \
+    --vad-dir /workspace/models/damo/speech_fsmn_vad_zh-cn-16k-common-onnx \
+    --punc-dir /workspace/models/damo/punc_ct-transformer_zh-cn-common-vad_realtime-vocab272727-onnx \
+    --itn-dir /workspace/models/thuduj12/fst_itn_zh \
+    --lm-dir /workspace/models/damo/speech_ngram_lm_zh-cn-ai-wesp-fst \
+    --port 10095 --certfile '' \
+    --decoder-thread-num 4 --io-thread-num 1 --model-thread-num 4"
+
+# 查看日志
+docker logs -f myfunasr_online
 ```
 
- **（3）客户端测试**
+  ## 2.5 下载的模型清单
+
+启动完成后，宿主机 `/data/funasr-runtime-resources-online/models/` 下的文件：
+
+```
+damo/
+├── speech_fsmn_vad_zh-cn-16k-common-onnx/                    (VAD, ~540KB)
+├── speech_paraformer-large_asr_nat-zh-cn-16k-common-vocab8404-onnx/        (离线模型, ~228MB)
+├── speech_paraformer-large_asr_nat-zh-cn-16k-common-vocab8404-online-onnx/ (在线模型, ~228MB)
+├── punc_ct-transformer_zh-cn-common-vad_realtime-vocab272727-onnx/         (实时标点, ~273MB)
+└── speech_ngram_lm_zh-cn-ai-wesp-fst/                       (N-gram LM, ~929MB)
+thuduj12/
+└── fst_itn_zh/                                               (ITN, ~896KB)
+```
+
+  ## 2.6 客户端测试
 
 ```sh
-python3 funasr_wss_client.py --host "127.0.0.1" --port 10096 --mode 2pass
+# 容器内测试（用示例 wav 文件）
+docker exec myfunasr_online sh -c 'cd /workspace/FunASR/runtime/python/websocket && \
+  python3 funasr_wss_client.py --host 127.0.0.1 --port 10095 \
+    --mode 2pass --ssl 0 --use_itn 1 \
+    --audio_in /workspace/FunASR/runtime/funasr_api/asr_example.wav \
+    --chunk_size "5,10,5"'
+
+# 宿主机测试（连 10096 映射端口）
+python3 funasr_wss_client.py --host 127.0.0.1 --port 10096 --mode 2pass --ssl 0
 ```
-
-  可选：HTML5 网页客户端
-
-  启动一个 Web 页面，支持浏览器/手机端访问：
-
-```sh
-cd /home/rd/workspace/FunASR-main/runtime/html5
-python h5Server.py --host 0.0.0.0 --port 1337  
-```
-
-  然后浏览器打开 https://127.0.0.1:1337/static/index.html，输入 wss 地址即可使用。
 
 
 
