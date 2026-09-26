@@ -102,7 +102,7 @@ python3 funasr_wss_client.py --host "127.0.0.1" --port 10096 --mode 2pass
 
 ## 2.6 服务端用法详解：
 
-### 2.6.1 启动FunASR服务
+### 2.6.1 启动 `FunASR` 服务
 
 ```sh
 cd /workspace/FunASR/runtime
@@ -117,7 +117,7 @@ nohup bash run_server_2pass.sh \
   --keyfile ../../../ssl_key/server.key \
   --hotword ../../hotwords.txt > log.txt 2>&1 &
 ```
-**run_server_2pass.sh命令参数介绍**
+**`run_server_2pass.sh`命令参数介绍**
 
 ```sh
 --download-model-dir 模型下载地址，通过设置model ID从Modelscope下载模型
@@ -139,7 +139,7 @@ nohup bash run_server_2pass.sh \
             如果客户端提供热词，则与客户端提供的热词合并一起使用，服务端热词全局生效，客户端热词只针对对应客户端生效。
 ```
 
-### 2.6.2 关闭FunASR服务
+### 2.6.2 关闭 `FunASR` 服务
 
 ```sh
 # 查看 funasr-wss-server-2pass 对应的PID
@@ -148,7 +148,7 @@ kill -9 PID
 ```
 
 ### 2.6.3 修改模型及其他参数
-替换正在使用的模型或者其他参数，需先关闭FunASR服务，修改需要替换的参数，并重新启动FunASR服务。其中模型需为ModelScope中的ASR/VAD/PUNC模型，或者从ModelScope中模型finetune后的模型。
+替换正在使用的模型或者其他参数，需先关闭 `FunASR` 服务，修改需要替换的参数，并重新启动 `FunASR` 服务。其中模型需为 `ModelScope` 中的`ASR/VAD/PUNC` 模型，或者从 `ModelScope` 中模型 `finetune`后的模型。
 ```sh
 # 例如替换ASR模型为 damo/speech_paraformer-large_asr_nat-zh-cn-16k-common-vocab8404-onnx，则如下设置参数 --model-dir
     --model-dir damo/speech_paraformer-large_asr_nat-zh-cn-16k-common-vocab8404-onnx 
