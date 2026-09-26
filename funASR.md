@@ -85,10 +85,13 @@ docker rm myfunasr
 
 ```sh
 # 创建网桥（仅首次）
-docker network create llm_net 2>/dev/null || true
+docker network create llm_net 2>/dev/null
 
-# stop & clean & start（一条命令）
-docker stop myfunasr 2>/dev/null; docker rm myfunasr 2>/dev/null; \
+# stop
+docker stop myfunasr 2>/dev/null
+# clean
+docker rm myfunasr 2>/dev/null
+# start
 docker run -p 10095:10095 -dit --privileged=true --name myfunasr \
   -v /data/funasr-runtime-resources/models:/workspace/models \
   --network llm_net \
@@ -253,11 +256,11 @@ docker rm myfunasr_online
 
 
 
-  ## 2.2 后续启动
+  ## 2.2 完整镜像
 
 ```sh
 # 创建网桥（仅首次）
-docker network create llm_net 2>/dev/null || true
+docker network create llm_net 2>/dev/null
 
 # stop
 docker stop myfunasr_online 2>/dev/null
