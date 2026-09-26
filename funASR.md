@@ -77,6 +77,8 @@ docker commit myfunasr funasr-with-ffmpeg:runtime-sdk-cpu-0.4.7
 docker rm myfunasr
 ```
 
+
+
 ## 1.2 完整镜像
 
 运行新容器
@@ -150,12 +152,6 @@ docker network create llm_net
 
 
 
-
-
-
-
-
-
 ```sh
 # 进入当前用户的根目录
 cd ~
@@ -183,27 +179,30 @@ python ./funasr_wss_client.py --host "127.0.0.1" --port 10095 --ssl 0 --mode off
 
 
 
-# 2. online（实时转写，2pass）✅ 已验证
+# 2. online（实时转写，2pass）
 
-  ## 2.1 拉取实时语音听写镜像
+  ## 2.1 基础镜像 
+
+拉取实时语音听写镜像
+
 ```sh
 docker pull \
     registry.cn-hangzhou.aliyuncs.com/funasr_repo/funasr:funasr-runtime-sdk-online-cpu-0.1.13
 ```
 
-  ## 2.2 创建模型目录
-
-> **注意**：online 版使用的模型和 offline 版不同（目录需与 offline 分离）。
+创建模型目录，online 版使用的模型和 offline 版不同（目录需与 offline 分离）。
 
 ```sh
 mkdir -p /data/funasr-runtime-resources-online/models
 ```
 
-  ## 2.3 首次使用（自动下载模型并启动服务）
+首次使用（自动下载模型并启动服务）
 
 ```sh
 # stop & clean
-docker stop myfunasr_online 2>/dev/null; docker rm myfunasr_online 2>/dev/null
+docker stop myfunasr_online 2>/dev/null
+# clean
+docker rm myfunasr_online 2>/dev/null
 
 # start 容器
 docker run -p 10096:10095 -dit --privileged=true \
@@ -212,7 +211,8 @@ docker run -p 10096:10095 -dit --privileged=true \
     registry.cn-hangzhou.aliyuncs.com/funasr_repo/funasr:funasr-runtime-sdk-online-cpu-0.1.13
 
 # 启动 2pass 服务（首次运行会自动下载所需模型）
-docker exec -d myfunasr_online bash -c '
+docker exec -d myfunasr_online bash -c
+
 cd /workspace/FunASR/runtime && chmod +x *.sh
 nohup bash run_server_2pass.sh \
   --download-model-dir /workspace/models \
@@ -224,27 +224,53 @@ nohup bash run_server_2pass.sh \
   --lm-dir damo/speech_ngram_lm_zh-cn-ai-wesp-fst \
   --certfile 0 \
   > /workspace/FunASR/runtime/server.log 2>&1 &
-'
 
 # 查看日志，看到 "listen on port:10095" 即启动成功
 docker logs -f myfunasr_online
 ```
 
-  ## 2.4 后续启动（模型已下载，一条命令）
+需要在容器内安装ffmpeg，安装好之后，再打包成一个新镜像。
+
+```sh
+# 进入容器
+docker exec -it myfunasr_online bash
+
+# 更新包列表并安装 ffmpeg
+apt update && apt install -y ffmpeg
+
+# 验证安装
+ffmpeg -version
+# 退出容器
+exit
+
+# 提交为新的容器
+docker commit myfunasr_online funasr-with-ffmpeg:runtime-sdk-online-cpu-0.1.13
+docker stop myfunasr_online
+docker rm myfunasr_online
+```
+
+
+
+
+
+  ## 2.2 后续启动
 
 ```sh
 # 创建网桥（仅首次）
 docker network create llm_net 2>/dev/null || true
 
-# stop & clean & start（一条命令）
-docker stop myfunasr_online 2>/dev/null; docker rm myfunasr_online 2>/dev/null; \
+# stop
+docker stop myfunasr_online 2>/dev/null
+# clean
+docker rm myfunasr_online 2>/dev/null
+# start
 docker run -p 10096:10095 -dit --privileged=true --name myfunasr_online \
   -v /data/funasr-runtime-resources-online/models:/workspace/models \
   --network llm_net \
   -e MODELSCOPE_DISABLE_DOWNLOAD=1 \
   -e HF_HUB_DISABLE_TELEMETRY=1 \
   -e FUNASR_DISABLE_DOWNLOAD=1 \
-  registry.cn-hangzhou.aliyuncs.com/funasr_repo/funasr:funasr-runtime-sdk-online-cpu-0.1.13 \
+  funasr-with-ffmpeg:runtime-sdk-online-cpu-0.1.13 \
   /bin/bash -c "cd /workspace/FunASR/runtime/websocket/build/bin && ./funasr-wss-server-2pass \
     --model-dir /workspace/models/damo/speech_paraformer-large_asr_nat-zh-cn-16k-common-vocab8404-onnx \
     --online-model-dir /workspace/models/damo/speech_paraformer-large_asr_nat-zh-cn-16k-common-vocab8404-online-onnx \
@@ -259,7 +285,7 @@ docker run -p 10096:10095 -dit --privileged=true --name myfunasr_online \
 docker logs -f myfunasr_online
 ```
 
-  ## 2.5 下载的模型清单
+  ## 2.3 下载的模型清单
 
 启动完成后，宿主机 `/data/funasr-runtime-resources-online/models/` 下的文件：
 
@@ -274,7 +300,7 @@ thuduj12/
 └── fst_itn_zh/                                               (ITN, ~896KB)
 ```
 
-  ## 2.6 客户端测试
+  ## 2.4 客户端测试
 
 ```sh
 # 容器内测试（用示例 wav 文件）
