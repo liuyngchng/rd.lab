@@ -26,8 +26,11 @@ docker pull docker.1ms.run/ubuntu:24.04
 ​		systemctl start docker
 
 ​		执行
-```
+```sh
 docker images
+
+# 29 以上版本的docker 更改了默认的输出列，可以通过自定义想要输出的列
+docker images --format 'table {{.Repository}}\t{{.Tag}}\t{{.ID}}\t{{.CreatedSince}}\t{{.Size}}'
 ```
 ​		看到  
 
