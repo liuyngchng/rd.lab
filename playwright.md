@@ -64,6 +64,14 @@ claude mcp add playwright -- docker run -i --rm mcr.microsoft.com/playwright/mcp
 
 在浏览器上一顿操作，自动复刻生成代码。
 
+首先安装 playwright 命令
+
+```sh
+
+npm install -g playwright
+
+```
+
 ```sh
 # 打开页面并录制，实时生成代码
 playwright codegen https://example.com
