@@ -2,10 +2,31 @@
 
 https://playwright.dev/docs/getting-started-mcp
 
-
 # 环境配置
 
+清理环境
+
+
+
 ```sh
+npm uninstall -g @anthropic-ai/claude-code
+rm -f ~/.local/bin/claude && rm -rf ~/.local/share/claude
+rm -rf ~/.claude && rm -f ~/.claude.json
+npm install -g @anthropic-ai/claude-code@latest
+claude -version
+2.1.296 (Claude Code)
+npx playwright uninstall --all
+# 删除 mcp server
+claude mcp remove playwright
+```
+
+
+
+
+
+```sh
+# 安装playwright mcp
+npx @playwright/mcp@latest
 # 安装 mcp server
 claude mcp add playwright npx @playwright/mcp@latest
 
@@ -16,9 +37,12 @@ npx playwright install chromium
 claude
 /mcp
 
+# 修改浏览器
+claude mcp add playwright -s local -- npx -- "npx" "@playwright/mcp@latest" "--browser" "chromium"
+claude mcp add playwright -s local -- npx @playwright/mcp@latest --executable-path /snap/bin/chromium
 
-# 删除 mcp server
-claude mcp remove playwright
+
+
 ```
 
 
