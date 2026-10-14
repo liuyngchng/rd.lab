@@ -65,6 +65,6 @@ git config --global core.autocrlf false
 # disables Git's tracking of file permission changes (executable bit) globally
 git config --global core.fileMode false
 # 设置检出时统一使用 LF
-git config core.eol lf
+git config --global core.eol lf
 ```
 
