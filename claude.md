@@ -54,6 +54,8 @@ export ANTHROPIC_DEFAULT_OPUS_MODEL=deepseek-v4-pro[1m]
 export ANTHROPIC_DEFAULT_SONNET_MODEL=deepseek-v4-pro[1m]
 export ANTHROPIC_DEFAULT_HAIKU_MODEL=deepseek-v4-flash[1m]
 export CLAUDE_CODE_SUBAGENT_MODEL=deepseek-v4-flash[1m]
+# 解决 classifier unavailable 的问题
+export CLAUDE_CODE_AUTO_MODE_SERVER=0
 export CLAUDE_CODE_EFFORT_LEVEL=max
 export API_TIMEOUT_MS=600000
 # 防止联网验证、模型回退、检查更新失败导致的卡顿或错误
